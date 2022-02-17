@@ -1,0 +1,43 @@
+@keyframes appLogoSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+header {
+  color: green;
+  margin: 0 auto 3em;
+}
+
+li {
+  list-style-type: none;
+}
+
+.app {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.appLogo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.appLink {
+  color: #61dafb;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .appLogo {
+    animation: appLogoSpin infinite 20s linear;
+  }
+}
