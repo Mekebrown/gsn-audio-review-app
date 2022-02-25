@@ -7,6 +7,15 @@
   }
 }
 
+body {
+  padding: 50px;
+  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00b7ff;
+}
+
 header {
   color: green;
   margin: 0 auto 3em;

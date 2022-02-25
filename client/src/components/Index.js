@@ -4,14 +4,20 @@ const Index = () => {
     const [index, setIndex] = useState([]);
 
     useEffect(() => {
-        fetch('/index/').then(res => {
+        fetch('/')
+        .then(res => {
             if (res.ok) {
-                setIndex(res.body);
-                // return res.json();
+                return res.json();
+            } else {
+                let error = new Error(res.statusText);
+                error.response = res;
+                console.warn(error);
+
+                throw error;
             }
-        });//.then(jsonRes => {
-        //     setIndex(jsonRes.indexContent);
-        // });
+        }).then(jsonRes => {
+            setIndex(jsonRes.indexContent);
+        }).catch((error) => console.warn(error));
     }, [setIndex]);
 
     return (
@@ -19,7 +25,11 @@ const Index = () => {
             <header>
                 <h2>Home</h2>
             </header>
-            <main>{index}</main>
+            <main>
+                <div>
+                    {index.map(item => <li key={item}>{item}</li>)}
+                </div>
+            </main>
         </>
     )
 }; 
