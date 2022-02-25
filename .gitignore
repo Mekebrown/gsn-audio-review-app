@@ -1,0 +1,13 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+.git
+client/node_modules
+server/node_modules
+
+# database
+server/database 
+
+# misc
+etc
+.DS_Store
