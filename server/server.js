@@ -1,13 +1,27 @@
-const usersRouter =  require("./routes/usersRoute");
+const adminRouter =  require("./routes/adminRoute");
 const indexRouter =  require("./routes/indexRoute");
 const notesRouter =  require("./routes/notesRoute");
+const projectsRouter =  require("./routes/projectsRoute");
+const singleProjectRouter =  require("./routes/singleProjectRoute");
+const usersRouter =  require("./routes/usersRoute");
 const express = require("express");
 const app = express();
 const createError = require('http-errors');
 const path = require('path');
+const cors = require("cors");
+const corsOptions = { origin: "http://localhost:3002" };
+const db = require("./models");
+// db.sequelize.sync(); Use this for production!
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("Drop and re-sync db.");
+}); // Use this for development env only!
 
+app.use(cors(corsOptions));
+app.use("/admin/", adminRouter);
 app.use("/", indexRouter);
 app.use("/notes/", notesRouter);
+app.use("/projects/", projectsRouter);
+app.use("/singleproject/", singleProjectRouter);
 app.use("/users/", usersRouter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,6 +56,8 @@ function auth(req, res, next) {
 
     res.send("No auth");
 }
+
+// require("./routes/notesRoute.js")(app);
 
 app.listen(3001, function() {
     console.log("===Server port 3001===");

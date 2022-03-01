@@ -3,6 +3,6 @@ router = express.Router();
 
 usersRoute = require("../controllers/usersController");
 
-router.get("/", usersRoute.usersController);
+router.get("/users", usersRoute.usersController);
 
 module.exports = router;
