@@ -1,6 +1,7 @@
 const adminRouter =  require("./routes/adminRoute");
 const indexRouter =  require("./routes/indexRoute");
 const notesRouter =  require("./routes/notesRoute");
+const playAudioRouter =  require("./routes/playAudioRoute");
 const projectsRouter =  require("./routes/projectsRoute");
 const singleProjectRouter =  require("./routes/singleProjectRoute");
 const usersRouter =  require("./routes/usersRoute");
@@ -20,6 +21,7 @@ app.use(cors(corsOptions));
 app.use("/admin/", adminRouter);
 app.use("/", indexRouter);
 app.use("/notes/", notesRouter);
+app.use("/playaudio/", playAudioRouter);
 app.use("/projects/", projectsRouter);
 app.use("/singleproject/", singleProjectRouter);
 app.use("/users/", usersRouter);

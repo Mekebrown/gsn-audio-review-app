@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Admin from "./components/Admin";
 import Index from "./components/Index";
 import Notes from "./components/Notes";
+import PlayAudio from "./components/Project/PlayAudio";
 import Projects from "./components/Project/Projects";
 import SingleProject from "./components/Project/SingleProject";
 import Users from "./components/Users";
@@ -20,6 +21,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/" element={<Index />} />
           <Route path="/notes" element={<Notes />} />
+          <Route path="/Playaudio" element={<PlayAudio />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/singleproject" element={<SingleProject />} />
           <Route path="/users" element={<Users />} />
