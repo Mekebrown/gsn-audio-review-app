@@ -1,22 +1,46 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
+import usersData from "./data/users_dummy_data";
 
+/**
+ * This page will show every user and their notes.
+ * 
+ * @returns {Node} Users
+ */
 const Users = () => {
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        fetch('/users/').then(res => {
-            if (res.ok) {
-                return res.json();
-            }
-        }).then(jsonRes => {
-            setUsers(jsonRes.usersList);
-        });
-    }, [setUsers]);
-
     return (
-        <div>
-            {users.map(user => <li key={user}>{user}</li>)}
-        </div>
+        <>
+            <header>
+                <h2>Users</h2>
+            </header>
+
+            <main>
+                {usersData.map(user => 
+                    <section key={user[0].key}>
+                        <h3>
+                            <a href="/user_page">{user[0].userName}</a>
+                        </h3>
+
+                        <ul>
+                            {user[0].usersNotes.map(note => 
+                            <li key={note.id} className="clickable tooltip">
+                                <h4>Project: {note.project}</h4>
+
+                                <p>Posted note on: {note.posted}</p>
+
+                                <figure>
+                                    <blockquote>
+                                        <p><a href="/user_page">
+                                            {note.content}
+                                        </a></p>
+                                    </blockquote>
+                                </figure>
+                                <hr />
+                            </li>)}
+                        </ul>
+                    </section>
+                )}
+            </main>
+        </>
     )
 }; 
 
