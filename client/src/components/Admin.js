@@ -1,6 +1,11 @@
 import React from "react";
 import adminData from "./data/admin_dummy_data";
 
+/**
+ * Lance's page
+ * 
+ * @returns {Node} Admin
+ */
 const Admin = () => {
     return (
         <>

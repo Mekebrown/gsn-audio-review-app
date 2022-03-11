@@ -1,13 +1,11 @@
-// const express = require("express");
-// router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-// notesRoute = require("../controllers/notesController");
+const notesRoute = require("../controllers/notesController");
 
-// router.get("/", notesRoute.notesController);
+router.get("/notes", notesRoute.notesController);
 
 module.exports = app => {
-    const notes = require("../controllers/notesController.js");
-
     var router = require("express").Router();
 
     // Create a new Note

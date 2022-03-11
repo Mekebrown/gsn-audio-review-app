@@ -1,14 +1,19 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './App.css';
+
+// Admin
+import AdminSingleProject from "./components/Projects_Oriented/Admin/AdminSingleProject"; 
 import Admin from "./components/Admin";
+
+// General
 import Index from "./components/Index";
 import Notes from "./components/Notes";
-import PlayAudio from "./components/Project/PlayAudio";
-import Projects from "./components/Project/Projects";
-import SingleProject from "./components/Project/SingleProject";
-import Users from "./components/Users";
+import Users from "./components/Users"; 
 
-import './App.css';
+// Project
+import UserSingleProject from "./components/Projects_Oriented/User/UserSingleProject";
+import Projects from "./components/Projects_Oriented/AllProjects";
 
 function App() {
   return (
@@ -19,12 +24,13 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin" element={<Admin />} />
+          <Route path="/asingle" element={<AdminSingleProject />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/" element={<Index />} />
           <Route path="/notes" element={<Notes />} />
-          <Route path="/Playaudio" element={<PlayAudio />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/singleproject" element={<SingleProject />} />
+          <Route path="/usingle" element={<UserSingleProject />} />
           <Route path="/users" element={<Users />} />
+          
           {/* For non-existent routes */}
           <Route 
               path="*" 

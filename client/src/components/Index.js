@@ -1,6 +1,10 @@
 import React from "react";
 
-// The general page
+/**
+ * The general page
+ * 
+ * @returns {Node} Index
+ */
 const Index = () => {
     return (
         <>
