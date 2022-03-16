@@ -25,7 +25,7 @@ const AdminSingleProject = () => {
                 <hr />
 
                 <SectionAudioPlayerOnly />
-
+{/* 
                 {singleProject.map(project => 
                     <section key={project[0].key}>
                         <h3>
@@ -53,7 +53,7 @@ const AdminSingleProject = () => {
                             </li>)}
                         </ul>
                     </section>
-                )}
+                )} */}
             </main>
         </>
     )

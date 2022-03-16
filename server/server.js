@@ -1,65 +1,101 @@
-const adminRouter =  require("./routes/adminRoute");
-const indexRouter =  require("./routes/indexRoute");
-const notesRouter =  require("./routes/notesRoute");
-const playAudioRouter =  require("./routes/playAudioRoute");
-const projectsRouter =  require("./routes/projectsRoute");
-const singleProjectRouter =  require("./routes/singleProjectRoute");
-const usersRouter =  require("./routes/usersRoute");
+// Utilities
 const express = require("express");
 const app = express();
-const createError = require('http-errors');
+const mysql = require("mysql");
+const cors = require('cors');
 const path = require('path');
-const cors = require("cors");
-const corsOptions = { origin: "http://localhost:3002" };
-const db = require("./models");
-// db.sequelize.sync(); Use this for production!
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("Drop and re-sync db.");
-}); // Use this for development env only!
+const dbPermanent = require('./database');
 
-app.use(cors(corsOptions));
-app.use("/admin/", adminRouter);
+// Components
+const indexRouter =  require("./routes/indexRoute");
+/* const adminRouter =  require("./routes/adminRoute");
+const adminSingleProjectRouter =  require("./routes/adminSingleProjectRoute");
+const allProjectsRouter =  require("./routes/allProjectsRoute");
+const notesRouter =  require("./routes/notesRoute");
+const userSingleProjectRouter =  require("./routes/userSingleProjectRoute");
+const usersRouter =  require("./routes/usersRoute");*/
+
 app.use("/", indexRouter);
+/* app.use("/admin/", adminRouter);
+app.use("/asingle/", adminSingleProjectRouter); // Doesn't work
+app.use("/projects/", allProjectsRouter);
 app.use("/notes/", notesRouter);
-app.use("/playaudio/", playAudioRouter);
-app.use("/projects/", projectsRouter);
-app.use("/singleproject/", singleProjectRouter);
-app.use("/users/", usersRouter);
+app.use("/usingle/", userSingleProjectRouter);
+app.use("/users/", usersRouter);*/
+
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware to catch 404 and forward to error handler for ANY request
-app.use(function(req, res, next) {  
-    console.error("404")
-
-    next(createError(404));
-});
-  
-// Middleware to handle error in ANY request
-app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-    console.error(err.stack);
-
-    // render the error page
-    res.status(err.status || 500);
-    res.send('error');
-});
-
-// Middleware of authorization checker - Lesson in https://www.youtube.com/watch?v=lY6icfhap2o at 7:15
-function auth(req, res, next) {
-    if (req.query.admin === "true") {
-        req.admin = true;
-        next();
-        return;
-    }
-
-    res.send("No auth");
+const details = {
+  user: 'root',
+  host: 'localhost',
+  password: 'rootmysql',
+  database: 'gsndb'
 }
 
-// require("./routes/notesRoute.js")(app);
+const conn = mysql.createConnection(details);
+
+// Create and Save a new note
+app.post("/usingle", (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: "Note can not be empty!"
+    });
+  };  
+
+  const note = req.body.note;
+  const noteId = req.body.noteId;
+  const userId = req.body.userId;
+  const projectName = req.body.projectName;
+  const noteContent = req.body.noteContent;
+  
+  conn.query(
+    "INSERT INTO notes (note_id, user_id, project_name, contents, creation_datetime) VALUES (?, ?, ?, ?, ?)",
+    [
+      req.body.noteId, 
+      req.body.userId, 
+      req.body.projectName, 
+      req.body.noteContent, 
+      req.body.creationDateTime
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
+});
+
+app.get("/usingle", (req, res) => {
+  const mediaId = 1; //req.params.media_id;
+  let result = [];
+
+  
+  console.log(conn);
+  conn.query("SELECT * FROM media WHERE media_id = 1", (err, mediaRes) => {
+    if (err) {
+      console.log(err);
+    } else {
+      result = [...result, mediaRes];
+      console.log("Successfully sent media info");
+    }
+  });
+
+  conn.query("SELECT * FROM notes WHERE note_id = 1", (err, notesRes) => {
+    if (err) {
+      console.log(err);
+    } else {
+      result = [...result, notesRes];
+      console.log("Successfully sent notes info");
+    }
+  });
+
+  res.send(result);
+});
 
 app.listen(3001, function() {
     console.log("===Server port 3001===");

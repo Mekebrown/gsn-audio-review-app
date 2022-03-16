@@ -1,10 +1,12 @@
 const express = require("express");
-router = express.Router();
+const router = express.Router();
 
-adminRoute = require("../controllers/adminController");
+const adminRoute = require("../controllers/adminController");
 
-router.get('/admin', function(req, res, next) {
-    res.send('Admin portal');
-});
+router.get("/admin", adminRoute.adminController);
+
+// router.get('/admin', function(req, res, next) {
+//     res.send('Admin portal');
+// });
 
 module.exports = router;
