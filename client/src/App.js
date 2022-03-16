@@ -4,16 +4,17 @@ import './App.css';
 
 // Admin
 import AdminSingleProject from "./components/Projects_Oriented/Admin/AdminSingleProject"; 
-import Admin from "./components/Admin";
+import Admin from "./components/Projects_Oriented/Admin/Admin";
+import UploadMedia from "./components/Projects_Oriented/Admin/UploadMedia";
+import Notes from "./components/Projects_Oriented/Admin/Notes";
+import Projects from "./components/Projects_Oriented/Admin/AllProjects";
 
 // General
-import Index from "./components/Index";
-import Notes from "./components/Notes";
-import Users from "./components/Users"; 
+import Index from "./components/Index"; 
 
-// Project
+// User
 import UserSingleProject from "./components/Projects_Oriented/User/UserSingleProject";
-import Projects from "./components/Projects_Oriented/AllProjects";
+import Users from "./components/Projects_Oriented/User/Users";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path="/admin" element={<Admin />} />
           <Route path="/asingle" element={<AdminSingleProject />} />
+          <Route path="/uploadmedia" element={<UploadMedia />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/" element={<Index />} />
           <Route path="/notes" element={<Notes />} />
