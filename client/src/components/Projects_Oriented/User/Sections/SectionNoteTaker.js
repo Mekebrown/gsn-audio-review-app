@@ -7,44 +7,75 @@ import React, { useState } from "react";
  * 
  * @returns {Node} SectionNoteTaker
  */
-const SectionNoteTaker = ({notesList}) => {
-    const [noteInList, setNoteInList] = useState("");
-    const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
+const SectionNoteTaker = ({notesList, noteContent, userId}) => {
+    const [activeNoteInTextArea, setActiveNoteInTextArea] = useState(noteContent);
+    
+    const handleNoteSubmit = (event) => {
+        const {
+            noteId,
+            projectName,
+        } = event;
 
+        const formData = new FormData();
+        
+        formData.append('user_id', userId);
+        formData.append('note', activeNoteInTextArea);
+        formData.append('note_id', noteId);
+        formData.append('project_name', projectName);
+        
+        fetch('http://localhost:3001/usingle', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    };
 
-    const handleNoteSubmit = (event) => {};
     const handleNoteClearing = () => {};
     const handleSizeChange = (change) => {};
-    const handleListChange = (noteToChange) => {}; // Deleting, editing, updating a saved note
+    const handleListChange = (noteToChange) => {
+    }; // Deleting, editing, updating a saved note
 
     return (
         <section id="notesContainer" draggable="true">
             <div id="notePad">
-                <label for="notePadTextarea" id="notePadLabel">Write thoughts here:</label><br />
+                <label htmlFor="notePadTextarea" id="notePadLabel">Write thoughts here:</label><br />
 
-                <textarea id="notePadTextarea" rows="10" cols="50" title="Note pad text area" placeholder="Notes">
-                    {activeNoteInTextArea}
+                <textarea id="notePadTextarea" 
+                    rows="10" 
+                    cols="50" 
+                    title="Note pad text area" 
+                    placeholder="Notes:"
+                    name="note"
+                    value={activeNoteInTextArea}
+                    onChange={(event)=>{setActiveNoteInTextArea(event.target.value)}}
+                >
                 </textarea>
             </div>
 
             <span id="notePadOptions">
-                <button id="larger" onclick={() => handleSizeChange('larger')}>Larger</button>
-                <button id="smaller" onclick={() => handleSizeChange('smaller')}>Smaller</button>
-                <button id="normal"onclick={() => handleSizeChange('normal')}>Normal</button> 
+                <button id="larger" onClick={() => handleSizeChange('larger')}>Larger</button>
+                <button id="smaller" onClick={() => handleSizeChange('smaller')}>Smaller</button>
+                <button id="normal"onClick={() => handleSizeChange('normal')}>Normal</button> 
                 <br />
-                <button id="notePadSave" onsubmit={(event) => handleNoteSubmit(event)}>Save</button>
-                <button id="notePadClear" onsubmit={handleNoteClearing}>Clear</button>
+                <button id="notePadSave" onSubmit={(event) => handleNoteSubmit(event)}>Save</button>
+                <button id="notePadClear" onSubmit={handleNoteClearing}>Clear</button>
             </span>
 
             <hr />
 
-            <ul>
+            {/* <ul onChange={handleListChange}>
                 {
                     notesList.map((noteInList, key) => {
                         return <div key={key}>{noteInList}</div>;
                     })
                 }
-            </ul>
+            </ul> */}
         </section>
     );
 };

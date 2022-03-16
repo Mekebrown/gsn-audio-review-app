@@ -17,32 +17,32 @@ const Index = () => {
                     <p>Greeting, purpose of app, msg from creator</p>
 
                     <form id="appEntryForm" name="appEntryForm" action="" method="post">
-                        <label for="userEntryPurpose">I am a </label>
+                        <label htmlFor="userEntryPurpose">I am a </label>
 
                             <select title="userEntryPurpose" name="userEntryPurpose" id="userEntryPurpose" required>
                                 <option value="guest">Guest</option>
                                 <option value="reviewer">Reviewer</option>
+                                <option value="login">Administrator</option>
+                            </select>
                                     <select label="Reviewer" disabled>
                                         <option value="audio">Audio Project</option>
                                         <option value="video">Video Project</option>
                                     </select>
-                                <option value="login">Administrator</option>
-                            </select>
 
                         <br />
 
-                        <label for="projectName">Project Name:</label>
+                        <label htmlFor="projectName">Project Name:</label>
                             <input type="text" id="projectName" name="projectName" pattern="[a-zA-Z- .,!]" />
 
                         <br />
 
-                        <label for="keypass">Do you accept a Keypass (tracking cookie) for repeat visits?</label>
+                        <label htmlFor="keypass">Do you accept a Keypass (tracking cookie) for repeat visits?</label>
                             <input type="radio" name="keypass" title="Allow a key - Yes" value="yes" disabled /> Yes 
                             <input type="radio" name="keypass" title="Allow a key - No" value="no" disabled /> No
 
                         <br />
 
-                        <label for="secretPhrase">What is your secret?</label>
+                        <label htmlFor="secretPhrase">What is your secret?</label>
                             <input type="text" id="secretPhrase" name="secretPhrase" pattern="[a-zA-Z- .,!]" disabled />
                             <span>Ok! Is this your secret image?</span>
                             <input type="radio" name="secretImage" title="Image - Yes" value="yes" disabled /> Yes 
@@ -66,14 +66,3 @@ const Index = () => {
 }; 
 
 export default Index;
-
-// const [info, setInfo] = useState([]);
-// useEffect(() => {
-//     fetch('/').then(res => {
-//         if (res.ok) {
-//             return res.json();
-//         }
-//     }).then(jsonRes => {
-//         setInfo(jsonRes.infoList);
-//     });
-// }, [setInfo]);
