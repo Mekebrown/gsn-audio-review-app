@@ -48,6 +48,10 @@ li {
   background-color: aliceblue;
 }
 
+.hideNotePad {
+  visibility: collapse;
+}
+
 .tooltip .tooltiptext {
   /* Tooltip text */
   visibility: hidden;

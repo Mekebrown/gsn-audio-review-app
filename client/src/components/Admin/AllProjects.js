@@ -1,5 +1,5 @@
 import React from "react";
-import allProjects from "../../data/dummy_data"
+import allProjects from "../tools/dummy_data"
 
 /**
  * This page will show all projects.
