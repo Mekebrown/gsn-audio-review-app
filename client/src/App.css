@@ -49,7 +49,7 @@ li {
 }
 
 .hideNotePad {
-  visibility: collapse;
+  display: none;
 }
 
 .tooltip .tooltiptext {
