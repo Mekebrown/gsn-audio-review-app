@@ -29,9 +29,9 @@ import UserSingleProject from "./components/User/UserSingleProject";
 import Users from "./components/User/Users";
 
 function App() {
-  // Somehow retrieve the needed introUserId
-  let introUserId = 1;
-  const projectReviewingLocation = projectReviewingPath + introUserId;
+  // Somehow retrieve the needed mediaId
+  let mediaId = 1;
+  const projectReviewingLocation = projectReviewingPath + mediaId;
   
   return (
     <div className="app">
@@ -46,7 +46,7 @@ function App() {
           <Route path={allProjectsPath} element={<Projects />} />
           <Route index path={indexPath} element={<Index />} />
           <Route path={allNotesPath} element={<Notes />} />
-          <Route path={projectReviewingLocation} element={<UserSingleProject introUserId={introUserId} />} />
+          <Route path={projectReviewingLocation} element={<UserSingleProject mediaId={mediaId} />} />
           <Route path={allUsersPath} element={<Users />} />
           
           {/* For non-existent routes */}
