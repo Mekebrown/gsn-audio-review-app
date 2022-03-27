@@ -2,6 +2,18 @@ const db = require('../models');
 const Note = db.notes;
 const Op = db.Sequelize.Op;
 
+const getQueryValues = (queryStatement, params = []) => {
+    return new Promise((resolve, reject) => {
+        conn.query(queryStatement, params, (err, rows) => {                                                
+            if (err || rows === undefined) {
+                reject(new Error("Error with the row retrieval"));
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
+
 // Find a single note with an id
 exports.get = (req, res) => { 
 };
