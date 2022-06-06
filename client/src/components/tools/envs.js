@@ -1,4 +1,4 @@
-const testAudio = "https://ia902203.us.archive.org/11/items/testmp3testfile/mpthreetest.";
+const testAudio = "https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.";
 
 const {
     REACT_APP_FULL_TITLE, 
@@ -15,6 +15,7 @@ const indvlProjectPath = "project_path";
 const indvlUserPath = "/user_path";
 const projectReviewingPath = "usingle/";
 const uploadMediaPath = "/uploadmedia";
+const mediaId = 1;
 
 export default testAudio; 
 
@@ -33,5 +34,6 @@ export {
     indvlProjectPath,
     indvlUserPath,
     projectReviewingPath,
-    uploadMediaPath
+    uploadMediaPath,
+    mediaId
 };
