@@ -18,7 +18,7 @@ const SectionAudioPlayerAndControls = ({playerDetails}) => {
 
     // Play, pause, reset - TODO volume change, stop
     const handleAudioControlsClick = (clickedBtn) => {
-        const thePlayer = document.querySelector("#audioPlayer");
+        const thePlayer = document.querySelector(".audioPlayer");
 
         if (clickedBtn === "reload") {
             thePlayer.currentTime = 0.0;
@@ -54,7 +54,7 @@ const SectionAudioPlayerAndControls = ({playerDetails}) => {
                     </button>
                 </div>
             )}
-            <audio controls id="audioPlayer" preload="auto">
+            <audio controls className="audioPlayer" preload="auto">
                 {
                     sources.map(source => {
                         let fileSrc = fileName + "." + source.ext;
