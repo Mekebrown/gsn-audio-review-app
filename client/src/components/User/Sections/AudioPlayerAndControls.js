@@ -3,15 +3,19 @@ import Axios from "axios";
 import testAudio from "../../tools/envs";
 
 /**
+ * @param {String} fileName
+ * @param {Number} thumbRating
+ * @param {Number} mediaId
+ * @param {String} mediaDesc
+ * @param {Number} userId
+ * 
  * @returns {Node} AudioPlayerAndControls
  */
-const AudioPlayerAndControls = ({playerDetails}) => {
-    const [fileName, thumbRating, mediaId, mediaDesc, userId] = playerDetails;
+const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, userId}) => {
     const [prevThumbRating, setThumbRating] = useState(thumbRating);
     const [duration, setDuration] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
 
-    const thePlayer = document.querySelector("#audioPlayer");
+    const thePlayer = document.querySelector(".audioPlayer");
 
     const sources = [
         {item: 1, ext: "mp3", type: "audio/mpeg"}, 
@@ -81,12 +85,11 @@ const AudioPlayerAndControls = ({playerDetails}) => {
 
     return (
         <>
-            &nbsp; 
             {prevThumbRating && ( // Swap out with react-icons?
                 <div>
                     <button
                         value="approve" 
-                        id="trackApproved" 
+                        className="trackApproved" 
                         onClick={() => handleThumbRatingClick("up")}
                     >
                         &#128077;
@@ -94,25 +97,33 @@ const AudioPlayerAndControls = ({playerDetails}) => {
                     &nbsp;
                     <button 
                         value="disapprove" 
-                        id="trackDisapproved" 
+                        className="trackDisapproved" 
                         onClick={() => handleThumbRatingClick("down")}
                     >
                         &#128078;
                     </button>
                 </div>
             )}
-            <audio controls id="audioPlayer" preload="auto">
+            
+            <audio controls className="audioPlayer" preload="auto">
                 {
                     sources.map(source => {
                         return <source key={source.item} src={testAudio + source.ext} type={source.type} />
                     })
-                }      
+                } 
+                {// When timeline point is clicked, update timestamp prop to current point
+                }  
+                {// When the pause button is clicked, update timestamp prop to current point
+                }     
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
+
             <p>Project description: {mediaDesc}.</p>
-            <div id="audioControls">
-                <button id="playPause" onClick={() => {handleAudioControlsClick("togglePlayPause")}}>Play</button>
-                <button id="reload" onClick={() => {handleAudioControlsClick("reload")}}>Reload</button>
+
+            <div className="audioControls">
+                <button className="playPause" onClick={() => {handleAudioControlsClick("togglePlayPause")}}>Play</button> {// When pause is clicked, update timestamp prop
+                }
+                <button className="reload" onClick={() => {handleAudioControlsClick("reload")}}>Reload</button>
             </div>
         </>
     );

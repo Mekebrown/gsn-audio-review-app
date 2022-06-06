@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, createContext } from "react";
 import Axios from "axios";
 import AudioPlayerAndControls from "./Sections/AudioPlayerAndControls";
-import NoteTaker from "./Sections/NoteTaker";
-import PreviousNotesLinks from "./Sections/PreviousNotesLinks";
-import testAudio, {REACT_APP_SERVER_URL, projectReviewingPath} from "../tools/envs";
+import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
+// import NoteTaker from "./Sections/NoteTaker";
+
+let context = createContext();
 
 /**
  * Page for a single media work and notes opportunity
@@ -16,42 +17,162 @@ import testAudio, {REACT_APP_SERVER_URL, projectReviewingPath} from "../tools/en
  * - Previous thumbnail rating, if set
  * - List of notes the current user saved for this work, if set (all_note_ids)
  * 
+ * @param {Number} mediaId
+ * 
  * @returns {Node} UserSingleProject
  */
 const UserSingleProject = ({mediaId}) => {
     const [fileName, setFileName] = useState("");
-    const [userId, setUserId] = useState(1); // added_by in db
-    const [projectName, setProjectName] = useState("Track Audio");
-    const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
-    const [notesList, setNotesList] = useState([]);
+    const [userId, setUserId] = useState(null);
+    const [currentNoteId, setCurrentNoteId] = useState(null);
     const [thumbRating, setThumbRating] = useState("");
     const [mediaDesc, setMediaDesc] = useState("");
-    const [noteDetails, setNoteDetails] = useState({});
+    const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
+    const [hideNotePad, setHideNotePad] = useState(false);
+    const [hideTimestampText, setHideTimestampText] = useState(true);
+    const [noteWithTimestamp, setNoteWithTimestamp] = useState("note_00.00.00");
+    const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
+    const theNotePadTextarea = document.querySelector(".notePadTextarea");
+    const theFullNotePad = document.querySelector(".notePad");
+    const timestampDiv = document.querySelector(".timestampDiv");
+    // const [projectName, setProjectName] = useState("Track Audio");
+    // const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
+    // const [noteDetails, setNoteDetails] = useState([]);
+    // const [currentTime, setCurrentTime] = useState(0);
+
+    const noteAreaSelectionToggle = (e) => {
+        e.preventDefault();
+
+        // When user clicks in text box, pause player, record current timestamp, update timestampDiv with current timestamp messaging
+                                    
+        console.log("hit");
+    }
+
+    const loadNote = (e, nContents, nTimestamp, nId) => {
+        e.preventDefault();
+
+        if (theNotePadTextarea && timestampDiv) { // If notepad's present
+            theFullNotePad.removeAttribute("class"); // Make sure it's visible now
+            timestampDiv.removeAttribute("class"); // Make sure it's visible now
+
+            let timestamp = (nTimestamp).split("note_")[1];
+
+            timestampDiv.innerHTML = "<small><em>From timestamp " + timestamp + ": </em></small>";
+            setActiveNoteInTextArea(nContents);
+            setCurrentNoteId(nId);
+            setIsAnUpdatedNote(true);
+            
+        }
+    };
+
+    const processLinksOfPrevNotes = (noteToProcess) => {
+        let toShow = noteToProcess ? noteToProcess : activeNoteInTextArea;
+        let aLen = toShow.length;
+        let aSplit = toShow.split(" ");
+
+        if (aLen > 10) {
+            let cNV = aSplit;
+
+            toShow = cNV.length < 3 ? 
+                        toShow : 
+                            cNV[0].length < 5 && cNV[1].length < 5 && cNV[2].length < 5 ? 
+                                cNV[0] + " " + cNV[1] + " " + cNV[2] + " ..." : 
+                                    cNV[0].length < 5 && cNV[1].length < 5 ? 
+                                        cNV[0] + " " + cNV[1] + " ..."  : cNV[0] + " ...";   
+        }
+
+        return toShow;
+    };
+
+    // const handleSizeChange = (change) => {};
+
+    const onUpdateTimestampPoint = () => {
+        let time = document.querySelector(".audioPlayer").currentTime;
+
+        if (time?.toFixed(2) > 0) {
+            setNoteWithTimestamp(`note_${time.toFixed(2)}`);
+        }
+    };
+
+    const handleNotePadToggle = (event) => {
+        event.preventDefault(); 
+
+        setHideNotePad(prev => !prev);
+    };
+
+    const handleNoteSubmit = (event) => {
+        event.preventDefault();
+        timestampDiv.removeAttribute("class"); // Make sure it's visible now
+        setHideTimestampText(false);
+
+        const info = {
+            media_id: 1,
+            note_body: event.value, // note_last_updated: isAnUpdatedNote ? new Date() : false,
+            note_id: 11111,
+            note_timestamp: noteWithTimestamp,
+            current_datetime: event.timeStamp
+        };
+
+        Axios.post('http://localhost:3001/usingle', info)
+        .then((res) => timestampDiv.innerHTML = "<small><em>" + JSON.stringify(res) + "</em></small>") // Handle updating noteDetails with res info
+        .catch(error => timestampDiv.innerHTML = "<small><em>" + JSON.stringify(error) + "</em></small>");
+
+        // setHideTimestampText(true);
+        // setActiveNoteInTextArea("");
+    };
 
     // Need to retrieve current user and all of *their* notes
     useEffect(() => {
         Axios.get(REACT_APP_SERVER_URL + projectReviewingPath + mediaId).then((res) => {
             if (res.status === 200) {
+                let temp = [];
+
+                for (let note of res.data.totalNotesFromServer) {
+                    let nContents = note.note_body;
+                    let nTimestamp = note.note_timestamp;
+                    let nId = note.note_id;
+
+                    let nLink = processLinksOfPrevNotes(nContents);
+
+                    temp = [
+                        ...temp,
+                        {
+                            nLink: nLink,
+                            nContents: nContents,
+                            nTimestamp: nTimestamp,
+                            nId: nId
+                        }
+                    ];
+                }
+
+                // setNoteDetails(temp);
+
                 const {
-                    project_name, file_name, creation_datetime, user_id,
-                    thumb_rating, media_desc, contents
+                    project_name, 
+                    creation_datetime,
+                    file_name,
+                    thumb_rating, media_desc,
+                    user_id
                 } = res.data;
                 
-                const creationDate = new Date(creation_datetime);
-                const cMonth = creationDate.getMonth() + 1;
-                const cDay = creationDate.getDate();
-                const cYear = creationDate.getFullYear();
-                const formattedMediaDate = cMonth + "/" + cDay + "/" + cYear;
-                const formattedProjectName = project_name[0].toUpperCase() + project_name.substring(1);
+                // const creationDate = new Date(creation_datetime);
+                // const cMonth = creationDate.getMonth() + 1;
+                // const cDay = creationDate.getDate();
+                // const cYear = creationDate.getFullYear();
+                // const formattedMediaDate = cMonth + "/" + cDay + "/" + cYear;
+                // const formattedProjectName = project_name[0].toUpperCase() + project_name.substring(1);
 
-                setUserId(user_id);
-                setProjectName(formattedProjectName);
+                // setProjectName(formattedProjectName);
                 setMediaDesc(media_desc);
                 setFileName(file_name);
-                setCreatedOn(formattedMediaDate);
+                setUserId(user_id);
+                // setCreatedOn(formattedMediaDate);
                 setThumbRating(thumb_rating);
-                setNotesList(contents); // Contents of notes for this media
-                setNoteDetails({...noteDetails, userId: userId, mediaId: mediaId});
+
+                if (isAnUpdatedNote === "This ain't gonna happen") { // Delete
+                    loadNote(); // Delete
+                    handleNotePadToggle(project_name + creation_datetime); // Delete
+                } // Delete
             } else {
                 const formData = new FormData();
                 
@@ -63,32 +184,48 @@ const UserSingleProject = ({mediaId}) => {
                     body: formData
                 });
             }
-         });
+        });
+        /* eslint-disable-next-line */
     }, []);
 
    return (
         <div>
-            <header>
-                <h2>
-                    <p>Project: <em>{projectName}</em>, created on {createdOn}</p>
-                </h2>
-            </header>
+            <AudioPlayerAndControls fileName={fileName} thumbRating={thumbRating} mediaDesc={mediaDesc} mediaId={mediaId} userId={userId} />
                 
+            <hr />
+
             <main>
-                <hr />
+                <section className="notesContainer" draggable="true">
 
-                <AudioPlayerAndControls playerDetails={[fileName, thumbRating, mediaId, mediaDesc, userId]} />
+                    <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
+                        <form className="hereThere" onSubmit={handleNoteSubmit}>
+                            <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
 
-                <NoteTaker noteDetails={noteDetails} />
+                            <div className={hideTimestampText ? "hideTimestampText timestampDiv" : "timestampDiv"} />
 
-                <PreviousNotesLinks notesList={notesList} />
+                            <textarea className="notePadTextarea" 
+                                rows="10" 
+                                cols="50" 
+                                title="Note pad text area" 
+                                placeholder="Notes:"
+                                name="note"
+                                maxLength="500"
+                                value={activeNoteInTextArea}
+                                onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
+                                onFocus={onUpdateTimestampPoint}
+                                onClick={(e) => {noteAreaSelectionToggle(e)}}
+                                >
+                            </textarea>
+                        </form>
+                    </div>
+                </section>
 
-                <section id="done" hidden>
+                <section className="done" hidden>
                     <p>Thanks for your contribution. You will be contacted right away!</p>
                 </section>
             </main>
         </div>
-    )
+    );
 }; 
 
 export default UserSingleProject;
