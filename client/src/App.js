@@ -1,5 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './App.css';
+
+// Variables
 import { 
   adminPath,
   adminIndvlViewinglePath,
@@ -11,8 +14,6 @@ import {
   REACT_APP_FULL_TITLE,
   uploadMediaPath 
 } from "./components/tools/envs";
-
-import './App.css';
 
 // Admin
 import AdminSingleProject from "./components/Admin/AdminSingleProject"; 
