@@ -1,4 +1,33 @@
 window.onload = () => {
+    // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp#examples
+play.addEventListener('click', () => {
+if(!audioCtx) {
+audioCtx = new window.AudioContext();
+}
+
+getData();
+source.start(0);
+play.setAttribute('disabled', 'disabled');
+
+rAF = requestAnimationFrame(outputTimestamps);
+});
+
+stop.addEventListener('click', () => {
+source.stop(0);
+play.removeAttribute('disabled');
+cancelAnimationFrame(rAF);
+});
+// End of https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp#examples
+
+
+// function to output timestamps
+
+function outputTimestamps() {
+let ts = audioCtx.getOutputTimestamp()
+console.log('Context time: ' + ts.contextTime + ' | Performance time: ' + ts.performanceTime);
+rAF = requestAnimationFrame(outputTimestamps);
+}
+
     // session id - Unique cookie replaces the matching previous cookie
             let noteID = "";
             let project = "gsn";

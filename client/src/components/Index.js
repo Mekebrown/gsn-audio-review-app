@@ -1,17 +1,45 @@
 import React from "react";
+import Axios from "axios";
+import { REACT_APP_SERVER_URL, projectReviewingPath } from "./tools/envs";
 
 /**
  * The general page
  * 
+ * GET info retrieved: 
+ * - N/A
+ * 
+ * POST info sent:
+ * - User id
+ * - Date and time
+ * - Device info
+ * 
  * @returns {Node} Index
  */
 const Index = () => {
+    const login = () => {
+        const userId = 1;
+
+        const formData = new FormData();
+                
+        formData.append('userId', userId);
+
+        Axios.post(REACT_APP_SERVER_URL, {
+            body: formData
+        }).then(() => {
+            const reroute = document.location.href + projectReviewingPath + userId;
+
+            window.location.assign(reroute);
+        });
+    };
+
     return (
         <>
             <header>
                 <h2>GSN!</h2>
             </header>
-
+                        
+            <button id="openApp" type="submit" value="submit" onClick={login}>Open App</button>
+{/* 
             <main>
                 <section id="appEntrySection">
                     <p>Greeting, purpose of app, msg from creator</p>
@@ -60,7 +88,7 @@ const Index = () => {
                         // maxlength - integer
                     }
                 </section>
-            </main>
+            </main> */}
         </>
     );
 }; 
