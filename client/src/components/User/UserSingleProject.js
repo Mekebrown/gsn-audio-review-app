@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import AudioPlayerAndControls from "./Sections/AudioPlayerAndControls";
 import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
-// import NoteTaker from "./Sections/NoteTaker";
+import NoteTaker from "./Sections/NoteTaker";
 
 /**
  * Page for a single media work and notes opportunity
@@ -109,6 +109,7 @@ const UserSingleProject = ({mediaId}) => {
 
         // setHideTimestampText(true);
         // setActiveNoteInTextArea("");
+        document.getElementsByClassName("thankYouMsg").innerHTML = "Thanks for your contribution. You will be contacted right away!";
     };
 
     // Need to retrieve current user and all of *their* notes
@@ -189,6 +190,7 @@ const UserSingleProject = ({mediaId}) => {
 
             <section className="notesContainer">
                 <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
+
                 <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
 
                     <hr />
@@ -213,8 +215,10 @@ const UserSingleProject = ({mediaId}) => {
                     </form>
                 </div>
 
-                <p hidden>Thanks for your contribution. You will be contacted right away!</p>
+                <p className="thankYouMsg"></p>
             </section>
+
+            <NoteTaker />
         </main>
     );
 }; 
