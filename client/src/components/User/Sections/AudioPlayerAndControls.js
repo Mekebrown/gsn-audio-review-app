@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import testAudio from "../../tools/envs";
 
-/**
+/** 
+ * When timeline point is clicked, update timestamp prop to current point
+ * When the pause button is clicked, update timestamp prop to current point
+ * 
  * @param {String} fileName
  * @param {Number} thumbRating
  * @param {Number} mediaId
@@ -14,6 +17,7 @@ import testAudio from "../../tools/envs";
 const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, userId}) => {
     const [currentThumbRating, setCurrentThumbRating] = useState(thumbRating);
     const [duration, setDuration] = useState(0);
+    const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
 
     const thePlayer = document.querySelector(".audioPlayer");
 
@@ -36,8 +40,10 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
         } else {
             if (thePlayer.currentTime === 0.0 || thePlayer.paused) {
                 thePlayer.play(); 
+                setPlayPauseBtnText("Pause");
             } else  {
                 thePlayer.pause(); 
+                setPlayPauseBtnText("Play");
             }
         }
     };
@@ -110,20 +116,20 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
                     sources.map(source => {
                         return <source key={source.item} src={testAudio + source.ext} type={source.type} />
                     })
-                } 
-                {// When timeline point is clicked, update timestamp prop to current point
-                }  
-                {// When the pause button is clicked, update timestamp prop to current point
-                }     
+                }
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
-            <p>Project description: {mediaDesc}.</p>
+            <p>Project description: <em>{mediaDesc}</em>.</p>
 
             <div className="audioControls">
-                <button className="playPause" onClick={() => {handleAudioControlsClick("togglePlayPause")}}>Play</button> {// When pause is clicked, update timestamp prop
-                }
-                <button className="reload" onClick={() => {handleAudioControlsClick("reload")}}>Reload</button>
+                <button className="playPause" onClick={() => {
+                    handleAudioControlsClick("togglePlayPause")
+                }}>{playPauseBtnText}</button>
+
+                <button className="reload" onClick={() => {
+                    handleAudioControlsClick("reload")
+                }}>Reload</button>
             </div>
         </>
     );
