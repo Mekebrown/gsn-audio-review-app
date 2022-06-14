@@ -23,7 +23,7 @@ const Index = () => {
                 
         formData.append('userId', userId);
 
-        Axios.post(REACT_APP_SERVER_URL, {
+        Axios.post(REACT_APP_SERVER_URL, { // Why and how does this work but not going to the route on L29 directly not work?
             body: formData
         }).then(() => {
             const reroute = document.location.href + projectReviewingPath + userId;
