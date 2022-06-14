@@ -12,7 +12,7 @@ import testAudio from "../../tools/envs";
  * @returns {Node} AudioPlayerAndControls
  */
 const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, userId}) => {
-    const [prevThumbRating, setThumbRating] = useState(thumbRating);
+    const [currentThumbRating, setCurrentThumbRating] = useState(thumbRating);
     const [duration, setDuration] = useState(0);
 
     const thePlayer = document.querySelector(".audioPlayer");
@@ -23,9 +23,9 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
     ];
 
     const handleThumbRatingClick = (clickedBtn) => {
-        setThumbRating(clickedBtn);
+        setCurrentThumbRating(clickedBtn);
         
-        const infoToSend = [mediaId, userId, prevThumbRating];
+        const infoToSend = [mediaId, userId, currentThumbRating];
     };
 
     // Play, pause, reset - TODO volume change, stop
@@ -85,7 +85,7 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
 
     return (
         <>
-            {prevThumbRating && ( // Swap out with react-icons?
+            {currentThumbRating && ( // Swap out with react-icons?
                 <div>
                     <button
                         value="approve" 

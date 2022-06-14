@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import AudioPlayerAndControls from "./Sections/AudioPlayerAndControls";
 import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
 // import NoteTaker from "./Sections/NoteTaker";
-
-let context = createContext();
 
 /**
  * Page for a single media work and notes opportunity
@@ -25,7 +23,7 @@ const UserSingleProject = ({mediaId}) => {
     const [fileName, setFileName] = useState("");
     const [userId, setUserId] = useState(null);
     const [currentNoteId, setCurrentNoteId] = useState(null);
-    const [thumbRating, setThumbRating] = useState("");
+    const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(false);
@@ -65,7 +63,7 @@ const UserSingleProject = ({mediaId}) => {
         }
     };
 
-    const processLinksOfPrevNotes = (noteToProcess) => {
+    const getListLinkForNote = (noteToProcess) => {
         let toShow = noteToProcess ? noteToProcess : activeNoteInTextArea;
         let aLen = toShow.length;
         let aSplit = toShow.split(" ");
@@ -123,37 +121,35 @@ const UserSingleProject = ({mediaId}) => {
 
     // Need to retrieve current user and all of *their* notes
     useEffect(() => {
-        Axios.get(REACT_APP_SERVER_URL + projectReviewingPath + mediaId).then((res) => {
-            if (res.status === 200) {
-                let temp = [];
-
-                for (let note of res.data.totalNotesFromServer) {
-                    let nContents = note.note_body;
-                    let nTimestamp = note.note_timestamp;
-                    let nId = note.note_id;
-
-                    let nLink = processLinksOfPrevNotes(nContents);
-
-                    temp = [
-                        ...temp,
-                        {
-                            nLink: nLink,
-                            nContents: nContents,
-                            nTimestamp: nTimestamp,
-                            nId: nId
-                        }
-                    ];
-                }
-
-                // setNoteDetails(temp);
-
+        Axios.get(REACT_APP_SERVER_URL + projectReviewingPath + mediaId).then((initialInfo) => {
+            if (initialInfo.status === 200) {
                 const {
                     project_name, 
                     creation_datetime,
                     file_name,
-                    thumb_rating, media_desc,
-                    user_id
-                } = res.data;
+                    thumb_rating, 
+                    media_desc,
+                    user_id,
+                    totalNotesFromServer
+                } = initialInfo.data;
+
+                let allNotesInfoForTrack = [];
+
+                for (let eachNote of totalNotesFromServer) {
+                    let nContents = eachNote.note_body;
+
+                    allNotesInfoForTrack = [
+                        ...allNotesInfoForTrack,
+                        {
+                            nContents: nContents,
+                            nTimestamp: eachNote.note_timestamp,
+                            nId: eachNote.note_id,
+                            nLink: getListLinkForNote(nContents)
+                        }
+                    ];
+                }
+
+                // setNoteDetails(allNotesInfoForTrack);
                 
                 // const creationDate = new Date(creation_datetime);
                 // const cMonth = creationDate.getMonth() + 1;
@@ -167,7 +163,8 @@ const UserSingleProject = ({mediaId}) => {
                 setFileName(file_name);
                 setUserId(user_id);
                 // setCreatedOn(formattedMediaDate);
-                setThumbRating(thumb_rating);
+                setThumbRating(thumb_rating ? thumb_rating : false);
+
 
                 if (isAnUpdatedNote === "This ain't gonna happen") { // Delete
                     loadNote(); // Delete
@@ -177,7 +174,7 @@ const UserSingleProject = ({mediaId}) => {
                 const formData = new FormData();
                 
                 formData.append('mediaId', mediaId);
-                formData.append('res', res);
+                formData.append('res', initialInfo);
 
                 Axios.post("http://localhost:3001/error", {
                     method: 'POST',
