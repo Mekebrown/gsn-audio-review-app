@@ -3,56 +3,26 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
-const bp = require('body-parser')
+const bp = require('body-parser');
+
 require('dotenv').config();
-
-// const dbPermanent = require("./database/db_details");
-
-// Components
-// const indexRouter =  require("./routes/indexRoute");
-/* const adminRouter =  require("./routes/adminRoute");
-const adminSingleProjectRouter =  require("./routes/adminSingleProjectRoute");
-const allProjectsRouter =  require("./routes/allProjectsRoute");
-const notesRouter =  require("./routes/notesRoute");
-const userSingleProjectRouter =  require("./routes/userSingleProjectRoute");
-const usersRouter =  require("./routes/usersRoute");*/
-
-// app.use("/", indexRouter);
-/* app.use("/admin/", adminRouter);
-app.use("/asingle/", adminSingleProjectRouter); // Doesn't work
-app.use("/projects/", allProjectsRouter);
-app.use("/notes/", notesRouter);
-app.use("/usingle/", userSingleProjectRouter);
-app.use("/users/", usersRouter);*/
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bp.json())
-app.use(bp.urlencoded({ extended: true }))
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
 
-const details = {
-  host: 'localhost',
-  user: 'root',
-  password: 'rootmysql',
-  database: 'gsndb',
-  port: 3306,
-  ssl: true,
-  dialect: "mysql",
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-};
+const conn = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
+});
 
-const conn = mysql.createConnection(details);
-
-var dataToSend = {};
+let dataToSend = {}; // Let to allow overwriting later
 
 const getQueryValues = (queryStatement, params = []) => {
   return new Promise((resolve, reject) => {
@@ -115,10 +85,6 @@ app.get("/", (req, res) => {
   res.send("Entered");
 });
 
-app.post("/", (req, res) => {
-  res.send("Here");
-});
-
 app.get("/usingle/:media_id", (req, res) => {
   const mediaId = parseInt(req.params.media_id);
 
@@ -129,7 +95,15 @@ app.get("/usingle/:media_id", (req, res) => {
   let ratings_query_statement = "SELECT * FROM ratings WHERE media_id = ?";
 
   // notes - Zero or more results; We need the following: media_id, user_id, note_id, note_last_retrieved, note_body, is_deleted, note_timestamp
-  let notes_query_statement = "SELECT note_id, note_body, note_last_retrieved, note_timestamp FROM notes WHERE media_id = ? AND is_deleted = 'no' ORDER BY note_last_retrieved DESC LIMIT 5";
+  let notes_query_statement = `SELECT 
+                                note_id, note_body, note_last_retrieved, note_timestamp 
+                                FROM notes 
+                                WHERE media_id = ? 
+                                AND is_deleted = 'no' 
+                                ORDER BY note_last_retrieved 
+                                DESC 
+                                LIMIT 5
+  `;
   
   getQueryValues(media_query_statement, [mediaId])
   .then(() => getQueryValues(ratings_query_statement, [mediaId]))
@@ -142,48 +116,6 @@ app.get("/usingle/:media_id", (req, res) => {
     res.send(dataToSend);
   })
   .catch((err) => console.log("Promise rejection error: " + err));
-});
-
-// old '/audio/:media_id/:file_name/:file_ext/:file_type
-app.get('/audio', function(req, res) {
-    // const mediaId = req.params.media_id && typeof req.params.media_id === "number" ? req.params.media_id : null;
-    // const fileName = req.params.file_name && typeof req.params.file_name === "string" ? req.params.file_name : null;
-    // const fileExt = req.params.file_ext && typeof req.params.file_ext === "string" ? req.params.file_ext : null;
-    // const fileType = req.params.file_type && typeof req.params.file_type === "string" ? req.params.file_type : null;
-
-    const mediaId = req.body.media_id && typeof req.body.media_id === "number" ? req.body.media_id : null;
-    const fileName = req.body.file_name && typeof req.body.file_name === "string" ? req.body.file_name : null;
-    const fileExt = req.body.file_ext && typeof req.body.file_ext === "string" ? req.body.file_ext : null;
-    const fileType = req.body.file_type && typeof req.body.file_type === "string" ? req.body.file_type : null;
-
-  if (mediaId && fileName && fileExt && fileType) {
-    const path = "./media/audio/" + fileName + "." + fileType;
-    const stat = fs.statSync(path);
-    const fileSize = stat.size;
-
-    const head = {
-      'Content-Length': fileSize,
-      'Content-Type': fileType,
-    };
-    
-    getQueryValues("SELECT file_name FROM media WHERE media_id = ?", [mediaId])
-    .then((results) => {
-      console.log({results});
-      //res.writeHead(200, head);
-      //fs.createReadStream(path).pipe(res);
-    })
-    .catch((err) => console.log("Promise rejection error: " + err));
-  } else console.log("Error: Missing info");
-});
-
-app.post("/error", (req, res) => {
-  console.log('============error===============' + req.body);
-});
-
-app.get('/admin', (req, res) => {
-  // Redirect back to the homepage. User not permitted to visit this page directly.
-  res.setHeader('Content-Type', 'text/html');
-  res.end('<h1>Admin</h1>');
 });
 
 app.listen(3001, function() {
