@@ -26,7 +26,7 @@ const UserSingleProject = ({mediaId}) => {
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
-    const [hideNotePad, setHideNotePad] = useState(false);
+    const [hideNotePad, setHideNotePad] = useState(true);
     const [hideTimestampText, setHideTimestampText] = useState(true);
     const [noteWithTimestamp, setNoteWithTimestamp] = useState("note_00.00.00");
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
@@ -37,14 +37,6 @@ const UserSingleProject = ({mediaId}) => {
     // const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
     // const [noteDetails, setNoteDetails] = useState([]);
     // const [currentTime, setCurrentTime] = useState(0);
-
-    const noteAreaSelectionToggle = (e) => {
-        e.preventDefault();
-
-        // When user clicks in text box, pause player, record current timestamp, update timestampDiv with current timestamp messaging
-                                    
-        console.log("hit");
-    }
 
     const loadNote = (e, nContents, nTimestamp, nId) => {
         e.preventDefault();
@@ -82,8 +74,6 @@ const UserSingleProject = ({mediaId}) => {
         return toShow;
     };
 
-    // const handleSizeChange = (change) => {};
-
     const onUpdateTimestampPoint = () => {
         let time = document.querySelector(".audioPlayer").currentTime;
 
@@ -92,10 +82,12 @@ const UserSingleProject = ({mediaId}) => {
         }
     };
 
-    const handleNotePadToggle = (event) => {
-        event.preventDefault(); 
-
+    const handleNotePadToggle = (userInfo = null) => {
+        let createHideNoteBtn = document.querySelector(".createHide");
+        // Eventually log that user thought about making a note...
         setHideNotePad(prev => !prev);
+
+        hideNotePad ? createHideNoteBtn.innerHTML = "Hide Note" : createHideNoteBtn.innerHTML = "Create A Note";
     };
 
     const handleNoteSubmit = (event) => {
@@ -186,42 +178,44 @@ const UserSingleProject = ({mediaId}) => {
     }, []);
 
    return (
-        <div>
-            <AudioPlayerAndControls fileName={fileName} thumbRating={thumbRating} mediaDesc={mediaDesc} mediaId={mediaId} userId={userId} />
-                
-            <hr />
+        <main>
+            <AudioPlayerAndControls 
+                fileName={fileName} 
+                thumbRating={thumbRating} 
+                mediaDesc={mediaDesc} 
+                mediaId={mediaId} 
+                userId={userId} 
+            />
 
-            <main>
-                <section className="notesContainer" draggable="true">
+            <section className="notesContainer">
+                <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
+                <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
 
-                    <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
-                        <form className="hereThere" onSubmit={handleNoteSubmit}>
-                            <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
+                    <hr />
 
-                            <div className={hideTimestampText ? "hideTimestampText timestampDiv" : "timestampDiv"} />
+                    <form className="hereThere" onSubmit={handleNoteSubmit}>
+                        <div className={hideTimestampText ? "hideTimestampText timestampDiv" : "timestampDiv"} />
 
-                            <textarea className="notePadTextarea" 
-                                rows="10" 
-                                cols="50" 
-                                title="Note pad text area" 
-                                placeholder="Notes:"
-                                name="note"
-                                maxLength="500"
-                                value={activeNoteInTextArea}
-                                onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                                onFocus={onUpdateTimestampPoint}
-                                onClick={(e) => {noteAreaSelectionToggle(e)}}
-                                >
-                            </textarea>
-                        </form>
-                    </div>
-                </section>
+                        <textarea className="notePadTextarea" 
+                            rows="10" 
+                            cols="50" 
+                            title="Note pad text area" 
+                            placeholder="Notes:"
+                            name="note"
+                            maxLength="500"
+                            value={activeNoteInTextArea}
+                            onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
+                            onFocus={onUpdateTimestampPoint}
+                            >
+                        </textarea>
+                        <br />
+                        <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
+                    </form>
+                </div>
 
-                <section className="done" hidden>
-                    <p>Thanks for your contribution. You will be contacted right away!</p>
-                </section>
-            </main>
-        </div>
+                <p hidden>Thanks for your contribution. You will be contacted right away!</p>
+            </section>
+        </main>
     );
 }; 
 
