@@ -93,8 +93,8 @@ rAF = requestAnimationFrame(outputTimestamps);
                 } else audioSeconds = ":" + audioSeconds;
             
                 marker = audioMinutes + audioSeconds;
-                        // Ex: note_12122021_gsn_03:10:00
-                noteID = "note_" + noteStartDate + "_" + project + "_" + marker;
+                        // Ex: 12122021_gsn_03:10:00
+                noteID = noteStartDate + "_" + project + "_" + marker;
 
                 return marker;
             }

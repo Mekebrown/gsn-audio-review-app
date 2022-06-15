@@ -98,9 +98,9 @@ app.get("/usingle/:media_id", (req, res) => {
   // ratings - Zero or one result; We need the following: thumb_rating_id, media_id, user_id, thumb_rating
   let ratings_query_statement = "SELECT * FROM ratings WHERE media_id = ?";
 
-  // notes - Zero or more results; We need the following: media_id, user_id, note_id, note_last_retrieved, note_body, note_is_deleted, note_timestamp
+  // notes - Zero or more results; We need the following: media_id, user_id, note_id, note_last_updated, note_last_retrieved, note_body, note_timestamp
   let notes_query_statement = `SELECT 
-                                note_id, note_body, note_last_retrieved, note_timestamp 
+                                note_id, note_body, note_last_updated, note_timestamp, note_last_retrieved, note_is_deleted
                                 FROM notes 
                                 WHERE media_id = ? 
                                 AND note_is_deleted = 'no' 

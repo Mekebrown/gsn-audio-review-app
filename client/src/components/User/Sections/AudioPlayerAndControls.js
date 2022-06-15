@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import testAudio from "../../tools/envs";
+// import testAudio from "../../tools/envs";
 
 /** 
  * When timeline point is clicked, update timestamp prop to current point
@@ -15,38 +15,38 @@ import testAudio from "../../tools/envs";
  * @returns {Node} AudioPlayerAndControls
  */
 const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, userId}) => {
-    const [currentThumbRating, setCurrentThumbRating] = useState(thumbRating);
-    const [duration, setDuration] = useState(0);
-    const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
+    // const [currentThumbRating, setCurrentThumbRating] = useState(thumbRating);
+    // const [duration, setDuration] = useState(0);
+    // const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
 
-    const thePlayer = document.querySelector(".audioPlayer");
+    // const thePlayer = document.querySelector(".audioPlayer");
 
-    const sources = [
-        {item: 1, ext: "mp3", type: "audio/mpeg"}, 
-        {item: 2, ext: "ogg", type: "audio/ogg"}
-    ];
+    // const sources = [
+    //     {item: 1, ext: "mp3", type: "audio/mpeg"}, 
+    //     {item: 2, ext: "ogg", type: "audio/ogg"}
+    // ];
 
-    const handleThumbRatingClick = (clickedBtn) => {
-        setCurrentThumbRating(clickedBtn);
+    // const handleThumbRatingClick = (clickedBtn) => {
+    //     setCurrentThumbRating(clickedBtn);
         
-        const infoToSend = [mediaId, userId, currentThumbRating];
-    };
+    //     const infoToSend = [mediaId, userId, currentThumbRating];
+    // };
 
     // Play, pause, reset - TODO volume change, stop
-    const handleAudioControlsClick = (clickedBtn) => {
-        if (clickedBtn === "reload") {
-            thePlayer.currentTime = 0.0;
-            thePlayer.pause();
-        } else {
-            if (thePlayer.currentTime === 0.0 || thePlayer.paused) {
-                thePlayer.play(); 
-                setPlayPauseBtnText("Pause");
-            } else  {
-                thePlayer.pause(); 
-                setPlayPauseBtnText("Play");
-            }
-        }
-    };
+    // const handleAudioControlsClick = (clickedBtn) => {
+    //     if (clickedBtn === "reload") {
+    //         thePlayer.currentTime = 0.0;
+    //         thePlayer.pause();
+    //     } else {
+    //         if (thePlayer.currentTime === 0.0 || thePlayer.paused) {
+    //             thePlayer.play(); 
+    //             setPlayPauseBtnText("Pause");
+    //         } else  {
+    //             thePlayer.pause(); 
+    //             setPlayPauseBtnText("Play");
+    //         }
+    //     }
+    // };
 
     const holdThis = (source) => {
         let retrievalPath;
@@ -81,17 +81,17 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
         console.log("Not available");
     };
 
-    useEffect(() => {
-        if (thePlayer?.current?.duration) {
-            const sec = Math.floor(thePlayer.current.duration);
+    // useEffect(() => {
+    //     if (thePlayer?.current?.duration) {
+    //         const sec = Math.floor(thePlayer.current.duration);
 
-            setDuration(thePlayer.current.duration);
-        }
-    }, []);
+    //         setDuration(thePlayer.current.duration);
+    //     }
+    // }, []);
 
     return (
         <>
-            {currentThumbRating && ( // Swap out with react-icons?
+            {/* {currentThumbRating && ( // Swap out with react-icons?
                 <div>
                     <button
                         value="approve" 
@@ -130,7 +130,7 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
                 <button className="reload" onClick={() => {
                     handleAudioControlsClick("reload")
                 }}>Reload</button>
-            </div>
+            </div> */}
         </>
     );
 };

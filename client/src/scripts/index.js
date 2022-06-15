@@ -111,7 +111,7 @@ window.onload = () => {
             }
 
             function getNoteID(markerOutput) {
-                return "note_111"; // "note_" + markerOutput
+                return "111"; // markerOutput
             }
 
             function setNotePadText() {

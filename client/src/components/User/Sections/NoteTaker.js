@@ -25,7 +25,7 @@ const NoteTaker = ({noteDetails, notesList}) => {
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("Homie");
     const [hideNotePad, setHideNotePad] = useState(false);
     const [currentNotesList, setCurrentNotesList] = useState(notesList);
-    const [noteWithTimestamp, setNoteWithTimestamp] = useState("note_");
+    // const [noteWithTimestamp, setNoteWithTimestamp] = useState("");
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [serverData, setServerData] = useState({});
@@ -34,18 +34,18 @@ const NoteTaker = ({noteDetails, notesList}) => {
     const theFullNotePad = document.querySelector(".notePad");
     const thePlayer = document.querySelector(".audioPlayer");
     
-    const loadNote = (e, noteInList) => {
-        e.preventDefault();
+    // const loadNote = (e, noteInList) => {
+    //     e.preventDefault();
 
-        if (theNotePadTextarea && theFullNotePad) {
-            theFullNotePad.removeAttribute("class");
-            theFullNotePad.classList.remove("hideNotePad");
+    //     if (theNotePadTextarea && theFullNotePad) {
+    //         theFullNotePad.removeAttribute("class");
+    //         theFullNotePad.classList.remove("hideNotePad");
 
-            theNotePadTextarea.value = noteInList;
+    //         theNotePadTextarea.value = noteInList.nContents;
 
-            setIsAnUpdatedNote(true);
-        }
-    };
+    //         setIsAnUpdatedNote(true);
+    //     }
+    // };
 
     const handleSizeChange = (change) => {};
 
@@ -92,18 +92,6 @@ const NoteTaker = ({noteDetails, notesList}) => {
     return (
         <>
             <section>
-                <ul className="notesList">
-                    {currentNotesList ? (
-                        currentNotesList.map((noteInList, key) => {
-                            return <div key={key}>
-                                <span onClick={(e)=>loadNote(e, noteInList)}>Note: "<em>{noteInList}</em>..."</span>
-                            </div>;
-                        })
-                    ) : (
-                        <span>No notes</span>
-                    )}
-                </ul>
-
                 {/* <span className="notePadOptions">
                     <button className="larger" type="button" onClick={() => handleSizeChange('larger')}>Larger</button>
                     <button className="smaller" type="button" onClick={() => handleSizeChange('smaller')}>Smaller</button>
@@ -121,12 +109,10 @@ const NoteTaker = ({noteDetails, notesList}) => {
                         <>
                             <p>Most recent notes:</p>
                             {
-                                noteDetails.map(({nLink, nContents, nTimestamp, nId}) => {
-                                    return <div key={nId}>
-                                        <a href="ok" onClick={(e)=>loadNote(e, nContents, nTimestamp, nId)}>
-                                            Note: "<em>{nLink}</em>..."
-                                        </a>
-                                    </div>;
+                                noteDetails.map((note) => {
+                                    return <span key={note.nId} onClick={(e)=>loadNote(e, note)}>
+                                        Note: "<em>{note.nLink}</em>" - {note.nTimestamp}
+                                    </span>;
                                 })
                             }
                         </>
