@@ -329,4 +329,30 @@ const allProjects = [
     ]
 ];
 
-module.exports = [allProjects, allUsers, allNotesForAllProjects, singleAdmin, singleProject];
+const currDateTime = new Date();
+
+const newSampleNote = {
+    media_id: 1,
+    user_id: 1001,
+    note_id: 11111,
+    note_created_on: currDateTime,
+    note_last_retrieved: currDateTime,
+    note_timestamp: currDateTime,
+};
+
+const updatedSampleNote = {
+    media_id: 1,
+    user_id: 1001,
+    note_timestamp: currDateTime,
+    note_last_retrieved: currDateTime,
+};
+
+module.exports = {
+    allProjects, 
+    allUsers, 
+    allNotesForAllProjects, 
+    singleAdmin, 
+    singleProject, 
+    newSampleNote, 
+    updatedSampleNote
+};
