@@ -37,10 +37,13 @@ const NoteTaker = ({noteDetails, notesList}) => {
     const loadNote = (e, noteInList) => {
         e.preventDefault();
 
-        if (theNotePadTextarea) {
+        if (theNotePadTextarea && theFullNotePad) {
             theFullNotePad.removeAttribute("class");
+            theFullNotePad.classList.remove("hideNotePad");
+
             theNotePadTextarea.value = noteInList;
-            setIsAnUpdatedNote("true");
+
+            setIsAnUpdatedNote(true);
         }
     };
 
@@ -88,84 +91,50 @@ const NoteTaker = ({noteDetails, notesList}) => {
 
     return (
         <>
-        <section className="notesContainer" draggable="true">
-            
-            {/* <button className="toggleNotePad" onClick={(e) => {e.preventDefault(); setHideNotePad(!hideNotePad)}}>
-                Make A Note
-            </button> */}
+            <section>
+                <ul className="notesList">
+                    {currentNotesList ? (
+                        currentNotesList.map((noteInList, key) => {
+                            return <div key={key}>
+                                <span onClick={(e)=>loadNote(e, noteInList)}>Note: "<em>{noteInList}</em>..."</span>
+                            </div>;
+                        })
+                    ) : (
+                        <span>No notes</span>
+                    )}
+                </ul>
 
-            <div className={hideNotePad ? "hideNotePad notePad" : "notePad"}>
-                <form className="hereThere" onSubmit={(e) => handleNoteSubmit(e)} >
-                    {/* <label htmlFor="notePadTextarea" className="notePadLabel">Write thoughts here:</label><br /> */}
+                {/* <span className="notePadOptions">
+                    <button className="larger" type="button" onClick={() => handleSizeChange('larger')}>Larger</button>
+                    <button className="smaller" type="button" onClick={() => handleSizeChange('smaller')}>Smaller</button>
+                    <button className="normal" type="button" onClick={() => handleSizeChange('normal')}>Normal</button> 
+                    <br />
+                    <button className="notePadClear" type="button" onClick={() => document.querySelector(".notePadTextarea").value = ""}>Clear</button>
+                </span> */}
 
-                    <button className="notePadSave" type="submit">Save</button>
-                    <textarea className="notePadTextarea" 
-                        rows="1" 
-                        cols="50" 
-                        title="Note pad text area" 
-                        placeholder="Notes:"
-                        name="note"
-                        maxLength="500"
-                        value={activeNoteInTextArea}
-                        onChange={(event)=>setActiveNoteInTextArea(event.target.value)}>
-                    </textarea>
+                {
+                    // if note update send along with the form data "note_last_updated: rightNow"
+                }
 
-                    {/* <br />
-
-                    <span className="notePadOptions">
-                        <button className="larger" type="button" onClick={() => handleSizeChange('larger')}>Larger</button>
-                        <button className="smaller" type="button" onClick={() => handleSizeChange('smaller')}>Smaller</button>
-                        <button className="normal" type="button" onClick={() => handleSizeChange('normal')}>Normal</button> 
-                        <br />
-                        <button className="notePadClear" type="button" onClick={() => document.querySelector(".notePadTextarea").value = ""}>Clear</button>
-                    </span> */}
-                </form>
-            </div>
-
-            <div>
-                {console.log(JSON.stringify(serverData))}
-                <br />-----------------
-                <br /> activeNoteInTextArea: "{activeNoteInTextArea}"
-                <br /> userId: {userId} ({typeof userId}), mediaId: {mediaId} ({typeof mediaId})
-                <br /> currentNotesList: [{currentNotesList}]
-                <br /> noteWithTimestamp: "{noteWithTimestamp}" <br />
-                -------------
-            </div>
-
-            {
-                // if note update send along with the form data "note_last_updated: rightNow"
-            }
-            <ul className="notesList">
-                {notesList ? (
-                    notesList.map((noteInList, key) => {
-                        return <div key={key}>
-                            <span onClick={(e)=>loadNote(e, noteInList)}>Note: "<em>{noteInList}</em>..."</span>
-                        </div>;
-                    })
-                ) : (
-                    <span>No notes</span>
-                )}
-            </ul>
-
-            {/* <ul className="noteDetails">
-                {noteDetails ? (
-                    <>
-                        <p>Most recent notes:</p>
-                        {
-                            noteDetails.map(({nLink, nContents, nTimestamp, nId}) => {
-                                return <div key={nId}>
-                                    <a href="ok" onClick={(e)=>loadNote(e, nContents, nTimestamp, nId)}>
-                                        Note: "<em>{nLink}</em>..."
-                                    </a>
-                                </div>;
-                            })
-                        }
-                    </>
-                ) : (
-                    <span>No notes were saved for this audio</span>
-                )}
-            </ul> */}
-        </section>
+                {/* <ul className="noteDetails">
+                    {noteDetails ? (
+                        <>
+                            <p>Most recent notes:</p>
+                            {
+                                noteDetails.map(({nLink, nContents, nTimestamp, nId}) => {
+                                    return <div key={nId}>
+                                        <a href="ok" onClick={(e)=>loadNote(e, nContents, nTimestamp, nId)}>
+                                            Note: "<em>{nLink}</em>..."
+                                        </a>
+                                    </div>;
+                                })
+                            }
+                        </>
+                    ) : (
+                        <span>No notes were saved for this audio</span>
+                    )}
+                </ul> */}
+            </section>
         </>
     );
 };

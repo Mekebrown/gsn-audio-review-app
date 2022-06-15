@@ -17,7 +17,7 @@ import { REACT_APP_SERVER_URL, projectReviewingPath } from "./tools/envs";
  */
 const Index = () => {
     const login = () => {
-        const userId = 1;
+        const userId = 1001;
 
         const formData = new FormData();
                 
@@ -26,7 +26,7 @@ const Index = () => {
         Axios.post(REACT_APP_SERVER_URL, { // Why and how does this work but not going to the route on L29 directly not work?
             body: formData
         }).then(() => {
-            const reroute = document.location.href + projectReviewingPath + userId;
+            const reroute = document.location.href + projectReviewingPath + 1;
 
             window.location.assign(reroute);
         });

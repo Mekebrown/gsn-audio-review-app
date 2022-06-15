@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import AudioPlayerAndControls from "./Sections/AudioPlayerAndControls";
 import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
+import AudioPlayerAndControls from "./Sections/AudioPlayerAndControls";
 import NoteTaker from "./Sections/NoteTaker";
 
 /**
@@ -30,13 +30,14 @@ const UserSingleProject = ({mediaId}) => {
     const [hideTimestampText, setHideTimestampText] = useState(true);
     const [noteWithTimestamp, setNoteWithTimestamp] = useState("note_00.00.00");
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
+    const [noteDetails, setNoteDetails] = useState([]); // Each note's contents, timestamp, id, and its link
+    // const [projectName, setProjectName] = useState("Track Audio");
+    // const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
+    // const [currentTime, setCurrentTime] = useState(0);
+
     const theNotePadTextarea = document.querySelector(".notePadTextarea");
     const theFullNotePad = document.querySelector(".notePad");
     const timestampDiv = document.querySelector(".timestampDiv");
-    // const [projectName, setProjectName] = useState("Track Audio");
-    // const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
-    // const [noteDetails, setNoteDetails] = useState([]);
-    // const [currentTime, setCurrentTime] = useState(0);
 
     const loadNote = (e, nContents, nTimestamp, nId) => {
         e.preventDefault();
@@ -119,10 +120,10 @@ const UserSingleProject = ({mediaId}) => {
                 const {
                     project_name, 
                     creation_datetime,
-                    file_name,
-                    thumb_rating, 
+                    file_name, 
                     media_desc,
                     user_id,
+                    thumb_rating,
                     totalNotesFromServer
                 } = initialInfo.data;
 
@@ -142,8 +143,13 @@ const UserSingleProject = ({mediaId}) => {
                     ];
                 }
 
-                // setNoteDetails(allNotesInfoForTrack);
-                
+                setNoteDetails(allNotesInfoForTrack);
+                setThumbRating(thumb_rating ? thumb_rating : false);
+
+                // setMediaDesc(media_desc);
+                // setFileName(file_name);
+                // setUserId(user_id);
+
                 // const creationDate = new Date(creation_datetime);
                 // const cMonth = creationDate.getMonth() + 1;
                 // const cDay = creationDate.getDate();
@@ -152,28 +158,23 @@ const UserSingleProject = ({mediaId}) => {
                 // const formattedProjectName = project_name[0].toUpperCase() + project_name.substring(1);
 
                 // setProjectName(formattedProjectName);
-                setMediaDesc(media_desc);
-                setFileName(file_name);
-                setUserId(user_id);
                 // setCreatedOn(formattedMediaDate);
-                setThumbRating(thumb_rating ? thumb_rating : false);
 
-
-                if (isAnUpdatedNote === "This ain't gonna happen") { // Delete
-                    loadNote(); // Delete
-                    handleNotePadToggle(project_name + creation_datetime); // Delete
-                } // Delete
-            } else {
-                const formData = new FormData();
+                // if (isAnUpdatedNote === "This ain't gonna happen") { // Delete
+                //     loadNote(); // Delete
+                //     handleNotePadToggle(project_name + creation_datetime); // Delete
+                // } // Delete
+            } //else {
+            //     const formData = new FormData();
                 
-                formData.append('mediaId', mediaId);
-                formData.append('res', initialInfo);
+            //     formData.append('mediaId', mediaId);
+            //     formData.append('res', initialInfo);
 
-                Axios.post("http://localhost:3001/error", {
-                    method: 'POST',
-                    body: formData
-                });
-            }
+            //     Axios.post("http://localhost:3001/error", {
+            //         method: 'POST',
+            //         body: formData
+            //     });
+            // }
         });
         /* eslint-disable-next-line */
     }, []);
@@ -218,7 +219,7 @@ const UserSingleProject = ({mediaId}) => {
                 <p className="thankYouMsg"></p>
             </section>
 
-            <NoteTaker />
+            <NoteTaker noteDetails={noteDetails} notesList={noteDetails}/>
         </main>
     );
 }; 

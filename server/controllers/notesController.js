@@ -16,7 +16,7 @@ exports.create = (req, res) => {
   // Create a Note
   const note = {
     note_id: 1,
-    user_id: 1,
+    user_id: 1001,
     project_name: req.body.project_name,
     contents: req.body.contents,
     creation_datetime: new Date
