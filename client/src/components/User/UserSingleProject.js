@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
 import testAudio from "../tools/envs";
+import { newSampleNote, updatedSampleNote } from "../tools/dummy_data";
 
 /**
  * Page for a single media work and notes opportunity
@@ -19,18 +20,15 @@ import testAudio from "../tools/envs";
  * @returns {Node} UserSingleProject
  */
 const UserSingleProject = ({mediaId}) => {
-    const [currentThumbRating, setCurrentThumbRating] = useState(null);
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
-    const [hideTimestampText, setHideTimestampText] = useState(true);
     const [noteWithTimestamp, setNoteWithTimestamp] = useState("00.00.00");
     const [noteDetails, setNoteDetails] = useState([]); // Each note's contents, timestamp, id, and its link
     const [duration, setDuration] = useState(0);
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
     const [fileName, setFileName] = useState("");
     const [userId, setUserId] = useState(null);
-    const [currentNoteId, setCurrentNoteId] = useState(null);
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
     // const [projectName, setProjectName] = useState("Track Audio");
@@ -39,37 +37,25 @@ const UserSingleProject = ({mediaId}) => {
 
     const theNotePadTextarea = document.querySelector(".notePadTextarea");
     const theFullNotePad = document.querySelector(".notePad");
-    const timestampDiv = document.querySelector(".timestampDiv");
     const thePlayer = document.querySelector(".audioPlayer");
-
-    // const loadNote = (e, nContents, nTimestamp, nId) => {
-    //     e.preventDefault();
-
-    //     if (theNotePadTextarea && timestampDiv) { // If notepad's present
-    //         theFullNotePad.removeAttribute("class"); // Make sure it's visible now
-    //         timestampDiv.removeAttribute("class"); // Make sure it's visible now
-
-    //         let timestamp = (nTimestamp).split("note_")[1];
-
-    //         timestampDiv.innerHTML = "<small><em>From timestamp " + timestamp + ": </em></small>";
-    //         setActiveNoteInTextArea(nContents);
-    //         setCurrentNoteId(nId);
-    //         setIsAnUpdatedNote(true);
-            
-    //     }
-    // };
     
     const loadNote = (e, noteInList) => {
         e.preventDefault();
 
         if (theNotePadTextarea && theFullNotePad) {
+            let currentPlace = thePlayer?.current?.duration;
+            
+            if (currentPlace) {
+                setDuration(Math.floor(currentPlace));
+            }
+
             theFullNotePad.classList.remove("hideNotePad");
 
-            theNotePadTextarea.value = noteInList.nContents;
+            setActiveNoteInTextArea(noteInList.nContents);
 
-            // if (noteInList.nTimestamp === audio player's current timestamp) {
+            if (noteInList.nTimestamp === currentPlace) {
                 setIsAnUpdatedNote(true);
-            // }
+            }
         }
     };
 
@@ -113,12 +99,6 @@ const UserSingleProject = ({mediaId}) => {
         {item: 2, ext: "ogg", type: "audio/ogg"}
     ];
 
-    const handleThumbRatingClick = (clickedBtn) => {
-        setCurrentThumbRating(clickedBtn);
-        
-        const infoToSend = [mediaId, userId, currentThumbRating];
-    };
-
     const handleAudioControlsClick = (clickedBtn) => {
         if (clickedBtn === "reload") {
             thePlayer.currentTime = 0.0;
@@ -137,43 +117,30 @@ const UserSingleProject = ({mediaId}) => {
     const handleNoteSubmit = (event) => {
         event.preventDefault();
 
-        timestampDiv.removeAttribute("class"); // Make sure it's visible now
-        
-        setHideTimestampText(false);
+        let info = { note_body: event.value };
 
-        const info = {
-            media_id: 1,
-            note_body: event.value, // note_last_updated: isAnUpdatedNote ? new Date() : false,
-            note_id: 11111,
-            note_timestamp: noteWithTimestamp,
-            current_datetime: event.timeStamp
-        };
+        isAnUpdatedNote ? info = {...info, updatedSampleNote} : info = {...info, newSampleNote};
+
+        console.log(info);
 
         Axios.post('http://localhost:3001/usingle', info)
-        .then((res) => timestampDiv.innerHTML = "<small><em>" + JSON.stringify(res) + "</em></small>") // Handle updating noteDetails with res info
-        .catch(error => timestampDiv.innerHTML = "<small><em>" + JSON.stringify(error) + "</em></small>");
+        .then((res) => console.log(JSON.stringify(res)))
+        .catch(error => console.log(JSON.stringify(error)));
 
-        // setHideTimestampText(true);
-        // setActiveNoteInTextArea("");
+        setActiveNoteInTextArea("");
+
         document.getElementsByClassName("thankYouMsg").innerHTML = "Thanks for your contribution. You will be contacted right away!";
     };
 
-    // Need to retrieve current user and all of *their* notes
     useEffect(() => {
-        if (thePlayer?.current?.duration) {
-            const sec = Math.floor(thePlayer.current.duration);
-
-            setDuration(thePlayer.current.duration);
-        }
-
         Axios.get(REACT_APP_SERVER_URL + projectReviewingPath + mediaId).then((initialInfo) => {
             if (initialInfo.status === 200) {
                 const {
                     project_name, 
                     creation_datetime,
-                    file_name, 
+                    file_name,
+                    user_id, 
                     media_desc,
-                    user_id,
                     thumb_rating,
                     totalNotesFromServer
                 } = initialInfo.data;
@@ -197,7 +164,7 @@ const UserSingleProject = ({mediaId}) => {
                 setNoteDetails(allNotesInfoForTrack);
                 setThumbRating(thumb_rating ? thumb_rating : false);
 
-                // setMediaDesc(media_desc);
+                setMediaDesc(media_desc);
                 // setFileName(file_name);
                 // setUserId(user_id);
 
@@ -210,11 +177,6 @@ const UserSingleProject = ({mediaId}) => {
 
                 // setProjectName(formattedProjectName);
                 // setCreatedOn(formattedMediaDate);
-
-                // if (isAnUpdatedNote === "This ain't gonna happen") { // Delete
-                //     loadNote(); // Delete
-                //     handleNotePadToggle(project_name + creation_datetime); // Delete
-                // } // Delete
             } //else {
             //     const formData = new FormData();
                 
@@ -232,20 +194,12 @@ const UserSingleProject = ({mediaId}) => {
 
    return (
         <main>
-            {/* <AudioPlayerAndControls 
-                fileName={fileName} 
-                thumbRating={thumbRating} 
-                mediaDesc={mediaDesc} 
-                mediaId={mediaId} 
-                userId={userId} 
-            /> */}
-
-            {currentThumbRating && ( // Swap out with react-icons?
+            {thumbRating && (
                 <div>
                     <button
                         value="approve" 
                         className="trackApproved" 
-                        onClick={() => handleThumbRatingClick("up")}
+                        onClick={() => setThumbRating("up")}
                     >
                         &#128077;
                     </button>
@@ -253,7 +207,7 @@ const UserSingleProject = ({mediaId}) => {
                     <button 
                         value="disapprove" 
                         className="trackDisapproved" 
-                        onClick={() => handleThumbRatingClick("down")}
+                        onClick={() => setThumbRating("down")}
                     >
                         &#128078;
                     </button>
@@ -269,7 +223,7 @@ const UserSingleProject = ({mediaId}) => {
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
-            <p>Project description: <em>{mediaDesc}</em>.</p>
+            <p>Project description: <em>{mediaDesc}</em></p>
 
             <div className="audioControls">
                 <button className="playPause" onClick={() => {
@@ -289,8 +243,6 @@ const UserSingleProject = ({mediaId}) => {
                     <hr />
 
                     <form className="hereThere" onSubmit={handleNoteSubmit}>
-                        <div className={hideTimestampText ? "hideTimestampText timestampDiv" : "timestampDiv"} />
-
                         <textarea className="notePadTextarea" 
                             rows="10" 
                             cols="50" 
@@ -303,7 +255,9 @@ const UserSingleProject = ({mediaId}) => {
                             onFocus={onUpdateTimestampPoint}
                             >
                         </textarea>
+
                         <br />
+
                         <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
                     </form>
                 </div>
