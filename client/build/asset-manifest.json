@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.d6facc16.css",
-    "main.js": "/static/js/main.6f81ff75.js",
+    "main.js": "/static/js/main.79381fc3.js",
+    "static/media/wearenotokay.mp3": "/static/media/wearenotokay.3d81d6e2b48064380d4c.mp3",
     "index.html": "/index.html",
     "main.d6facc16.css.map": "/static/css/main.d6facc16.css.map",
-    "main.6f81ff75.js.map": "/static/js/main.6f81ff75.js.map"
+    "main.79381fc3.js.map": "/static/js/main.79381fc3.js.map"
   },
   "entrypoints": [
     "static/css/main.d6facc16.css",
-    "static/js/main.6f81ff75.js"
+    "static/js/main.79381fc3.js"
   ]
 }
