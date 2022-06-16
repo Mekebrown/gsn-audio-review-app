@@ -7,7 +7,8 @@
   "scripts": {
     "start": "nodemon -r dotenv/config server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "node server.js"
+    "debug": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client"
   },
   "author": "",
   "license": "ISC",

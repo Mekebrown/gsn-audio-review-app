@@ -120,6 +120,13 @@ app.get("/usingle/:media_id", (req, res) => {
   .catch((err) => console.log("Promise rejection error: " + err));
 });
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 app.listen(3001, function() {
   console.log(process.env.SERVER_PORT);
 });
