@@ -79,5 +79,8 @@
     "jest-watch-typeahead": "^0.6.5",
     "react-scripts": "5.0.0",
     "webpack": "^5.70.0"
+  },
+  "resolutions": {
+    "trim-newlines": "4.x.x"
   }
 }
