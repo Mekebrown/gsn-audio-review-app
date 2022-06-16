@@ -82,9 +82,9 @@ app.post("/usingle", (req, res) => {
   .catch((err) => console.log(err));
 });
 
-app.get("/", (req, res) => {
-  res.send("Entered");
-});
+// app.get("/", (req, res) => {
+//   res.send("Entered");
+// });
 
 app.post("/", (req, res) => {
   res.send("Cool");
