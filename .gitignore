@@ -1,7 +1,7 @@
 # dependencies
 .git
 client/node_modules
-server/node_modules
+node_modules
 
 # database
 server/database 
@@ -9,7 +9,6 @@ server/database
 # environment variables
 .env
 client/~.env
-server/~.env
 
 # misc
 etc
