@@ -23,12 +23,9 @@ const UserSingleProject = ({mediaId}) => {
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
-    const [noteWithTimestamp, setNoteWithTimestamp] = useState("00.00.00");
+    const [noteWithTimestamp, setNoteWithTimestamp] = useState(null);
     const [noteDetails, setNoteDetails] = useState([]); // Each note's contents, timestamp, id, and its link
-    const [duration, setDuration] = useState(0);
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
-    const [fileName, setFileName] = useState("");
-    const [userId, setUserId] = useState(null);
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
     // const [projectName, setProjectName] = useState("Track Audio");
@@ -38,26 +35,11 @@ const UserSingleProject = ({mediaId}) => {
     const theNotePadTextarea = document.querySelector(".notePadTextarea");
     const theFullNotePad = document.querySelector(".notePad");
     const thePlayer = document.querySelector(".audioPlayer");
-    
-    const loadNote = (e, noteInList) => {
-        e.preventDefault();
 
-        if (theNotePadTextarea && theFullNotePad) {
-            let currentPlace = thePlayer?.current?.duration;
-            
-            if (currentPlace) {
-                setDuration(Math.floor(currentPlace));
-            }
-
-            theFullNotePad.classList.remove("hideNotePad");
-
-            setActiveNoteInTextArea(noteInList.nContents);
-
-            if (noteInList.nTimestamp === currentPlace) {
-                setIsAnUpdatedNote(true);
-            }
-        }
-    };
+    const sources = [
+        {item: 1, ext: "mp3", type: "audio/mpeg"}, 
+        {item: 2, ext: "ogg", type: "audio/ogg"}
+    ];
 
     const getListLinkForNote = (noteToProcess) => {
         let toShow = noteToProcess ? noteToProcess : activeNoteInTextArea;
@@ -78,26 +60,40 @@ const UserSingleProject = ({mediaId}) => {
         return toShow;
     };
 
-    const onUpdateTimestampPoint = () => {
-        let time = document.querySelector(".audioPlayer").currentTime;
-
-        if (time?.toFixed(2) > 0) {
-            setNoteWithTimestamp(`${time.toFixed(2)}`);
-        }
+    const setTimestampPoint = (setToThisPoint = null) => {
+        let time = (document.querySelector(".audioPlayer").currentTime).toFixed(2);
+        let valueForTimestamp = setToThisPoint ? setToThisPoint : time;
+        
+        // setNoteWithTimestamp(valueForTimestamp).then((res) => console.log({res})).error((err) => console.log({err}));
     };
 
+    debugger;
     const handleNotePadToggle = (userInfo = null) => {
+        setTimestampPoint(userInfo?.nTimestamp);
+
         let createHideNoteBtn = document.querySelector(".createHide");
-        // Eventually log that user thought about making a note...
+
+        // Eventually log that the user thought about making a note...
         setHideNotePad(prev => !prev);
 
         hideNotePad ? createHideNoteBtn.innerHTML = "Hide Note" : createHideNoteBtn.innerHTML = "Create A Note";
+
+        console.log("From handleNotePadToggle, the timestamp set is ", noteWithTimestamp);
     };
 
-    const sources = [
-        {item: 1, ext: "mp3", type: "audio/mpeg"}, 
-        {item: 2, ext: "ogg", type: "audio/ogg"}
-    ];
+    const loadNote = (e, noteInList) => {
+        e.preventDefault();
+
+        if (theNotePadTextarea && theFullNotePad) {
+            handleNotePadToggle(noteInList);
+
+            setActiveNoteInTextArea(noteInList.nContents);
+
+            setIsAnUpdatedNote(true);
+        }
+
+        console.log("From loadNote, the timestamp set is ", noteWithTimestamp);
+    };
 
     const handleAudioControlsClick = (clickedBtn) => {
         if (clickedBtn === "reload") {
@@ -112,10 +108,16 @@ const UserSingleProject = ({mediaId}) => {
                 setPlayPauseBtnText("Play");
             }
         }
+
+        setTimestampPoint();
+
+        console.log("From handleAudioControlsClick, the timestamp set is ", noteWithTimestamp);
     };
 
     const handleNoteSubmit = (event) => {
         event.preventDefault();
+
+        setTimestampPoint();
 
         let info = { note_body: event.value };
 
@@ -165,6 +167,8 @@ const UserSingleProject = ({mediaId}) => {
                 setThumbRating(thumb_rating ? thumb_rating : false);
 
                 setMediaDesc(media_desc);
+
+                setNoteWithTimestamp(document.querySelector(".audioPlayer").currentTime);
                 // setFileName(file_name);
                 // setUserId(user_id);
 
@@ -252,7 +256,7 @@ const UserSingleProject = ({mediaId}) => {
                             maxLength="500"
                             value={activeNoteInTextArea}
                             onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                            onFocus={onUpdateTimestampPoint}
+                            onFocus={setTimestampPoint}
                             >
                         </textarea>
 
