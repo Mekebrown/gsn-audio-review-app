@@ -16,12 +16,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-const conn = mysql.createConnection({
+if (process.env.NODE_ENV !== 'production') {
+  const conn = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE
-});
+  });
+}
 
 let dataToSend = {}; // Let to allow overwriting later
 
@@ -82,10 +84,6 @@ app.post("/usingle", (req, res) => {
   .catch((err) => console.log(err));
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Entered");
-// });
-
 app.post("/", (req, res) => {
   res.send("Cool");
 });
@@ -127,6 +125,7 @@ app.get("/usingle/:media_id", (req, res) => {
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
+
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   });
