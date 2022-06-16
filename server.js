@@ -5,7 +5,6 @@ const mysql = require("mysql");
 const cors = require('cors');
 const path = require('path');
 const bp = require('body-parser');
-const someInfo = require("./server/database/dummy_info");
 
 require('dotenv').config();
 
@@ -92,6 +91,35 @@ app.get("/usingle/:media_id", (req, res) => {
   const mediaId = parseInt(req.params.media_id);
 
   if (process.env.NODE_ENV === 'production') {
+    const someInfo = {
+      creation_datetime: "2022-03-23T21:37:22.000Z",
+      file_directory: "media/audio",
+      file_name: "t.mp3",
+      media_deleted_on: null,
+      media_desc: "The file t.mp3 is an audio track that is the current GSN theme song.",
+      media_id: 1,
+      media_last_retrieved: null,
+      media_type: "audio",
+      media_updated_on: null,
+      media_uploaded_on: "2022-06-10T19:11:53.000Z",
+      project_name: "t.mp3",
+      read_datetime: null,
+      thumb_rating: "up",
+      thumb_rating_id: 1,
+      totalNotesFromServer: [
+          {
+              note_body: "The whole track is great. Thanks, Lance.",
+              note_id: 12,
+              note_is_deleted: "no",
+              note_last_retrieved: "2022-06-10T20:11:53.000Z",
+              note_last_updated: null,
+              note_timestamp: "14.25"
+          }
+      ],
+      update_datetime: null,
+      user_id: 1
+    }
+
     res.send(someInfo);
   } else {
     //media - Only one result; We need the following: media_id, file_name,  file_directory, user_id, project_name, media_desc, and all_note_ids
