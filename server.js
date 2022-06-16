@@ -15,14 +15,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
-if (process.env.NODE_ENV !== 'production') {
-  const conn = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
-  });
-}
+const conn = mysql.createConnection({
+host: process.env.DB_HOST,
+user: process.env.DB_USERNAME,
+password: process.env.DB_PASSWORD,
+database: process.env.DB_DATABASE
+});
 
 let dataToSend = {}; // Let to allow overwriting later
 
@@ -90,7 +88,7 @@ app.post("/", (req, res) => {
 app.get("/usingle/:media_id", (req, res) => {
   const mediaId = parseInt(req.params.media_id);
 
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== undefined) {
     const someInfo = {
       creation_datetime: "2022-03-23T21:37:22.000Z",
       file_directory: "media/audio",
