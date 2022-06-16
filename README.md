@@ -1,6 +1,8 @@
 # gsn-audio-review-app
 
-Known security issue with react-scripts: https://github.com/facebook/create-react-app/issues/12132
+Known security error issue with react-scripts: https://github.com/facebook/create-react-app/issues/12132
+
+Known security error issue with trim-newlines: https://github.com/storybookjs/storybook/issues/14603
 
 Currently I am writing unit tests using Jest. KIM: Arrange/Act/Assert
 
