@@ -1,6 +1,6 @@
 import React from "react";
 import Axios from "axios";
-import { REACT_APP_SERVER_URL, projectReviewingPath } from "./tools/envs";
+import { projectReviewingPath } from "./tools/envs";
 
 /**
  * The general page
@@ -23,7 +23,7 @@ const Index = () => {
                 
         formData.append('userId', userId);
 
-        Axios.post(REACT_APP_SERVER_URL, { // Why and how does this work but not going to the route on L29 directly not work?
+        Axios.post("https://intense-forest-28148.herokuapp.com/", { // Why and how does this work but not going to the route on L29 directly not work?
             body: formData
         }).then(() => {
             const reroute = document.location.href + projectReviewingPath + 1;
