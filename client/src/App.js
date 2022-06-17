@@ -30,6 +30,15 @@ import UserSingleProject from "./components/User/UserSingleProject";
 import Users from "./components/User/Users";
 
 function App() {
+
+  const LocationForHome = () => {
+    if (process.env.NODE_ENV === 'production') { 
+      return <UserSingleProject mediaId={1} />
+    } else {
+      return <Index />;
+    }
+  };
+
   return (
     <div className="app">
       <header>
@@ -41,7 +50,7 @@ function App() {
           <Route path={adminIndvlViewinglePath} element={<AdminSingleProject />} />
           <Route path={uploadMediaPath} element={<UploadMedia />} />
           <Route path={allProjectsPath} element={<Projects />} />
-          <Route index path={indexPath} element={<Index />} />
+          <Route index path={indexPath} element={<LocationForHome />} />
           <Route path={allNotesPath} element={<Notes />} />
           <Route path={projectReviewingPath + 1} element={<UserSingleProject mediaId={1} />} />
           <Route path={allUsersPath} element={<Users />} />
