@@ -1,6 +1,6 @@
 import React from "react";
 import Axios from "axios";
-import { projectReviewingPath } from "./tools/envs";
+import { Link } from "react-router-dom";
 
 /**
  * The general page
@@ -23,12 +23,9 @@ const Index = () => {
                 
         formData.append('userId', userId);
 
-        Axios.post("https://intense-forest-28148.herokuapp.com/", { // Why and how does this work but not going to the route on L29 directly not work?
+        // Why and how does this work but not going to the route on L29 directly not work?
+        Axios.post("http://localhost:3001", { 
             body: formData
-        }).then(() => {
-            const reroute = document.location.href + projectReviewingPath + 1;
-
-            window.location.assign(reroute);
         });
     };
 
@@ -38,8 +35,9 @@ const Index = () => {
                 <h2>GSN!</h2>
             </header>
                         
-            <button id="openApp" type="submit" value="submit" onClick={login}>Open App</button>
-{/* 
+            <Link to="http://localhost:3001/usingle/1" onClick={login}>Open App</Link>
+
+            {/* 
             <main>
                 <section id="appEntrySection">
                     <p>Greeting, purpose of app, msg from creator</p>
