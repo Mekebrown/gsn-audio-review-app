@@ -1,39 +1,31 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css';
-
-// Variables
 import { indexPath, REACT_APP_FULL_TITLE } from "./components/tools/envs";
-
-// General
-import Index from "./components/Index"; 
-
-// User
 import UserSingleProject from "./components/User/UserSingleProject";
 
 function App() {
   return (
-    <div className="app">
-      <header>
-        {REACT_APP_FULL_TITLE}
-      </header>
-      <Router>
-        <Routes>
-          <Route index path={indexPath} element={<Index />} />
-          <Route path="http://localhost:3001/usingle/:media_id" element={<UserSingleProject mediaId={1} />} />
+    <Router>
+      <div>
+        <ul>
+          <li><Link to="/">Home</Link>  </li>
+          <li><Link to="/dashboard">Dashboard</Link></li>
+        </ul>
 
-          {/* For non-existent routes */}
-          <Route 
-              path="*" 
-              element={
-                <main style={{padding: "1rem"}}>
-                  <p>Please try again</p>
-                </main>
-              }
-            ></Route>
+        <hr />
+
+        <Routes>
+          <Route exact path={indexPath} element={<h2>{REACT_APP_FULL_TITLE}</h2>} />
+          <Route path="/dashboard" element={<UserSingleProject mediaId={1} />} />
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 
