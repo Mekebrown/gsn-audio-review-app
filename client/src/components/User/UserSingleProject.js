@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { REACT_APP_SERVER_URL, projectReviewingPath } from "../tools/envs";
-import testAudio1 from "../tools/envs";
-import testAudio2 from "../tools/wearenotokay.mp3";
+import testAudio from "../tools/envs";
 import { newSampleNote, updatedSampleNote } from "../tools/dummy_data";
 
 /**
@@ -125,7 +123,7 @@ const UserSingleProject = ({mediaId}) => {
 
         console.log(info);
 
-        Axios.post('http://localhost:3001/usingle', info)
+        Axios.post("http://localhost:3001", info)
         .then((res) => console.log(JSON.stringify(res)))
         .catch(error => console.log(JSON.stringify(error)));
 
@@ -135,7 +133,7 @@ const UserSingleProject = ({mediaId}) => {
     };
 
     useEffect(() => {
-        Axios.get(REACT_APP_SERVER_URL + projectReviewingPath + mediaId).then((initialInfo) => {
+        Axios.get("http://localhost:3001/usingle/" + mediaId).then((initialInfo) => {
             if (initialInfo.status === 200) {
                 const {
                     project_name, 
@@ -221,10 +219,10 @@ const UserSingleProject = ({mediaId}) => {
             <audio controls className="audioPlayer" preload="auto">
                 {/* {
                     sources.map(source => {
-                        return <source key={source.item} src={testAudio2 + source.ext} type={source.type} />
+                        return <source key={source.item} src={testAudio + source.ext} type={source.type} />
                     })
                 } */}
-                <source key="wearenotokay" src={testAudio2} type="audio/mpeg" />
+                <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
