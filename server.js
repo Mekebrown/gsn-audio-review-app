@@ -17,7 +17,7 @@ app.use(bp.urlencoded({ extended: true }));
 const isProduction = process.env.NODE_ENV === "production";
 
 if (isProduction) {
-  app.use(express.static("/client/build"));
+  app.use(express.static("/build"));
   app.get("/usingle/:media_id", (req, res) => {
     res.send({
       "creation_datetime": "2022-03-23T21:37:22.000Z",
@@ -50,7 +50,7 @@ if (isProduction) {
   });
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
   });
 } else {
   const mysql = require("mysql");
