@@ -15,14 +15,14 @@ function App() {
       <div>
         <ul>
           <li><Link to="/">Home</Link>  </li>
-          <li><Link to="/dashboard">Dashboard</Link></li>
+          <li><Link to="/usingle/1">Dashboard</Link></li>
         </ul>
 
         <hr />
 
         <Routes>
           <Route exact path={indexPath} element={<h2>{REACT_APP_FULL_TITLE}</h2>} />
-          <Route path="/dashboard" element={<UserSingleProject mediaId={1} />} />
+          <Route path="/usingle/:mediaId" element={<UserSingleProject mediaId={1} />} />
         </Routes>
       </div>
     </Router>
