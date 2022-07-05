@@ -23,7 +23,7 @@ const UserSingleProject = ({mediaId}) => {
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
     const [noteWithTimestamp, setNoteWithTimestamp] = useState(null);
-    const [noteDetails, setNoteDetails] = useState([]); // Each note's contents, timestamp, id, and its link
+    const [notesList, setNotesList] = useState([]); // Each note's contents, timestamp, id, and its link
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
@@ -161,7 +161,7 @@ const UserSingleProject = ({mediaId}) => {
                     ];
                 }
 
-                setNoteDetails(allNotesInfoForTrack);
+                setNotesList(allNotesInfoForTrack);
                 setThumbRating(thumb_rating ? thumb_rating : false);
 
                 setMediaDesc(media_desc);
@@ -268,13 +268,13 @@ const UserSingleProject = ({mediaId}) => {
                 <p className="thankYouMsg"></p>
             </section>
 
-            <div className="noteDetails">
-                {noteDetails ? (
+            <div className="notesList">
+                {notesList ? (
                     <>
                         <p>Most recent notes:</p>
                         <ul>
                             {
-                                noteDetails.map((note) => {
+                                notesList.map((note) => {
                                     return <li key={note.nId} onClick={(e)=>loadNote(e, note)}>
                                         Note from timestamp {note.nTimestamp}: "<em>{note.nLink}</em>"
                                     </li>;
