@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import testAudio from "../tools/envs";
-import { newSampleNote, updatedSampleNote } from "../tools/dummy_data";
+import dataForProd, { newSampleNote, updatedSampleNote } from "../tools/dummy_data";
 
 /**
  * Page for a single media work and notes opportunity
@@ -116,8 +116,8 @@ const UserSingleProject = ({mediaId}) => {
     };
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/usingle/" + mediaId).then((initialInfo) => {
-            if (initialInfo.status === 200) {
+        // Axios.get("http://localhost:3001/usingle/" + mediaId).then((initialInfo) => {
+            // if (initialInfo.status === 200) {
                 const {
                     project_name, 
                     creation_datetime,
@@ -126,7 +126,7 @@ const UserSingleProject = ({mediaId}) => {
                     media_desc,
                     thumb_rating,
                     totalNotesFromServer
-                } = initialInfo.data;
+                } = dataForProd;
 
                 let allNotesInfoForTrack = [];
 
@@ -160,7 +160,7 @@ const UserSingleProject = ({mediaId}) => {
 
                 // setProjectName(formattedProjectName);
                 // setCreatedOn(formattedMediaDate);
-            } //else {
+            // } else {
             //     const formData = new FormData();
                 
             //     formData.append('mediaId', mediaId);
@@ -171,7 +171,7 @@ const UserSingleProject = ({mediaId}) => {
             //         body: formData
             //     });
             // }
-        });
+        // });
 
         /* eslint-disable-next-line */
     }, [noteWithTimestamp]);
