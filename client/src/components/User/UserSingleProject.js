@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import testAudio from "../tools/envs";
 import { newSampleNote, updatedSampleNote } from "../tools/dummy_data";
@@ -23,22 +23,13 @@ const UserSingleProject = ({mediaId}) => {
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
     const [noteWithTimestamp, setNoteWithTimestamp] = useState(null);
-    const [notesList, setNotesList] = useState([]); // Each note's contents, timestamp, id, and its link
+    const [notesList, setNotesList] = useState(null); // Each note's contents, timestamp, id, and its link
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
-    // const [projectName, setProjectName] = useState("Track Audio");
-    // const [createdOn, setCreatedOn] = useState(null); // creation_datetime in db
-    // const [currentTime, setCurrentTime] = useState(0);
-
     const theNotePadTextarea = document.querySelector(".notePadTextarea");
     const theFullNotePad = document.querySelector(".notePad");
-    const thePlayer = document.querySelector(".audioPlayer");
-
-    const sources = [
-        {item: 1, ext: "mp3", type: "audio/mpeg"}, 
-        {item: 2, ext: "ogg", type: "audio/ogg"}
-    ];
+    const player = useRef(null)
 
     const getListLinkForNote = (noteToProcess) => {
         let toShow = noteToProcess ? noteToProcess : activeNoteInTextArea;
@@ -58,16 +49,9 @@ const UserSingleProject = ({mediaId}) => {
 
         return toShow;
     };
-
-    const setTimestampPoint = (setToThisPoint = null) => {
-        let time = (document.querySelector(".audioPlayer").currentTime).toFixed(2);
-        let valueForTimestamp = setToThisPoint ? setToThisPoint : time;
-        
-        // setNoteWithTimestamp(valueForTimestamp).then((res) => console.log({res})).error((err) => console.log({err}));
-    };
     
     const handleNotePadToggle = (userInfo = null) => {
-        setTimestampPoint(userInfo?.nTimestamp);
+        setTimestampPoint(player.current, userInfo?.nTimestamp);
 
         let createHideNoteBtn = document.querySelector(".createHide");
 
@@ -93,21 +77,33 @@ const UserSingleProject = ({mediaId}) => {
         console.log("From loadNote, the timestamp set is ", noteWithTimestamp);
     };
 
+    const setTimestampPoint = (thePlayer, setToThisPoint = null) => {
+        let time = (thePlayer.currentTime).toFixed(2);
+        let valueForTimestamp = setToThisPoint ? setToThisPoint : time;
+        
+        setNoteWithTimestamp(valueForTimestamp);
+        console.log(thePlayer.currentTime);
+        console.log('===================================');
+        console.log(`and ${time} - converted is ${valueForTimestamp}`);
+    };
+
     const handleAudioControlsClick = (clickedBtn) => {
+        const playerRef = player.current;
+
         if (clickedBtn === "reload") {
-            thePlayer.currentTime = 0.0;
-            thePlayer.pause();
+            player.current.currentTime = 0.0;
+            player.current.pause();
         } else {
-            if (thePlayer.currentTime === 0.0 || thePlayer.paused) {
-                thePlayer.play(); 
+            if (playerRef.currentTime === 0 || playerRef.paused) {
+                playerRef.play(); 
                 setPlayPauseBtnText("Pause");
             } else  {
-                thePlayer.pause(); 
+                playerRef.pause(); 
                 setPlayPauseBtnText("Play");
             }
         }
 
-        setTimestampPoint();
+        setTimestampPoint(playerRef);
 
         console.log("From handleAudioControlsClick, the timestamp set is ", noteWithTimestamp);
     };
@@ -115,7 +111,7 @@ const UserSingleProject = ({mediaId}) => {
     const handleNoteSubmit = (event) => {
         event.preventDefault();
 
-        setTimestampPoint();
+        setTimestampPoint(player.current);
 
         let info = { note_body: event.value };
 
@@ -166,7 +162,7 @@ const UserSingleProject = ({mediaId}) => {
 
                 setMediaDesc(media_desc);
 
-                setNoteWithTimestamp(document.querySelector(".audioPlayer").currentTime);
+                setNoteWithTimestamp(player.current.currentTime);
                 // setFileName(file_name);
                 // setUserId(user_id);
 
@@ -196,7 +192,7 @@ const UserSingleProject = ({mediaId}) => {
 
    return (
         <main>
-            {thumbRating && (
+            {thumbRating && 
                 <div>
                     <button
                         value="approve" 
@@ -214,9 +210,9 @@ const UserSingleProject = ({mediaId}) => {
                         &#128078;
                     </button>
                 </div>
-            )}
+            }
             
-            <audio controls className="audioPlayer" preload="auto">
+            <audio controls preload="auto" ref={player}>
                 {/* {
                     sources.map(source => {
                         return <source key={source.item} src={testAudio + source.ext} type={source.type} />
@@ -226,16 +222,12 @@ const UserSingleProject = ({mediaId}) => {
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
-            <p>Project description: <em>{mediaDesc}</em></p>
+            {mediaDesc && <p>Project description: <em>{mediaDesc}</em></p>}
 
             <div className="audioControls">
-                <button className="playPause" onClick={() => {
-                    handleAudioControlsClick("togglePlayPause")
-                }}>{playPauseBtnText}</button>
+                <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
 
-                <button className="reload" onClick={() => {
-                    handleAudioControlsClick("reload")
-                }}>Reload</button>
+                <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
             </div>
 
             <section className="notesContainer">
@@ -255,7 +247,7 @@ const UserSingleProject = ({mediaId}) => {
                             maxLength="500"
                             value={activeNoteInTextArea}
                             onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                            onFocus={setTimestampPoint}
+                            onFocus={()=>setTimestampPoint(player.current)}
                             >
                         </textarea>
 
@@ -273,18 +265,14 @@ const UserSingleProject = ({mediaId}) => {
                     <>
                         <p>Most recent notes:</p>
                         <ul>
-                            {
-                                notesList.map((note) => {
-                                    return <li key={note.nId} onClick={(e)=>loadNote(e, note)}>
-                                        Note from timestamp {note.nTimestamp}: "<em>{note.nLink}</em>"
-                                    </li>;
-                                })
-                            }
+                            {notesList.map((note) => {
+                                return <li key={note.nId} onClick={(e)=>loadNote(e, note)}>
+                                    Note from timestamp {note.nTimestamp}: "<em>{note.nLink}</em>"
+                                </li>;
+                            })}
                         </ul>
                     </>
-                ) : (
-                    <span>No notes were saved for this audio</span>
-                )}
+                ) : <span>No notes yet</span>}
             </div>
         </main>
     );
