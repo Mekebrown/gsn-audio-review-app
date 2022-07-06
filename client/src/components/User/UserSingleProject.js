@@ -22,14 +22,15 @@ const UserSingleProject = ({mediaId}) => {
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
-    const [noteWithTimestamp, setNoteWithTimestamp] = useState(null);
+    const [noteWithTimestamp, setNoteWithTimestamp] = useState("0.00");
     const [notesList, setNotesList] = useState(null); // Each note's contents, timestamp, id, and its link
     const [isAnUpdatedNote, setIsAnUpdatedNote] = useState(false);
     const [thumbRating, setThumbRating] = useState(false); // May not be set at all (not required in Ratings table)
     const [mediaDesc, setMediaDesc] = useState("");
     const theNotePadTextarea = document.querySelector(".notePadTextarea");
     const theFullNotePad = document.querySelector(".notePad");
-    const player = useRef(null)
+    const player = useRef(null);
+    const thankYouMsg = useRef(null);
 
     const getListLinkForNote = (noteToProcess) => {
         let toShow = noteToProcess ? noteToProcess : activeNoteInTextArea;
@@ -51,7 +52,9 @@ const UserSingleProject = ({mediaId}) => {
     };
     
     const handleNotePadToggle = (userInfo = null) => {
-        setTimestampPoint(player.current, userInfo?.nTimestamp);
+        let timeStampForNote = userInfo?.nTimestamp ? userInfo.nTimestamp : player.current.currentTime;
+
+        setNoteWithTimestamp(parseFloat(timeStampForNote).toFixed(2));
 
         let createHideNoteBtn = document.querySelector(".createHide");
 
@@ -59,8 +62,6 @@ const UserSingleProject = ({mediaId}) => {
         setHideNotePad(prev => !prev);
 
         hideNotePad ? createHideNoteBtn.innerHTML = "Hide Note" : createHideNoteBtn.innerHTML = "Create A Note";
-
-        console.log("From handleNotePadToggle, the timestamp set is ", noteWithTimestamp);
     };
 
     const loadNote = (e, noteInList) => {
@@ -77,55 +78,41 @@ const UserSingleProject = ({mediaId}) => {
         console.log("From loadNote, the timestamp set is ", noteWithTimestamp);
     };
 
-    const setTimestampPoint = (thePlayer, setToThisPoint = null) => {
-        let time = (thePlayer.currentTime).toFixed(2);
-        let valueForTimestamp = setToThisPoint ? setToThisPoint : time;
-        
-        setNoteWithTimestamp(valueForTimestamp);
-        console.log(thePlayer.currentTime);
-        console.log('===================================');
-        console.log(`and ${time} - converted is ${valueForTimestamp}`);
-    };
-
     const handleAudioControlsClick = (clickedBtn) => {
         const playerRef = player.current;
 
         if (clickedBtn === "reload") {
-            player.current.currentTime = 0.0;
             player.current.pause();
+            player.current.currentTime = 0.0;
+            setNoteWithTimestamp("0.00");
         } else {
             if (playerRef.currentTime === 0 || playerRef.paused) {
                 playerRef.play(); 
                 setPlayPauseBtnText("Pause");
             } else  {
-                playerRef.pause(); 
+                playerRef.pause();
+                setNoteWithTimestamp(playerRef.currentTime.toFixed(2));
                 setPlayPauseBtnText("Play");
             }
         }
-
-        setTimestampPoint(playerRef);
-
-        console.log("From handleAudioControlsClick, the timestamp set is ", noteWithTimestamp);
     };
 
     const handleNoteSubmit = (event) => {
+        const thankYouMsgRef = thankYouMsg.current;
+
         event.preventDefault();
 
-        setTimestampPoint(player.current);
-
-        let info = { note_body: event.value };
+        let info = { note_body: event.target.textContent };
 
         isAnUpdatedNote ? info = {...info, updatedSampleNote} : info = {...info, newSampleNote};
 
-        console.log(info);
-
-        Axios.post("http://localhost:3001", info)
+        Axios.post("/", info)
         .then((res) => console.log(JSON.stringify(res)))
         .catch(error => console.log(JSON.stringify(error)));
 
         setActiveNoteInTextArea("");
 
-        document.getElementsByClassName("thankYouMsg").innerHTML = "Thanks for your contribution. You will be contacted right away!";
+        thankYouMsgRef.innerHTML = "Thanks for your contribution. You will be contacted right away!";
     };
 
     useEffect(() => {
@@ -161,8 +148,6 @@ const UserSingleProject = ({mediaId}) => {
                 setThumbRating(thumb_rating ? thumb_rating : false);
 
                 setMediaDesc(media_desc);
-
-                setNoteWithTimestamp(player.current.currentTime);
                 // setFileName(file_name);
                 // setUserId(user_id);
 
@@ -187,8 +172,9 @@ const UserSingleProject = ({mediaId}) => {
             //     });
             // }
         });
+
         /* eslint-disable-next-line */
-    }, []);
+    }, [noteWithTimestamp]);
 
    return (
         <main>
@@ -242,12 +228,12 @@ const UserSingleProject = ({mediaId}) => {
                             rows="10" 
                             cols="50" 
                             title="Note pad text area" 
-                            placeholder="Notes:"
+                            placeholder={"Note for " + noteWithTimestamp + ":"}
                             name="note"
                             maxLength="500"
                             value={activeNoteInTextArea}
                             onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                            onFocus={()=>setTimestampPoint(player.current)}
+                            onFocus={()=>setNoteWithTimestamp(player.current.currentTime.toFixed(2))}
                             >
                         </textarea>
 
@@ -257,7 +243,7 @@ const UserSingleProject = ({mediaId}) => {
                     </form>
                 </div>
 
-                <p className="thankYouMsg"></p>
+                <p ref={thankYouMsg}></p>
             </section>
 
             <div className="notesList">
