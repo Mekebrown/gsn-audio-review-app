@@ -78,8 +78,5 @@
     "webpack": "^5.73.0",
     "x-default-browser": "^0.4.0"
   },
-  "resolutions": {
-    "trim-newlines": "3.0.1"
-  },
   "homepage": "https://intense-forest-28148.herokuapp.com/"
 }
