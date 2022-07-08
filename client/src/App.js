@@ -8,6 +8,7 @@ import {
 import './App.css';
 import { indexPath, REACT_APP_FULL_TITLE } from "./components/tools/envs";
 import UserSingleProject from "./components/User/UserSingleProject";
+import UploadMedia from "./components/Admin/UploadMedia";
 
 const App = () => {
   const [key, setKey] = useState(null);
@@ -31,6 +32,7 @@ const App = () => {
         <ul>
           <li><Link to="/">Home</Link>  </li>
           <li><Link to="/usingle/1">Dashboard</Link></li>
+          {adminEntry && <li><Link to="/admin/add-media">Upload media</Link></li>}
         </ul>
 
         <hr />
@@ -54,6 +56,7 @@ const App = () => {
             </>
           } />
           <Route path="/usingle/:mediaId" element={<UserSingleProject mediaId={1} />} />
+          {adminEntry && <Route path="/admin/add-media" element={<UploadMedia />} />}
         </Routes>
       </div>
     </Router>

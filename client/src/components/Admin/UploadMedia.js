@@ -1,4 +1,5 @@
 import react from "react";
+import "./UploadMedia.css";
 
 /**
  * Lets Lance upload files
@@ -6,27 +7,50 @@ import react from "react";
  * @returns {Node} UploadMedia
  */
 const UploadMedia = () => {
-    // const formData = new FormData();
-    // const photos = document.querySelector('input[type="file"][multiple]');
+    const handleMediaUploadSubmit = (e) => {
+        e.preventDefault();
 
-    // formData.append('title', 'My Vegas Vacation');
-    // for (let i = 0; i < photos.files.length; i++) {
-    // formData.append(`photos_${i}`, photos.files[i]);
-    // }
+        fetch('/posts', {
+            method: 'POST',
+            body: e.target.value,
+        })
+        .then(response => { if (response.ok) console.log('Success:');})
+        .catch(error => { console.error('Error:', error); });
+    };
 
-    // fetch('https://example.com/posts', {
-    // method: 'POST',
-    // body: formData,
-    // })
-    // .then(response => response.json())
-    // .then(result => {
-    // console.log('Success:', result);
-    // })
-    // .catch(error => {
-    // console.error('Error:', error);
-    // });
+    return <form action="action_page.php" method="POST" onSubmit={handleMediaUploadSubmit}>
+            <div className="mediaContainer">
+                <h1>Upload new media</h1>
+                
+                <p>Please fill in this form to upload new media and add details if you wish.</p>
 
-    return <div>FILES TO UPLOAD:</div>;
+                <label htmlFor="media"><strong>Upload your media file: </strong>
+                    <input type="file" placeholder="Location" name="media" id="media" required />
+                </label>
+
+                <label htmlFor="media-type"><strong>What kind of media file is this? </strong>
+                    <select name="media-type" id="media-type">
+                        <option value="audio">Audio</option>
+                        <option value="video">Video</option>
+                        <option value="document">Document</option>
+                        <option value="etc">Etc.</option>
+                    </select>
+                </label>
+
+                <label htmlFor="project-name"><strong>Project Name for media: </strong>
+                    <input type="text" placeholder="Project name" name="project-name" id="project-name"/>
+                </label>
+
+                <label htmlFor="description"><strong>Describe the project: </strong>
+                    <input type="text" placeholder="Description" name="description" id="description" />
+                </label>
+
+                <div>
+                    <button type="button" className="cancelbtn">Cancel</button>
+                    <button type="submit" className="signupbtn">Upload</button>
+                </div>
+            </div>
+        </form>;
 }
 
 export default UploadMedia;
