@@ -1,4 +1,4 @@
-import react from "react";
+import react, { useRef } from "react";
 import "./UploadMedia.css";
 
 /**
@@ -7,18 +7,21 @@ import "./UploadMedia.css";
  * @returns {Node} UploadMedia
  */
 const UploadMedia = () => {
+    let mediaForm = useRef(null);
+
     const handleMediaUploadSubmit = (e) => {
         e.preventDefault();
 
-        fetch('/posts', {
+        fetch('/media', {
             method: 'POST',
-            body: e.target.value,
+            mode: 'cors',
+            body: e.target,
         })
         .then(response => { if (response.ok) console.log('Success:');})
         .catch(error => { console.error('Error:', error); });
     };
 
-    return <form action="action_page.php" method="POST" onSubmit={handleMediaUploadSubmit}>
+    return <form action="action_page.php" method="POST" onSubmit={handleMediaUploadSubmit} ref={mediaForm}>
             <div className="mediaContainer">
                 <h1>Upload new media</h1>
                 
@@ -46,7 +49,7 @@ const UploadMedia = () => {
                 </label>
 
                 <div>
-                    <button type="button" className="cancelbtn">Cancel</button>
+                    <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>Cancel</button>
                     <button type="submit" className="signupbtn">Upload</button>
                 </div>
             </div>

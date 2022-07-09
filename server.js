@@ -107,6 +107,10 @@ if (isProduction) {
       })
       .catch((err) => console.log("Promise rejection error: " + err));
   });
+
+  app.post("/media", (req, res) => {
+    res.send({message: "Great job!"});
+  });
 }
 
 app.listen(process.env.PORT || 3001, function() {
