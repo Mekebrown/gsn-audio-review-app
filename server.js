@@ -4,15 +4,31 @@ const app = express();
 const cors = require('cors');
 const path = require('path');
 const bp = require('body-parser');
+const fs = require('fs');
+const mysql = require("mysql");
+const fileupload = require("express-fileupload");
 
 require('dotenv').config();
 
 app.use(express.json());
+app.use(fileupload());
 app.use(express.urlencoded({ extended: true }));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'client', 'public')));
 
-const allowList = ['http://localhost:3000', 'http://localhost:3001', 'https://intense-forest-28148.herokuapp.com/'];
+const conn = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
+});
+
+const allowList = [
+  'http://localhost:3000/', 
+  'http://localhost:3001/', 
+  'https://intense-forest-28148.herokuapp.com/'
+];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -22,7 +38,7 @@ const corsOptions = {
       console.log("Origin acceptable");
       callback(null, true);
     } else {
-      console.log("Origin rejected");
+      console.log(allowList.indexOf(origin));
       callback(new Error("Not allowed by CORS"));
     }
   }
@@ -38,23 +54,14 @@ if (isProduction) {
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
-} else {
-  app.use(express.static(path.join(__dirname, 'client', 'public')));
-  const mysql = require("mysql");
-  const conn = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-  });
-  
+} else {  
   let dataToSend = {}; // Let to allow overwriting later
   
   const getQueryValues = (queryStatement, params = []) => {
     return new Promise((resolve, reject) => {
       conn.query(queryStatement, params, (err, rows) => {                                                
           if (err || rows === undefined) {
-              reject(new Error(err));
+            reject(new Error(err));
           } else {
             dataToSend = {...dataToSend, ...rows[0]};
             resolve(rows);
@@ -109,7 +116,38 @@ if (isProduction) {
   });
 
   app.post("/media", (req, res) => {
-    res.send({message: "Great job!"});
+    const { description, mediaFileToUpload, mediaType, projectName } = req.body;
+console.log(mediaFileToUpload);
+    const mediaFileName = mediaFileToUpload.name;
+
+    const fileDirectory = `/media/${mediaType}/${mediaFileName}`;
+
+    const mediaUploadedOn =  new Date();
+
+    const userId = 1;
+
+    const queryValues = [
+      userId, 
+      description, 
+      mediaFileName, 
+      mediaType, 
+      projectName, 
+      mediaUploadedOn, 
+      fileDirectory
+    ];
+
+    const mediaQueryStatement = "INSERT INTO media (user_id, media_desc, file_name, media_type, project_name, media_uploaded_on, file_directory) VALUES (?, ?, ?, ?, ?, ?, ?)"; 
+
+    getQueryValues(mediaQueryStatement, queryValues)
+    .then(()=> {
+      mediaFileToUpload.mv(__dirname + fileDirectory, (err) => {
+        if (err) {
+          res.status(500).send({ message: "File upload failed", code: 200 });
+        }
+        res.status(200).send({ message: "File Uploaded", code: 200 });
+      });
+    })
+    .catch((err) => console.log("Promise rejection error: " + err));
   });
 }
 
