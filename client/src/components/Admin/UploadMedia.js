@@ -1,4 +1,4 @@
-import react, { useRef } from "react";
+import react, { useRef, useState } from "react";
 import "./UploadMedia.css";
 import Axios from "axios";
 
@@ -8,28 +8,35 @@ import Axios from "axios";
  * @returns {Node} UploadMedia
  */
 const UploadMedia = () => {
+    const [file, setFile] = useState();
+    const [fileName, setFileName] = useState("");
     const mediaForm = useRef(null);
 
-    const handleMediaUploadSubmit = (e) => {
-        e.preventDefault();
+    const saveFile = (e) => {
+        setFile(e.target.files[0]);
+        setFileName(e.target.files[0].name);
+    };
 
+    const handleMediaUploadSubmit = async (e) => {
+        e.preventDefault();
         const formItems = e.target.elements;
 
-        const description = formItems.description.value;
-        const mediaFileToUpload = formItems.mediaFileToUpload.files[0];
-        const mediaType = formItems.mediaType.value;
-        const projectName = formItems.projectName.value;
+        const formData = new FormData();
 
-        const data = {
-            description: description,
-            mediaFileToUpload: mediaFileToUpload,
-            mediaType: mediaType,
-            projectName: projectName
-        };
+        formData.append("description", formItems.description.value);
+        formData.append("mediaFileToUpload", file);
+        formData.append("fileName", fileName);
+        formData.append("mediaType", formItems.mediaType.value);
+        formData.append("projectName", formItems.projectName.value);
 
-        Axios.post("/media", data).then((initialInfo) => {
-            console.log(initialInfo);
-        }); 
+        try {
+            await Axios.post("/media", formData)
+            .then((initialInfo) => {
+                console.log(initialInfo);
+            });
+        } catch (ex) {
+          console.log(ex);
+        }
     };
 
     return <form id="mediaForm" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
@@ -38,7 +45,7 @@ const UploadMedia = () => {
         <p>Please fill in this form to upload new media and add details if you wish.</p>
 
         <label htmlFor="mediaFileToUpload"><strong>Upload your media file: </strong>
-            <input type="file" placeholder="Location" name="mediaFileToUpload" id="mediaFileToUpload" required />
+            <input type="file" placeholder="Location" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
         </label>
 
         <label htmlFor="mediaType"><strong>What kind of media file is this? </strong>
