@@ -45,6 +45,7 @@
     "@testing-library/user-event": "^14.2.1",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "classnames": "^2.3.1",
     "css-select": "^5.1.0",
     "default-browser-id": "^3.0.0",
     "dotenv": "^16.0.1",
