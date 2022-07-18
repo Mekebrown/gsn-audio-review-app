@@ -4,7 +4,6 @@ const app = express();
 const cors = require('cors');
 const path = require('path');
 const bp = require('body-parser');
-const fs = require('fs');
 const mysql = require("mysql");
 const fileupload = require("express-fileupload");
 
