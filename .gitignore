@@ -11,6 +11,7 @@ server/database
 client/~.env
 
 # misc
+files
 etc
 .DS_Store
 .vscode/
