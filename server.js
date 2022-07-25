@@ -6,6 +6,16 @@ const path = require('path');
 const bp = require('body-parser');
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const fileupload = require("express-fileupload");
+const {
+  media_upload_query_statement,
+  media_query_statement,
+  ratings_query_statement,
+  notes_query_statement,
+  notes_query_statement_insert,
+  notes_query_statement_update,
+  media_query_statement_retrieval,
+  media_query_statement_insert
+} = require("./server/database/query_strings.js");
 
 require('dotenv').config();
 
@@ -92,7 +102,7 @@ const corsOptions = {
   }
 };
 
-app.use(cors(corsOptions));
+app.use(cors(require("./server/tools/cors_options")));
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -134,19 +144,7 @@ if (isProduction) {
 
   app.get("/usingle", (req, res) => {
     const mediaId = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
-  
-    const media_query_statement = "SELECT * FROM media WHERE media_id = ?";
-    const ratings_query_statement = "SELECT * FROM ratings WHERE media_id = ?";
-    const notes_query_statement = `SELECT 
-                                  note_id, note_body, note_last_updated, note_timestamp, note_last_retrieved, note_is_deleted
-                                  FROM notes 
-                                  WHERE media_id = ? 
-                                  AND note_is_deleted = 'no' 
-                                  ORDER BY note_last_retrieved 
-                                  DESC 
-                                  LIMIT 5
-    `;
-    
+
     getQueryValues(media_query_statement, [mediaId])
     .then(() => getQueryValues(ratings_query_statement, [mediaId]))
     .then(() => getNotesQueryValues(notes_query_statement, [mediaId]))
@@ -186,17 +184,6 @@ if (isProduction) {
       converted_datetime,
       note_id_to_work_with
     ];
-
-    let notes_query_statement = !is_note_updated ? `INSERT INTO notes (
-                                                    note_body, note_last_updated, note_timestamp, note_last_retrieved, user_id, media_id, note_created_on) VALUES (?, ?, ?, ?, ?, ?, ?)` : 
-    `UPDATE notes 
-    SET
-    note_body = ?, note_last_updated = ?, note_timestamp = ?, note_last_retrieved = ?
-    WHERE note_id = ?`;
-
-    let media_query_statement_retrieval = "SELECT notes_for_this_media FROM media WHERE media_id = ?";
-    
-    let media_query_statement_insert = "INSERT INTO media (notes_for_this_media) VALUES (?) WHERE media_id = ?";
     
     if (!is_note_updated) {
       getNotesQueryValues('SELECT NOW()', [])
