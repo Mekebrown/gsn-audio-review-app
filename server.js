@@ -4,7 +4,7 @@ const app = express();
 const cors = require('cors');
 const path = require('path');
 const bp = require('body-parser');
-const mysql = require("mysql");
+const { Sequelize, DataTypes, Model } = require("sequelize");
 const fileupload = require("express-fileupload");
 
 require('dotenv').config();
@@ -17,18 +17,66 @@ app.use(bp.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'client', 'public')));
 app.use(express.static('files'));
 
-const conn = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
-});
+try {
+  const sequelize = new Sequelize(
+    process.env.DB_DATABASE,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD, 
+    {
+      host: process.env.DB_HOST,
+      dialect: 'postgres'
+    }
+  );
 
-const allowList = [
-  'http://localhost:3000/', 
-  'http://localhost:3001/', 
-  'https://intense-forest-28148.herokuapp.com/'
-];
+  sequelize.authenticate();
+
+  console.log('Connection has been established successfully.');
+
+  const User = sequelize.define('User', {
+    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    user_name:        { type: DataTypes.STRING, allowNull: false },
+    last_visited:     { type: DataTypes.DATE, allowNull: false },
+    role:             { type: DataTypes.STRING, allowNull: false, defaultValue: "guest" },
+    note_ids_created: { type: DataTypes.STRING, allowNull: true },
+    email:            { type: DataTypes.STRING, allowNull: true },
+  });
+
+  const Note = sequelize.define('Note', {
+    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    user_id:          { type: DataTypes.INTEGER, allowNull: false },
+    media_id:         { type: DataTypes.INTEGER, allowNull: false },
+    note_body:        { type: DataTypes.STRING(5000), allowNull: false },
+    timestamp:        { type: DataTypes.STRING, allowNull: false },
+    last_retrieved:   { type: DataTypes.DATE, allowNull: true },
+    last_updated:     { type: DataTypes.DATE, allowNull: true },
+  });
+
+  const Media = sequelize.define('Media', {
+    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    file_name:        { type: DataTypes.STRING, allowNull: false },
+    file_directory:   { type: DataTypes.STRING(5000), allowNull: false },
+    user_id:          { type: DataTypes.INTEGER, allowNull: false },
+    media_type:       { type: DataTypes.STRING, allowNull: false, defaultValue: "audio" },
+    project_name:     { type: DataTypes.STRING, allowNull: true },
+    media_desc:       { type: DataTypes.STRING, allowNull: true },
+  });
+
+  sequelize.sync();
+
+  const admin = User.build({
+    user_name: "admin",
+    last_visited: DataTypes.NOW,
+  });
+
+  const note = Note.build({
+    user_id: 1,
+    media_id: 1001,
+    note_body: "This will be the first note!",
+    timestamp: "00:00",
+  });
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -184,17 +232,18 @@ if (isProduction) {
         projectName, 
         media_uploaded_on, 
         "test"
-      ];
-
-      const media_upload_query_statement = "INSERT INTO media (user_id, media_desc, file_name, media_type, project_name, media_uploaded_on, file_directory) VALUES (?, ?, ?, ?, ?, ?, ?)"; 
-
-      getQueryValues(media_upload_query_statement, media_upload_query_values)
+      ]; // getQueryValues(media_upload_query_statement, media_upload_query_values)
+      
+      const media = Media.build({
+      });
+      
+      media.save()
       .then(() => {
         res.status(200).send({ message: "File Uploaded", code: 200 });
       })
       .catch((err) => console.log("Promise rejection error: " + err));
       });
-    });
+  });
 }
 
 app.listen(process.env.PORT || 3001, function() {
