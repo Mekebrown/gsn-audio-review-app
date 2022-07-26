@@ -1,4 +1,4 @@
-import react, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./UploadMedia.css";
 import Axios from "axios";
 
@@ -10,6 +10,7 @@ import Axios from "axios";
 const UploadMedia = () => {
     const [file, setFile] = useState();
     const [fileName, setFileName] = useState("");
+    const [uploadMsg, setUploadMsg] = useState("Upload new media");
     const mediaForm = useRef(null);
 
     const saveFile = (e) => {
@@ -33,6 +34,7 @@ const UploadMedia = () => {
             await Axios.post("/media", formData)
             .then((initialInfo) => {
                 console.log(initialInfo);
+                setUploadMsg(`Media file ${fileName} uploaded!`)
             });
         } catch (ex) {
           console.log(ex);
@@ -40,7 +42,7 @@ const UploadMedia = () => {
     };
 
     return <form id="mediaForm" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
-        <h1>Upload new media</h1>
+        <h1>{uploadMsg}</h1>
         
         <p>Please fill in this form to upload new media and add details if you wish.</p>
 
