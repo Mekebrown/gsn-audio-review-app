@@ -15,6 +15,7 @@ const indvlProjectPath = "project_path";
 const indvlUserPath = "/user_path";
 const uploadMediaPath = "/admin/add-media";
 const mediaId = 1;
+const theStraightURL = "https://intense-forest-28148.herokuapp.com/";
 
 export default testAudio; 
 
@@ -32,5 +33,6 @@ export {
     singleMediaPath,
     uploadMediaPath,
     mediaId,
-    testAudio_testing
+    testAudio_testing,
+    theStraightURL
 };

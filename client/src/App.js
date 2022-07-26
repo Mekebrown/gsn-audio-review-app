@@ -6,7 +6,7 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
-import { indexPath, singleMediaPath, uploadMediaPath, mediaId } from "./components/tools/envs";
+import { indexPath, singleMediaPath, uploadMediaPath, mediaId, theStraightURL } from "./components/tools/envs";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 
@@ -22,6 +22,7 @@ const App = () => {
         <hr />
 
         <Routes>
+          <Route path={theStraightURL} element={ <UserSingleProject mediaId={mediaId} /> } />
           <Route exact path={indexPath} element={ <UserSingleProject mediaId={mediaId} /> } />
           <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
           <Route path={uploadMediaPath} element={ <UploadMedia />} />
