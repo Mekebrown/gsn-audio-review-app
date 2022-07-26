@@ -25,6 +25,7 @@ const App = () => {
           <Route exact path={indexPath} element={ <UserSingleProject mediaId={mediaId} /> } />
           <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
           <Route path={uploadMediaPath} element={ <UploadMedia />} />
+          <Route path="/times" element={ <UploadMedia />} />
         </Routes>
       </div>
     </Router>

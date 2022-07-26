@@ -16,6 +16,7 @@ const {
   media_query_statement_retrieval,
   media_query_statement_insert
 } = require("./server/database/query_strings.js");
+const { Pool } = require('pg');
 require('dotenv').config();
 
 app.use(express.json());
@@ -26,6 +27,13 @@ app.use(bp.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'client', 'public')));
 app.use(express.static('files'));
 app.use(cors(require("./server/tools/cors_options")));
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 const sequelize = new Sequelize(
   process.env.DB_DATABASE,
@@ -44,15 +52,29 @@ sequelize.authenticate()
 
 const isProduction = process.env.NODE_ENV === "production";
 
+const showTimes = () => {
+  let result = '';
+
+  const times = process.env.TIMES || 5;
+  for (i = 0; i < times; i++) {
+    result += i + ' ';
+  }
+  return result;
+};
+
 if (isProduction) {
   app.use(express.static(path.join(__dirname, "client/build")));
   
+  app.get("/times", (req, res) => res.send("Interesting production"));
+
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
   });
 } else {  
   let dataToSend = {}; // Let to allow overwriting later
 
+  
+  app.get("/times", (req, res) => res.send("Build from local"));
   const User = sequelize.define('User', {
     id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     user_name:        { type: DataTypes.STRING, allowNull: false },
