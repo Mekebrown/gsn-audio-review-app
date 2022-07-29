@@ -52,16 +52,6 @@ sequelize.authenticate()
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const showTimes = () => {
-  let result = '';
-
-  const times = process.env.TIMES || 5;
-  for (i = 0; i < times; i++) {
-    result += i + ' ';
-  }
-  return result;
-};
-
 if (isProduction) {
   app.use(express.static("client/build"));
 
@@ -71,8 +61,6 @@ if (isProduction) {
 } else {  
   let dataToSend = {}; // Let to allow overwriting later
 
-  
-  app.get("/times", (req, res) => res.send("Build from local"));
   const User = sequelize.define('User', {
     id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     user_name:        { type: DataTypes.STRING, allowNull: false },
@@ -133,16 +121,6 @@ if (isProduction) {
 
   app.get("/usingle", (req, res) => {
     const mediaId = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
-
-    getQueryValues(media_query_statement, [mediaId])
-    .then(() => (ratings_query_statement, [mediaId]))
-    .then(() => getNotesQueryValues(notes_query_statement, [mediaId]))
-    .then((rows) => {
-      dataToSend = {...dataToSend, totalNotesFromServer: rows};
-
-      res.send(dataToSend);
-    })
-    .catch((err) => console.log("Promise rejection error: " + err));
   });
 
   app.post("/usingle", (req, res) => {
