@@ -9,6 +9,7 @@ import './App.css';
 import { indexPath, singleMediaPath, uploadMediaPath, mediaId } from "./components/tools/envs";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
+import Home from "./components/Home";
 
 const App = () => {
   return (
@@ -22,9 +23,11 @@ const App = () => {
         <hr />
 
         <Routes>
-          <Route exact path={indexPath} element={ <UserSingleProject mediaId={mediaId} /> } />
           <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
           <Route path={uploadMediaPath} element={ <UploadMedia />} />
+          {/* All default routes */}
+          <Route exact path={indexPath} element={ <Home /> } />
+          <Route path="/*" element={ <Home />} />
         </Routes>
       </div>
     </Router>
