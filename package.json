@@ -6,6 +6,7 @@
   "main": "server.js",
   "scripts": {
     "install-client": "cd client && npm install",
+    "dev-build": "cd client && npm run build",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client",
     "start": "nodemon -r dotenv/config server.js",
     "client": "cd client && npm start"
