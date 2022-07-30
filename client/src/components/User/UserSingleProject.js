@@ -79,12 +79,16 @@ const UserSingleProject = ({mediaId}) => {
         setTimeout(() => thankYouMsg.current.innerHTML = "", 5000);
     };
 
-    useEffect(() => { //Axios.get("/usingle", {media_id: mediaId}).then((res) => ).catch(error => );
-        const {
-            media_desc,
-        } = dataForProd;
+    useEffect(() => { 
+        // Axios.get("/usingle", {media_id: mediaId}).then((res) => {
+        //     const {
+        //         media_desc,
+        //     } = res.media_desc;
 
-        setMediaDesc(media_desc);
+        //     setMediaDesc(media_desc);
+        // }).catch(error => console.log(error));
+
+        setMediaDesc(dataForProd.media_desc);
 
         /* eslint-disable-next-line */
     }, [currentTimestamp]);
