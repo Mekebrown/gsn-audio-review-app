@@ -7,11 +7,11 @@ const media_query_statement = "SELECT * FROM media WHERE media_id = ?";
 const ratings_query_statement = "SELECT * FROM ratings WHERE media_id = ?";
 
 const notes_query_statement = `SELECT 
-                              note_id, note_body, note_last_updated, note_timestamp, note_last_retrieved, note_is_deleted
+                              note_id, note_body, note_last_updated, note_timestamp, updatedAt, note_is_deleted
                               FROM notes 
                               WHERE media_id = ? 
                               AND note_is_deleted = 'no' 
-                              ORDER BY note_last_retrieved 
+                              ORDER BY updatedAt 
                               DESC 
                               LIMIT 5
 `;
