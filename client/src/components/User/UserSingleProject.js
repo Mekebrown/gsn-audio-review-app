@@ -24,6 +24,7 @@ const UserSingleProject = ({mediaId}) => {
     const [hideNotePad, setHideNotePad] = useState(true);
     const [currentTimestamp, setCurrentTimestamp] = useState("0.00");
     const [mediaDesc, setMediaDesc] = useState("");
+    const [noteId, setNoteId] = useState(null);
     const player = useRef(null);
     const thankYouMsg = useRef(null);
     
@@ -67,6 +68,7 @@ const UserSingleProject = ({mediaId}) => {
             note_body: activeNoteInTextArea,
             note_timestamp: currentTimestamp,
             media_id: mediaId,
+            note_id: noteId,
             user_id: 1, // eventually retrieved somewhere else
         }
 
@@ -89,6 +91,7 @@ const UserSingleProject = ({mediaId}) => {
         // }).catch(error => console.log(error));
 
         setMediaDesc(dataForProd.media_desc);
+        setNoteId(dataForProd.note_id);
 
         /* eslint-disable-next-line */
     }, [currentTimestamp]);
