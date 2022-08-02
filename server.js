@@ -4,7 +4,6 @@ const app = express();
 const cors = require('cors');
 const path = require('path');
 const bp = require('body-parser');
-const { Sequelize, DataTypes, Op } = require("sequelize");
 const fileupload = require("express-fileupload");
 const {
   media_upload_query_statement,
@@ -16,7 +15,7 @@ const {
   media_query_statement_retrieval,
   media_query_statement_insert
 } = require("./server/database/query_strings.js");
-const { Pool } = require('pg');
+const { Client } = require('pg');
 const fs = require("fs");
 require('dotenv').config();
 
@@ -30,39 +29,55 @@ app.use(express.static('./files'));
 app.use(express.static('./files/logs'));
 app.use(cors(require("./server/tools/cors_options")));
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+const client = new Client({
+  connectionString: process.env.DATABASE_URL || 'postgres://tjsodpcshgeglq:aa521f57c3c87855222e7579a4a77dc70b1476953c06a57910e16f3809226bc0@ec2-44-206-197-71.compute-1.amazonaws.com:5432/d4r8porbvt5nuc',
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-const sequelize = new Sequelize(
-  process.env.DB_DATABASE,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD, 
-  {
-    host: process.env.DB_HOST,
-    dialect: 'postgres',
-    logging: false, 
-  }
-);
-
-sequelize.authenticate()
+client.connect()
 .then(() => console.log('Connection has been established successfully.'))
 .catch((err) => {  
   logger({ 
-    location: "sequelize_auth",
-    req: "sequelize variable: " + sequelize + 
-          "| process.env.DB_DATABASE: " + process.env.DB_DATABASE + 
-          "| process.env.DB_USERNAME: " + process.env.DB_USERNAME + 
-          "| process.env.DB_PASSWORD: " + process.env.DB_PASSWORD +
-          "| process.env.DB_HOST: " + process.env.DB_HOST,
+    location: "pg_client_connect",
+    req: "client variable: " + client + 
+          " -|- process.env.PGUSER: " + process.env.PGUSER + 
+          " -|- process.env.PGHOST: " + process.env.PGHOST + 
+          " -|- process.env.PGPASSWORD: " + process.env.PGPASSWORD +
+          " -|- process.env.PGDATABASE: " + process.env.PGDATABASE +
+          " -|- process.env.PGPORT: " + process.env.PGPORT,
     message: err 
   });
   
   console.error('Unable to connect to the database:', err); 
 });
+
+// client.query(`CREATE TYPE user_types AS ENUM ('guest', 'admin', 'reviewer');
+//   CREATE TABLE users (
+//   id INTEGER PRIMARY KEY NOT NULL,
+//   role user_types NOT NULL DEFAULT 'guest', 
+//   email VARCHAR (250)
+// )`).then((res) => console.log(res)).catch((err) => console.log(err));
+
+// client.query(`CREATE TABLE notes (
+//   id INTEGER PRIMARY KEY NOT NULL,
+//   user_id INTEGER NOT NULL, 
+//   media_id INTEGER NOT NULL,
+//   note_body VARCHAR (1000) NOT NULL, 
+//   note_timestamp TIMESTAMPTZ NOT NULL, 
+//   last_retrieved TIMESTAMPTZ
+// )`).then((res) => console.log(res)).catch((err) => console.log(err));
+
+// client.query(`CREATE TABLE media (
+//   id INTEGER PRIMARY KEY NOT NULL,
+//   file_name VARCHAR(100) NOT NULL, 
+//   file_directory VARCHAR(250) NOT NULL,
+//   project_name VARCHAR(250) NOT NULL,
+//   media_desc VARCHAR(500) NOT NULL, 
+//   media_type media_types NOT NULL DEFAULT 'n/a',  
+//   last_retrieved TIMESTAMPTZ
+// )`).then((res) => console.log(res)).catch((err) => console.log(err));
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -75,43 +90,14 @@ if (isProduction) {
 } else {  
   let dataToSend = {}; // Let to allow overwriting later
 
-  const User = sequelize.define('User', {
-    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    user_name:        { type: DataTypes.STRING, allowNull: false },
-    last_visited:     { type: DataTypes.DATE, allowNull: false },
-    role:             { type: DataTypes.STRING, allowNull: false, defaultValue: "guest" },
-    note_ids_created: { type: DataTypes.STRING, allowNull: true },
-    email:            { type: DataTypes.STRING, allowNull: true },
-  });
-
-  const Note = sequelize.define('Note', {
-    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    user_id:          { type: DataTypes.INTEGER, allowNull: false },
-    media_id:         { type: DataTypes.INTEGER, allowNull: false },
-    note_body:        { type: DataTypes.STRING(5000), allowNull: false },
-    timestamp:        { type: DataTypes.STRING, allowNull: false },
-    last_retrieved:   { type: DataTypes.DATE, allowNull: true }
-  });
-
-  const Media = sequelize.define('Media', {
-    id:               { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    file_name:        { type: DataTypes.STRING, allowNull: false },
-    file_directory:   { type: DataTypes.STRING(5000), allowNull: false },
-    user_id:          { type: DataTypes.INTEGER, allowNull: false },
-    media_type:       { type: DataTypes.STRING, allowNull: false, defaultValue: "audio" },
-    project_name:     { type: DataTypes.STRING, allowNull: true },
-    media_desc:       { type: DataTypes.STRING, allowNull: true },
-  });
-
-  sequelize.sync();
-
   const getQueryValues = (queryStatement, params = []) => {
     return new Promise((resolve, reject) => {
-      conn.query(queryStatement, params, (err, rows) => {                                                
+      client.query(queryStatement, params, (err, rows) => {                                                
           if (err || rows === undefined) {
             logger({
               location: "getQueryValues", 
-              req: "Query statement: " + queryStatement + "| Params: " + params, 
+              req: "Query statement: " + queryStatement +
+                    " -|- Params: " + params, 
               res: "Rows: " + rows,
               message: err
             });
@@ -119,25 +105,7 @@ if (isProduction) {
             reject(new Error(err));
           } else {
             dataToSend = {...dataToSend, ...rows[0]};
-            resolve(rows);
-          }
-        }
-      )}
-    );
-  };
-  
-  const getNotesQueryValues = (queryStatement, params = []) => {
-    return new Promise((resolve, reject) => {
-      conn.query(queryStatement, params, (err, rows) => {                                                
-          if (err || rows === undefined) {
-            logger({
-              location: "getNotesQueryValues", 
-              req: "Query statement: " + queryStatement + "| Params: " + params, 
-              res: "Rows: " + rows,
-              message: err
-            });
-            reject(new Error(err));
-          } else {
+
             resolve(rows);
           }
         }
@@ -150,127 +118,150 @@ if (isProduction) {
 
     const userId = 1;
 
-    Media.findOne({
-      where: {
-        id: mediaId
+    getQueryValues(media_query_statement, [ mediaId ])
+    .then((res) => {
+      for (let row of res.rows) {
+        dataToSend = {...dataToSend, row};
+
+        console.log(JSON.stringify(row));
       }
     })
-    .then((res) => dataToSend = {...dataToSend, ...res.dataValues})
-    .catch((err) => {      
+    .catch((err) => {     
       logger({
         location: "get_usingle_mediaQuery", 
         req: req.query, 
         res: "Promise rejection error (Media)",
-        headers: req.rawHeaders[9] + "|" + 
-                  req.rawHeaders[13] + "|" + 
-                  req.rawHeaders[21] + "|" + 
+        headers: req.rawHeaders[9] + " -|- " + 
+                  req.rawHeaders[13] + " -|- " + 
+                  req.rawHeaders[21] + " -|- " + 
                   req.rawHeaders[22] + "-" + 
                   req.rawHeaders[23],
         message: err
-      });
-      
-      console.error("Promise rejection error (Media): " + err); });
+      });      
+        
+      console.error("Promise rejection error (Media): " + err);
 
-    Note.findAll({
-      order: [
-        ["updatedAt", "DESC"]
-      ],
-      where: {
-        [Op.and]: [
-          {media_id: mediaId},
-          {user_id: userId},
-        ]
+      throw err;
+    })
+    .then(() => client.end());
+
+    getQueryValues(notes_query_statement, [ mediaId, userId ])        
+    .then((res) => {
+      for (let row of res.rows) {
+        dataToSend = {...dataToSend, row};
+
+        console.log(JSON.stringify(row));
       }
     })
-    .then((res) => dataToSend = {...dataToSend, ...res.dataValues})
-    .then(() => res.send(dataToSend))
-    .catch((err) => {
+    .catch((err) => {     
       logger({
         location: "get_usingle_noteQuery", 
         req: req.query, 
         res: "Promise rejection error (Note)",
-        headers: req.rawHeaders[9] + "|" + 
-                  req.rawHeaders[13] + "|" + 
-                  req.rawHeaders[21] + "|" + 
+        headers: req.rawHeaders[9] + " -|- " + 
+                  req.rawHeaders[13] + " -|- " + 
+                  req.rawHeaders[21] + " -|- " + 
                   req.rawHeaders[22] + "-" + 
                   req.rawHeaders[23],
         message: err
-      });
-      
-      console.error("Promise rejection error (Note): " + err); });
+      });      
+        
+      console.error("Promise rejection error (Note): " + err);
+
+      throw err;
+    })
+    .then(() => client.end());    
   });
 
   app.post("/usingle", (req, res) => {
     const {
       is_note_updated,
+      note_id,
       note_body,            // notes: The written note
       note_timestamp,       // notes: Timestamp
       media_id,             // notes and media: media id
       user_id,               // notes and users: user id
     } = req.body;
 
-    let note_id_to_work_with = note_id ? note_id : null;
-
     let converted_datetime = new Date();
     
-    const new_notes_query_values = {
-      note_body,
-      converted_datetime,
-      note_timestamp,
-      converted_datetime,
-      user_id, 
-      media_id,
-      converted_datetime,
-     };
-
-     const updated_notes_query_values = {
-      note_body,
-      converted_datetime, 
-      note_timestamp, 
-      converted_datetime,
-      note_id_to_work_with
-     };
-    
     if (!is_note_updated) {
-      const new_note = Note.build(new_notes_query_values);
+      const insert_note_query = `INSERT INTO notes ( 
+        user_id, 
+        media_id,
+        note_body, 
+        note_timestamp, 
+        last_retrieved) 
+        VALUES ($1, $2, $3, $4, $5)`;
+      
+      const insert_values = [ 
+        user_id, 
+        media_id, 
+        note_body, 
+        note_timestamp, 
+        converted_datetime
+      ];
 
-      new_note.save()
-      .then((mysql_now) => converted_datetime = mysql_now[0]["NOW()"])
-      .then(() => getNotesQueryValues(`INSERT INTO notes (note_body, note_last_updated, note_timestamp, note_last_retrieved, user_id, media_id, note_created_on) VALUES (?, ?, ?, ?, ?, ?, ?)`, [ note_body, converted_datetime, note_timestamp, converted_datetime, user_id, media_id, converted_datetime]))
-      .then(() => getNotesQueryValues("SELECT note_id, note_last_updated FROM notes WHERE note_last_updated = ? LIMIT 1", [converted_datetime]))
-      .then((note_info_retrieved_from_query) => note_id_to_work_with = note_info_retrieved_from_query[0].note_id)
-      .catch((err) => {
-        logger({
-          location: "post_usingle", 
-          req: req.query, 
-          res: "Note not saved",
-          headers: req.rawHeaders[9] + "|" + 
-                    req.rawHeaders[13] + "|" + 
-                    req.rawHeaders[21] + "|" + 
+      getQueryValues(insert_note_query, insert_values)
+        .then(res => { 
+          console.log(res.rows[0].id);          
+          
+          res.status(200).send({ message: "New note saved", data: { id: res.rows[0].id } });
+        })
+        .catch(err => {
+          logger({
+          location: "post_usingle_new_note", 
+          req: "Body: " + JSON.stringify(req.body), 
+          res: "New note not saved",
+          headers: req.rawHeaders[9] + " -|- " + 
+                    req.rawHeaders[13] + " -|- " + 
+                    req.rawHeaders[21] + " -|- " + 
                     req.rawHeaders[22] + "-" + 
                     req.rawHeaders[23],
-          message: err
+          message: JSON.stringify(err)
         }); 
+
+        console.log(err);
         
-        res.status(500).send({ message: "Note not saved", code: 200 }); 
-      });
+        res.status(500).send({ message: "New note not saved", code: 200 });
+        })
+        .then(() => client.end());
     } else {
-      getNotesQueryValues(`UPDATE notes SET note_body = ?, note_last_updated = ?, note_timestamp = ?, note_last_retrieved = ? WHERE note_id = ?`, [note_body, converted_datetime, note_timestamp, converted_datetime, note_id_to_work_with])
-      .catch((err) => {
-        logger({
-          location: "post_usingle_getNotesQueryValues", 
-          req: req.query, 
-          res: "Note not saved",
-          headers: req.rawHeaders[9] + "|" + 
-                    req.rawHeaders[13] + "|" + 
-                    req.rawHeaders[21] + "|" + 
-                    req.rawHeaders[22] + "-" + 
-                    req.rawHeaders[23],
-          message: err
-        });
-        
-        res.status(500).send({ message: "Note not saved", code: 200 }); 
-      });
+      const update_note_query = `UPDATE notes 
+      SET note_body = $1,
+      note_timestamp = $2, 
+      last_retrieved = $3 
+      WHERE note_id = $4 
+      AND media_id = $5`;
+      
+      const update_values = [ 
+        note_body, 
+        note_timestamp, 
+        converted_datetime, 
+        note_id,
+        media_id
+      ];
+
+      getQueryValues(update_note_query, update_values)
+        .then(res => { 
+          res.status(200).send({ message: "Updated note saved" });
+        })
+        .catch((err) => {
+          logger({
+            location: "post_usingle_updated_note", 
+            req: req.query, 
+            res: "Updated note not saved",
+            headers: req.rawHeaders[9] + " -|- " + 
+                      req.rawHeaders[13] + " -|- " + 
+                      req.rawHeaders[21] + " -|- " + 
+                      req.rawHeaders[22] + "-" + 
+                      req.rawHeaders[23],
+            message: err
+          });
+          
+          res.status(500).send({ message: "Updated note not saved", code: 200 }); 
+        })
+        .then(() => client.end());
     }
   });
 
@@ -286,27 +277,20 @@ if (isProduction) {
         res.status(500).send({ message: "File upload failed", code: 200 });
       }
       
-      const media = Media.build({
-        file_name: fileName,
-        file_directory: file_directory,
-        user_id: user_id,
-        media_type: mediaType,
-        project_name: projectName,
-        media_desc: description
-      });
+      const media_values = [ user_id, fileName, file_directory, mediaType, projectName, description ];
       
-      media.save()
+      getQueryValues(media_upload_query_statement, media_values)
       .then(() => {
-        res.status(200).send({ message: "File Uploaded", code: 200 });
+        res.status(200).send({ message: "File Uploaded" });
       })
       .catch((err) => {
         logger({
           location: "post_media", 
           req: req.query, 
           res: "Promise rejection error",
-          headers: req.rawHeaders[9] + "|" + 
-                    req.rawHeaders[13] + "|" + 
-                    req.rawHeaders[21] + "|" + 
+          headers: req.rawHeaders[9] + " -|- " + 
+                    req.rawHeaders[13] + " -|- " + 
+                    req.rawHeaders[21] + " -|- " + 
                     req.rawHeaders[22] + "-" + 
                     req.rawHeaders[23],
           message: err
