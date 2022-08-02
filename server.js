@@ -55,22 +55,22 @@ client.connect()
 
 // client.query(`CREATE TYPE user_types AS ENUM ('guest', 'admin', 'reviewer');
 //   CREATE TABLE users (
-//   id INTEGER PRIMARY KEY NOT NULL,
+//   id SERIAL PRIMARY KEY NOT NULL,
 //   role user_types NOT NULL DEFAULT 'guest', 
 //   email VARCHAR (250)
 // )`).then((res) => console.log(res)).catch((err) => console.log(err));
 
 // client.query(`CREATE TABLE notes (
-//   id INTEGER PRIMARY KEY NOT NULL,
+//   id SERIAL PRIMARY KEY NOT NULL,
 //   user_id INTEGER NOT NULL, 
 //   media_id INTEGER NOT NULL,
 //   note_body VARCHAR (1000) NOT NULL, 
-//   note_timestamp TIMESTAMPTZ NOT NULL, 
+//   note_timestamp VARCHAR (100) NOT NULL, 
 //   last_retrieved TIMESTAMPTZ
 // )`).then((res) => console.log(res)).catch((err) => console.log(err));
 
 // client.query(`CREATE TABLE media (
-//   id INTEGER PRIMARY KEY NOT NULL,
+//   id SERIAL PRIMARY KEY NOT NULL,
 //   file_name VARCHAR(100) NOT NULL, 
 //   file_directory VARCHAR(250) NOT NULL,
 //   project_name VARCHAR(250) NOT NULL,
@@ -114,16 +114,20 @@ if (isProduction) {
   };
 
   app.get("/usingle", (req, res) => {
-    const mediaId = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
+    const media_id = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
 
-    const userId = 1;
+    const user_id = 1;
 
-    getQueryValues(media_query_statement, [ mediaId ])
-    .then((res) => {
-      for (let row of res.rows) {
+    getQueryValues(media_query_statement, [ media_id ])
+    .then(() => getQueryValues(notes_query_statement, [ media_id, user_id ]) )
+    .then((data) => {
+      for (let row of data.rows) {
         dataToSend = {...dataToSend, row};
 
         console.log(JSON.stringify(row));
+        console.log(dataToSend);
+
+        res.status(200).send({ message: "Info retrieved", data: { data: dataToSend } });
       }
     })
     .catch((err) => {     
@@ -143,33 +147,6 @@ if (isProduction) {
 
       throw err;
     })
-    .then(() => client.end());
-
-    getQueryValues(notes_query_statement, [ mediaId, userId ])        
-    .then((res) => {
-      for (let row of res.rows) {
-        dataToSend = {...dataToSend, row};
-
-        console.log(JSON.stringify(row));
-      }
-    })
-    .catch((err) => {     
-      logger({
-        location: "get_usingle_noteQuery", 
-        req: req.query, 
-        res: "Promise rejection error (Note)",
-        headers: req.rawHeaders[9] + " -|- " + 
-                  req.rawHeaders[13] + " -|- " + 
-                  req.rawHeaders[21] + " -|- " + 
-                  req.rawHeaders[22] + "-" + 
-                  req.rawHeaders[23],
-        message: err
-      });      
-        
-      console.error("Promise rejection error (Note): " + err);
-
-      throw err;
-    })
     .then(() => client.end());    
   });
 
@@ -183,7 +160,7 @@ if (isProduction) {
       user_id,               // notes and users: user id
     } = req.body;
 
-    let converted_datetime = new Date();
+    const converted_datetime = new Date();
     
     if (!is_note_updated) {
       const insert_note_query = `INSERT INTO notes ( 
@@ -192,7 +169,7 @@ if (isProduction) {
         note_body, 
         note_timestamp, 
         last_retrieved) 
-        VALUES ($1, $2, $3, $4, $5)`;
+        VALUES ($1, $2, $3, $4, $5) RETURNING id`;
       
       const insert_values = [ 
         user_id, 
@@ -203,10 +180,8 @@ if (isProduction) {
       ];
 
       getQueryValues(insert_note_query, insert_values)
-        .then(res => { 
-          console.log(res.rows[0].id);          
-          
-          res.status(200).send({ message: "New note saved", data: { id: res.rows[0].id } });
+        .then(data => {
+          res.status(200).send({ message: "New note saved", data: { id: data.rows[0].id } });
         })
         .catch(err => {
           logger({
@@ -224,26 +199,25 @@ if (isProduction) {
         console.log(err);
         
         res.status(500).send({ message: "New note not saved", code: 200 });
-        })
-        .then(() => client.end());
+        });
     } else {
       const update_note_query = `UPDATE notes 
       SET note_body = $1,
       note_timestamp = $2, 
       last_retrieved = $3 
-      WHERE note_id = $4 
+      WHERE id = $4 
       AND media_id = $5`;
       
       const update_values = [ 
         note_body, 
-        note_timestamp, 
+        note_timestamp,
         converted_datetime, 
         note_id,
         media_id
       ];
 
       getQueryValues(update_note_query, update_values)
-        .then(res => { 
+        .then(() => { 
           res.status(200).send({ message: "Updated note saved" });
         })
         .catch((err) => {
@@ -260,8 +234,7 @@ if (isProduction) {
           });
           
           res.status(500).send({ message: "Updated note not saved", code: 200 }); 
-        })
-        .then(() => client.end());
+        });
     }
   });
 
@@ -271,14 +244,15 @@ if (isProduction) {
 
     const file_directory = __dirname + "/files/";
     const user_id = 1;
+    const converted_datetime = new Date();
 
     mediaFileToUpload.mv(`${file_directory}${fileName}`, (err) => {
       if (err) {
         res.status(500).send({ message: "File upload failed", code: 200 });
       }
       
-      const media_values = [ user_id, fileName, file_directory, mediaType, projectName, description ];
-      
+      const media_values = [ description, fileName, mediaType, projectName, converted_datetime, file_directory ];
+
       getQueryValues(media_upload_query_statement, media_values)
       .then(() => {
         res.status(200).send({ message: "File Uploaded" });

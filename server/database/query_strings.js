@@ -1,7 +1,7 @@
-const media_upload_query_statement = `INSERT INTO media 
-                                    (user_id, media_desc, file_name, media_type, project_name, media_uploaded_on, file_directory) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?)`;
-  
+const media_upload_query_statement = `INSERT INTO media (
+                                    media_desc, file_name, media_type, project_name, last_retrieved, file_directory) 
+                                    VALUES ($1, $2, $3, $4, $5, $6)`;                                      
+                                      
 const media_query_statement = "SELECT * FROM media WHERE media_id = ?";
 
 const ratings_query_statement = "SELECT * FROM ratings WHERE media_id = ?";
