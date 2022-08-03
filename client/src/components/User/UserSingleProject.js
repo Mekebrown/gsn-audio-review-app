@@ -82,13 +82,15 @@ const UserSingleProject = ({mediaId}) => {
     };
 
     useEffect(() => { 
-        // Axios.get("/usingle", {media_id: mediaId}).then((res) => {
-        //     const {
-        //         media_desc,
-        //     } = res.media_desc;
+        Axios.get("/usingle", {media_id: mediaId}).then((res) => {
+            // const {
+            //     media_desc,
+            // } = res.media_desc;
 
-        //     setMediaDesc(media_desc);
-        // }).catch(error => console.log(error));
+            // setMediaDesc(media_desc);
+            console.log(res.data);
+            console.log('===================================');
+        }).catch(error => console.log(error));
 
         setMediaDesc(dataForProd.media_desc);
         setNoteId(dataForProd.note_id);

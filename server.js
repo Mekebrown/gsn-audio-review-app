@@ -8,6 +8,8 @@ const fileupload = require("express-fileupload");
 const {
   media_upload_query_statement,
   media_query_statement,
+  insert_note_query,
+  update_note_query,
   ratings_query_statement,
   notes_query_statement,
   notes_query_statement_insert,
@@ -53,32 +55,6 @@ client.connect()
   console.error('Unable to connect to the database:', err); 
 });
 
-// client.query(`CREATE TYPE user_types AS ENUM ('guest', 'admin', 'reviewer');
-//   CREATE TABLE users (
-//   id SERIAL PRIMARY KEY NOT NULL,
-//   role user_types NOT NULL DEFAULT 'guest', 
-//   email VARCHAR (250)
-// )`).then((res) => console.log(res)).catch((err) => console.log(err));
-
-// client.query(`CREATE TABLE notes (
-//   id SERIAL PRIMARY KEY NOT NULL,
-//   user_id INTEGER NOT NULL, 
-//   media_id INTEGER NOT NULL,
-//   note_body VARCHAR (1000) NOT NULL, 
-//   note_timestamp VARCHAR (100) NOT NULL, 
-//   last_retrieved TIMESTAMPTZ
-// )`).then((res) => console.log(res)).catch((err) => console.log(err));
-
-// client.query(`CREATE TABLE media (
-//   id SERIAL PRIMARY KEY NOT NULL,
-//   file_name VARCHAR(100) NOT NULL, 
-//   file_directory VARCHAR(250) NOT NULL,
-//   project_name VARCHAR(250) NOT NULL,
-//   media_desc VARCHAR(500) NOT NULL, 
-//   media_type media_types NOT NULL DEFAULT 'n/a',  
-//   last_retrieved TIMESTAMPTZ
-// )`).then((res) => console.log(res)).catch((err) => console.log(err));
-
 const isProduction = process.env.NODE_ENV === "production";
 
 if (isProduction) {
@@ -121,20 +97,19 @@ if (isProduction) {
     getQueryValues(media_query_statement, [ media_id ])
     .then(() => getQueryValues(notes_query_statement, [ media_id, user_id ]) )
     .then((data) => {
-      for (let row of data.rows) {
-        dataToSend = {...dataToSend, row};
+      // for (let row of data.rows) {
+        // dataToSend = {...dataToSend, ...row};
+      // }
 
-        console.log(JSON.stringify(row));
-        console.log(dataToSend);
-
-        res.status(200).send({ message: "Info retrieved", data: { data: dataToSend } });
-      }
+      console.log(dataToSend);
+      console.log('===================================');
+      res.status(200).send({ message: "Info retrieved", data});
     })
-    .catch((err) => {     
+    .catch((err) => {   
       logger({
         location: "get_usingle_mediaQuery", 
-        req: req.query, 
-        res: "Promise rejection error (Media)",
+        req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement, 
+        res: "N/A",
         headers: req.rawHeaders[9] + " -|- " + 
                   req.rawHeaders[13] + " -|- " + 
                   req.rawHeaders[21] + " -|- " + 
@@ -146,8 +121,8 @@ if (isProduction) {
       console.error("Promise rejection error (Media): " + err);
 
       throw err;
-    })
-    .then(() => client.end());    
+    });
+    // .then(() => client.end());    
   });
 
   app.post("/usingle", (req, res) => {
@@ -163,19 +138,13 @@ if (isProduction) {
     const converted_datetime = new Date();
     
     if (!is_note_updated) {
-      const insert_note_query = `INSERT INTO notes ( 
-        user_id, 
-        media_id,
-        note_body, 
-        note_timestamp, 
-        last_retrieved) 
-        VALUES ($1, $2, $3, $4, $5) RETURNING id`;
-      
       const insert_values = [ 
         user_id, 
         media_id, 
         note_body, 
         note_timestamp, 
+        converted_datetime,
+        converted_datetime,
         converted_datetime
       ];
 
@@ -200,17 +169,11 @@ if (isProduction) {
         
         res.status(500).send({ message: "New note not saved", code: 200 });
         });
-    } else {
-      const update_note_query = `UPDATE notes 
-      SET note_body = $1,
-      note_timestamp = $2, 
-      last_retrieved = $3 
-      WHERE id = $4 
-      AND media_id = $5`;
-      
+    } else {      
       const update_values = [ 
         note_body, 
         note_timestamp,
+        converted_datetime,
         converted_datetime, 
         note_id,
         media_id
@@ -243,7 +206,6 @@ if (isProduction) {
     const { mediaFileToUpload } = req.files;
 
     const file_directory = __dirname + "/files/";
-    const user_id = 1;
     const converted_datetime = new Date();
 
     mediaFileToUpload.mv(`${file_directory}${fileName}`, (err) => {
@@ -251,7 +213,7 @@ if (isProduction) {
         res.status(500).send({ message: "File upload failed", code: 200 });
       }
       
-      const media_values = [ description, fileName, mediaType, projectName, converted_datetime, file_directory ];
+      const media_values = [ description, fileName, mediaType, projectName, converted_datetime, file_directory, converted_datetime, converted_datetime ];
 
       getQueryValues(media_upload_query_statement, media_values)
       .then(() => {
