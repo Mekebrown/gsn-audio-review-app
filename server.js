@@ -32,7 +32,7 @@ app.use(express.static('./files/logs'));
 app.use(cors(require("./server/tools/cors_options")));
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL || 'postgres://tjsodpcshgeglq:aa521f57c3c87855222e7579a4a77dc70b1476953c06a57910e16f3809226bc0@ec2-44-206-197-71.compute-1.amazonaws.com:5432/d4r8porbvt5nuc',
+  connectionString: process.env.DATABASE_URL || process.env.PG_URI_APP,
   ssl: {
     rejectUnauthorized: false
   }
