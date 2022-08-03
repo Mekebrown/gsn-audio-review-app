@@ -169,7 +169,7 @@ if (isProduction) {
         
         res.status(500).send({ message: "New note not saved", code: 200 });
         });
-    } else {      
+    } else {
       const update_values = [ 
         note_body, 
         note_timestamp,
