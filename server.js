@@ -64,8 +64,6 @@ if (isProduction) {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
   });
 } else {  
-  let dataToSend = {}; // Let to allow overwriting later
-
   const getQueryValues = (queryStatement, params = []) => {
     return new Promise((resolve, reject) => {
       client.query(queryStatement, params, (err, rows) => {                                                
@@ -80,8 +78,6 @@ if (isProduction) {
 
             reject(new Error(err));
           } else {
-            dataToSend = {...dataToSend, ...rows[0]};
-
             resolve(rows);
           }
         }
@@ -93,17 +89,18 @@ if (isProduction) {
     const media_id = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
 
     const user_id = 1;
+    let dataToSend = {};
 
     getQueryValues(media_query_statement, [ media_id ])
-    .then(() => getQueryValues(notes_query_statement, [ media_id, user_id ]) )
     .then((data) => {
-      // for (let row of data.rows) {
-        // dataToSend = {...dataToSend, ...row};
-      // }
+      dataToSend = data.rows[0];
 
-      console.log(dataToSend);
-      console.log('===================================');
-      res.status(200).send({ message: "Info retrieved", data});
+      return getQueryValues(notes_query_statement, [ media_id, user_id ]);
+    })
+    .then((data) => {
+      dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
+
+      res.status(200).send(dataToSend);
     })
     .catch((err) => {   
       logger({
@@ -122,7 +119,6 @@ if (isProduction) {
 
       throw err;
     });
-    // .then(() => client.end());    
   });
 
   app.post("/usingle", (req, res) => {
