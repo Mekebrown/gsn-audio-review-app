@@ -348,33 +348,22 @@ const updatedSampleNote = {
 };
 
 const dataForProd = {
-  "creation_datetime": "2022-03-23T21:37:22.000Z",
-  "file_directory": "media/audio",
-  "file_name": "t.mp3",
-  "media_deleted_on": null,
-  "media_desc": "The file t.mp3 is an audio track that is the current GSN theme song.",
-  "media_id": 1,
-  "media_last_retrieved": null,
-  "media_type": "audio",
-  "media_updated_on": null,
-  "media_uploaded_on": "2022-06-10T19:11:53.000Z",
-  "project_name": "t.mp3",
-  "read_datetime": null,
-  "thumb_rating": "up",
-  "thumb_rating_id": 1,
-  "totalNotesFromServer": [
-    {
-      "note_body": "The whole track is great. Thanks, Lance.",
-      "note_id": 12,
-      "note_is_deleted": "no",
-      "note_last_retrieved": "2022-06-10T20:11:53.000Z",
-      "note_last_updated": null,
-      "note_timestamp": "14.25"
-    }
-  ],
-  "update_datetime": null,
-  "user_id": 1,
-  "note_id": null
+    "file_name": "t3.mp3",
+    "file_directory": "C: \\Code Projects\\Non-GH Repos\\gsn-app_heroku/files/",
+    "project_name": "t3",
+    "media_desc": "t3",
+    "totalNotesFromServer": [
+        {
+            "id": 2,
+            "note_body": "aNOTHER",
+            "note_timestamp": "0.00"
+        },
+        {
+            "id": 1,
+            "note_body": "DZ",
+            "note_timestamp": "0.00"
+        }
+    ]
 };
 
 export default dataForProd;
