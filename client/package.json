@@ -7,9 +7,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -40,17 +38,21 @@
     ]
   },
   "dependencies": {
+    "@svgr/plugin-svgo": "^6.2.0",
+    "@svgr/webpack": "^6.2.1",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^14.4.1",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^14.2.1",
     "axios": "^0.27.2",
     "body-parser": "^1.20.0",
+    "classnames": "^2.3.1",
     "css-select": "^5.1.0",
     "default-browser-id": "^3.0.0",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "glob-parent": "^6.0.2",
-    "jest": "^28.1.3",
+    "jest": "^28.1.1",
+    "jest-watch-typeahead": "^1.1.0",
     "meow": "^10.1.2",
     "minimist": "^1.2.6",
     "nodemon": "^2.0.16",
@@ -59,25 +61,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.1",
     "svgo": "^2.8.0",
     "trim": "^1.0.1",
     "trim-newlines": "^4.0.2",
     "web-vitals": "^2.1.4",
+    "webpack": "^5.73.0",
     "x-default-browser": "^0.4.0"
   },
-  "devDependencies": {
-    "@storybook/addon-actions": "^6.5.9",
-    "@storybook/addon-essentials": "^6.5.9",
-    "@storybook/addon-links": "^6.5.9",
-    "@storybook/builder-webpack5": "^6.5.9",
-    "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/node-logger": "^6.5.9",
-    "@storybook/preset-create-react-app": "^4.1.2",
-    "@storybook/react": "^6.5.9",
-    "@svgr/plugin-svgo": "^6.2.0",
-    "@svgr/webpack": "^6.2.1",
-    "jest-watch-typeahead": "^2.0.0",
-    "react-scripts": "^5.0.1",
-    "webpack": "^5.73.0"
-  }
+  "homepage": "https://intense-forest-28148.herokuapp.com/"
 }

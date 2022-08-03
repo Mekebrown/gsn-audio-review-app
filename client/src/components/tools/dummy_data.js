@@ -347,7 +347,28 @@ const updatedSampleNote = {
     note_last_retrieved: currDateTime,
 };
 
-module.exports = {
+const dataForProd = {
+    "file_name": "t3.mp3",
+    "file_directory": "C: \\Code Projects\\Non-GH Repos\\gsn-app_heroku/files/",
+    "project_name": "t3",
+    "media_desc": "t3",
+    "totalNotesFromServer": [
+        {
+            "id": 2,
+            "note_body": "aNOTHER",
+            "note_timestamp": "0.00"
+        },
+        {
+            "id": 1,
+            "note_body": "DZ",
+            "note_timestamp": "0.00"
+        }
+    ]
+};
+
+export default dataForProd;
+
+export {
     allProjects, 
     allUsers, 
     allNotesForAllProjects, 

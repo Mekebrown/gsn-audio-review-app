@@ -69,7 +69,6 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
     };
 
     const calculateTime = (seconds) => {
-        if (duration && !isNaN(duration)) {
             const actualMinutes = Math.floor(seconds / 60);
             const FormattedMinutes = actualMinutes < 10 ? `0${actualMinutes}` : `${actualMinutes}`;
             const secsRemainder =  Math.floor(seconds % 60);
@@ -79,7 +78,6 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
         }
 
         console.log("Not available");
-    };
 
     // useEffect(() => {
     //     if (thePlayer?.current?.duration) {

@@ -65,7 +65,6 @@ const NoteTaker = ({noteDetails, notesList}) => {
 
     const updateDuration = () => {
         const timerz = thePlayer?.current?.duration ? thePlayer.current.duration : "undefined";
-        setNoteWithTimestamp(`note_${timerz}`);
     };
 
     const setServerInfo = () => {
@@ -73,8 +72,7 @@ const NoteTaker = ({noteDetails, notesList}) => {
             user_id: userId,
             media_id: mediaId,
             note_body: activeNoteInTextArea,
-            note_last_updated: isAnUpdatedNote ? new Date() : false,
-            note_timestamp: noteWithTimestamp
+            note_last_updated: isAnUpdatedNote ? new Date() : false
         });
     };
 
@@ -83,7 +81,7 @@ const NoteTaker = ({noteDetails, notesList}) => {
         setServerInfo();
 
         if (serverData) {
-            await Axios.post('http://localhost:3001/usingle', serverData)
+            await Axios.post("http://localhost:3001", serverData)
             .then((res) => { console.log(res)})//updateNotesList(); })
             .catch(error => { console.error('Error:', error); });
         }

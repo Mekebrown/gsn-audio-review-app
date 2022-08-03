@@ -1,63 +1,36 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css';
-
-// Variables
-import { 
-  adminPath,
-  adminIndvlViewinglePath,
-  allNotesPath,
-  allProjectsPath,
-  allUsersPath,
-  indexPath,
-  projectReviewingPath, 
-  REACT_APP_FULL_TITLE,
-  uploadMediaPath 
-} from "./components/tools/envs";
-
-// Admin
-import AdminSingleProject from "./components/Admin/AdminSingleProject"; 
-import Admin from "./components/Admin/Admin";
-import UploadMedia from "./components/Admin/UploadMedia";
-import Notes from "./components/Admin/Notes";
-import Projects from "./components/Admin/AllProjects";
-
-// General
-import Index from "./components/Index"; 
-
-// User
+import { indexPath, singleMediaPath, uploadMediaPath, mediaId } from "./components/tools/envs";
 import UserSingleProject from "./components/User/UserSingleProject";
-import Users from "./components/User/Users";
+import UploadMedia from "./components/Admin/UploadMedia";
+import Home from "./components/Home";
 
-function App() {
+const App = () => {
   return (
-    <div className="app">
-      <header>
-        {REACT_APP_FULL_TITLE}
-      </header>
-      <Router>
+    <Router>
+      <div>
+        <ul>
+          <li><Link to={indexPath}>Home</Link>  </li>
+          <li><Link to={singleMediaPath}>Dashboard</Link></li>
+        </ul>
+
+        <hr />
+
         <Routes>
-          <Route path={adminPath} element={<Admin />} />
-          <Route path={adminIndvlViewinglePath} element={<AdminSingleProject />} />
-          <Route path={uploadMediaPath} element={<UploadMedia />} />
-          <Route path={allProjectsPath} element={<Projects />} />
-          <Route index path={indexPath} element={<Index />} />
-          <Route path={allNotesPath} element={<Notes />} />
-          <Route path={projectReviewingPath + 1} element={<UserSingleProject mediaId={1} />} />
-          <Route path={allUsersPath} element={<Users />} />
-          
-          {/* For non-existent routes */}
-          <Route 
-              path="*" 
-              element={
-                <main style={{padding: "1rem"}}>
-                  <p>Please try again</p>
-                </main>
-              }
-            ></Route>
+          <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
+          <Route path={uploadMediaPath} element={ <UploadMedia />} />
+          {/* All default routes */}
+          <Route exact path={indexPath} element={ <Home /> } />
+          <Route path="/*" element={ <Home />} />
         </Routes>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 
