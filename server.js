@@ -57,13 +57,15 @@ client.connect()
 
 const isProduction = process.env.NODE_ENV === "production";
 
-if (isProduction) {
-  app.use(express.static("client/build"));
+console.log(` `);
+console.log(` `);
+console.log(` `);
 
-  app.get("/*", function(req, res) {
-    res.sendFile(path.join(__dirname, "./client/build/index.html"));
-  });
-} else {  
+// if (isProduction) {
+  // console.log(`Production routes...`);
+  app.use(express.static("client/build"));
+// } else {  
+  // console.log(`Development routes...`);
   const getQueryValues = (queryStatement, params = []) => {
     return new Promise((resolve, reject) => {
       client.query(queryStatement, params, (err, rows) => {                                                
@@ -85,7 +87,8 @@ if (isProduction) {
     );
   };
 
-  app.get("/usingle", (req, res) => {
+  app.get("/api/usingle", (req, res) => {
+    console.log(`Production routes...`);
     const media_id = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
 
     const user_id = 1;
@@ -231,8 +234,13 @@ if (isProduction) {
         console.error("Promise rejection error: " + err) 
       });
     });
+  });  
+
+  app.get("/*", function(req, res) {
+    console.log(`Referring to the client...`);
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
   });
-}
+// }
 
 const logger = (details) => {
   let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
