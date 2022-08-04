@@ -72,7 +72,7 @@ const UserSingleProject = ({mediaId}) => {
             user_id: 1, // eventually retrieved somewhere else
         }
 
-        Axios.post("/usingle", whatToSend)
+        Axios.post("/api/usingle", whatToSend)
         .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
         .catch(error => console.log(JSON.stringify(error)));
 

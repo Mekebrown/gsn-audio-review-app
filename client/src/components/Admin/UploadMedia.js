@@ -31,7 +31,7 @@ const UploadMedia = () => {
         formData.append("projectName", formItems.projectName.value);
 
         try {
-            await Axios.post("/media", formData)
+            await Axios.post("/api/media", formData)
             .then((initialInfo) => {
                 console.log(initialInfo);
                 setUploadMsg(`Media file ${fileName} uploaded!`)
