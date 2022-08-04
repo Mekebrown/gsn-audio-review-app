@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import Axios from "axios";
-import testAudio from "../tools/envs";
-import dataForProd from "../tools/dummy_data";
 
 /**
  * Page for a single media work and notes opportunity
@@ -19,11 +17,13 @@ import dataForProd from "../tools/dummy_data";
  * @returns {Node} UserSingleProject
  */
 const UserSingleProject = ({mediaId}) => {
+    const [testAudio, setTestAudio] = useState("https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.mp3");
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
     const [currentTimestamp, setCurrentTimestamp] = useState("0.00");
-    const [mediaDesc, setMediaDesc] = useState("");
+    const [mediaDesc, setMediaDesc] = useState(null);
+    const [projectName, setProjectName] = useState(null);
     const [noteId, setNoteId] = useState(null);
     const player = useRef(null);
     const thankYouMsg = useRef(null);
@@ -74,7 +74,10 @@ const UserSingleProject = ({mediaId}) => {
 
         Axios.post("/api/usingle", whatToSend)
         .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
-        .catch(error => console.log(JSON.stringify(error)));
+        .catch(error => {
+            thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try later.";
+            console.log(JSON.stringify(error))
+        });
 
         setActiveNoteInTextArea("");
 
@@ -83,8 +86,21 @@ const UserSingleProject = ({mediaId}) => {
 
     useEffect(() => { 
         Axios.get("/api/usingle", {media_id: mediaId}).then((res) => {
-            setMediaDesc(res.data.media_desc);
-            setNoteId(res.data.note_id);
+            if (res.status === 200) {
+                const {
+                    media_desc,
+                    note_id,
+                    file_name,
+                    file_directory,
+                    project_name,
+                    totalNotesFromServer
+                } = res.data;
+
+                setMediaDesc(media_desc);
+                setNoteId(note_id);
+                setTestAudio(file_directory + file_name);
+                setProjectName(project_name);
+            }
         }).catch(error => console.log(error));
 
         /* eslint-disable-next-line */
@@ -97,7 +113,8 @@ const UserSingleProject = ({mediaId}) => {
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
-            {mediaDesc && <p>Project description: <em>{mediaDesc}</em></p>}
+            {projectName && <p>Project: {projectName}</p>}
+            {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
 
             <div className="audioControls">
                 <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
