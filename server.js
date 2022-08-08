@@ -15,7 +15,8 @@ const {
   notes_query_statement_insert,
   notes_query_statement_update,
   media_query_statement_retrieval,
-  media_query_statement_insert
+  media_query_statement_insert,
+  login_query
 } = require("./server/database/query_strings.js");
 const { Client } = require('pg');
 const fs = require("fs");
@@ -62,11 +63,11 @@ const getQueryValues = (queryStatement, params = []) => {
         if (err || rows === undefined) {
           logger({
             location: "getQueryValues", 
-            req: "Query statement: " + queryStatement +
-                  " -|- Params: " + params, 
-            res: "Rows: " + rows,
-            message: err
-          });
+            req: "Query statement: " + queryStatement + " -|- Params: " + params, 
+            res: "Rows: " + JSON.stringify(rows),
+            headers: "N/A",
+            message: JSON.stringify(err)
+          }); 
 
           reject(new Error(err));
         } else {
@@ -77,8 +78,51 @@ const getQueryValues = (queryStatement, params = []) => {
   );
 };
 
-app.get("/api/usingle", (req, res) => {
-  const media_id = parseInt(req.query.media_id) ? parseInt(req.query.media_id) : 1;
+app.post("/api/home", (req, res) => {
+  const { username, password } = req.body;
+
+  const isValid = username !== undefined && password !== undefined
+                  && username !== 0 && password !== 0 
+                  && username !== null && password !== null
+                  && username !== "" && password !== ""
+                  && username.match(/[A-Za-z0-9 ,.!-]/g) && !password.match(/[^LTa-z-]/g)
+                  && password.length === 25;
+
+  if (!isValid) res.status(403).send("Information not accepted");
+
+  const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ? 
+                      "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ? 
+                      "reviewer" : null;
+
+  if (visitor_role) {
+    const reroute_loc = visitor_role === "reviewer" ? 
+                        "/review-sample" : "/review";
+
+    const country_loc = req.rawHeaders[9];
+    const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
+
+    const current_date = new Date();
+
+    const login_values = [ username, country_loc, device_info, visitor_role, current_date ];
+
+    getQueryValues(login_query, login_values)
+    .then((data) => res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id }))
+    .catch((err) => console.log(err));
+  } else {
+    logger({
+      location: "post_homepage_login_check", 
+      req: "Body: " + JSON.stringify(req.body), 
+      res: "N/A",
+      headers: country_loc + " " + device_info,
+      message: "N/A"
+    });    
+
+    res.status(403).send("Information not accepted");
+  }
+});
+
+app.get("/api/usingle/:media_id", (req, res) => {
+  const media_id = parseInt(req.params.media_id) ? parseInt(req.params.media_id) : 1;
   const user_id = 1;
   let dataToSend = {};
 
@@ -93,17 +137,13 @@ app.get("/api/usingle", (req, res) => {
 
     res.status(200).send(dataToSend);
   })
-  .catch((err) => {   
+  .catch((err) => {
     logger({
       location: "get_usingle_mediaQuery", 
       req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement, 
       res: "N/A",
-      headers: req.rawHeaders[9] + " -|- " + 
-                req.rawHeaders[13] + " -|- " + 
-                req.rawHeaders[21] + " -|- " + 
-                req.rawHeaders[22] + "-" + 
-                req.rawHeaders[23],
-      message: err
+      headers: "N/A",
+      message: JSON.stringify(err)
     });      
       
     console.error("Promise rejection error (Media): " + err);
@@ -121,6 +161,14 @@ app.post("/api/usingle", (req, res) => {
     media_id,             // notes and media: media id
     user_id,               // notes and users: user id
   } = req.body;
+
+  const isValid = note_body !== undefined
+                  && note_body !== 0
+                  && note_body !== null
+                  && note_body !== ""
+                  && !note_body.match(/[^A-Za-z0-9 ,:;().!-]/g);
+  
+  if (!isValid) res.status(500).send({ message: "Note not saved" }); 
 
   const converted_datetime = new Date();
   
@@ -191,6 +239,13 @@ app.post("/api/usingle", (req, res) => {
 app.post("/api/media", (req, res) => {
   const { fileName, description, mediaType, projectName } = req.body;
   const { mediaFileToUpload } = req.files;
+
+  const isValid = mediaFileToUpload !== undefined && projectName !== undefined
+                  && mediaFileToUpload !== 0 && projectName !== 0 
+                  && mediaFileToUpload !== null && projectName !== null
+                  && mediaFileToUpload !== "" && projectName !== "";
+  
+  if (!isValid) res.status(500).send({ message: "File upload failed" });
 
   const file_directory = __dirname + "/files/";
   const converted_datetime = new Date();
