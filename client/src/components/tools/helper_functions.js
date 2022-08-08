@@ -1,3 +1,5 @@
+import { createContext } from "react";
+
 const values = {
     projectName: "Track Audio",
     createdOn: null,
@@ -9,5 +11,7 @@ const sources = [
     {item: 2, ext: "ogg", type: "audio/ogg"}
 ];
 
+const UserContext = createContext();
+
 export default values;
-export { sources };
+export { sources, UserContext };
