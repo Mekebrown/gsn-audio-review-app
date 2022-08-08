@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import Axios from "axios";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import axios from "axios";
+import { UserContext } from "../tools/helper_functions";
+import Home from "../Home";
 
 /**
  * Page for a single media work and notes opportunity
@@ -17,7 +19,7 @@ import Axios from "axios";
  * @returns {Node} UserSingleProject
  */
 const UserSingleProject = ({mediaId}) => {
-    const [testAudio, setTestAudio] = useState("https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.mp3");
+    const [testAudio, setTestAudio] = useState(null);
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
     const [hideNotePad, setHideNotePad] = useState(true);
@@ -27,7 +29,7 @@ const UserSingleProject = ({mediaId}) => {
     const [noteId, setNoteId] = useState(null);
     const player = useRef(null);
     const thankYouMsg = useRef(null);
-    
+
     const handleNotePadToggle = (userInfo = null) => {
         let timeStampForNote = userInfo?.nTimestamp ? userInfo.nTimestamp : player.current.currentTime;
 
@@ -63,29 +65,50 @@ const UserSingleProject = ({mediaId}) => {
     const handleNoteSubmit = (event) => {
         event.preventDefault();
 
-        const whatToSend = {
-            is_note_updated: false,
-            note_body: activeNoteInTextArea,
-            note_timestamp: currentTimestamp,
-            media_id: mediaId,
-            note_id: noteId,
-            user_id: 1, // eventually retrieved somewhere else
+        if (activeNoteInTextArea !== undefined 
+            && activeNoteInTextArea !== 0 
+            && activeNoteInTextArea !== null
+            && activeNoteInTextArea !== "") {
+            const whatToSend = {
+                is_note_updated: false,
+                note_body: activeNoteInTextArea,
+                note_timestamp: currentTimestamp,
+                media_id: mediaId,
+                note_id: noteId,
+                user_id: 1, // eventually retrieved somewhere else
+            }
+
+            axios.post("/api/usingle", whatToSend)
+            .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
+            .catch(error => {
+                thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try again.";
+                console.log(JSON.stringify(error))
+            });
+
+            setActiveNoteInTextArea("");
+
+            setTimeout(() => thankYouMsg.current.innerHTML = "", 5000);
+        } else {
+            thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try again.";
         }
-
-        Axios.post("/api/usingle", whatToSend)
-        .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
-        .catch(error => {
-            thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try later.";
-            console.log(JSON.stringify(error))
-        });
-
-        setActiveNoteInTextArea("");
-
-        setTimeout(() => thankYouMsg.current.innerHTML = "", 5000);
     };
 
-    useEffect(() => { 
-        Axios.get("/api/usingle", {media_id: mediaId}).then((res) => {
+    const {userId, setUserId} = useContext(UserContext);
+
+    useEffect(() => {
+        // let collectedCookies = document.cookie.split(';');
+
+        // collectedCookies.forEach((item) => {
+        //     let cookieInfo = item.split("=");
+
+        //     if (cookieInfo[0] === "reviewPortal") {
+        //         setLoggedIn(true);
+
+        //     }
+        // });
+
+        axios.get(`/api/usingle/${mediaId}`)
+        .then((res) => {
             if (res.status === 200) {
                 const {
                     media_desc,
@@ -98,61 +121,66 @@ const UserSingleProject = ({mediaId}) => {
 
                 setMediaDesc(media_desc);
                 setNoteId(note_id);
-                setTestAudio(file_directory + file_name);
+                // setTestAudio(file_directory + file_name);
+                setTestAudio("https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.mp3");
                 setProjectName(project_name);
             }
-        }).catch(error => console.log(error));
+        })
+        .catch(error => console.log(error));
 
         /* eslint-disable-next-line */
     }, [currentTimestamp]);
 
-   return (
-        <main> 
-            <audio controls preload="auto" ref={player}>
-                <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
-                Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
-            </audio>
+   return (<>
+        {userId ? <main>
+        <button onClick={() => setUserId(null)}>Log Out</button> 
+        
+        <audio controls preload="auto" ref={player}>
+            <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
+            Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
+        </audio>
 
-            {projectName && <p>Project: {projectName}</p>}
-            {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
+        {projectName && <p>Project: {projectName}</p>}
+        {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
 
-            <div className="audioControls">
-                <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
+        <div className="audioControls">
+            <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
 
-                <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
+            <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
+        </div>
+
+        <section className="notesContainer">
+            <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
+
+            <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
+
+                <hr />
+
+                <form className="hereThere" onSubmit={handleNoteSubmit}>
+                    <textarea className="notePadTextarea" 
+                        rows="10" 
+                        cols="50" 
+                        title="Note pad text area" 
+                        placeholder={"Note for " + currentTimestamp + ":"}
+                        name="note"
+                        maxLength="500"
+                        required
+                        value={activeNoteInTextArea}
+                        onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
+                        onFocus={()=>setCurrentTimestamp(player.current.currentTime.toFixed(2))}
+                        >
+                    </textarea>
+
+                    <br />
+
+                    <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
+                </form>
             </div>
 
-            <section className="notesContainer">
-                <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
-
-                <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
-
-                    <hr />
-
-                    <form className="hereThere" onSubmit={handleNoteSubmit}>
-                        <textarea className="notePadTextarea" 
-                            rows="10" 
-                            cols="50" 
-                            title="Note pad text area" 
-                            placeholder={"Note for " + currentTimestamp + ":"}
-                            name="note"
-                            maxLength="500"
-                            value={activeNoteInTextArea}
-                            onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                            onFocus={()=>setCurrentTimestamp(player.current.currentTime.toFixed(2))}
-                            >
-                        </textarea>
-
-                        <br />
-
-                        <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
-                    </form>
-                </div>
-
-                <p ref={thankYouMsg}></p>
-            </section>
-        </main>
-    );
+            <p ref={thankYouMsg}></p>
+        </section>
+        </main> : <Home />}
+    </>);
 }; 
 
 export default UserSingleProject;
