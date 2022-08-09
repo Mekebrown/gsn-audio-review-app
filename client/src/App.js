@@ -20,31 +20,29 @@ const App = () => {
 
   return (
     <Router>
-      <div>
-        <ul>
-          <li><Link to={indexPath}>Home</Link>  </li>
-          {userId && <>
-            <li><Link to={singleMediaPath}>Dashboard</Link></li>
-            <li><Link to={uploadMediaPath}>Upload</Link>  </li>
-            <li><Link to={adminPath}>All projects</Link></li>
-            </>
-          }
-        </ul>
+      <ul>
+        <li><Link to={indexPath}>Home</Link>  </li>
+        {userId && <>
+          <li><Link to={singleMediaPath}>Dashboard</Link></li>
+          <li><Link to={uploadMediaPath}>Upload</Link>  </li>
+          <li><Link to={adminPath}>All projects</Link></li>
+          </>
+        }
+      </ul>
 
-        <hr />
+      <hr />
 
-        <UserContext.Provider value={providerValue}>
-          <Routes>
-              <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
-              <Route path={uploadMediaPath} element={ <UploadMedia />} />
-              <Route path={adminPath} element={ <AllProjects />} />
+      <UserContext.Provider value={providerValue}>
+        <Routes>
+            <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
+            <Route path={uploadMediaPath} element={ <UploadMedia />} />
+            <Route path={adminPath} element={ <AllProjects />} />
 
-              {/* All default routes */}
-              <Route exact path={indexPath} element={ <Home /> } />
-              <Route path="/*" element={ <Home />} />
-          </Routes>
-        </UserContext.Provider>
-      </div>
+            {/* All default routes */}
+            <Route exact path={indexPath} element={ <Home /> } />
+            <Route path="/*" element={ <Home />} />
+        </Routes>
+      </UserContext.Provider>
     </Router>
   );
 }
