@@ -132,7 +132,7 @@ const UserSingleProject = ({mediaId}) => {
     }, [currentTimestamp]);
 
    return (<>
-        {userId ? <main>
+        {userId ? <section>
         <button onClick={() => setUserId(null)}>Log Out</button> 
         
         <audio controls preload="auto" ref={player}>
@@ -179,7 +179,7 @@ const UserSingleProject = ({mediaId}) => {
 
             <p ref={thankYouMsg}></p>
         </section>
-        </main> : <Home />}
+        </section> : <Home />}
     </>);
 }; 
 

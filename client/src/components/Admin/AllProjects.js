@@ -12,7 +12,7 @@ const AllProjects = () => {
     const {userId, setUserId} = useContext(UserContext);
 
     return (<>
-        {userId ? <main>
+        {userId ? <section>
             <button onClick={() => setUserId(null)}>Log Out</button> 
             
             <header>
@@ -25,7 +25,7 @@ const AllProjects = () => {
                 <li>Total notes: {allProjects.totalNotes}</li>
                 <li>Created: {allProjects.creation_datetime}</li>
             </ul>
-        </main> : <Home />}
+        </section> : <Home />}
     </>);
 }; 
 

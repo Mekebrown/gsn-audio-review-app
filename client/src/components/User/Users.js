@@ -9,39 +9,37 @@ import { indvlUserPath } from "../tools/envs";
  */
 const Users = () => {
     return (
-        <>
+        <section>
             <header>
                 <h2>Users</h2>
             </header>
 
-            <main>
-                {allUsers.map(user => 
-                    <section key={user[0].key}>
-                        <h3>
-                            <a href={indvlUserPath}>{user[0].userName}</a>
-                        </h3>
+            {allUsers.map(user => 
+                <section key={user[0].key}>
+                    <h3>
+                        <a href={indvlUserPath}>{user[0].userName}</a>
+                    </h3>
 
-                        <ul>
-                            {user[0].usersNotes.map(note => 
-                            <li key={note.id} className="clickable tooltip">
-                                <h4>Project: {note.project}</h4>
+                    <ul>
+                        {user[0].usersNotes.map(note => 
+                        <li key={note.id} className="clickable tooltip">
+                            <h4>Project: {note.project}</h4>
 
-                                <p>Posted note on: {note.posted}</p>
+                            <p>Posted note on: {note.posted}</p>
 
-                                <figure>
-                                    <blockquote>
-                                        <p><a href={indvlUserPath}>
-                                            {note.content}
-                                        </a></p>
-                                    </blockquote>
-                                </figure>
-                                <hr />
-                            </li>)}
-                        </ul>
-                    </section>
-                )}
-            </main>
-        </>
+                            <figure>
+                                <blockquote>
+                                    <p><a href={indvlUserPath}>
+                                        {note.content}
+                                    </a></p>
+                                </blockquote>
+                            </figure>
+                            <hr />
+                        </li>)}
+                    </ul>
+                </section>
+            )}
+        </section>
     )
 }; 
 
