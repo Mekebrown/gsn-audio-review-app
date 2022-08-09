@@ -1,52 +1,14 @@
-@keyframes appLogoSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 body {
   padding: 50px;
   font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+  background-color: #f9fbff;
 }
 
-a {
-  color: #00b7ff;
-}
+header {  margin: 0 auto 3em; }
 
-header {
-  color: green;
-  margin: 0 auto 3em;
-}
+li {  list-style-type: none; }
 
-li {
-  list-style-type: none;
-}
-
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
-}
-
-.appLogo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.appLink {
-  color: #61dafb;
-}
-
-.clickable:hover {
-  background-color: aliceblue;
-}
+.clickable:hover { background-color: aliceblue; }
 
 .hideNotePad {
   display: none;
@@ -69,10 +31,13 @@ li {
   z-index: 1;
 }
 
-.tooltip:hover .tooltiptext {
-  /* Show the tooltip text when you mouse over the tooltip container */
-  visibility: visible;
-}
+.tooltip:hover .tooltiptext { visibility: visible; }
+
+.loggedOut { display: flex; align-items: center; justify-content: center; }
+.loggedIn { display: flex; }
+.topBarLogo span { padding-left: 20px; }
+.hideOption { visibility: hidden; display: none; }
+.rightSection { margin-right: 20px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .appLogo {
