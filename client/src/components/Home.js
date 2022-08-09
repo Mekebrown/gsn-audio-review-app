@@ -57,23 +57,38 @@ const Home = () => {
     };
 
     return (<>
-        {userId ? <button onClick={() => setUserId(null)}>Log Out</button> : 
-        <form onSubmit={handleSubmit}>
-            {userMsg}
-            <br />
-            <label>
-                Your First Name: <input type="text" placeholder="Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="8" maxLength="50" autoFocus required />
-            </label>
+        {!userId ?  
+            <main>
+                <section>
+                    <p>
+                        <span>Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears. 
+                    </p>
+                    
+                    <form onSubmit={handleSubmit}>
+                        {userMsg}
+                        <br />
+                        <label>
+                            Your First Name: <input type="text" placeholder="Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="8" maxLength="50" autoFocus required />
+                        </label>
 
-            <br />
+                        <br />
 
-            <label>
-                Given Passcode: <input type="text" placeholder="Secret" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required />
-            </label>
-            <br /> 
-            <button type="submit">Enter</button>
-        </form>}
-    </>);
+                        <label>
+                            Given Passcode: <input type="text" placeholder="Secret" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required />
+                        </label>
+                        <br /> 
+                        <button type="submit">Enter</button>
+                    </form>
+                </section>
+
+                <section>
+                    <div>Animation goes here</div>
+                </section>
+            </main>
+            : 
+            <button onClick={() => setUserId(null)}>Log Out</button>}
+        </>
+    );
 };
 
 export default Home;

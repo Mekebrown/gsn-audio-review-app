@@ -133,52 +133,52 @@ const UserSingleProject = ({mediaId}) => {
 
    return (<>
         {userId ? <section>
-        <button onClick={() => setUserId(null)}>Log Out</button> 
-        
-        <audio controls preload="auto" ref={player}>
-            <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
-            Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
-        </audio>
+            <button onClick={() => setUserId(null)}>Log Out</button> 
+            
+            <audio controls preload="auto" ref={player}>
+                <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
+                Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
+            </audio>
 
-        {projectName && <p>Project: {projectName}</p>}
-        {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
+            {projectName && <p>Project: {projectName}</p>}
+            {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
 
-        <div className="audioControls">
-            <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
+            <div className="audioControls">
+                <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
 
-            <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
-        </div>
-
-        <section className="notesContainer">
-            <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
-
-            <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
-
-                <hr />
-
-                <form className="hereThere" onSubmit={handleNoteSubmit}>
-                    <textarea className="notePadTextarea" 
-                        rows="10" 
-                        cols="50" 
-                        title="Note pad text area" 
-                        placeholder={"Note for " + currentTimestamp + ":"}
-                        name="note"
-                        maxLength="500"
-                        required
-                        value={activeNoteInTextArea}
-                        onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                        onFocus={()=>setCurrentTimestamp(player.current.currentTime.toFixed(2))}
-                        >
-                    </textarea>
-
-                    <br />
-
-                    <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
-                </form>
+                <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
             </div>
 
-            <p ref={thankYouMsg}></p>
-        </section>
+            <section className="notesContainer">
+                <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
+
+                <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
+
+                    <hr />
+
+                    <form className="hereThere" onSubmit={handleNoteSubmit}>
+                        <textarea className="notePadTextarea" 
+                            rows="10" 
+                            cols="50" 
+                            title="Note pad text area" 
+                            placeholder={"Note for " + currentTimestamp + ":"}
+                            name="note"
+                            maxLength="500"
+                            required
+                            value={activeNoteInTextArea}
+                            onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
+                            onFocus={()=>setCurrentTimestamp(player.current.currentTime.toFixed(2))}
+                            >
+                        </textarea>
+
+                        <br />
+
+                        <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
+                    </form>
+                </div>
+
+                <p ref={thankYouMsg}></p>
+            </section>
         </section> : <Home />}
     </>);
 }; 
