@@ -5,15 +5,16 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import styles from './App.css';
 import { indexPath, singleMediaPath, uploadMediaPath, mediaId, adminPath } from "./components/tools/vars";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
 import AllProjects from "./components/Admin/AllProjects";
 import { UserContext } from "./components/tools/helper_functions";
-import classNames from 'classnames/bind';
 import logo from "./components/tools/assets/logo.png";
+
+import styles from './App.css';
+import classNames from 'classnames/bind';
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -21,23 +22,45 @@ const App = () => {
   const providerValue = useMemo(() => ({userId, setUserId}), [userId, setUserId]);
 
   let cx = classNames.bind(styles);
-  let classNameEntries = cx({ topBarLogo: true, loggedIn: userId, loggedOut: !userId, mobile: false });
-  let loggedInClassNameEntries = cx({ hideOption: !userId, rightSection: true });
+
+  let topBarOverallCont = cx({ 
+    loggedIn: userId, 
+    loggedOut: !userId 
+  });
+
+  let topBarLogoCont = cx({ 
+    topBarSection: userId 
+  });
+
+  let topBarLinksCont = cx({ 
+    topBarSection: userId, 
+    hideOption: !userId 
+  });
+
+  let topBarLinks = cx({ 
+    displayInline: userId,
+    rightSection: userId 
+  });
 
   return (
     <Router>
       <header>
         <nav>
-          <menu className={classNameEntries}>
-            <li>
-              <Link to={indexPath}>
-                <img src={logo} alt="Gifted Sounds Network logo" />
-                <span>GIFTED SOUNDS</span>
-              </Link>
-            </li>
-            <li className={loggedInClassNameEntries}><Link to={singleMediaPath}>Dashboard</Link></li>
-            <li className={loggedInClassNameEntries}><Link to={uploadMediaPath}>Upload</Link></li>
-            <li className={loggedInClassNameEntries}><Link to={adminPath}>All projects</Link></li>
+          <menu className={topBarOverallCont}>
+            <section className={topBarLogoCont}>
+              <li>
+                <Link to={indexPath} className="topBarLogo">
+                  <img src={logo} alt="Gifted Sounds Network logo" />
+                  <span>GIFTED SOUNDS</span>
+                </Link>
+              </li>
+            </section>
+
+            <section className={topBarLinksCont}>
+              <li className={topBarLinks}><Link to={uploadMediaPath}>Upload</Link></li>
+              <li className={topBarLinks}><Link to={singleMediaPath}  >Dashboard</Link></li>
+              <li className={topBarLinks}><Link to={adminPath}>All projects</Link></li>
+            </section>
           </menu>
         </nav>
       </header>

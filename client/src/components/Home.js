@@ -1,14 +1,30 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext } from "./tools/helper_functions";
-import "./Home.css";
+import styles from "./Home.css";
+import classNames from 'classnames/bind';
 
 const Home = () => {
     const [inputUN, setInputUN] = useState(null);
     const [inputPW, setInputPW] = useState(null);
     const [userMsg, setUserMsg] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     const {userId, setUserId} = useContext(UserContext);
+
+    let cx = classNames.bind(styles);
+
+    let unField = cx({ 
+      displayInline: !isMobile
+    });
+
+    let pwField = cx({ 
+        displayInline: !isMobile 
+    });
+
+    let loginFieldDivs = cx({ 
+        displayFlex: !isMobile 
+    });
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -64,21 +80,28 @@ const Home = () => {
                     <p>
                         <span>Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears. 
                     </p>
-                    
+                    <small>
+                        Enter your given password to review your project...
+                    </small>
+
                     <form onSubmit={handleSubmit}>
                         {userMsg}
                         <br />
-                        <label>
-                            Your First Name: <input type="text" placeholder="Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="8" maxLength="50" autoFocus required />
-                        </label>
+                        <div className={loginFieldDivs}>
+                            <label className={unField}>
+                                Your First Name: 
+                                <br />
+                                <input type="text" placeholder="Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="8" maxLength="50" autoFocus required />
+                            </label>
 
-                        <br />
-
-                        <label>
-                            Given Passcode: <input type="text" placeholder="Secret" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required />
-                        </label>
+                            <label className={pwField}>
+                                Given Password: 
+                                <br />
+                                <input type="text" placeholder="Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required />
+                            </label>
+                        </div>
                         <br /> 
-                        <button type="submit">Enter</button>
+                        <button type="submit">Login</button>
                     </form>
                 </section>
 
