@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import axios from "axios";
 import { UserContext } from "./tools/helper_functions";
+import "./Home.css";
 
 const Home = () => {
     const [inputUN, setInputUN] = useState(null);
@@ -58,8 +59,8 @@ const Home = () => {
 
     return (<>
         {!userId ?  
-            <main>
-                <section>
+            <main className="cont">
+                <section className="sect">
                     <p>
                         <span>Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears. 
                     </p>
@@ -81,7 +82,7 @@ const Home = () => {
                     </form>
                 </section>
 
-                <section>
+                <section className="sect animation">
                     <div>Animation goes here</div>
                 </section>
             </main>
