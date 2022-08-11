@@ -8,43 +8,45 @@ header {  margin: 0 auto 3em; }
 
 li {  list-style-type: none; }
 
-.clickable:hover { background-color: aliceblue; }
 
-.hideNotePad {
-  display: none;
-}
+/* Notes Page */
+  .clickable:hover { background-color: aliceblue; }
 
-.hideTimestampText {
-  visibility: hidden;
-}
-
-.tooltip .tooltiptext {
-  /* Tooltip text */
-  visibility: hidden;
-  width: 120px;
-  background-color: grey;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-  position: absolute; /* Position the tooltip text */
-  z-index: 1;
-}
-
-.tooltip:hover .tooltiptext { visibility: visible; }
-
-.loggedOut { display: flex; align-items: center; justify-content: center; }
-
-.loggedIn { display: flex; }
-
-.topBarLogo span { padding-left: 20px; }
-
-.hideOption { visibility: hidden; display: none; }
-
-.rightSection { margin-right: 20px; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .appLogo {
-    animation: appLogoSpin infinite 20s linear;
+  .hideNotePad {
+    display: none;
   }
-}
+
+  .hideTimestampText {
+    visibility: hidden;
+  }
+
+  .tooltip .tooltiptext {
+    /* Tooltip text */
+    visibility: hidden;
+    width: 120px;
+    background-color: grey;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute; /* Position the tooltip text */
+    z-index: 1;
+  }
+
+  .tooltip:hover .tooltiptext { visibility: visible; }
+
+
+/* Top Navigation */
+  .loggedOut { display: flex; align-items: center; justify-content: center; }
+
+  .loggedIn { display: flex; }
+
+  .topBarSection { flex: 1; width: 50%; }
+
+  .displayInline { display: inline; }
+
+  .topBarLogo span { padding-left: 20px; }
+
+  .hideOption { visibility: hidden; display: none; }
+
+  .rightSection { margin-right: 20px; }
