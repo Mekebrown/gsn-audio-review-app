@@ -1,6 +1,7 @@
 body {
   padding: 50px;
-  font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+  font: 14px 'Nunito', Helvetica, Arial, sans-serif;
+  font-weight: 700;
   background-color: #f9fbff;
 }
 
@@ -45,7 +46,8 @@ li {  list-style-type: none; }
 
   .displayInline { display: inline; }
 
-  .topBarLogo span { padding-left: 20px; }
+  .topBarLogo img { vertical-align:middle; }
+  .topBarLogo span { padding-left: 20px; font-family: 'Nunito', sans-serif; }
 
   .hideOption { visibility: hidden; display: none; }
 
