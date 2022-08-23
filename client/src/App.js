@@ -65,8 +65,6 @@ const App = () => {
         </nav>
       </header>
 
-      <hr />
-
       <main>
         <UserContext.Provider value={providerValue}>
           <Routes>
