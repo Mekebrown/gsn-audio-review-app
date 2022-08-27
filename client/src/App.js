@@ -42,6 +42,10 @@ const App = () => {
     rightSection: userId 
   });
 
+  let searchBarInput = cx({ 
+    hideOption: userId
+  });
+
   return (
     <Router>
       <header>
@@ -58,6 +62,12 @@ const App = () => {
 
             <section className={topBarLinksCont}>
               <li className={topBarLinks}><Link to={uploadMediaPath}>Upload</Link></li>
+              <li>                
+                <i class="fa fa-search"></i>
+                  <label for="searchBar" className={searchBarInput}>
+                      <input type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
+                  </label>
+              </li>
               <li className={topBarLinks}><Link to={singleMediaPath}  >Dashboard</Link></li>
               <li className={topBarLinks}><Link to={adminPath}>All projects</Link></li>
             </section>
