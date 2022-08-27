@@ -116,3 +116,8 @@ a {
 }
 
 .displayFlex { display: flex; }
+
+.mobileInvisible {
+    display: none;
+    visibility: hidden;
+}
