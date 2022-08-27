@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "./tools/helper_functions";
 import UserSingleProject from "./User/UserSingleProject";
@@ -14,6 +14,10 @@ const Home = () => {
     const [inputPW, setInputPW] = useState(null);
     const [userMsg, setUserMsg] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [windowSize, setWindowSize] = useState({
+        width: undefined,
+        height: undefined,
+    });
 
     const {userId, setUserId} = useContext(UserContext);
 
@@ -22,6 +26,7 @@ const Home = () => {
     let loginFields = cx({ displayFlex: !isMobile });
     let unField = cx({ displayInline: !isMobile });
     let pwField = cx({ displayInline: !isMobile });
+    let showAnimation = cx({mobileInvisible: isMobile, sect: true, animation: true});
 
     const isInputPresent = inputUN !== undefined && inputPW !== undefined
                             && inputUN !== 0 && inputPW !== 0 
@@ -65,6 +70,26 @@ const Home = () => {
         }
     };
 
+    useEffect(() => {
+        setIsMobile(windowSize.width <= 500);
+        
+        function handleResize() {
+            setWindowSize({
+              width: window.innerWidth,
+              height: window.innerHeight,
+            });
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        handleResize();
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+    
+
+    console.log(`${windowSize.width} and ${isMobile}`);
+
     return (<>
         {!userId ?  
             <main className="cont">
@@ -99,7 +124,7 @@ const Home = () => {
                     </form>
                 </section>
 
-                <section className="sect animation">
+                <section className={showAnimation}>
                     <div className="largePurple"></div>
                     <div className="largWhite"></div>
                     <div className="purpleCircle"></div>                   
