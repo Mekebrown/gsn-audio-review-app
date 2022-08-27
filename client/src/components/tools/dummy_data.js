@@ -222,111 +222,115 @@ const allNotesForAllProjects = [
     ]
 ];
 
-const allProjects = [
-    [
-        {
-            key: 1,
-            name: "Vox Machina",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 2,
-            name: "TikTok Vybes",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 3,
-            name: "The 4400",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 4,
-            name: "Prince's \"If I Was Your Girlfriend\"",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ]
+const projectsList = [
+    {
+        key: 1,
+        mediaId: 1,
+        projectName: "Vox Machina",
+        notes: [
+            {
+                noteId: 12,
+                userId: 1,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 2,
+                createdAt: "7-5-2021",
+                updatedAt: "7-5-2021",
+                noteBody: "The second note",
+                noteTimestamp: "1.03"
+            },
+            {
+                noteId: 1,
+                userId: 3,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            },
+            {
+                noteId: 111,
+                userId: 33,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    },
+    {
+        key: 2,
+        mediaId: 2,
+        projectName: "SHOWTIME!",
+        notes: [
+            {
+                noteId: 1,
+                userId: 1,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 2,
+                createdAt: "7-5-2021",
+                updatedAt: "7-5-2021",
+                noteBody: "The second note",
+                noteTimestamp: "1.03"
+            },
+            {
+                noteId: 1,
+                userId: 3,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    },
+    {
+        key: 3,
+        mediaId: 3,
+        projectName: "Rap Shit",
+        notes: [
+            {
+                noteId: 1,
+                userId: 1,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            }
+        ]
+    },
+    {
+        key: 4,
+        mediaId: 4,
+        projectName: "The Sandman",
+        notes: [
+            {
+                noteId: 1,
+                userId: 1,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 3,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    }
 ];
 
 const currDateTime = new Date();
@@ -369,9 +373,9 @@ const dataForProd = {
 export default dataForProd;
 
 export {
-    allProjects, 
     allUsers, 
     allNotesForAllProjects, 
+    projectsList, 
     singleAdmin, 
     singleProject, 
     newSampleNote, 
