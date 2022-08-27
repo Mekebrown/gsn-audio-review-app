@@ -46,8 +46,6 @@ const UserSingleProject = ({mediaId}) => {
     const handleAudioControlsClick = (clickedBtn) => {
         const playerRef = player.current;
 
-        const playerRef = player.current;
-
         if (clickedBtn === "reload") {
             player.current.pause();
             player.current.currentTime = 0.0;
