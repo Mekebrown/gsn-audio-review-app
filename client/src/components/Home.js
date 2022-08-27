@@ -19,57 +19,50 @@ const Home = () => {
 
     let cx = classNames.bind(styles);
 
+    let loginFields = cx({ displayFlex: !isMobile });
     let unField = cx({ displayInline: !isMobile });
-
     let pwField = cx({ displayInline: !isMobile });
 
-    let loginFieldDivs = cx({ displayFlex: !isMobile });
+    const isInputPresent = inputUN !== undefined && inputPW !== undefined
+                            && inputUN !== 0 && inputPW !== 0 
+                            && inputUN !== null && inputPW !== null
+                            && inputUN !== "" && inputPW !== "";
+    
+    const regEx = /[<>\s;:.,\]+$*()#|\\%!@^{}?&"'[/()]/g;
+    const isInputValid = !(inputUN?.match(regEx)) && !(inputPW?.match(regEx));
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (inputUN !== undefined && inputPW !== undefined
-            && inputUN !== 0 && inputPW !== 0 
-            && inputUN !== null && inputPW !== null
-            && inputUN !== "" && inputPW !== "") {
-            const regEx = /[<>\s;:.,\]+$*()#|\\%!@^{}?&"'[/()]/g;
-            const isInputValid = !inputUN.match(regEx) && !inputPW.match(regEx);
-
+        if (isInputPresent && isInputValid) {
             const formData = new FormData();
 
             formData.append("username", inputUN);
             formData.append("password", inputPW);
 
-            if (isInputValid) {
-                axios.post("/api/home", formData)
-                .then((res) => {
-                    if (res.status === 200) {
-                        const forwardLocation = res.data.loc;
+            axios.post("/api/home", formData)
+            .then((res) => {
+                if (res.status === 200) {
+                    const forwardLocation = res.data.loc;
 
-                        setUserId(res.data.user_id);
+                    setUserId(res.data.user_id);
 
-                        setUserMsg("Log in accepted. Loading review section...");
+                    setUserMsg("Log in accepted. Loading review section...");
 
-                        let showMsg = setTimeout(() => {
-                            setUserMsg(null);
-                            window.location.href = forwardLocation;
-                        }, 4000);
+                    let showMsg = setTimeout(() => {
+                        setUserMsg(null);
+                        window.location.href = forwardLocation;
+                    }, 4000);
 
-                        clearTimeout(showMsg);
-                    } else {
-                        setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team")
-                    }
-                })
-                .catch(() => setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
-            } else {
-                setUserMsg("Please enter your information again.");
-            }
+                    clearTimeout(showMsg);
+                } else {
+                    setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team")
+                }
+            })
+            .catch(() => setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
         } else {
             setUserMsg("Please enter your information again.");
         }
-
-        console.log(userId);
-        console.log('===================================');
     };
 
     return (<>
@@ -85,7 +78,7 @@ const Home = () => {
 
                     <form onSubmit={handleSubmit}>
                         {userMsg}
-                        <div className={loginFieldDivs}>
+                        <div className={loginFields}>
                             <label className={unField}>
                                 
                                 <input type="text" placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
