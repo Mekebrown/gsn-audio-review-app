@@ -13,8 +13,8 @@ import AllProjects from "./components/Admin/AllProjects";
 import { UserContext } from "./components/tools/helper_functions";
 import logo from "./components/tools/assets/logo.png";
 
-import styles from './App.css';
-import classNames from 'classnames/bind';
+import styles from "./App.css";
+import classNames from "classnames/bind";
 
 const App = () => {
   const [userId, setUserId] = useState(null);
