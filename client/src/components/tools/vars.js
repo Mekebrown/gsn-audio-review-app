@@ -28,5 +28,6 @@ export {
     singleMediaPath,
     uploadMediaPath,
     mediaId,
+    testAudio_testing,
     testAudio_testing
 };

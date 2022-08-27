@@ -4,7 +4,7 @@ client/node_modules
 node_modules
 
 # database
-latest.dump
+server/database 
 
 # environment variables
 .env
