@@ -72,5 +72,8 @@
     "webpack": "^5.73.0",
     "x-default-browser": "^0.4.0"
   },
-  "homepage": "https://intense-forest-28148.herokuapp.com/"
+  "homepage": "https://intense-forest-28148.herokuapp.com/",
+  "devDependencies": {
+    "eslint": "^8.22.0"
+  }
 }
