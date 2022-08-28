@@ -9,6 +9,7 @@ import { indexPath, singleMediaPath, uploadMediaPath, mediaId, adminPath } from 
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
+import Admin from "./components/Admin/Admin";
 import AllProjects from "./components/Admin/AllProjects";
 import { UserContext } from "./components/tools/helper_functions";
 import logo from "./components/tools/assets/logo.png";
@@ -78,6 +79,7 @@ const App = () => {
       <main>
         <UserContext.Provider value={providerValue}>
           <Routes>
+              <Route path={singleMediaPath} element={ <Admin />} />
               <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
               <Route path={uploadMediaPath} element={ <UploadMedia />} />
               <Route path={adminPath} element={ <AllProjects />} />
