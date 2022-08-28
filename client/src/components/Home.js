@@ -71,7 +71,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        setIsMobile(windowSize.width <= 500);
+        setIsMobile(windowSize.width <= 900);
         
         function handleResize() {
             setWindowSize({
