@@ -12,7 +12,7 @@ import Home from "../Home";
 const UploadMedia = () => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState("");
-    const [uploadMsg, setUploadMsg] = useState("Upload new media");
+    const [uploadMsg, setUploadMsg] = useState("");
     const mediaForm = useRef(null);
 
     const {userId, setUserId} = useContext(UserContext);
@@ -54,50 +54,40 @@ const UploadMedia = () => {
         } else setUploadMsg(`Media file not uploaded.`)
     };
 
-    // useEffect(() => {
-    //     let collectedCookies = document.cookie.split(';');
-
-    //     collectedCookies.forEach((item) => {
-    //         let cookieInfo = item.split("=");
-
-    //         if (cookieInfo[0] === "reviewPortal") setLoggedIn(true);
-    //     });
-    // }, []);
-
     return (<>
-        {userId ? <form id="mediaForm" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
-        {userId}
-        <h1>{uploadMsg}</h1>
-        {userId && <button onClick={() => setUserId(null)}>Log Out</button>}
-        
-        <p>Please fill in this form to upload new media and add details if you wish.</p>
+        {userId ? 
+            <form id="mediaForm" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
+                {uploadMsg}
 
-        <label htmlFor="mediaFileToUpload"><strong>Upload your media file: </strong>
-            <input type="file" placeholder="Location" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
-        </label>
+                <label htmlFor="imageUpload">UPLOAD IMAGE</label>
+                <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" />
 
-        <label htmlFor="mediaType"><strong>What kind of media file is this? </strong>
-            <select name="mediaType" id="mediaType">
-                <option value="audio">Audio</option>
-                <option value="video">Video</option>
-                <option value="document">Document</option>
-                <option value="etc">Etc.</option>
-            </select>
-        </label>
+                <input type="text" placeholder="Project Name" />
 
-        <label htmlFor="projectName"><strong>Project Name for media: </strong>
-            <input type="text" placeholder="Project name" name="projectName" id="projectName" required />
-        </label>
+                <select name="mediaType" id="mediaType">
+                    <option value="">File type?</option>
+                    <option value="audio">Audio</option>
+                    <option value="video">Video</option>
+                    <option value="document">Document</option>
+                    <option value="etc">Etc.</option>
+                </select>
 
-        <label htmlFor="description"><strong>Describe the project: </strong>
-            <input type="text" placeholder="Description" name="description" id="description" required />
-        </label>
+                <label htmlFor="mediaFileToUpload">
+                    Drag/drop or upload media 
+                </label>
+                <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
 
-        <div>
-            <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>Cancel</button>
-            <button type="submit" className="signupbtn">Upload</button>
-        </div>
-    </form> : <Home />}
+                <input type="text" placeholder="Description" name="description" id="description" required />
+
+                <button type="submit" className="public">Public</button>
+
+                <button type="submit" className="private">Private</button>
+
+                <button type="submit" className="signupbtn">UPLOAD</button>
+
+                <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>CANCEL</button>
+            </form> : <Home />
+        }
     </>);
 };
 
