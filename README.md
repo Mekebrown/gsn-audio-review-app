@@ -11,3 +11,6 @@ A media project can have one user (the uploading admin), multiple notes, and mul
 A rating can have only one user and one media project
 A user can have multiple notes and multiple ratings
 A note can have only one user (the author) and (refer to) one media project
+
+Third-party tools
+![Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
