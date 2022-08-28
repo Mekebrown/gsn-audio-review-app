@@ -156,10 +156,10 @@ app.post("/api/usingle", (req, res) => {
   const {
     is_note_updated,
     note_id,
-    note_body,            // notes: The written note
-    note_timestamp,       // notes: Timestamp
-    media_id,             // notes and media: media id
-    user_id,               // notes and users: user id
+    note_body,
+    note_timestamp,
+    media_id,
+    user_id,
   } = req.body;
 
   const isValid = note_body !== undefined
