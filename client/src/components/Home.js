@@ -61,7 +61,7 @@ const Home = () => {
 
                     clearTimeout(showMsg);
                 } else {
-                    setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team")
+                    setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team");
                 }
             })
             .catch(() => setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
@@ -102,21 +102,16 @@ const Home = () => {
                     </small>
 
                     <form onSubmit={handleSubmit}>
-                        {userMsg}
+                        <p title="userMsg">{userMsg}</p>
                         <div className={loginFields}>
-                            <label className={unField}>
-                                
-                                <input type="text" placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
-                            </label>
+                            <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
 
                             {' '} 
 
-                            <label className={pwField}>
-                                <input type="text" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
-                            </label>
+                            <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
                         </div>
                         <br /> 
-                        <button type="submit">
+                        <button title="submit" type="submit">
                             <FontAwesomeIcon icon={faPaperPlane} />
                              {' '} 
                             Login
