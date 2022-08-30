@@ -3,6 +3,9 @@ import { projectsList } from "../tools/dummy_data"
 import { UserContext } from "../tools/helper_functions";
 import Home from "../Home";
 import axios from "axios";
+import { adminIndvlViewinglePath } from "../tools/vars";
+import "./AllProjects.css";
+import { Link } from "react-router-dom";
 
 /**
  * This page will show all projects.
@@ -14,6 +17,19 @@ import axios from "axios";
 const AllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
     const {userId, setUserId} = useContext(UserContext);
+
+    const handleNoteSubmit = (e) => {
+        e.preventDefault();
+
+        const whatToSend = {
+            note_body: e.target[0].value,
+            media_id: e.target[1].value,
+            user_id: e.target[2].value,
+            note_timestamp: e.target[3].value,
+        }
+
+        console.log({whatToSend});
+    };
 
     useEffect(() => {
         axios.get("/api/retrieve-info/all")
@@ -91,18 +107,59 @@ const AllProjects = () => {
                     </div>
                 </section>
 
+                {/** List of All Media Projects */}
                 <h3>All Media</h3>
-                {projectsList.map(project => {
+                {allProjectsInfo.map(project => {
+                    let notesQuantity = project.notes.length;
+                    let descToDisplay = project.projectDesc.length > 50 ? project.projectDesc.substring(0, 50) + "..." : project.projectDesc;
+                    let audio = new Audio(project.mediaFile);
+                    let audioLength;
+
+                    audio.addEventListener("loadedmetadata", (event) => { if (!audioLength) audioLength = event.path[0].duration; });
+                    audio.addEventListener("loadeddata", (event) => { if (!audioLength) audioLength = event.path[0].duration; });
+                    audio.addEventListener('durationchange', (event) => { if (!audioLength) audioLength = event.path[0].duration; });
+
                     return <div key={project.key} style={{border: "1px solid grey", borderRadius: "3px"}}>
-                        <span>&#xf04b;</span>
-                        <span>&#xf067;</span>
-                        <img src="" alt=""/>
-                        <div style={{display: "inline"}}>
-                            <h4>Title</h4>
-                            <small></small>
-                        </div>
-                        <p>4.05 Mins</p>
-                        <button type="button">View</button>
+                        <i className={`fa fa-play`} style={{cursor: "pointer"}} onClick={event => {
+                            if (audio.paused) {
+                                event.target.setAttribute("class", `fa fa-pause`);
+                                audio.play();
+                            } else  {
+                                event.target.setAttribute("class", `fa fa-play`);
+                                audio.pause();
+                            }
+                            console.log("sup");
+                        }}></i>
+
+                        <i className="fa fa-plus" onClick={event => {
+                            let note = event.target.nextElementSibling;
+
+                            if (note.getAttribute("class") === `note-${project.key} hiddenComment`) {
+                                note.setAttribute("class", `note-${project.key}`);
+                                event.target.setAttribute("class", `fa fa-window-close`);
+                            } else {
+                                note.setAttribute("class", `note-${project.key} hiddenComment`);
+                                event.target.setAttribute("class", `fa fa-plus`);
+                            }
+                        }}></i>
+                        <form className={`note-${project.key} hiddenComment`} onSubmit={handleNoteSubmit}>                            
+                            <textarea title="addComment" placeholder={"Note for " + audio.currentTime.toFixed(2) + ":"} />
+                            <input type="hidden" title="mediaId" value={project.mediaId} />                            
+                            <input type="hidden" title="userId" value={project.userId} />                         
+                            <input type="hidden" title="timestamp" value={audio.currentTime.toFixed(2)} />
+                            <button type="submit">Add Note</button>
+                        </form>
+
+                        <img src={project.projectThumb} alt="thumb" style={{width: "25px"}}/>
+
+                        <span>
+                            <h4>{project.projectName}</h4>
+                            <small>{descToDisplay}</small>
+                        </span>
+
+                        <p>{notesQuantity > 0 ? notesQuantity : "No"} notes</p>
+
+                        <Link to={`/admin/retrieve-info/media/${project.mediaId}`}>View</Link>
                     </div>;
                 })}
             </section> : <Home />
