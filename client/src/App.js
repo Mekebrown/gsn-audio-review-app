@@ -5,7 +5,15 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { adminRetrieveSingleMediaInfo, indexPath, singleMediaPath, uploadMediaPath, mediaId, adminPath } from "./components/tools/vars";
+import { 
+  adminRetrieveSingleMediaInfo, 
+  adminIndvlViewinglePath,
+  indexPath, 
+  singleMediaPath, 
+  uploadMediaPath, 
+  mediaId, 
+  adminPath 
+} from "./components/tools/vars";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
@@ -41,7 +49,6 @@ const App = () => {
   });
 
   let topBarLinksCont = cx({ 
-    topBarSection: userId, 
     hideOption: !userId 
   });
 
@@ -97,10 +104,10 @@ const App = () => {
       </header>
 
       <div>
-        <Link to={indexPath}>Home</Link><br /><br />
+        <Link to={indexPath}>Home</Link> { " "} |  { " "} <br /><br />
         <Link to={uploadMediaPath}>Upload Media - Admin</Link><br />
         <Link to={adminRetrieveSingleMediaInfo}>Single Media Information - Admin</Link><br />
-        <Link to={adminPath}>All Projects - Admin</Link><br /><br />
+        <Link to={adminPath}>All Projects - Admin</Link><br /><br />{/** /review */}
         <Link to={singleMediaPath}>Single Media Note Page - User</Link><br />
       </div>
 
@@ -113,7 +120,7 @@ const App = () => {
               <Route path={adminPath} element={ <AllProjects />} />
 
               <Route path="a" element={ <AudioPlayerOnly />} />
-              <Route path="b" element={ <AdminSingleProject />} />
+              <Route path={`${adminIndvlViewinglePath}/${mediaId}`} element={ <AdminSingleProject /> } />
               <Route path="c" element={ <UploadMedia />} />
               <Route path="d" element={ <AllProjects />} />    
               <Route path="e" element={ <Notes />} />

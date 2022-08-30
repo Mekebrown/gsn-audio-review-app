@@ -1,3 +1,4 @@
+// https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3
 const testAudio_testing = "../tools/wearenotokay.mp3";
 
 const { REACT_APP_FULL_TITLE } = process.env;
@@ -5,7 +6,7 @@ const { REACT_APP_FULL_TITLE } = process.env;
 const adminPath = "/review";
 const adminRetrieveSingleMediaInfo = "retrieve-info";
 const singleMediaPath = "/usingle";
-const adminIndvlViewinglePath = "/asingle";
+const adminIndvlViewinglePath = "/admin/retrieve-info/media/";
 const allNotesPath = "/notes";
 const allProjectsPath = "/projects";
 const allUsersPath = "/users";
