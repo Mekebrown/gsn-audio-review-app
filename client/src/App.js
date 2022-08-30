@@ -5,7 +5,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { indexPath, singleMediaPath, uploadMediaPath, mediaId, adminPath } from "./components/tools/vars";
+import { adminRetrieveSingleMediaInfo, indexPath, singleMediaPath, uploadMediaPath, mediaId, adminPath } from "./components/tools/vars";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
@@ -16,6 +16,13 @@ import logo from "./components/tools/assets/logo.png";
 
 import styles from "./App.css";
 import classNames from "classnames/bind";
+
+import AudioPlayerOnly from "./components/Admin/Sections/AudioPlayerOnly";
+import AdminSingleProject from "./components/Admin/AdminSingleProject";
+import Notes from "./components/Notes/Notes";
+import AudioPlayerAndControls from "./components/User/Sections/AudioPlayerAndControls";
+import NoteTaker from "./components/User/Sections/NoteTaker";
+import Users from "./components/User/Users";
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -67,20 +74,37 @@ const App = () => {
                 <i className="fa fa-search"></i>
                   <input className={searchBarInput} type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
               </li>
-              <li className={topBarLinks}><Link to={singleMediaPath}  >Dashboard</Link></li>
+              <li className={topBarLinks}><Link to={singleMediaPath}>Dashboard</Link></li>
               <li className={topBarLinks}><Link to={adminPath}>All projects</Link></li>
             </section>
           </menu>
         </nav>
       </header>
 
+      <div>
+        <Link to={indexPath}>Home</Link><br /><br />
+        <Link to={uploadMediaPath}>Upload Media - Admin</Link><br />
+        <Link to={adminRetrieveSingleMediaInfo}>Single Media Information - Admin</Link><br />
+        <Link to={adminPath}>All Projects - Admin</Link><br /><br />
+        <Link to={singleMediaPath}>Single Media Note Page - User</Link><br />
+      </div>
+
       <main>
         <UserContext.Provider value={providerValue}>
           <Routes>
-              <Route path={singleMediaPath} element={ <Admin />} />
+              <Route path={adminRetrieveSingleMediaInfo} element={ <Admin />} />
               <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
               <Route path={uploadMediaPath} element={ <UploadMedia />} />
               <Route path={adminPath} element={ <AllProjects />} />
+
+              <Route path="a" element={ <AudioPlayerOnly />} />
+              <Route path="b" element={ <AdminSingleProject />} />
+              <Route path="c" element={ <UploadMedia />} />
+              <Route path="d" element={ <AllProjects />} />    
+              <Route path="e" element={ <Notes />} />
+              <Route path="f" element={ <AudioPlayerAndControls />} />
+              <Route path="g" element={ <NoteTaker />} />
+              <Route path="h" element={ <Users />} />
 
               {/* All default routes */}
               <Route exact path={indexPath} element={ <Home /> } />
