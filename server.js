@@ -279,6 +279,35 @@ app.post("/api/media", (req, res) => {
   });
 });  
 
+app.get("/api/retrieve-info/all", function(req, res) {
+  let tbd = "";
+  
+  // getQueryValues(tbd, [ media_id ])
+  // .then((data) => {
+  //   dataToSend = data.rows[0];
+
+  //   return getQueryValues(notes_query_statement, [ media_id, user_id ]);
+  // })
+  // .then((data) => {
+  //   dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
+
+    res.status(200).send({message: "Success", media: "tbd"});
+  // })
+  // .catch((err) => {
+  //   logger({
+  //     location: "get_retrieve_info_media_id", 
+  //     req: "", 
+  //     res: "N/A",
+  //     headers: "N/A",
+  //     message: JSON.stringify(err)
+  //   });      
+      
+  //   console.error("Promise rejection error (Media): " + err);
+
+  //   throw err;
+  // });
+});  
+
 app.get("/api/retrieve-info/:media_id", function(req, res) {
   let media_id = req.params.media_id;
   let tbd = "";
