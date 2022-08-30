@@ -65,9 +65,7 @@ const App = () => {
               <li className={topBarLinks}><Link to={uploadMediaPath}>Upload</Link></li>
               <li>                
                 <i className="fa fa-search"></i>
-                  <label htmlFor="searchBar" className={searchBarInput}>
-                      <input type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
-                  </label>
+                  <input className={searchBarInput} type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
               </li>
               <li className={topBarLinks}><Link to={singleMediaPath}  >Dashboard</Link></li>
               <li className={topBarLinks}><Link to={adminPath}>All projects</Link></li>
