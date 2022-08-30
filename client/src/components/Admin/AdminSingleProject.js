@@ -9,11 +9,14 @@ import axios from "axios";
  * 
  * @returns {Node} AdminSingleProject
  */
-const AdminSingleProject = ({mediaId}) => {
+const AdminSingleProject = () => {
+    const mediaId = window.location.href.split("media/")[1];
     const {userId, setUserId} = useContext(UserContext);
 
+
     useEffect(() => {
-        axios.get(`/api/retrieve-info/${mediaId}`)
+        axios.get(`/api/retrieve-info/media/${mediaId}`)
+        .then(response => { return JSON.parse(response)})
         .then(data => console.log(data))
         .catch(error => console.log(error));
     });
