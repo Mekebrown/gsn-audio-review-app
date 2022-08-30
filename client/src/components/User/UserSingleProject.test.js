@@ -4,7 +4,7 @@ import axios from "axios";
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom"
 
-import UserSingleProject from "../components/User/UserSingleProject";
+import UserSingleProject from "./UserSingleProject";
 
 const MEDIA_NO_RATING = {
   data: [
@@ -78,15 +78,6 @@ describe("individual media project functionality", () => {
   
     // Need to retrieve user id and all media/notes info
     axios.get.mockResolvedValue({MEDIA_NO_RATING});
-
-    render(<UserSingleProject introUserId={1} />);
-  });
-
-  test("rating is retrieved", () => {
-    jest.mock("axios");
-  
-    // Need to retrieve user id and all media/notes info
-    axios.get.mockResolvedValue({MEDIA_WITH_RATING});
 
     render(<UserSingleProject introUserId={1} />);
   });

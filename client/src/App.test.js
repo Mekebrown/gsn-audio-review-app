@@ -3,7 +3,7 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom"
 
-import App from "../App";
+import App from "./App";
 
 /**
  * Unit and integration testing since all tests
@@ -16,17 +16,13 @@ import App from "../App";
  * - Submit button redirects user to correct page
  */
 
-// =================TESTS======================= //
 describe("homepage functionality", () => {
-  test('renders "Open App" button', () => {
+  test('top bar navigation', () => {
     render(<App />);
 
-    const submitBtn = screen.getByText(/Open App/i);
-    
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).not.toBeDisabled();
-
-    fireEvent.click(submitBtn);
+    const uploadLink = screen.getByText(/Upload/i);
+    const dashboardLink = screen.getByText(/Dashboard/i);
+    const allProjectsLink = screen.getByText(/All projects/i);
     
     // Have to spoof this somehow:
     //      expect(submitBtn).not.toBeInTheDocument();
@@ -37,8 +33,8 @@ describe("homepage functionality", () => {
   });
 
   test('has redirect links working as expected', () => {
-  // // Every button click's link
-  // // Every a tag link?
-  // // Shows correct user data dependent upon the url params
+  // Every button click's link
+  // Every a tag link?
+  // Shows correct user data dependent upon the url params
   });
 });
