@@ -3,6 +3,7 @@ const testAudio_testing = "../tools/wearenotokay.mp3";
 const { REACT_APP_FULL_TITLE } = process.env;
 
 const adminPath = "/review";
+const adminRetrieveSingleMediaInfo = "retrieve-info";
 const singleMediaPath = "/usingle";
 const adminIndvlViewinglePath = "/asingle";
 const allNotesPath = "/notes";
@@ -41,6 +42,7 @@ export default REACT_APP_FULL_TITLE;
 export {
     adminPath,
     adminIndvlViewinglePath,
+    adminRetrieveSingleMediaInfo,
     allNotesPath,
     allProjectsPath,
     allUsersPath,

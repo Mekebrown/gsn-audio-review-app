@@ -1,15 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Home from "../Home";
 import { UserContext } from "../tools/helper_functions";
 import singleAdmin from "../tools/dummy_data";
+import axios from "axios";
 
 /**
  * Lance's page
  * 
  * @returns {Node} Admin
  */
-const Admin = () => {
+const Admin = ({mediaId}) => {
     const {userId, setUserId} = useContext(UserContext);
+
+    useEffect(() => {
+        axios.get(`/api/retrieve-info/${mediaId}`)
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+    });
 
     return (<>
         {userId ?
