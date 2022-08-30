@@ -68,14 +68,29 @@ const App = () => {
               </li>
             </section>
 
-            <section className={topBarLinksCont}>
-              <li className={topBarLinks}><Link to={uploadMediaPath}>Upload</Link></li>
-              <li>                
+            <section>
+                <i className="fa fa-upload"></i>{' '}
+                <Link to={uploadMediaPath}>Upload</Link>
+                {' '} &nbsp; {' '} &nbsp; 
                 <i className="fa fa-search"></i>
-                  <input className={searchBarInput} type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
-              </li>
-              <li className={topBarLinks}><Link to={singleMediaPath}>Dashboard</Link></li>
-              <li className={topBarLinks}><Link to={adminPath}>All projects</Link></li>
+                <input className={searchBarInput} type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
+                {' '} &nbsp; {' '} &nbsp; 
+                <Link to="/">                  
+                  <i className="fa fa-user"></i>
+                  Username
+                </Link>
+                {' '} &nbsp; {' '} &nbsp; 
+                <Link to="/">
+                  <i className="fa fa-cog"></i>
+                </Link>
+                {' '} &nbsp; {' '} &nbsp; 
+                <Link to="/">
+                  <i className="fa fa-comments"></i>
+                </Link>
+                {' '} &nbsp; {' '} &nbsp; 
+                <Link to="/">
+                  <i className="fa fa-bell"></i>
+                </Link>
             </section>
           </menu>
         </nav>
