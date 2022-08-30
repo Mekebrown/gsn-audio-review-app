@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { projectsList } from "../tools/dummy_data"
 import { UserContext } from "../tools/helper_functions";
 import Home from "../Home";
@@ -12,74 +12,85 @@ import axios from "axios";
  * @returns {Node} AllProjects
  */
 const AllProjects = () => {
+    const [allProjectsInfo, setAllProjectsInfo] = useState(null);
     const {userId, setUserId} = useContext(UserContext);
 
     useEffect(() => {
         axios.get("/api/retrieve-info/all")
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
+        .then(response => {
+            console.log(response);
+            // setAllProjectsInfo(response.data);            
+            setAllProjectsInfo(projectsList);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     });
 
     return (<>
         {userId ? 
             <section>
-                <div style={{border: "2px solid grey", borderRadius: "3px", textAlign: "center"}}>
-                    <h3 style={{border: "2px dashed grey", borderRadius: "3px"}}>All Filters</h3>
-                </div>
-            
-                <div>
-                    <h2>Search by...</h2>
-                    <form>
-                        <div id="filterTopRow">
-                            <fieldset>
-                                <legend>
-                                    <small>Month and year</small>
-                                </legend>
-                                <select className="fa">
-                                    <option value="september">
-                                        &#xf017; September
-                                    </option>
-                                </select>
+                {/** Search Filters */}
+                <section className="search">
+                    <div style={{border: "2px solid grey", borderRadius: "3px", textAlign: "center"}}>
+                        <h3 style={{border: "2px dashed grey", borderRadius: "3px"}}>All Filters</h3>
+                    </div>
+                
+                    <div>
+                        <h2>Search by...</h2>
+                        <form>
+                            <div id="filterTopRow">
+                                <fieldset>
+                                    <legend>
+                                        <small>Month and year</small>
+                                    </legend>
+                                    <select className="fa">
+                                        <option value="september">
+                                            &#xf017; September
+                                        </option>
+                                    </select>
+                                    <select>
+                                        <option value="1999">
+                                        &#xf017; 1999
+                                        </option>
+                                    </select>
+                                </fieldset>
+
+                                <label>
+                                    Users
+                                </label>
                                 <select>
-                                    <option value="1999">
-                                    &#xf017; 1999
+                                    <option value="meke">
+                                    &#xf007; Meke
                                     </option>
                                 </select>
-                            </fieldset>
-
-                            <label>
-                                Users
-                            </label>
-                            <select>
-                                <option value="meke">
-                                &#xf007; Meke
-                                </option>
-                            </select>
-                        </div>
+                            </div>
 
 
-                        <div id="filterBottomRow">
-                            <label>
-                                Notes
-                            </label>
-                            <select>
-                                <option value="ascending">
-                                &#xf075; Ascending
-                                </option>
-                            </select>
+                            <div id="filterBottomRow">
+                                <label>
+                                    Notes
+                                </label>
+                                <select>
+                                    <option value="ascending">
+                                    &#xf075; Ascending
+                                    </option>
+                                </select>
 
-                            <label>
-                                Ratings
-                            </label>
-                            <select className="filterRatings">
-                                <option value="meke">
-                                    &#xf164; Thumbs Up
-                                </option>
-                            </select>
-                        </div>
-                        <button>&#xf5ad; Apply Filters</button>
-                    </form>
-                </div>
+                                <label>
+                                    Ratings
+                                </label>
+                                <select className="filterRatings">
+                                    <option value="meke">
+                                        &#xf164; Thumbs Up
+                                    </option>
+                                </select>
+                            </div>
+                            <button>&#xf5ad; Apply Filters</button>
+                        </form>
+                    </div>
+                </section>
+
                 <h3>All Media</h3>
                 {projectsList.map(project => {
                     return <div key={project.key} style={{border: "1px solid grey", borderRadius: "3px"}}>
