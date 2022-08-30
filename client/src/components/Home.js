@@ -86,10 +86,6 @@ const Home = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-    
-
-    console.log(`${windowSize.width} and ${isMobile}`);
-
     return (<>
         {!userId ?  
             <main className="cont">
