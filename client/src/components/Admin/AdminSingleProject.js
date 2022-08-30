@@ -1,7 +1,6 @@
 import React from "react";
 import AudioPlayerOnly from "./Sections/AudioPlayerOnly";
 import singleProject from "../tools/dummy_data";
-import { indvlProjectPath } from "../tools/envs";
 
 /**
  * Lance's page to see a single project
