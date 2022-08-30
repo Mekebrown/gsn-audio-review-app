@@ -1,3 +1,130 @@
+const projectsList = [
+    {
+        key: 1,
+        mediaId: 1,
+        userId: 111,
+        mediaFile: "https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3",
+        projectName: "Vox Machina",
+        projectDesc: "Vox Machina - This will have a description eventually",
+        projectThumb: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png",
+        notes: [
+            {
+                noteId: 12,
+                userId: 100,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 200,
+                createdAt: "7-5-2021",
+                updatedAt: "7-5-2021",
+                noteBody: "The second note",
+                noteTimestamp: "1.03"
+            },
+            {
+                noteId: 1,
+                userId: 300,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            },
+            {
+                noteId: 111,
+                userId: 300,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    },
+    {
+        key: 2,
+        mediaId: 2,
+        userId: 111,
+        mediaFile: "https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3",
+        projectName: "SHOWTIME!",
+        projectDesc: "It's, well you know.",
+        projectThumb: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png",
+        notes: [
+            {
+                noteId: 1,
+                userId: 100,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 200,
+                createdAt: "7-5-2021",
+                updatedAt: "7-5-2021",
+                noteBody: "The second note",
+                noteTimestamp: "1.03"
+            },
+            {
+                noteId: 1,
+                userId: 300,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    },
+    {
+        key: 3,
+        mediaId: 3,
+        userId: 111,
+        mediaFile: "https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3",
+        projectName: "Rap Shit",
+        projectDesc: "Rap Shit. Yup. Great stuff.",
+        projectThumb: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png",
+        notes: [
+            {
+                noteId: 1,
+                userId: 100,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            }
+        ]
+    },
+    {
+        key: 4,
+        mediaId: 4,
+        userId: 111,
+        mediaFile: "https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3",
+        projectName: "The Sandman",
+        projectDesc: "The Sandman - The Sandman! The Sandman? The Sandman. The SandmanThe Sandman!",
+        projectThumb: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png",
+        notes: [
+            {
+                noteId: 1,
+                userId: 100,
+                createdAt: "2-1-2022",
+                updatedAt: "2-1-2022",
+                noteBody: "This will always be note one",
+                noteTimestamp: "0.03"
+            },
+            {
+                noteId: 1,
+                userId: 300,
+                createdAt: "12-1-2020",
+                updatedAt: "12-1-2020",
+                noteBody: "Three is the magic number",
+                noteTimestamp: "2.43"
+            }
+        ]
+    }
+];
+
 const singleAdmin =  {
     user_name: "Admin Admin",
     last_login: "01-02-2020",
@@ -220,117 +347,6 @@ const allNotesForAllProjects = [
             ]
         }
     ]
-];
-
-const projectsList = [
-    {
-        key: 1,
-        mediaId: 1,
-        projectName: "Vox Machina",
-        notes: [
-            {
-                noteId: 12,
-                userId: 1,
-                createdAt: "2-1-2022",
-                updatedAt: "2-1-2022",
-                noteBody: "This will always be note one",
-                noteTimestamp: "0.03"
-            },
-            {
-                noteId: 1,
-                userId: 2,
-                createdAt: "7-5-2021",
-                updatedAt: "7-5-2021",
-                noteBody: "The second note",
-                noteTimestamp: "1.03"
-            },
-            {
-                noteId: 1,
-                userId: 3,
-                createdAt: "12-1-2020",
-                updatedAt: "12-1-2020",
-                noteBody: "Three is the magic number",
-                noteTimestamp: "2.43"
-            },
-            {
-                noteId: 111,
-                userId: 33,
-                createdAt: "12-1-2020",
-                updatedAt: "12-1-2020",
-                noteBody: "Three is the magic number",
-                noteTimestamp: "2.43"
-            }
-        ]
-    },
-    {
-        key: 2,
-        mediaId: 2,
-        projectName: "SHOWTIME!",
-        notes: [
-            {
-                noteId: 1,
-                userId: 1,
-                createdAt: "2-1-2022",
-                updatedAt: "2-1-2022",
-                noteBody: "This will always be note one",
-                noteTimestamp: "0.03"
-            },
-            {
-                noteId: 1,
-                userId: 2,
-                createdAt: "7-5-2021",
-                updatedAt: "7-5-2021",
-                noteBody: "The second note",
-                noteTimestamp: "1.03"
-            },
-            {
-                noteId: 1,
-                userId: 3,
-                createdAt: "12-1-2020",
-                updatedAt: "12-1-2020",
-                noteBody: "Three is the magic number",
-                noteTimestamp: "2.43"
-            }
-        ]
-    },
-    {
-        key: 3,
-        mediaId: 3,
-        projectName: "Rap Shit",
-        notes: [
-            {
-                noteId: 1,
-                userId: 1,
-                createdAt: "2-1-2022",
-                updatedAt: "2-1-2022",
-                noteBody: "This will always be note one",
-                noteTimestamp: "0.03"
-            }
-        ]
-    },
-    {
-        key: 4,
-        mediaId: 4,
-        projectName: "The Sandman",
-        notes: [
-            {
-                noteId: 1,
-                userId: 1,
-                createdAt: "2-1-2022",
-                updatedAt: "2-1-2022",
-                noteBody: "This will always be note one",
-                noteTimestamp: "0.03"
-            },
-            {
-                noteId: 1,
-                userId: 3,
-                createdAt: "12-1-2020",
-                updatedAt: "12-1-2020",
-                noteBody: "Three is the magic number",
-                noteTimestamp: "2.43"
-            }
-        ]
-    }
 ];
 
 const currDateTime = new Date();
