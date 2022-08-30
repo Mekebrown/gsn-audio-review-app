@@ -5,13 +5,15 @@ Known security error issue with react-scripts: https://github.com/facebook/creat
 Currently I am writing unit tests using Jest. KIM: Arrange/Act/Assert
 
 Database
-Tables: digest, media, ratings, users, notes
-A digest entry stands alone
-A media project can have one user (the uploading admin), multiple notes, and multiple ratings
-A rating can have only one user and one media project
-A user can have multiple notes and multiple ratings
-A note can have only one user (the author) and (refer to) one media project
+
+- Tables: digest, media, ratings, users, notes
+- A digest entry stands alone
+- A media project can have one user (the uploading admin), multiple notes, and multiple ratings
+- A rating can have only one user and one media project
+- A user can have multiple notes and multiple ratings
+- A note can have only one user (the author) and (refer to) one media project
 
 Third-party tools
-![Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
-![Nifty way to add a tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010)
+[Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
+
+[Nifty way to add a tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010)
