@@ -308,7 +308,7 @@ app.get("/api/retrieve-info/all", function(req, res) {
   // });
 });  
 
-app.get("/api/retrieve-info/:media_id", function(req, res) {
+app.get("/api/retrieve-info/media/:media_id", function(req, res) {
   let media_id = req.params.media_id;
   let tbd = "";
   
