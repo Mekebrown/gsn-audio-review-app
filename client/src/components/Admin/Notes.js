@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import allNotesForAllProjects from "../tools/dummy_data";
 import { indvlProjectPath } from "../tools/envs";
+import { UserContext } from "../tools/helper_functions";
+import axios from "axios";
 
 /**
  * This page will show every note pertaining to every project that exists.
@@ -8,6 +10,14 @@ import { indvlProjectPath } from "../tools/envs";
  * @returns {Node} Notes
  */
 const Notes = () => {
+    const {userId, setUserId} = useContext(UserContext);
+
+    useEffect(() => {
+        axios.get("/api/retrieve-info/all")
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+    });
+    
     return (
         <section>
             <header>
