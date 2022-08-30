@@ -13,5 +13,6 @@ A user can have multiple notes and multiple ratings
 A note can have only one user (the author) and (refer to) one media project
 
 Third-party tools
-![Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
-![Nifty way to add a tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010)
+[Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
+
+[Nifty way to add a tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010)
