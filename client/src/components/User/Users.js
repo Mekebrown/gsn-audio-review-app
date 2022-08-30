@@ -1,6 +1,5 @@
 import React from "react";
 import allUsers from "../tools/dummy_data";
-import { indvlUserPath } from "../tools/envs";
 
 /**
  * This page will show every user and their notes.
@@ -17,7 +16,7 @@ const Users = () => {
             {allUsers.map(user => 
                 <section key={user[0].key}>
                     <h3>
-                        <a href={indvlUserPath}>{user[0].userName}</a>
+                        <a href="/">{user[0].userName}</a>
                     </h3>
 
                     <ul>
@@ -29,7 +28,7 @@ const Users = () => {
 
                             <figure>
                                 <blockquote>
-                                    <p><a href={indvlUserPath}>
+                                    <p><a href="/">
                                         {note.content}
                                     </a></p>
                                 </blockquote>
