@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../tools/helper_functions";
+import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 
 /**
@@ -27,6 +27,7 @@ const UserSingleProject = ({mediaId}) => {
     const [mediaDesc, setMediaDesc] = useState(null);
     const [projectName, setProjectName] = useState(null);
     const [noteId, setNoteId] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const player = useRef(null);
     const thankYouMsg = useRef(null);
 
@@ -93,9 +94,16 @@ const UserSingleProject = ({mediaId}) => {
         }
     };
 
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
     useEffect(() => {
+        let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
+        
+        if (!userIdFromLocalStorage && window.location.href.split("uid=")[1]) {
+            window.localStorage.setItem('userId', window.location.href.split("uid=")[1]);
+            setIsLoggedIn(true);
+        }
+
         // let collectedCookies = document.cookie.split(';');
 
         // collectedCookies.forEach((item) => {
@@ -132,9 +140,7 @@ const UserSingleProject = ({mediaId}) => {
     }, [currentTimestamp]);
 
    return (<>
-        {userId ? <section>
-            <button onClick={() => setUserId(null)}>Log Out</button> 
-            
+        {isLoggedIn ? <section>
             <audio controls preload="auto" ref={player}>
                 <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
@@ -179,7 +185,7 @@ const UserSingleProject = ({mediaId}) => {
 
                 <p ref={thankYouMsg}></p>
             </section>
-        </section> : <Home />}
+        </section> : <div>Didn't work</div>}
     </>);
 }; 
 

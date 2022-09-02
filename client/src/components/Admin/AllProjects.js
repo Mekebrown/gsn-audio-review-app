@@ -16,7 +16,8 @@ import { Link } from "react-router-dom";
  */
 const AllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
-    const {userId} = useContext(UserContext);
+    const {userId, setUserId} = useContext(UserContext);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleNoteSubmit = (e) => {
         e.preventDefault();
@@ -33,18 +34,26 @@ const AllProjects = () => {
 
     useEffect(() => {
         axios.get("/api/retrieve-info/all")
-        .then(response => {
-            console.log(response);
-            // setAllProjectsInfo(response.data);            
+        .then(data => {          
             setAllProjectsInfo(projectsList);
+            
+            if (!userId) {
+                let userIdFromLocalStorage = parseInt(window.localStorage.getItem('userId'));
+                
+                if (userIdFromLocalStorage) {
+                    setUserId(userIdFromLocalStorage);
+
+                    setIsLoggedIn(true);
+                } else setIsLoggedIn(false);
+            } else setIsLoggedIn(true);
         })
         .catch(error => {
             console.log(error);
         });
-    });
+    }, []);
 
     return (<>
-        {userId ? 
+        {isLoggedIn ? 
             <section>
                 {/** Search Filters */}
                 <section className="search">
