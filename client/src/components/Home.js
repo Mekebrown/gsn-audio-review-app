@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { UserContext } from "./tools/helper_functions";
+import { UserContext } from "../UserLogin";
 import UserSingleProject from "./User/UserSingleProject";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,66 +28,63 @@ const Home = () => {
     let pwField = cx({ displayInline: !isMobile });
     let showAnimation = cx({mobileInvisible: isMobile, sect: true, animation: true});
 
-    const isInputPresent = inputUN !== undefined && inputPW !== undefined
-                            && inputUN !== 0 && inputPW !== 0 
-                            && inputUN !== null && inputPW !== null
-                            && inputUN !== "" && inputPW !== "";
-    
-    const regEx = /[<>\s;:.,\]+$*()#|\\%!@^{}?&"'[/()]/g;
-    const isInputValid = !(inputUN?.match(regEx)) && !(inputPW?.match(regEx));
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (isInputPresent && isInputValid) {
-            const formData = new FormData();
+        setUserMsg("");
 
-            formData.append("username", inputUN);
-            formData.append("password", inputPW);
+        const formData = new FormData();
 
-            axios.post("/api/home", formData)
-            .then((res) => {
-                if (res.status === 200) {
-                    const forwardLocation = res.data.loc;
+        formData.append("username", inputUN);
+        formData.append("password", inputPW);
 
-                    setUserId(res.data.user_id);
+        await axios.post("/api/home", formData)
+        .then((res) => {
+            if (res.status !== 200) {
+                setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team");
 
-                    setUserMsg("Log in accepted. Loading review section...");
+                // eslint-disable-next-line no-throw-literal
+                throw "Not logged in";
+            } else {
+                return res.data; 
+            }
+        })
+        .then(data => {
+            setUserId(data.user_id);
+            window.localStorage.setItem('userId', data.user_id);
+            setUserMsg("Log in accepted. Loading review section...");
 
-                    let showMsg = setTimeout(() => {
-                        setUserMsg(null);
-                        window.location.href = forwardLocation;
-                    }, 4000);
-
-                    clearTimeout(showMsg);
-                } else {
-                    setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team");
-                }
-            })
-            .catch(() => setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
-        } else {
-            setUserMsg("Please enter your information again.");
-        }
+            return data.loc;
+        })
+        .then((forwardLocation) => {     
+            setTimeout(() => {
+                window.location.href = forwardLocation;
+            }, 3000);
+        })
+        .catch((error) => alert(`or here? ${error}`));//setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
     };
 
     useEffect(() => {
-        setIsMobile(windowSize.width <= 900);
+        // setUserMsg("");
+
+        // setIsMobile(windowSize.width <= 900);
         
-        function handleResize() {
-            setWindowSize({
-              width: window.innerWidth,
-              height: window.innerHeight,
-            });
-        }
+        // function handleResize() {
+        //     setWindowSize({
+        //       width: window.innerWidth,
+        //       height: window.innerHeight,
+        //     });
+        // }
 
-        window.addEventListener("resize", handleResize);
+        // window.addEventListener("resize", handleResize);
 
-        handleResize();
+        // handleResize();
 
-        return () => window.removeEventListener("resize", handleResize);
+        // return () => window.removeEventListener("resize", handleResize);
     }, []);
+
     return (<>
-        {!userId ?  
+        {!userId ? 
             <main className="cont">
                 <section className="sect">
                     <p>
@@ -112,10 +109,11 @@ const Home = () => {
                              {' '} 
                             Login
                         </button>
+                        raids-bellyLaugh-beholder
                     </form>
                 </section>
 
-                <section className={showAnimation}>
+                {/* <section className={showAnimation}>
                     <div className="largePurple"></div>
                     <div className="largWhite"></div>
                     <div className="purpleCircle"></div>                   
@@ -125,12 +123,10 @@ const Home = () => {
                     <div className="tinyWhite"></div>
                     
                     <svg className="playCircle" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" className="svg-inline--fa fa-circle-play playCircle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#c98f27" d="M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM176 168V344C176 352.7 180.7 360.7 188.3 364.9C195.8 369.2 205.1 369 212.5 364.5L356.5 276.5C363.6 272.1 368 264.4 368 256C368 247.6 363.6 239.9 356.5 235.5L212.5 147.5C205.1 142.1 195.8 142.8 188.3 147.1C180.7 151.3 176 159.3 176 168V168z"></path></svg>
-                </section>
-            </main>
-            : 
-            <UserSingleProject mediaId={1} />}
-        </>
-    );
+                </section> */}
+            </main> : <div>Something else </div>
+        }
+    </>);
 };
 
 export default Home;
