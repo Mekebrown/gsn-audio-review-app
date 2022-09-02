@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,7 +9,7 @@ import {
   adminRetrieveSingleMediaInfo, 
   adminIndvlViewinglePath,
   indexPath, 
-  singleMediaPath, 
+  userPath, 
   uploadMediaPath, 
   mediaId, 
   adminPath 
@@ -19,7 +19,6 @@ import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
 import Admin from "./components/Admin/Admin";
 import AllProjects from "./components/Admin/AllProjects";
-import { UserContext } from "./components/tools/helper_functions";
 import logo from "./components/tools/assets/logo.png";
 
 import styles from "./App.css";
@@ -31,6 +30,7 @@ import Notes from "./components/Notes/Notes";
 import AudioPlayerAndControls from "./components/User/Sections/AudioPlayerAndControls";
 import NoteTaker from "./components/User/Sections/NoteTaker";
 import Users from "./components/User/Users";
+import { UserLoginProvider } from "./UserLogin";
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -38,28 +38,15 @@ const App = () => {
   const providerValue = useMemo(() => ({userId, setUserId}), [userId, setUserId]);
 
   let cx = classNames.bind(styles);
+  let topBarOverallCont = cx({ loggedIn: userId,   loggedOut: !userId });
+  let topBarLogoCont = cx({ topBarSection: userId });
+  let topBarLinksCont = cx({ hideOption: !userId });
+  let topBarLinks = cx({ displayInline: userId,  rightSection: userId });
+  let searchBarInput = cx({ hideOption: userId});
 
-  let topBarOverallCont = cx({ 
-    loggedIn: userId, 
-    loggedOut: !userId 
-  });
+  useEffect(() => {
 
-  let topBarLogoCont = cx({ 
-    topBarSection: userId 
-  });
-
-  let topBarLinksCont = cx({ 
-    hideOption: !userId 
-  });
-
-  let topBarLinks = cx({ 
-    displayInline: userId,
-    rightSection: userId 
-  });
-
-  let searchBarInput = cx({ 
-    hideOption: userId
-  });
+  }, []);
 
   return (
     <Router>
@@ -98,24 +85,25 @@ const App = () => {
                 <Link to="/">
                   <i className="fa fa-bell"></i>
                 </Link>
+                <button onClick={() => {setUserId(null); window.localStorage.removeItem('userId')}}>Log Out</button>
             </section>
           </menu>
         </nav>
       </header>
 
       <div>
-        <Link to={indexPath}>Home</Link> { " "} |  { " "} <br /><br />
-        <Link to={uploadMediaPath}>Upload Media - Admin</Link><br />
-        <Link to={adminRetrieveSingleMediaInfo}>Single Media Information - Admin</Link><br />
-        <Link to={adminPath}>All Projects - Admin</Link><br /><br />{/** /review */}
-        <Link to={singleMediaPath}>Single Media Note Page - User</Link><br />
+        <Link to={indexPath}>Login ID #{userId}</Link> { " "} <br /><br />
+        <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
+        <Link to={uploadMediaPath}>Admin - Upload Media</Link><br />
+        <Link to={adminRetrieveSingleMediaInfo}>Admin - Single Media Information</Link><br /><br />
+        <Link to={userPath}>User - Single Media Note Page</Link><br />
       </div>
 
       <main>
-        <UserContext.Provider value={providerValue}>
+        <UserLoginProvider value={providerValue}>
           <Routes>
               <Route path={adminRetrieveSingleMediaInfo} element={ <Admin />} />
-              <Route path={singleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
+              <Route path={userPath} element={ <UserSingleProject mediaId={mediaId} />} />
               <Route path={uploadMediaPath} element={ <UploadMedia />} />
               <Route path={adminPath} element={ <AllProjects />} />
 
@@ -132,7 +120,7 @@ const App = () => {
               <Route exact path={indexPath} element={ <Home /> } />
               <Route path="/*" element={ <Home />} />
           </Routes>
-        </UserContext.Provider>
+        </UserLoginProvider>
       </main>
 
       <footer>
