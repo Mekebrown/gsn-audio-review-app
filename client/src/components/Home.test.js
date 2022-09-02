@@ -1,13 +1,8 @@
 import { render, fireEvent, screen } from "@testing-library/react";
 import Home from "./Home";
-import { UserContext } from "./tools/helper_functions";
 
 test("name and password are required", () => {
-    render(
-        <UserContext.Provider value="null">
-            <Home />
-        </UserContext.Provider>
-    );
+    render(<Home />);
 
     const inputName = screen.getByTitle("unField");
     const inputPW = screen.getByTitle("pwField");
