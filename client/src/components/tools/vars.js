@@ -3,9 +3,9 @@ const testAudio_testing = "../tools/wearenotokay.mp3";
 
 const { REACT_APP_FULL_TITLE } = process.env;
 
-const adminPath = "/review";
+const adminPath = "/admin";
+const userPath = "/review";
 const adminRetrieveSingleMediaInfo = "retrieve-info";
-const singleMediaPath = "/usingle";
 const adminIndvlViewinglePath = "/admin/retrieve-info/media/";
 const allNotesPath = "/notes";
 const allProjectsPath = "/projects";
@@ -50,7 +50,7 @@ export {
     indexPath,
     indvlProjectPath,
     indvlUserPath,
-    singleMediaPath,
+    userPath,
     uploadMediaPath,
     mediaId,
     testAudio_testing,

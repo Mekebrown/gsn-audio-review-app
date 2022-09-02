@@ -96,7 +96,7 @@ app.post("/api/home", (req, res) => {
 
   if (visitor_role) {
     const reroute_loc = visitor_role === "reviewer" ? 
-                        "/review-sample" : "/review";
+                        "/review" : "/admin";
 
     const country_loc = req.rawHeaders[9];
     const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
