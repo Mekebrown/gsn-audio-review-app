@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Home from "../Home";
-import { UserContext } from "../tools/helper_functions";
+import { UserContext } from "../../UserLogin";
 import singleProject from "../tools/dummy_data";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ import axios from "axios";
  */
 const AdminSingleProject = () => {
     const mediaId = window.location.href.split("media/")[1];
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
 
     useEffect(() => {

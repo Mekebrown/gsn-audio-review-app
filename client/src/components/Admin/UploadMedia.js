@@ -1,7 +1,7 @@
 import { useRef, useState, useContext } from "react";
 import "./UploadMedia.css";
 import Axios from "axios";
-import { UserContext } from "../tools/helper_functions";
+import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 
 /**
@@ -15,7 +15,7 @@ const UploadMedia = () => {
     const [uploadMsg, setUploadMsg] = useState("");
     const mediaForm = useRef(null);
 
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
     const saveFile = (e) => {
         setFile(e.target.files[0]);

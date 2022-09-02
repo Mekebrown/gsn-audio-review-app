@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { projectsList } from "../tools/dummy_data"
-import { UserContext } from "../tools/helper_functions";
+import { projectsList } from "../tools/dummy_data";
+import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 import axios from "axios";
 import { adminIndvlViewinglePath } from "../tools/vars";
@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
  */
 const AllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
     const handleNoteSubmit = (e) => {
         e.preventDefault();

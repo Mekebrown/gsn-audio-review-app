@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import allNotesForAllProjects from "../tools/dummy_data";
 import { indvlProjectPath } from "../tools/envs";
-import { UserContext } from "../tools/helper_functions";
+import { UserContext } from "../UserLogin";
 import axios from "axios";
 
 /**
@@ -10,7 +10,7 @@ import axios from "axios";
  * @returns {Node} Notes
  */
 const Notes = () => {
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
     useEffect(() => {
         axios.get("/api/retrieve-info/all")

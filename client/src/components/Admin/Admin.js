@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import Home from "../Home";
-import { UserContext } from "../tools/helper_functions";
+import { UserContext } from "../../UserLogin";
 import axios from "axios";
 
 /**
@@ -9,7 +9,7 @@ import axios from "axios";
  * @returns {Node} Admin
  */
 const Admin = () => {
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId} = useContext(UserContext);
 
     useEffect(() => {
         axios.get("/")
