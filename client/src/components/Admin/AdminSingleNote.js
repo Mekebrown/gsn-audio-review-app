@@ -1,7 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import allNotesForAllProjects from "../tools/dummy_data";
-import { indvlProjectPath } from "../tools/envs";
-import { UserContext } from "../UserLogin";
+import { UserContext } from "../../UserLogin";
 import axios from "axios";
 
 /**
@@ -21,7 +19,7 @@ const AdminSingleNote = () => {
     return (
         <section>
             <header>
-                <h2>Single Note from user [USER NAME, UID#]</h2>
+                <h2>Single Note from user [USER NAME], UID #{userId}</h2>
             </header>
 
             Note body
