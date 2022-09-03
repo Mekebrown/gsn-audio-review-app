@@ -3,19 +3,20 @@ const testAudio_testing = "../tools/wearenotokay.mp3";
 
 const { REACT_APP_FULL_TITLE } = process.env;
 
+const indexPath = "/";
+
 const adminPath = "/admin";
+const adminIndvlViewinglePath = "/admin/retrieve-info/media/media_id";
+const adminIndvlNote = "/admin/retrieve-info/notes/:note_id";
+const uploadMediaPath = "/admin/add-media";
+const adminSendPW = "/admin/send-pw";
+const adminShowAllUsers = "/admin/users";
+const adminShowSingleUser = "/admin/retrieve-info/user";
+const adminShowAllNotes = "/admin/retrieve-info/notes";
+
 const userPath = "/review";
 const userSingleMediaPath = "/review/:media_id";
-const adminIndvlViewinglePath = "/admin/retrieve-info/media/media_id";
-const adminIndvlNote = "/admin/review-info/note/:note_id";
-const allNotesPath = "/notes";
-const allProjectsPath = "/projects";
-const allUsersPath = "/users";
-const indexPath = "/";
-const indvlProjectPath = "project_path";
-const indvlUserPath = "/user_path";
-const uploadMediaPath = "/review/add-media";
-const adminShowAllUsers = "admin/users";
+
 const mediaId = 1;
 
 const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, updatedAt) => {
@@ -43,20 +44,18 @@ const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, u
 export default REACT_APP_FULL_TITLE;
 
 export {
+    indexPath,
     adminPath,
     adminIndvlViewinglePath,
-    userSingleMediaPath,
-    allNotesPath,
-    allProjectsPath,
-    allUsersPath,
-    indexPath,
-    indvlProjectPath,
-    indvlUserPath,
-    userPath,
-    uploadMediaPath,
-    mediaId,
     adminIndvlNote,
-    testAudio_testing,
+    uploadMediaPath,
+    adminSendPW,
     adminShowAllUsers,
+    adminShowSingleUser,
+    adminShowAllNotes,
+    userPath,
+    userSingleMediaPath,
+    mediaId,
+    testAudio_testing,
     noteInfo
 };
