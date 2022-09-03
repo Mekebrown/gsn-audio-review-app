@@ -12,14 +12,15 @@ import {
   userPath, 
   uploadMediaPath,
   adminIndvlNote,
-  mediaId, 
+  mediaId,
+  adminShowAllUsers,
   adminPath 
 } from "./components/tools/vars";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
 import AllProjects from "./components/Admin/AllProjects";
-import logo from "./components/tools/assets/logo.png";
+import logo from "./components/tools/logo.png";
 
 import styles from "./App.css";
 import classNames from "classnames/bind";
@@ -91,12 +92,15 @@ const App = () => {
 
       <div>
         <Link to={indexPath}>Login ID #{userId}</Link> { " "} <br /><br />
+
         <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
-        <Link to={uploadMediaPath}>Admin - Upload Media</Link><br />
-        <Link to={adminIndvlNote}>Admin - Show individual note</Link><br />
-        <Link to={adminIndvlViewinglePath}>Admin - Single Media Information</Link><br /><br />
-        <Link to={userPath}>User - All Media to Review</Link><br />
-        <Link to={userSingleMediaPath}>User - Single Media Note Page</Link><br />
+        <Link to={adminIndvlViewinglePath}>Admin - Single Media Information</Link><br /> {/** /admin/retrieve-info/media/media_id */}
+        <Link to={adminIndvlNote}>Admin - Show individual note</Link><br /> {/** /admin/review-info/note/:note_id */}
+        <Link to={uploadMediaPath}>Admin - Upload Media</Link><br /> {/** /review/add-media */}
+        <Link to={adminShowAllUsers}>Admin - All Users</Link><br /><br />{/** /admin/users */}
+        
+        <Link to={userPath}>User - All Media to Review</Link><br /> {/** /review */}
+        <Link to={userSingleMediaPath}>User - Single Media Note Page</Link><br /> {/** /review/:media_id */}
       </div>
 
       <main>
@@ -106,13 +110,14 @@ const App = () => {
               {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
               {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
               {/* NoteTaker to be used inside of UserSingleProject component */}
+              <Route path={adminPath} element={ <AllProjects />} />
+              <Route path={uploadMediaPath} element={ <UploadMedia />} />
+              <Route path={`${adminIndvlNote}/${mediaId}`} element={ <AdminSingleNote /> } />
+              <Route path={`${adminIndvlViewinglePath}/${mediaId}`} element={ <AdminSingleProject /> } />
+              <Route path={adminShowAllUsers} element={ <ShowAllUsers /> } />
+
               <Route path={userPath} element={ <UserAllMediaToReview />} />
               <Route path={userSingleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
-              <Route path={uploadMediaPath} element={ <UploadMedia />} />
-              <Route path={adminPath} element={ <AllProjects />} />              
-              <Route path={`${adminIndvlViewinglePath}/${mediaId}`} element={ <AdminSingleProject /> } />
-              <Route path={`${adminIndvlNote}/${mediaId}`} element={ <AdminSingleNote /> } />
-              <Route path="h" element={ <ShowAllUsers />} />
 
               {/* All default routes */}
               <Route exact path={indexPath} element={ <Home /> } />

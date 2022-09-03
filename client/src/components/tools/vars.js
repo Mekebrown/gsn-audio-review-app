@@ -15,6 +15,7 @@ const indexPath = "/";
 const indvlProjectPath = "project_path";
 const indvlUserPath = "/user_path";
 const uploadMediaPath = "/review/add-media";
+const adminShowAllUsers = "admin/users";
 const mediaId = 1;
 
 const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, updatedAt) => {
@@ -56,5 +57,6 @@ export {
     mediaId,
     adminIndvlNote,
     testAudio_testing,
+    adminShowAllUsers,
     noteInfo
 };
