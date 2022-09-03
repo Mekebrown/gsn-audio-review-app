@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserLogin";
-import Home from "../Home";
 
 /**
  * Page for a single media work and notes opportunity
@@ -30,6 +29,7 @@ const UserSingleProject = ({mediaId}) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const player = useRef(null);
     const thankYouMsg = useRef(null);
+    const fileTypes = [["mp3", "mpeg"], ["wav", "wav"]];
 
     const handleNotePadToggle = (userInfo = null) => {
         let timeStampForNote = userInfo?.nTimestamp ? userInfo.nTimestamp : player.current.currentTime;
