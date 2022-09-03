@@ -10,12 +10,7 @@ const {
   media_query_statement,
   insert_note_query,
   update_note_query,
-  ratings_query_statement,
   notes_query_statement,
-  notes_query_statement_insert,
-  notes_query_statement_update,
-  media_query_statement_retrieval,
-  media_query_statement_insert,
   login_query
 } = require("./server/database/query_strings.js");
 const { Client } = require('pg');
@@ -45,7 +40,7 @@ client.connect()
 .catch((err) => {  
   logger({ 
     location: "pg_client_connect",
-    req: "client variable: " + client + 
+    req: "client variable: " + JSON.stringify(client) + 
           " -|- process.env.PGUSER: " + process.env.PGUSER + 
           " -|- process.env.PGHOST: " + process.env.PGHOST + 
           " -|- process.env.PGPASSWORD: " + process.env.PGPASSWORD +
@@ -71,6 +66,7 @@ const getQueryValues = (queryStatement, params = []) => {
 
           reject(new Error(err));
         } else {
+          console.log(rows);
           resolve(rows);
         }
       }
@@ -280,37 +276,40 @@ app.post("/api/media", (req, res) => {
 });  
 
 app.get("/api/retrieve-info/all", function(req, res) {
-  let tbd = "";
-  
-  // getQueryValues(tbd, [ media_id ])
-  // .then((data) => {
-  //   dataToSend = data.rows[0];
+  let retrieve_all_media = "SELECT * FROM media;";
+  let retrieve_all_notes = "SELECT * FROM notes;";
+  let dataToSend = {};
 
-  //   return getQueryValues(notes_query_statement, [ media_id, user_id ]);
-  // })
-  // .then((data) => {
-  //   dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
+  getQueryValues(retrieve_all_media)
+  .then((data) => {
+    dataToSend = data.rows;
 
-    res.status(200).send({message: "Success", media: "tbd"});
-  // })
-  // .catch((err) => {
-  //   logger({
-  //     location: "get_retrieve_info_media_id", 
-  //     req: "", 
-  //     res: "N/A",
-  //     headers: "N/A",
-  //     message: JSON.stringify(err)
-  //   });      
+    return getQueryValues(retrieve_all_notes);
+  })
+  .then((data) => {
+    dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
+
+    res.status(200).send({message: "Success", media: dataToSend});
+  })
+  .catch((err) => {
+    logger({
+      location: "get_retrieve_info_media_id", 
+      req: "", 
+      res: "N/A",
+      headers: "N/A",
+      message: JSON.stringify(err)
+    });      
       
-  //   console.error("Promise rejection error (Media): " + err);
+    console.error("Promise rejection error: " + err);
 
-  //   throw err;
-  // });
+    throw err;
+  });
 });  
 
 app.get("/api/retrieve-info/media/:media_id", function(req, res) {
   let media_id = req.params.media_id;
   let tbd = "";
+  let dataToSend = {};
   
   // getQueryValues(tbd, [ media_id ])
   // .then((data) => {
