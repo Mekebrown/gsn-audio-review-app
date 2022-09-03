@@ -5,8 +5,9 @@ const { REACT_APP_FULL_TITLE } = process.env;
 
 const adminPath = "/admin";
 const userPath = "/review";
-const adminRetrieveSingleMediaInfo = "retrieve-info";
-const adminIndvlViewinglePath = "/admin/retrieve-info/media/";
+const userSingleMediaPath = "/review/:media_id";
+const adminIndvlViewinglePath = "/admin/retrieve-info/media/media_id";
+const adminIndvlNote = "/admin/review-info/note/:note_id";
 const allNotesPath = "/notes";
 const allProjectsPath = "/projects";
 const allUsersPath = "/users";
@@ -43,7 +44,7 @@ export default REACT_APP_FULL_TITLE;
 export {
     adminPath,
     adminIndvlViewinglePath,
-    adminRetrieveSingleMediaInfo,
+    userSingleMediaPath,
     allNotesPath,
     allProjectsPath,
     allUsersPath,
@@ -53,6 +54,7 @@ export {
     userPath,
     uploadMediaPath,
     mediaId,
+    adminIndvlNote,
     testAudio_testing,
     noteInfo
 };
