@@ -6,30 +6,28 @@ import {
   Link
 } from "react-router-dom";
 import { 
-  adminRetrieveSingleMediaInfo, 
   adminIndvlViewinglePath,
   indexPath, 
+  userSingleMediaPath,
   userPath, 
-  uploadMediaPath, 
+  uploadMediaPath,
+  adminIndvlNote,
   mediaId, 
   adminPath 
 } from "./components/tools/vars";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UploadMedia from "./components/Admin/UploadMedia";
 import Home from "./components/Home";
-import Admin from "./components/Admin/Admin";
 import AllProjects from "./components/Admin/AllProjects";
 import logo from "./components/tools/assets/logo.png";
 
 import styles from "./App.css";
 import classNames from "classnames/bind";
 
-import AudioPlayerOnly from "./components/Admin/Sections/AudioPlayerOnly";
 import AdminSingleProject from "./components/Admin/AdminSingleProject";
-import Notes from "./components/Notes/Notes";
-import AudioPlayerAndControls from "./components/User/Sections/AudioPlayerAndControls";
-import NoteTaker from "./components/User/Sections/NoteTaker";
-import Users from "./components/User/Users";
+import AdminSingleNote from "./components/Admin/AdminSingleNote";
+import ShowAllUsers from "./components/Admin/ShowAllUsers";
+import UserAllMediaToReview from "./components/User/UserAllMediaToReview";
 import { UserLoginProvider } from "./UserLogin";
 
 const App = () => {
@@ -95,26 +93,26 @@ const App = () => {
         <Link to={indexPath}>Login ID #{userId}</Link> { " "} <br /><br />
         <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
         <Link to={uploadMediaPath}>Admin - Upload Media</Link><br />
-        <Link to={adminRetrieveSingleMediaInfo}>Admin - Single Media Information</Link><br /><br />
-        <Link to={userPath}>User - Single Media Note Page</Link><br />
+        <Link to={adminIndvlNote}>Admin - Show individual note</Link><br />
+        <Link to={adminIndvlViewinglePath}>Admin - Single Media Information</Link><br /><br />
+        <Link to={userPath}>User - All Media to Review</Link><br />
+        <Link to={userSingleMediaPath}>User - Single Media Note Page</Link><br />
       </div>
 
       <main>
         <UserLoginProvider value={providerValue}>
           <Routes>
-              <Route path={adminRetrieveSingleMediaInfo} element={ <Admin />} />
-              <Route path={userPath} element={ <UserSingleProject mediaId={mediaId} />} />
+              {/* AudioPlayerOnly to be used inside of AllProjects and AdminSingleProject components */}
+              {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
+              {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
+              {/* NoteTaker to be used inside of UserSingleProject component */}
+              <Route path={userPath} element={ <UserAllMediaToReview />} />
+              <Route path={userSingleMediaPath} element={ <UserSingleProject mediaId={mediaId} />} />
               <Route path={uploadMediaPath} element={ <UploadMedia />} />
-              <Route path={adminPath} element={ <AllProjects />} />
-
-              <Route path="a" element={ <AudioPlayerOnly />} />
+              <Route path={adminPath} element={ <AllProjects />} />              
               <Route path={`${adminIndvlViewinglePath}/${mediaId}`} element={ <AdminSingleProject /> } />
-              <Route path="c" element={ <UploadMedia />} />
-              <Route path="d" element={ <AllProjects />} />    
-              <Route path="e" element={ <Notes />} />
-              <Route path="f" element={ <AudioPlayerAndControls />} />
-              <Route path="g" element={ <NoteTaker />} />
-              <Route path="h" element={ <Users />} />
+              <Route path={`${adminIndvlNote}/${mediaId}`} element={ <AdminSingleNote /> } />
+              <Route path="h" element={ <ShowAllUsers />} />
 
               {/* All default routes */}
               <Route exact path={indexPath} element={ <Home /> } />
