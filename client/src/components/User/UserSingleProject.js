@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserLogin";
+import Home from "../Home";
 
 /**
  * Page for a single media work and notes opportunity
@@ -185,7 +186,7 @@ const UserSingleProject = ({mediaId}) => {
 
                 <p ref={thankYouMsg}></p>
             </section>
-        </section> : <div>Didn't work</div>}
+        </section> : <Home />}
     </>);
 }; 
 
