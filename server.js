@@ -337,6 +337,10 @@ app.get("/api/retrieve-info/media/:media_id", function(req, res) {
   // });
 });  
 
+app.get("/", function(req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
 app.get("/*", function(req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
