@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import allUsers from "../tools/dummy_data";
+import { allUsers } from "../tools/dummy_data";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 
@@ -19,13 +19,13 @@ const AdminShowAllUsers = () => {
                 </header>
 
                 {allUsers.map(user => 
-                    <section key={user[0].key}>
+                    <section key={user.key}>
                         <h3>
-                            <a href="/">{user[0].userName}</a>
+                            <a href="/">{user.userName}</a>
                         </h3>
 
                         <ul>
-                            {user[0].usersNotes.map(note => 
+                            {user.usersNotes.map(note => 
                             <li key={note.id} className="clickable tooltip">
                                 <h4>Project: {note.project}</h4>
 

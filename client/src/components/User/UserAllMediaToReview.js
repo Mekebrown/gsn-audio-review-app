@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import allMediaToReview from "../tools/dummy_data";
+import { allMediaToReview } from "../tools/dummy_data";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 
@@ -19,13 +19,13 @@ const UserAllMediaToReview = () => {
                 </header>
 
                 {allMediaToReview.map(track => 
-                    <section key={track[0].key}>
+                    <section key={track.key}>
                         <h3>
-                            <a href="/">{track[0].userName}</a>
+                            <a href="/">{track.userName}</a>
                         </h3>
 
                         <ul>
-                            {track[0].usersNotes.map(note => 
+                            {track.usersNotes.map(note => 
                             <li key={note.id} className="clickable tooltip">
                                 <h4>Project: {note.project}</h4>
 
