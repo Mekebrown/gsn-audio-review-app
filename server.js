@@ -39,7 +39,8 @@ client.connect()
 .then(() => console.log('Connection has been established successfully.'))
 .catch((err) => {  
   logger({ 
-    location: "pg_client_connect",
+    location: "./files/logs/",
+    desc: "pg_client_connect",
     req: "client variable: " + JSON.stringify(client) + 
           " -|- process.env.PGUSER: " + process.env.PGUSER + 
           " -|- process.env.PGHOST: " + process.env.PGHOST + 
@@ -57,7 +58,8 @@ const getQueryValues = (queryStatement, params = []) => {
     client.query(queryStatement, params, (err, rows) => {                                                
         if (err || rows === undefined) {
           logger({
-            location: "getQueryValues", 
+            location: "./files/logs/",
+            desc: "getQueryValues", 
             req: "Query statement: " + queryStatement + " -|- Params: " + params, 
             res: "Rows: " + JSON.stringify(rows),
             headers: "N/A",
@@ -74,6 +76,7 @@ const getQueryValues = (queryStatement, params = []) => {
   );
 };
 
+// Login form
 app.post("/api/home", (req, res) => {
   const { username, password } = req.body;
 
@@ -106,7 +109,8 @@ app.post("/api/home", (req, res) => {
     .catch((err) => console.log(err));
   } else {
     logger({
-      location: "post_homepage_login_check", 
+      location: "./files/logs/",
+      desc: "post_homepage_login_check", 
       req: "Body: " + JSON.stringify(req.body), 
       res: "N/A",
       headers: country_loc + " " + device_info,
@@ -135,7 +139,8 @@ app.get("/api/usingle/:media_id", (req, res) => {
   })
   .catch((err) => {
     logger({
-      location: "get_usingle_mediaQuery", 
+      location: "./files/logs/",
+      desc: "get_usingle_mediaQuery", 
       req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement, 
       res: "N/A",
       headers: "N/A",
@@ -148,6 +153,7 @@ app.get("/api/usingle/:media_id", (req, res) => {
   });
 });
 
+// User note for audio
 app.post("/api/usingle", (req, res) => {
   const {
     is_note_updated,
@@ -185,20 +191,21 @@ app.post("/api/usingle", (req, res) => {
       })
       .catch(err => {
         logger({
-        location: "post_usingle_new_note", 
-        req: "Body: " + JSON.stringify(req.body), 
-        res: "New note not saved",
-        headers: req.rawHeaders[9] + " -|- " + 
-                  req.rawHeaders[13] + " -|- " + 
-                  req.rawHeaders[21] + " -|- " + 
-                  req.rawHeaders[22] + "-" + 
-                  req.rawHeaders[23],
-        message: JSON.stringify(err)
-      }); 
+          location: "./files/logs/",
+          desc: "post_usingle_new_note", 
+          req: "Body: " + JSON.stringify(req.body), 
+          res: "New note not saved",
+          headers: req.rawHeaders[9] + " -|- " + 
+                    req.rawHeaders[13] + " -|- " + 
+                    req.rawHeaders[21] + " -|- " + 
+                    req.rawHeaders[22] + "-" + 
+                    req.rawHeaders[23],
+          message: JSON.stringify(err)
+        }); 
 
-      console.log(err);
+        console.log(err);
       
-      res.status(500).send({ message: "New note not saved", code: 200 });
+        res.status(500).send({ message: "New note not saved", code: 200 });
       });
   } else {
     const update_values = [ 
@@ -216,7 +223,8 @@ app.post("/api/usingle", (req, res) => {
       })
       .catch((err) => {
         logger({
-          location: "post_usingle_updated_note", 
+          location: "./files/logs/",
+          desc: "post_usingle_updated_note", 
           req: req.query, 
           res: "Updated note not saved",
           headers: req.rawHeaders[9] + " -|- " + 
@@ -232,6 +240,7 @@ app.post("/api/usingle", (req, res) => {
   }
 });
 
+// Admin audio upload
 app.post("/api/media", (req, res) => {
   const { fileName, description, mediaType, projectName } = req.body;
   const { mediaFileToUpload } = req.files;
@@ -259,7 +268,8 @@ app.post("/api/media", (req, res) => {
     })
     .catch((err) => {
       logger({
-        location: "post_media", 
+        location: "./files/logs/",
+        desc: "post_media", 
         req: req.query, 
         res: "Promise rejection error",
         headers: req.rawHeaders[9] + " -|- " + 
@@ -293,7 +303,8 @@ app.get("/api/retrieve-info/all", function(req, res) {
   })
   .catch((err) => {
     logger({
-      location: "get_retrieve_info_media_id", 
+      location: "./files/logs/",
+      desc: "get_retrieve_info_media_id", 
       req: "", 
       res: "N/A",
       headers: "N/A",
@@ -324,7 +335,8 @@ app.get("/api/retrieve-info/media/:media_id", function(req, res) {
   // })
   // .catch((err) => {
   //   logger({
-  //     location: "get_retrieve_info_media_id", 
+  //     location: "./files/logs/",
+        // desc: "get_retrieve_info_media_id", 
   //     req: "", 
   //     res: "N/A",
   //     headers: "N/A",
@@ -335,10 +347,6 @@ app.get("/api/retrieve-info/media/:media_id", function(req, res) {
 
   //   throw err;
   // });
-});  
-
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
 app.get("/*", function(req, res) {
@@ -347,7 +355,7 @@ app.get("/*", function(req, res) {
 
 const logger = (details) => {
   let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
-  let file_name = `${details.location}_${current}.log`;
+  let file_name = `${details.location}${details.desc}${current}.log`;
 
   let log_data = {
     message: details.message,
