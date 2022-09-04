@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../UserLogin";
 import axios from "axios";
+import Home from "../Home";
 
 /**
  * This page will show every note pertaining to every project that exists.
@@ -16,21 +17,23 @@ const AdminSendPW = () => {
         .catch(error => console.log(error));
     });
     
-    return (
-        <section>
-            <header>
-                <h2>Single Note from user [USER NAME], UID #{userId}</h2>
-            </header>
+    return (<>
+        {userId ? 
+            <section>
+                <header>
+                    <h2>Single Note from user [USER NAME], UID #{userId}</h2>
+                </header>
 
-            Note body
+                Note body
 
-            Note timestamp
+                Note timestamp
 
-            created on 
+                created on 
 
-            Updated? No/Yes, on datetime 
-        </section>
-    )
+                Updated? No/Yes, on datetime 
+            </section> : <Home />
+        }
+    </>);
 }; 
 
 export default AdminSendPW;
