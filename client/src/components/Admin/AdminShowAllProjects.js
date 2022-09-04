@@ -3,8 +3,7 @@ import { projectsList } from "../tools/dummy_data";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 import axios from "axios";
-import { adminIndvlViewinglePath } from "../tools/vars";
-import "./AllProjects.css";
+import "./AdminShowAllProjects.css";
 import { Link } from "react-router-dom";
 
 /**
@@ -12,9 +11,9 @@ import { Link } from "react-router-dom";
  * 
  * /review
  * 
- * @returns {Node} AllProjects
+ * @returns {Node} AdminShowAllProjects
  */
-const AllProjects = () => {
+const AdminShowAllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
     const {userId, setUserId} = useContext(UserContext);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -176,4 +175,4 @@ const AllProjects = () => {
     </>);
 }; 
 
-export default AllProjects;
+export default AdminShowAllProjects;

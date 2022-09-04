@@ -1,5 +1,5 @@
 import { useRef, useState, useContext } from "react";
-import "./UploadMedia.css";
+import "./AdminUploadMedia.css";
 import Axios from "axios";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
@@ -7,9 +7,9 @@ import Home from "../Home";
 /**
  * Lets Lance upload files
  * 
- * @returns {Node} UploadMedia
+ * @returns {Node} AdminUploadMedia
  */
-const UploadMedia = () => {
+const AdminUploadMedia = () => {
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const [uploadMsg, setUploadMsg] = useState("");
@@ -91,5 +91,5 @@ const UploadMedia = () => {
     </>);
 };
 
-export default UploadMedia;
+export default AdminUploadMedia;
 
