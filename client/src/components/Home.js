@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../UserLogin";
-import UserSingleProject from "./User/UserSingleProject";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
