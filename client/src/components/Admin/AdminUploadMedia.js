@@ -56,37 +56,39 @@ const AdminUploadMedia = () => {
 
     return (<>
         {userId ? 
-            <form id="mediaForm" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
-                {uploadMsg}
+            <section className="sect" aria-labelledby="media-upload-form">
+                <form id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
+                    {uploadMsg}
 
-                <label htmlFor="imageUpload">UPLOAD IMAGE</label>
-                <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" />
+                    <label htmlFor="imageUpload">UPLOAD IMAGE</label>
+                    <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" />
 
-                <input type="text" placeholder="Project Name" />
+                    <input type="text" placeholder="Project Name" />
 
-                <select name="mediaType" id="mediaType">
-                    <option value="">File type?</option>
-                    <option value="audio">Audio</option>
-                    <option value="video">Video</option>
-                    <option value="document">Document</option>
-                    <option value="etc">Etc.</option>
-                </select>
+                    <select name="mediaType" id="mediaType">
+                        <option value="">File type?</option>
+                        <option value="audio">Audio</option>
+                        <option value="video">Video</option>
+                        <option value="document">Document</option>
+                        <option value="etc">Etc.</option>
+                    </select>
 
-                <label htmlFor="mediaFileToUpload">
-                    Drag/drop or upload media 
-                </label>
-                <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
+                    <label htmlFor="mediaFileToUpload">
+                        Drag/drop or upload media
+                    </label>
+                    <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
 
-                <input type="text" placeholder="Description" name="description" id="description" required />
+                    <input type="text" placeholder="Description" name="description" id="description" required />
 
-                <button type="submit" className="public">Public</button>
+                    <button type="submit" className="public">Public</button>
 
-                <button type="submit" className="private">Private</button>
+                    <button type="submit" className="private">Private</button>
 
-                <button type="submit" className="signupbtn">UPLOAD</button>
+                    <button type="submit" className="signupbtn">UPLOAD</button>
 
-                <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>CANCEL</button>
-            </form> : <Home />
+                    <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>CANCEL</button>
+                </form> 
+            </section>: <Home />
         }
     </>);
 };
