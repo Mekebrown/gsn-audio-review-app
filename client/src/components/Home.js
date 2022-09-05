@@ -11,7 +11,6 @@ import classNames from "classnames/bind";
 const Home = () => {
     const [inputUN, setInputUN] = useState(null);
     const [inputPW, setInputPW] = useState(null);
-    const [userMsg, setUserMsg] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [windowSize, setWindowSize] = useState({
         width: undefined,
@@ -30,7 +29,9 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setUserMsg("");
+        // Not saved in state to add alert role when relevant
+        let userMsg = document.getElementById("userMsg");
+        userMsg.setAttribute("role", "alert");
 
         const formData = new FormData();
 
@@ -40,7 +41,7 @@ const Home = () => {
         await axios.post("/api/home", formData)
         .then((res) => {
             if (res.status !== 200) {
-                setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team");
+                userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team";
 
                 // eslint-disable-next-line no-throw-literal
                 throw "Not logged in";
@@ -51,7 +52,7 @@ const Home = () => {
         .then(data => {
             setUserId(data.user_id);
             window.localStorage.setItem('userId', data.user_id);
-            setUserMsg("Log in accepted. Loading review section...");
+            userMsg.textContent = "Log in accepted. Loading review section...";
 
             return data.loc;
         })
@@ -60,11 +61,12 @@ const Home = () => {
                 window.location.href = forwardLocation;
             }, 3000);
         })
-        .catch((error) => setUserMsg("Unfortunately your information is not accepted. Please try again or contact the team"));
+        .catch((error) => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
     };
 
     useEffect(() => {
-        // setUserMsg("");
+        // let userMsg = document.getElementById("userMsg");
+        // userMsg.textContent = "";
 
         // setIsMobile(windowSize.width <= 900);
         
@@ -85,7 +87,7 @@ const Home = () => {
     return (<>
         {!userId ? 
             <main className="cont">
-                <section className="sect">
+                <section className="sect" aria-labelledby="log-in">
                     <p>
                         <span className="yellow">Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears. 
                     </p>
@@ -93,8 +95,8 @@ const Home = () => {
                         Enter your given password to review your project...
                     </small>
 
-                    <form onSubmit={handleSubmit}>
-                        <p title="userMsg">{userMsg}</p>
+                    <form id="log-in" onSubmit={handleSubmit}>
+                        <p title="userMsg" id="userMsg"></p>
                         <div className={loginFields}>
                             <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
 
