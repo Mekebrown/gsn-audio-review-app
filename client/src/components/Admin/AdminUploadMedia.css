@@ -1,5 +1,22 @@
 * {box-sizing: border-box}
 
+#imageUpload { opacity: 0; }
+
+#imageUploadBtn { 
+  background-color: #e3e3e3;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  height: 160px;
+  width: 160px;
+  text-align: center;
+  box-shadow: 3px 3px #d0d0d0;
+}
+
+#imageUploadBtn:hover {  
+  background-color: #dbdbdb;
+}
+
 /* Full-width input fields */
 .mediaContainer input[type=text], 
 .mediaContainer input[type=password] {

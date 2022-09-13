@@ -3,6 +3,7 @@ import "./AdminUploadMedia.css";
 import axios from "axios";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
+import { validFileType, returnFileSize } from "../tools/vars";
 
 /**
  * Lets Lance upload files
@@ -10,21 +11,62 @@ import Home from "../Home";
  * @returns {Node} AdminUploadMedia
  */
 const AdminUploadMedia = () => {
-    const [file, setFile] = useState(null);
-    const [fileName, setFileName] = useState("");
+    const [projectFiles, setProjectFiles] = useState({
+        image: null,
+        imageName: null,
+        mediaFile: null,
+        mediaFileName: null
+    });
     const [uploadMsg, setUploadMsg] = useState("");
     const mediaForm = useRef(null);
 
     const { userId } = useContext(UserContext);
 
-    const saveFile = (e) => {
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+    const saveMediaFile = (e) => {
+        // Have to check file size: e.target.files[0].size <- in bytes
+        setProjectFiles(prev => {
+            return {
+                ...prev,
+                mediaFile: e.target.files[0],
+                mediaFileName: e.target.files[0].name
+            };
+        });
+    };
+
+    const saveImage = (e) => {
+        const preview = document.querySelector(".preview");
+
+        while (preview.firstChild) { preview.removeChild(preview.firstChild); }
+
+        if (e.target.files.length === 0) {
+            setUploadMsg("No file is currently selected for upload.");
+        } else if (validFileType(e.target.files[0])) {
+            const img = document.createElement("img");
+            img.setAttribute("alt", "img upload preview");
+            img.style.width = "200px";
+            img.style.height = "200px";
+
+            img.src = URL.createObjectURL(e.target.files[0]);
+
+            preview.appendChild(img);
+
+            console.log(returnFileSize(e.target.files[0].size));
+
+            setProjectFiles(prev => {
+                return {
+                    ...prev,
+                    image: e.target.files[0],
+                    imageName: e.target.files[0].name
+                };
+            });
+        } else setUploadMsg("Sorry, your file is not a valid type. Please try again.");
     };
 
     const handleMediaUploadSubmit = async (e) => {
         e.preventDefault();
 
+        const file = projectFiles.mediaFile;
+        const fileName = projectFiles.mediaFileName;
         const projName = e.target.elements.projectName.value;
 
         if (projName
@@ -57,26 +99,23 @@ const AdminUploadMedia = () => {
     return (<>
         {userId ?
             <section className="sect" aria-labelledby="media-upload-form">
-                <form id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
+                <form method="post" encType="multipart/form-data" id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
                     {uploadMsg}
 
-                    <label htmlFor="imageUpload">UPLOAD IMAGE</label>
-                    <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" />
+                    <div className="preview">
+                        <label htmlFor="imageUpload" id="imageUploadBtn">UPLOAD IMAGE</label>
+                        <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" onChange={saveImage} />
+                    </div>
 
                     <input type="text" placeholder="Project Name" />
 
-                    <select name="mediaType" id="mediaType">
+                    <select name="mediaType" title="mediaType" id="mediaType">
                         <option value="">File type?</option>
                         <option value="audio">Audio</option>
-                        <option value="video">Video</option>
-                        <option value="document">Document</option>
-                        <option value="etc">Etc.</option>
                     </select>
 
-                    <label htmlFor="mediaFileToUpload">
-                        Drag/drop or upload media
-                    </label>
-                    <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveFile} required />
+                    <label htmlFor="mediaFileToUpload">Drag/drop or upload media</label>
+                    <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveMediaFile} required accept="audio/*" />
 
                     <input type="text" placeholder="Description" name="description" id="description" required />
 
