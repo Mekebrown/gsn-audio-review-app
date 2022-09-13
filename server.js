@@ -401,12 +401,25 @@ app.delete('/api/:type', (req, res) => {
   res.send('Got a DELETE request');
 });
 
+app.post("/error", (req, res) => {
+  console.log(req.body);
+
+  logger({
+    location: "./files/logs/",
+    desc: "error_boundary_trigger",
+    headers: "N/A",
+    message: `${req.body.error}\n Error Info: ${req.body.errorInfo}`
+  });
+
+  res.status(200).send({ message: "Message received" });
+});
+
 // Fallback route. Respond with default index.html page
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-// General error handling
+// Uncaught error handling catch
 app.use((err, req, res, next) => {
   console.error(err.stack);
 
@@ -432,7 +445,7 @@ const logger = (details) => {
     headers: details.headers ? details.headers : "N/A",
   };
 
-  fs.writeFile(file_name, JSON.stringify(log_data, null, "\t") + "\n===============\n", "utf8", (error, data) => {
+  fs.writeFile(file_name, JSON.stringify(log_data, null, "\t"), "utf8", (error, data) => {
     console.log("Write complete"); console.log(error); console.log(data);
   });
 };
