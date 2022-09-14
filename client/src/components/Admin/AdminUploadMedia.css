@@ -7,10 +7,11 @@
   padding: 5px 10px;
   border-radius: 5px;
   font-size: 0.8rem;
-  height: 160px;
-  width: 160px;
+  height: 200px;
+  width: 200px;
   text-align: center;
   box-shadow: 3px 3px #d0d0d0;
+  padding: 2px;
 }
 
 #imageUploadBtn:hover {  

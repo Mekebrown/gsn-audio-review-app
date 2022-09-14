@@ -34,21 +34,22 @@ const AdminUploadMedia = () => {
     };
 
     const saveImage = (e) => {
+        setUploadMsg("");
         const preview = document.querySelector(".preview");
 
-        while (preview.firstChild) { preview.removeChild(preview.firstChild); }
+        while (preview.childNodes[0].nodeName === "IMG") { preview.removeChild(preview.firstChild); }
 
         if (e.target.files.length === 0) {
             setUploadMsg("No file is currently selected for upload.");
         } else if (validFileType(e.target.files[0])) {
             const img = document.createElement("img");
             img.setAttribute("alt", "img upload preview");
-            img.style.width = "200px";
-            img.style.height = "200px";
+            img.style.width = "160px";
+            img.style.height = "160px";
 
             img.src = URL.createObjectURL(e.target.files[0]);
 
-            preview.appendChild(img);
+            preview.prepend(img);
 
             console.log(returnFileSize(e.target.files[0].size));
 
@@ -102,12 +103,10 @@ const AdminUploadMedia = () => {
                 <form method="post" encType="multipart/form-data" id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
                     {uploadMsg}
 
-                    <div className="preview">
-                        <label htmlFor="imageUpload" id="imageUploadBtn">UPLOAD IMAGE</label>
-                        <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" onChange={saveImage} />
-                    </div>
+                    <label htmlFor="imageUpload" id="imageUploadBtn" className="preview">UPLOAD IMAGE</label>
+                    <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" onChange={saveImage} />
 
-                    <input type="text" placeholder="Project Name" />
+                    <input type="text" placeholder="Project Name" minLength="5" maxLength="50" pattern="[\w\s\d?!.,!$#-_'\\/\\]" />
 
                     <select name="mediaType" title="mediaType" id="mediaType">
                         <option value="">File type?</option>
@@ -117,7 +116,7 @@ const AdminUploadMedia = () => {
                     <label htmlFor="mediaFileToUpload">Drag/drop or upload media</label>
                     <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveMediaFile} required accept="audio/*" />
 
-                    <input type="text" placeholder="Description" name="description" id="description" required />
+                    <input type="text" placeholder="Description" name="description" id="description" required minLength="10" maxLength="500" pattern="[\w\s\d?!.,!$#-_'\\/\\]" />
 
                     <button type="submit" className="public">Public</button>
 
