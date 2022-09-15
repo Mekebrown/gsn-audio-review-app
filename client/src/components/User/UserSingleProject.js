@@ -98,12 +98,12 @@ const UserSingleProject = ({ mediaId }) => {
     const { userId } = useContext(UserContext);
 
     useEffect(() => {
-        let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
+        // let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
 
-        if (!userIdFromLocalStorage && window.location.href.split("uid=")[1]) {
-            window.localStorage.setItem('userId', window.location.href.split("uid=")[1]);
-            setIsLoggedIn(true);
-        }
+        // if (!userIdFromLocalStorage && window.location.href.split("uid=")[1]) {
+        //     window.localStorage.setItem('userId', window.location.href.split("uid=")[1]);
+        //     setIsLoggedIn(true);
+        // }
 
         // let collectedCookies = document.cookie.split(';');
 
@@ -141,9 +141,9 @@ const UserSingleProject = ({ mediaId }) => {
     }, [currentTimestamp]);
 
     return (<>
-        {isLoggedIn ? <section>
+        {userId ? <section>
             <audio controls preload="auto" ref={player}>
-                <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
+                <source key="wearenotokay" src="https://gsnaudioreviewapp.s3.amazonaws.com/media/audio/t.mp3" type="audio/mpeg" />
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
