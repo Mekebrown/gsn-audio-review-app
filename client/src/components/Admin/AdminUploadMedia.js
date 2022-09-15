@@ -15,12 +15,24 @@ const AdminUploadMedia = () => {
         image: null,
         imageName: null,
         mediaFile: null,
-        mediaFileName: null
+        mediaFileName: null,
+        projectName: null,
+        description: null,
+        mediaType: null
     });
     const [uploadMsg, setUploadMsg] = useState("");
     const mediaForm = useRef(null);
 
     const { userId } = useContext(UserContext);
+
+    const saveAddlMediaInfo = (e) => {
+        setProjectFiles(prev => {
+            return {
+                ...prev,
+                [e.target.name]: e.target.value
+            };
+        });
+    };
 
     const saveMediaFile = (e) => {
         // Have to check file size: e.target.files[0].size <- in bytes
@@ -35,6 +47,8 @@ const AdminUploadMedia = () => {
 
     const saveImage = (e) => {
         setUploadMsg("");
+
+        console.log(projectFiles.imageName);
         const preview = document.querySelector(".preview");
 
         while (preview.childNodes[0].nodeName === "IMG") { preview.removeChild(preview.firstChild); }
@@ -66,69 +80,72 @@ const AdminUploadMedia = () => {
     const handleMediaUploadSubmit = async (e) => {
         e.preventDefault();
 
-        const file = projectFiles.mediaFile;
-        const fileName = projectFiles.mediaFileName;
-        const projName = e.target.elements.projectName.value;
+        const formData = new FormData();
 
-        if (projName
-            && projName !== undefined && fileName !== undefined
-            && projName !== 0 && fileName !== 0
-            && projName !== null && fileName !== null
-            && projName !== "" && fileName !== "") {
-            const formItems = e.target.elements;
+        formData.append("description", projectFiles.description);
+        formData.append("mediaFileToUpload", projectFiles.file);
+        formData.append("fileName", projectFiles.fileName);
+        formData.append("mediaType", projectFiles.mediaType);
+        formData.append("projectName", projectFiles.projectName);
+        formData.append("image", projectFiles.image);
+        formData.append("imageName", projectFiles.imageName);
 
-            const formData = new FormData();
+        try {
+            await axios.post("/api/upload", formData)
+                .then((initialInfo) => {
+                    console.log(initialInfo);
+                    setUploadMsg(`Media file ${fileName} uploaded!`);
+                });
+        } catch (ex) {
+            console.log(ex);
+        }
+    } else setUploadMsg(`Media file not uploaded.`);
+};
 
-            formData.append("description", formItems.description.value);
-            formData.append("mediaFileToUpload", file);
-            formData.append("fileName", fileName);
-            formData.append("mediaType", formItems.mediaType.value);
-            formData.append("projectName", projName);
+return (<>
+    {userId ?
+        <section className="sect" aria-labelledby="media-upload-form">
+            <form method="post" encType="multipart/form-data" id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
+                {uploadMsg}
 
-            try {
-                await axios.post("/api/upload", formData)
-                    .then((initialInfo) => {
-                        console.log(initialInfo);
-                        setUploadMsg(`Media file ${fileName} uploaded!`);
-                    });
-            } catch (ex) {
-                console.log(ex);
-            }
-        } else setUploadMsg(`Media file not uploaded.`);
-    };
-
-    return (<>
-        {userId ?
-            <section className="sect" aria-labelledby="media-upload-form">
-                <form method="post" encType="multipart/form-data" id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
-                    {uploadMsg}
-
-                    <label htmlFor="imageUpload" id="imageUploadBtn" className="preview">UPLOAD IMAGE</label>
+                {/* LOGO */}
+                <label htmlFor="imageUpload" id="imageUploadBtn" className="preview">UPLOAD IMAGE
                     <input type="file" id="imageUpload" title="imageUpload" name="imageUpload" accept="image/*" onChange={saveImage} />
+                </label>
 
-                    <input type="text" placeholder="Project Name" minLength="5" maxLength="50" pattern="[\w\s\d?!.,!$#-_'\\/\\]" />
+                {/* PROJECT NAME */}
+                <label htmlFor="projectName">Project Name
+                    <input type="text" placeholder="Project Name" name="projectName" title="projectName" minLength="5" maxLength="50" onChange={saveAddlMediaInfo} />
+                </label>
 
-                    <select name="mediaType" title="mediaType" id="mediaType">
+                {/* MEDIA TYPE */}
+                <label htmlFor="mediaType">Type of Media
+                    <select name="mediaType" title="mediaType" id="mediaType" onChange={saveAddlMediaInfo} >
                         <option value="">File type?</option>
                         <option value="audio">Audio</option>
                     </select>
+                </label>
 
-                    <label htmlFor="mediaFileToUpload">Drag/drop or upload media</label>
+                {/* FILE UPLOAD */}
+                <label htmlFor="mediaFileToUpload">Drag/drop or upload media
                     <input type="file" placeholder="investor-spotlight.wav" name="mediaFileToUpload" id="mediaFileToUpload" onChange={saveMediaFile} required accept="audio/*" />
+                </label>
 
-                    <input type="text" placeholder="Description" name="description" id="description" required minLength="10" maxLength="500" pattern="[\w\s\d?!.,!$#-_'\\/\\]" />
+                {/* DESCRIPTION */}
+                <label htmlFor="description">Description
+                    <input type="text" placeholder="Description" name="description" id="description" required minLength="10" maxLength="500" onChange={saveAddlMediaInfo} />
+                </label>
 
-                    <button type="submit" className="public">Public</button>
+                {/* BUTTONS */}
+                <button type="submit" className="public">Public</button> {' '} <button type="submit" className="private">Private</button>
 
-                    <button type="submit" className="private">Private</button>
+                <button type="submit" className="signupbtn" disabled={!projectFiles.image && !projectFiles.imageName && !projectFiles.file && !projectFiles.fileName && !projectFiles.projectName && !projectFiles.description && !projectFiles.mediaType}>UPLOAD</button>
 
-                    <button type="submit" className="signupbtn">UPLOAD</button>
-
-                    <button type="button" className="cancelbtn" onClick={() => mediaForm.current.reset()}>CANCEL</button>
-                </form>
-            </section> : <Home />
-        }
-    </>);
+                <button type="button" className="cancelbtn" onClick={() => mediaForm.current.reset()}>CANCEL</button>
+            </form>
+        </section> : <Home />
+    }
+</>);
 };
 
 export default AdminUploadMedia;
