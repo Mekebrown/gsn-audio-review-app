@@ -51,6 +51,7 @@ Additional Features will be added such as a Digest of projects from the producer
 - I found a [nifty, tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010), in CodePen, where an admin can play an audio track in their feed on the home page.
 - There is an alert message used for the log in form. Instead of the status message being saved in state I grab it through the DOM and add an alert role attribute once the form is submitted because [in MDN it says the following](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/alert_role#description): "Warning: Because of its intrusive nature, the alert role must be used sparingly and only in situations where the user's immediate attention is required." and "The alert role is added to the node containing an alert message, not the element causing the alert to be triggered." GTK.
 - [Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
+- [Helpful pull request thread](https://github.com/aws/aws-sdk-js/issues/2961) with suggestions on how to handle S3 file upload issues with larg binary
 
 ## Support and Feedback
 
