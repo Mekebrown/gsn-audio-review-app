@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
  */
 const AdminShowAllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
-    const {userId, setUserId} = useContext(UserContext);
+    const { userId, setUserId } = useContext(UserContext);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleNoteSubmit = (e) => {
@@ -26,40 +26,40 @@ const AdminShowAllProjects = () => {
             media_id: e.target[1].value,
             user_id: e.target[2].value,
             note_timestamp: e.target[3].value,
-        }
+        };
 
-        console.log({whatToSend});
+        console.log({ whatToSend });
     };
 
     useEffect(() => {
-        axios.get("/api/retrieve-info/all")
-        .then(data => {          
-            setAllProjectsInfo(projectsList);
-            
-            if (!userId) {
-                let userIdFromLocalStorage = parseInt(window.localStorage.getItem('userId'));
-                
-                if (userIdFromLocalStorage) {
-                    setUserId(userIdFromLocalStorage);
+        axios.get("/api/media")
+            .then(data => {
+                setAllProjectsInfo(projectsList);
 
-                    setIsLoggedIn(true);
-                } else setIsLoggedIn(false);
-            } else setIsLoggedIn(true);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+                if (!userId) {
+                    let userIdFromLocalStorage = parseInt(window.localStorage.getItem('userId'));
+
+                    if (userIdFromLocalStorage) {
+                        setUserId(userIdFromLocalStorage);
+
+                        setIsLoggedIn(true);
+                    } else setIsLoggedIn(false);
+                } else setIsLoggedIn(true);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }, []);
 
     return (<>
-        {isLoggedIn ? 
+        {isLoggedIn ?
             <section>
                 {/** Search Filters */}
                 <section className="search">
-                    <div style={{border: "2px solid grey", borderRadius: "3px", textAlign: "center"}}>
-                        <h3 style={{border: "2px dashed grey", borderRadius: "3px"}}>All Filters</h3>
+                    <div style={{ border: "2px solid grey", borderRadius: "3px", textAlign: "center" }}>
+                        <h3 style={{ border: "2px dashed grey", borderRadius: "3px" }}>All Filters</h3>
                     </div>
-                
+
                     <div>
                         <h2>Search by...</h2>
                         <form>
@@ -75,7 +75,7 @@ const AdminShowAllProjects = () => {
                                     </select>
                                     <select>
                                         <option value="1999">
-                                        &#xf017; 1999
+                                            &#xf017; 1999
                                         </option>
                                     </select>
                                 </fieldset>
@@ -85,7 +85,7 @@ const AdminShowAllProjects = () => {
                                 </label>
                                 <select>
                                     <option value="meke">
-                                    &#xf007; Meke
+                                        &#xf007; Meke
                                     </option>
                                 </select>
                             </div>
@@ -97,7 +97,7 @@ const AdminShowAllProjects = () => {
                                 </label>
                                 <select>
                                     <option value="ascending">
-                                    &#xf075; Ascending
+                                        &#xf075; Ascending
                                     </option>
                                 </select>
 
@@ -127,12 +127,12 @@ const AdminShowAllProjects = () => {
                     audio.addEventListener("loadeddata", (event) => { if (!audioLength) audioLength = event.path[0].duration; });
                     audio.addEventListener('durationchange', (event) => { if (!audioLength) audioLength = event.path[0].duration; });
 
-                    return <div key={project.key} style={{border: "1px solid grey", borderRadius: "3px"}}>
-                        <i className={`fa fa-play`} style={{cursor: "pointer"}} onClick={event => {
+                    return <div key={project.key} style={{ border: "1px solid grey", borderRadius: "3px" }}>
+                        <i className={`fa fa-play`} style={{ cursor: "pointer" }} onClick={event => {
                             if (audio.paused) {
                                 event.target.setAttribute("class", `fa fa-pause`);
                                 audio.play();
-                            } else  {
+                            } else {
                                 event.target.setAttribute("class", `fa fa-play`);
                                 audio.pause();
                             }
@@ -150,15 +150,15 @@ const AdminShowAllProjects = () => {
                                 event.target.setAttribute("class", `fa fa-plus`);
                             }
                         }}></i>
-                        <form className={`note-${project.key} hiddenComment`} onSubmit={handleNoteSubmit}>                            
+                        <form className={`note-${project.key} hiddenComment`} onSubmit={handleNoteSubmit}>
                             <textarea title="addComment" placeholder={"Note for " + audio.currentTime.toFixed(2) + ":"} />
-                            <input type="hidden" title="mediaId" value={project.mediaId} />                            
-                            <input type="hidden" title="userId" value={project.userId} />                         
+                            <input type="hidden" title="mediaId" value={project.mediaId} />
+                            <input type="hidden" title="userId" value={project.userId} />
                             <input type="hidden" title="timestamp" value={audio.currentTime.toFixed(2)} />
                             <button type="submit">Add Note</button>
                         </form>
 
-                        <img src={project.projectThumb} alt="thumb" style={{width: "25px"}}/>
+                        <img src={project.projectThumb} alt="thumb" style={{ width: "25px" }} />
 
                         <span>
                             <h4>{project.projectName}</h4>
@@ -173,6 +173,6 @@ const AdminShowAllProjects = () => {
             </section> : <Home />
         }
     </>);
-}; 
+};
 
 export default AdminShowAllProjects;
