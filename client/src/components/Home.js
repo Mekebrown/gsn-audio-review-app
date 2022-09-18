@@ -17,14 +17,14 @@ const Home = () => {
         height: undefined,
     });
 
-    const {userId, setUserId} = useContext(UserContext);
+    const { userId, setUserId } = useContext(UserContext);
 
     let cx = classNames.bind(styles);
 
     let loginFields = cx({ displayFlex: !isMobile });
     let unField = cx({ displayInline: !isMobile });
     let pwField = cx({ displayInline: !isMobile });
-    let showAnimation = cx({mobileInvisible: isMobile, sect: true, animation: true});
+    let showAnimation = cx({ mobileInvisible: isMobile, sect: true, animation: true });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,30 +38,30 @@ const Home = () => {
         formData.append("username", inputUN);
         formData.append("password", inputPW);
 
-        await axios.post("/api/home", formData)
-        .then((res) => {
-            if (res.status !== 200) {
-                userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team";
+        await axios.post("/api/login", formData)
+            .then((res) => {
+                if (res.status !== 200) {
+                    userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team";
 
-                // eslint-disable-next-line no-throw-literal
-                throw "Not logged in";
-            } else {
-                return res.data; 
-            }
-        })
-        .then(data => {
-            setUserId(data.user_id);
-            window.localStorage.setItem('userId', data.user_id);
-            userMsg.textContent = "Log in accepted. Loading review section...";
+                    // eslint-disable-next-line no-throw-literal
+                    throw "Not logged in";
+                } else {
+                    return res.data;
+                }
+            })
+            .then(data => {
+                setUserId(data.user_id);
+                window.localStorage.setItem('userId', data.user_id);
+                userMsg.textContent = "Log in accepted. Loading review section...";
 
-            return data.loc;
-        })
-        .then((forwardLocation) => {
-            setTimeout(() => {
-                window.location.href = forwardLocation;
-            }, 3000);
-        })
-        .catch((error) => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
+                return data.loc;
+            })
+            .then((forwardLocation) => {
+                setTimeout(() => {
+                    window.location.href = forwardLocation;
+                }, 3000);
+            })
+            .catch((error) => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
     };
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const Home = () => {
         // userMsg.textContent = "";
 
         // setIsMobile(windowSize.width <= 900);
-        
+
         // function handleResize() {
         //     setWindowSize({
         //       width: window.innerWidth,
@@ -85,11 +85,11 @@ const Home = () => {
     }, []);
 
     return (<>
-        {!userId ? 
+        {!userId ?
             <main className="cont">
                 <section className="sect" aria-labelledby="log-in">
                     <p>
-                        <span className="yellow">Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears. 
+                        <span className="yellow">Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears.
                     </p>
                     <small className="specialColoring">
                         Enter your given password to review your project...
@@ -98,16 +98,16 @@ const Home = () => {
                     <form id="log-in" onSubmit={handleSubmit}>
                         <p title="userMsg" id="userMsg"></p>
                         <div className={loginFields}>
-                            <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
+                            <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
 
-                            {' '} 
+                            {' '}
 
-                            <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px"}} />
+                            <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
                         </div>
-                        <br /> 
+                        <br />
                         <button title="submit" type="submit">
                             <FontAwesomeIcon icon={faPaperPlane} />
-                             {' '} 
+                            {' '}
                             Login
                         </button>
                     </form>
