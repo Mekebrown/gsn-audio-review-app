@@ -18,7 +18,7 @@ import Home from "../Home";
  * 
  * @returns {Node} UserSingleProject
  */
-const UserSingleProject = ({mediaId}) => {
+const UserSingleProject = ({ mediaId }) => {
     const [testAudio, setTestAudio] = useState(null);
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
@@ -54,9 +54,9 @@ const UserSingleProject = ({mediaId}) => {
             setCurrentTimestamp("0.00");
         } else {
             if (playerRef.currentTime === 0 || playerRef.paused) {
-                playerRef.play(); 
+                playerRef.play();
                 setPlayPauseBtnText("Pause");
-            } else  {
+            } else {
                 playerRef.pause();
                 setCurrentTimestamp(playerRef.currentTime.toFixed(2));
                 setPlayPauseBtnText("Play");
@@ -67,8 +67,8 @@ const UserSingleProject = ({mediaId}) => {
     const handleNoteSubmit = (event) => {
         event.preventDefault();
 
-        if (activeNoteInTextArea !== undefined 
-            && activeNoteInTextArea !== 0 
+        if (activeNoteInTextArea !== undefined
+            && activeNoteInTextArea !== 0
             && activeNoteInTextArea !== null
             && activeNoteInTextArea !== "") {
             const whatToSend = {
@@ -78,14 +78,14 @@ const UserSingleProject = ({mediaId}) => {
                 media_id: mediaId,
                 note_id: noteId,
                 user_id: 1, // eventually retrieved somewhere else
-            }
+            };
 
-            axios.post("/api/usingle", whatToSend)
-            .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
-            .catch(error => {
-                thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try again.";
-                console.log(JSON.stringify(error))
-            });
+            axios.post("/api/new/note", whatToSend)
+                .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
+                .catch(error => {
+                    thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try again.";
+                    console.log(JSON.stringify(error));
+                });
 
             setActiveNoteInTextArea("");
 
@@ -95,11 +95,11 @@ const UserSingleProject = ({mediaId}) => {
         }
     };
 
-    const {userId} = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     useEffect(() => {
         let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
-        
+
         if (!userIdFromLocalStorage && window.location.href.split("uid=")[1]) {
             window.localStorage.setItem('userId', window.location.href.split("uid=")[1]);
             setIsLoggedIn(true);
@@ -116,31 +116,31 @@ const UserSingleProject = ({mediaId}) => {
         //     }
         // });
 
-        axios.get(`/api/usingle/${mediaId}`)
-        .then((res) => {
-            if (res.status === 200) {
-                const {
-                    media_desc,
-                    note_id,
-                    file_name,
-                    file_directory,
-                    project_name,
-                    totalNotesFromServer
-                } = res.data;
+        axios.get(`/api/media/${mediaId}`)
+            .then((res) => {
+                if (res.status === 200) {
+                    const {
+                        media_desc,
+                        note_id,
+                        file_name,
+                        file_directory,
+                        project_name,
+                        totalNotesFromServer
+                    } = res.data;
 
-                setMediaDesc(media_desc);
-                setNoteId(note_id);
-                // setTestAudio(file_directory + file_name);
-                setTestAudio("https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.mp3");
-                setProjectName(project_name);
-            }
-        })
-        .catch(error => console.log(error));
+                    setMediaDesc(media_desc);
+                    setNoteId(note_id);
+                    // setTestAudio(file_directory + file_name);
+                    setTestAudio("https://ia804601.us.archive.org/22/items/hpr0283/hpr0283.mp3");
+                    setProjectName(project_name);
+                }
+            })
+            .catch(error => console.log(error));
 
         /* eslint-disable-next-line */
     }, [currentTimestamp]);
 
-   return (<>
+    return (<>
         {isLoggedIn ? <section>
             <audio controls preload="auto" ref={player}>
                 <source key="wearenotokay" src={testAudio} type="audio/mpeg" />
@@ -164,18 +164,18 @@ const UserSingleProject = ({mediaId}) => {
                     <hr />
 
                     <form className="hereThere" onSubmit={handleNoteSubmit}>
-                        <textarea className="notePadTextarea" 
-                            rows="10" 
-                            cols="50" 
-                            title="Note pad text area" 
+                        <textarea className="notePadTextarea"
+                            rows="10"
+                            cols="50"
+                            title="Note pad text area"
                             placeholder={"Note for " + currentTimestamp + ":"}
                             name="note"
                             maxLength="500"
                             required
                             value={activeNoteInTextArea}
-                            onChange={(event)=>setActiveNoteInTextArea(event.target.value)}
-                            onFocus={()=>setCurrentTimestamp(player.current.currentTime.toFixed(2))}
-                            >
+                            onChange={(event) => setActiveNoteInTextArea(event.target.value)}
+                            onFocus={() => setCurrentTimestamp(player.current.currentTime.toFixed(2))}
+                        >
                         </textarea>
 
                         <br />
@@ -188,6 +188,6 @@ const UserSingleProject = ({mediaId}) => {
             </section>
         </section> : <Home />}
     </>);
-}; 
+};
 
 export default UserSingleProject;
