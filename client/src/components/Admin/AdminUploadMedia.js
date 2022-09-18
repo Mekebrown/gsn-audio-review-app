@@ -1,6 +1,6 @@
 import { useRef, useState, useContext } from "react";
 import "./AdminUploadMedia.css";
-import Axios from "axios";
+import axios from "axios";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
 
@@ -15,7 +15,7 @@ const AdminUploadMedia = () => {
     const [uploadMsg, setUploadMsg] = useState("");
     const mediaForm = useRef(null);
 
-    const {userId} = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     const saveFile = (e) => {
         setFile(e.target.files[0]);
@@ -29,7 +29,7 @@ const AdminUploadMedia = () => {
 
         if (projName
             && projName !== undefined && fileName !== undefined
-            && projName !== 0 && fileName !== 0 
+            && projName !== 0 && fileName !== 0
             && projName !== null && fileName !== null
             && projName !== "" && fileName !== "") {
             const formItems = e.target.elements;
@@ -43,19 +43,19 @@ const AdminUploadMedia = () => {
             formData.append("projectName", projName);
 
             try {
-                await Axios.post("/api/media", formData)
-                .then((initialInfo) => {
-                    console.log(initialInfo);
-                    setUploadMsg(`Media file ${fileName} uploaded!`);
-                });
+                await axios.post("/api/upload", formData)
+                    .then((initialInfo) => {
+                        console.log(initialInfo);
+                        setUploadMsg(`Media file ${fileName} uploaded!`);
+                    });
             } catch (ex) {
                 console.log(ex);
             }
-        } else setUploadMsg(`Media file not uploaded.`)
+        } else setUploadMsg(`Media file not uploaded.`);
     };
 
     return (<>
-        {userId ? 
+        {userId ?
             <section className="sect" aria-labelledby="media-upload-form">
                 <form id="media-upload-form" ref={mediaForm} onSubmit={handleMediaUploadSubmit} className="mediaContainer">
                     {uploadMsg}
@@ -86,9 +86,9 @@ const AdminUploadMedia = () => {
 
                     <button type="submit" className="signupbtn">UPLOAD</button>
 
-                    <button type="button" className="cancelbtn" onClick={()=>mediaForm.current.reset()}>CANCEL</button>
-                </form> 
-            </section>: <Home />
+                    <button type="button" className="cancelbtn" onClick={() => mediaForm.current.reset()}>CANCEL</button>
+                </form>
+            </section> : <Home />
         }
     </>);
 };
