@@ -1,23 +1,21 @@
-// https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3
-const testAudio_testing = "../tools/wearenotokay.mp3";
+// https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore (mp3 and ogg)
 
 const { REACT_APP_FULL_TITLE } = process.env;
 
 const indexPath = "/";
 
-const adminPath = "/admin";
-const adminIndvlViewinglePath = "/admin/retrieve-info/media/media_id";
-const adminIndvlNote = "/admin/retrieve-info/notes/:note_id";
-const uploadMediaPath = "/admin/add-media";
-const adminSendPW = "/admin/send-pw";
-const adminShowAllUsers = "/admin/users";
-const adminShowSingleUser = "/admin/retrieve-info/user";
-const adminShowAllNotes = "/admin/retrieve-info/notes";
+const adminPath = "/admin"; // Temporary, for testing
+const adminUploadPath = "/upload";
+const adminSendDashPW = "/send-pw";
+const adminInfoMediaPath = "/info/media";
+const adminInfoNotesPath = "/info/notes";
+const adminInfoUsersPath = "/info/users";
 
-const userPath = "/review";
-const userSingleMediaPath = "/review/:media_id";
+const reviewerPath = "/review";
 
 const mediaId = 1;
+const reviewerId = 1;
+const noteId = 1;
 
 const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, updatedAt) => {
     this.noteId = noteId ? noteId : null;
@@ -44,18 +42,16 @@ const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, u
 export default REACT_APP_FULL_TITLE;
 
 export {
+    adminInfoMediaPath,
+    adminInfoNotesPath,
+    adminInfoUsersPath,
+    adminPath, // Temporary, for testing
+    adminSendDashPW,
+    adminUploadPath,
     indexPath,
-    adminPath,
-    adminIndvlViewinglePath,
-    adminIndvlNote,
-    uploadMediaPath,
-    adminSendPW,
-    adminShowAllUsers,
-    adminShowSingleUser,
-    adminShowAllNotes,
-    userPath,
-    userSingleMediaPath,
     mediaId,
-    testAudio_testing,
-    noteInfo
+    noteId,
+    noteInfo,
+    reviewerId,
+    reviewerPath
 };
