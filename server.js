@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "client", "public")));
-app.use(express.static("./files/logs"));
+app.use(express.static(path.join(__dirname, "files", "logs")));
 app.use(cors(require("./server/tools/cors_options")));
 
 const client = new Client({
@@ -36,7 +36,6 @@ client.connect()
   .then(() => console.log("Connection has been established successfully."))
   .catch((err) => {
     logger({
-      location: "./files/logs/",
       desc: "pg_client_connect",
       req: "client variable: " + JSON.stringify(client) +
         " -|- process.env.PGUSER: " + process.env.PGUSER +
@@ -55,7 +54,6 @@ const getQueryValues = (queryStatement, params = []) => {
     client.query(queryStatement, params, (err, rows) => {
       if (err || rows === undefined) {
         logger({
-          location: "./files/logs/",
           desc: "getQueryValues",
           req: "Query statement: " + queryStatement + " -|- Params: " + params,
           res: "Rows: " + JSON.stringify(rows),
@@ -75,7 +73,7 @@ const getQueryValues = (queryStatement, params = []) => {
 };
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
+  app.use(express.static(path.join(__dirname, "client", "build")));
 }
 
 /** 
@@ -116,7 +114,6 @@ app.post("/api/login", (req, res) => {
   //     .catch((err) => console.log(err));
   // } else {
   //   logger({
-  //     location: "./files/logs/",
   //     desc: "post_homepage_login_check",
   //     req: "Body: " + JSON.stringify(req.body),
   //     res: "N/A",
@@ -155,7 +152,6 @@ app.get("/api/:type", function (req, res) {
   //   })
   //   .catch((err) => {
   //     logger({
-  //       location: "./files/logs/",
   //       desc: "get_retrieve_info_media_id",
   //       req: "",
   //       res: "N/A",
@@ -196,7 +192,6 @@ app.get("/api/:type/:id", (req, res) => {
   //   })
   //   .catch((err) => {
   //     logger({
-  //       location: "./files/logs/",
   //       desc: "get_usingle_mediaQuery",
   //       req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement,
   //       res: "N/A",
@@ -234,8 +229,7 @@ app.get("/api/retrieve-info/media/:media_id", function (req, res) {
   // })
   // .catch((err) => {
   //   logger({
-  //     location: "./files/logs/",
-  // desc: "get_retrieve_info_media_id", 
+  //      desc: "get_retrieve_info_media_id", 
   //     req: "", 
   //     res: "N/A",
   //     headers: "N/A",
@@ -291,7 +285,6 @@ app.post("/api/new/:type", (req, res) => {
   //     })
   //     .catch(err => {
   //       logger({
-  //         location: "./files/logs/",
   //         desc: "post_usingle_new_note",
   //         req: "Body: " + JSON.stringify(req.body),
   //         res: "New note not saved",
@@ -323,7 +316,6 @@ app.post("/api/new/:type", (req, res) => {
   //     })
   //     .catch((err) => {
   //       logger({
-  //         location: "./files/logs/",
   //         desc: "post_usingle_updated_note",
   //         req: req.query,
   //         res: "Updated note not saved",
@@ -373,7 +365,6 @@ app.post("/api/upload", (req, res) => {
   //     })
   //     .catch((err) => {
   //       logger({
-  //         location: "./files/logs/",
   //         desc: "post_media",
   //         req: req.query,
   //         res: "Promise rejection error",
@@ -406,7 +397,7 @@ app.get("/*", function (req, res) {
 
 const logger = (details) => {
   let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
-  let file_name = `${details.location}${details.desc}${current}.log`;
+  let file_name = `./files/logs/${details.desc}${current}.log`;
 
   let log_data = {
     message: details.message,
