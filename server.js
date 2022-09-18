@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const cors = require('cors');
-const path = require('path');
-const bp = require('body-parser');
+const cors = require("cors");
+const path = require("path");
+const bp = require("body-parser");
 const fileupload = require("express-fileupload");
 const {
   media_upload_query_statement,
@@ -12,19 +12,17 @@ const {
   notes_query_statement,
   login_query
 } = require("./server/database/query_strings.js");
-const { Client } = require('pg');
+const { Client } = require("pg");
 const fs = require("fs");
-require('dotenv').config();
+require("dotenv").config();
 
 app.use(express.json());
 app.use(fileupload());
 app.use(express.urlencoded({ extended: true }));
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'client', 'public')));
-app.use(express.static('./files'));
-app.use(express.static('./files/logs'));
-app.use(express.static('client/build'));
+app.use(express.static(path.join(__dirname, "client", "public")));
+app.use(express.static("./files/logs"));
 app.use(cors(require("./server/tools/cors_options")));
 
 const client = new Client({
@@ -35,7 +33,7 @@ const client = new Client({
 });
 
 client.connect()
-  .then(() => console.log('Connection has been established successfully.'))
+  .then(() => console.log("Connection has been established successfully."))
   .catch((err) => {
     logger({
       location: "./files/logs/",
@@ -49,7 +47,7 @@ client.connect()
       message: err
     });
 
-    console.error('Unable to connect to the database:', err);
+    console.error("Unable to connect to the database:", err);
   });
 
 const getQueryValues = (queryStatement, params = []) => {
@@ -75,6 +73,10 @@ const getQueryValues = (queryStatement, params = []) => {
   }
   );
 };
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 /** 
  * Get login form data. Respond with user id AND all media info.
@@ -413,7 +415,7 @@ const logger = (details) => {
     headers: details.headers ? details.headers : "N/A",
   };
 
-  fs.writeFile(file_name, JSON.stringify(log_data, null, '\t') + "\n===============\n", "utf8", (error, data) => {
+  fs.writeFile(file_name, JSON.stringify(log_data, null, "\t") + "\n===============\n", "utf8", (error, data) => {
     console.log("Write complete"); console.log(error); console.log(data);
   });
 };
