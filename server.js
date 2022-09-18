@@ -76,6 +76,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
 }
 
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+});
+
 /** 
  * Get login form data. Respond with user id AND all media info.
  * 
@@ -388,6 +392,10 @@ app.post("/api/upload", (req, res) => {
  */
 app.get("/api/send-pw", (req, res) => {
   res.status(200).send("Password generated");
+});
+
+app.delete('/api/:type', (req, res) => {
+  res.send('Got a DELETE request');
 });
 
 // Fallback route. Respond with default index.html page
