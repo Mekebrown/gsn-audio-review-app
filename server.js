@@ -403,6 +403,21 @@ app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
+// General error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+
+  logger({
+    desc: "error",
+    req: err.stack,
+    res: "n/a",
+    headers: "n/a",
+    message: JSON.stringify(err)
+  });
+
+  res.status(500).send('Something broke!').redirect('/login');;
+});
+
 const logger = (details) => {
   let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
   let file_name = `./files/logs/${details.desc}${current}.log`;
