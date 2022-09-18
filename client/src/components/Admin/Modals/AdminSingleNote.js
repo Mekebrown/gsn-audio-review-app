@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
-import { UserContext } from "../../UserLogin";
+import { UserContext } from "../../../UserLogin";
 import axios from "axios";
-import Home from "../Home";
+import Home from "../../Home";
 
 /**
  * This page will show every note pertaining to every project that exists.
@@ -9,14 +9,14 @@ import Home from "../Home";
  * @returns {Node} AdminSingleNote
  */
 const AdminSingleNote = () => {
-    const {userId} = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     useEffect(() => {
-        axios.get("/api/retrieve-info/all")
-        .then(data => console.log(data))
-        .catch(error => console.log(error));
+        axios.get("/api/notes/1234")
+            .then(data => console.log(data))
+            .catch(error => console.log(error));
     });
-    
+
     return (<>
         {userId ?
             <section>
@@ -28,12 +28,12 @@ const AdminSingleNote = () => {
 
                 Note timestamp
 
-                created on 
+                created on
 
-                Updated? No/Yes, on datetime 
+                Updated? No/Yes, on datetime
             </section> : <Home />
         }
     </>);
-}; 
+};
 
 export default AdminSingleNote;
