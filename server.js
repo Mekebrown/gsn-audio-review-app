@@ -4,6 +4,8 @@ const cors = require("cors");
 const path = require("path");
 const bp = require("body-parser");
 const fileupload = require("express-fileupload");
+const { body, validationResult } = require("express-validator");
+
 const {
   media_upload_query_statement,
   media_query_statement,
@@ -88,49 +90,79 @@ app.get("/", function (req, res) {
  * 
  * Component making Axios call: Home
  */
-app.post("/api/login", (req, res) => {
-  res.status(200).send(`Log in received: ${req.body.username} and ${req.body.password}`);
-  // const { username, password } = req.body;
+app.post("/api/login",
+  body('username').trim().escape().not().isEmpty()
+    .withMessage('Username cannot be empty')
+    .isLength({ min: 5 })
+    .withMessage('Username must be five or more characters long')
+    .isLength({ max: 25 })
+    .withMessage('Username must be up to 25 characters long'),
+  body('password').trim().escape().not().isEmpty()
+    .withMessage('Password cannot be empty')
+    .matches(/[LTa-z-]/g)
+    .withMessage('Password not correct'),
+  (req, res) => {
+    const errors = validationResult(req);
 
-  // const isValid = username !== undefined && password !== undefined
-  //   && username !== 0 && password !== 0
-  //   && username !== null && password !== null
-  //   && username !== "" && password !== ""
-  //   && username.match(/[A-Za-z0-9 ,.!-]/g) && !password.match(/[^LTa-z-]/g)
-  //   && password.length === 25;
+    if (!errors.isEmpty()) {
+      logger({
+        desc: "validate_login",
+        req: "Body: " + JSON.stringify(req.body),
+        res: "N/A - Sent a 400",
+        headers: req.rawHeaders[9] + " -|- " +
+          req.rawHeaders[13] + " -|- " +
+          req.rawHeaders[21] + " -|- " +
+          req.rawHeaders[22] + "-" +
+          req.rawHeaders[23],
+        message: JSON.stringify(errors)
+      });
 
-  // if (!isValid) res.status(403).send("Information not accepted");
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-  // const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ?
-  //   "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ?
-  //     "reviewer" : null;
+    res.status(200).send(`Log in received: ${req.body.username} and ${req.body.password}`);
+    // const { username, password } = req.body;
 
-  // if (visitor_role) {
-  //   const reroute_loc = visitor_role === "reviewer" ?
-  //     "/review" : "/admin";
+    // const isValid = username !== undefined && password !== undefined
+    //   && username !== 0 && password !== 0
+    //   && username !== null && password !== null
+    //   && username !== "" && password !== ""
+    //   && username.match(/[A-Za-z0-9 ,.!-]/g) && !password.match(/[^LTa-z-]/g)
+    //   && password.length === 25;
 
-  //   const country_loc = req.rawHeaders[9];
-  //   const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
+    // if (!isValid) res.status(403).send("Information not accepted");
 
-  //   const current_date = new Date();
+    // const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ?
+    //   "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ?
+    //     "reviewer" : null;
 
-  //   const login_values = [username, country_loc, device_info, visitor_role, current_date];
+    // if (visitor_role) {
+    //   const reroute_loc = visitor_role === "reviewer" ?
+    //     "/review" : "/admin";
 
-  //   getQueryValues(login_query, login_values)
-  //     .then((data) => res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id }))
-  //     .catch((err) => console.log(err));
-  // } else {
-  //   logger({
-  //     desc: "post_homepage_login_check",
-  //     req: "Body: " + JSON.stringify(req.body),
-  //     res: "N/A",
-  //     headers: country_loc + " " + device_info,
-  //     message: "N/A"
-  //   });
+    //   const country_loc = req.rawHeaders[9];
+    //   const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
 
-  //   res.status(403).send("Information not accepted");
-  // }
-});
+    //   const current_date = new Date();
+
+    //   const login_values = [username, country_loc, device_info, visitor_role, current_date];
+
+    //   getQueryValues(login_query, login_values)
+    //     .then((data) => res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id }))
+    //     .catch((err) => console.log(err));
+    // } else {
+    //   logger({
+    //     desc: "post_homepage_login_check",
+    //     req: "Body: " + JSON.stringify(req.body),
+    //     res: "N/A",
+    //     headers: country_loc + " " + device_info,
+    //     message: "N/A"
+    //   });
+
+    //   res.status(403).send("Information not accepted");
+    // }
+  }
+);
 
 /**
  * Get type of info. Respond with all data for the type (notes, media, or users)
@@ -250,143 +282,189 @@ app.get("/api/retrieve-info/media/:media_id", function (req, res) {
 });
 
 /**
- * Get a type to create (note or user). Respond with a status code.
+ * Create a note. Respond with a status code.
  * 
- * Component making Axios call: UserSingleProject (type: note)
+ * Component making Axios call: UserSingleProject
  */
-app.post("/api/new/:type", (req, res) => {
-  res.status(200).send(`${req.params.type} created with info ${req.body.note_body}`);
-  // const {
-  //   is_note_updated,
-  //   note_id,
-  //   note_body,
-  //   note_timestamp,
-  //   media_id,
-  //   user_id,
-  // } = req.body;
+app.post("/api/new-note",
+  body('is_note_updated').trim().escape().not().isEmpty().toBoolean(),
+  body('note_timestamp').trim().escape().not().isEmpty(),
+  body('note_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
+  body('media_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
+  body('user_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
+  body('note_body').trim().escape().not().isEmpty()
+    .withMessage('Note cannot be empty')
+    .isLength({ min: 5 })
+    .withMessage('Note has to say something')
+    .isLength({ max: 500 })
+    .withMessage('Note contents too large. Consider writing an email.'),
+  async (req, res) => {
+    const errors = validationResult(req);
 
-  // const isValid = note_body !== undefined
-  //   && note_body !== 0
-  //   && note_body !== null
-  //   && note_body !== ""
-  //   && !note_body.match(/[^A-Za-z0-9 ,:;().!-]/g);
+    if (!errors.isEmpty()) {
+      logger({
+        desc: "validate_new_" + req.params.type,
+        req: "Body: " + JSON.stringify(req.body),
+        res: "N/A - Sent a 400",
+        headers: req.rawHeaders[9] + " -|- " +
+          req.rawHeaders[13] + " -|- " +
+          req.rawHeaders[21] + " -|- " +
+          req.rawHeaders[22] + "-" +
+          req.rawHeaders[23],
+        message: JSON.stringify(errors)
+      });
 
-  // if (!isValid) res.status(500).send({ message: "Note not saved" });
+      return res.status(400).json({ errors: errors.array() });
+    }
+    res.status(200).send(`${req.params.type} created with info ${req.body.note_body}`);
+    // const {
+    //   is_note_updated,
+    //   note_id,
+    //   note_body,
+    //   note_timestamp,
+    //   media_id,
+    //   user_id,
+    // } = req.body;
 
-  // const converted_datetime = new Date();
+    // const converted_datetime = new Date();
 
-  // if (!is_note_updated) {
-  //   const insert_values = [
-  //     user_id,
-  //     media_id,
-  //     note_body,
-  //     note_timestamp,
-  //     converted_datetime,
-  //     converted_datetime,
-  //     converted_datetime
-  //   ];
+    // if (!is_note_updated) {
+    //   const insert_values = [
+    //     user_id,
+    //     media_id,
+    //     note_body,
+    //     note_timestamp,
+    //     converted_datetime,
+    //     converted_datetime,
+    //     converted_datetime
+    //   ];
 
-  //   getQueryValues(insert_note_query, insert_values)
-  //     .then(data => {
-  //       res.status(200).send({ message: "New note saved", data: { id: data.rows[0].id } });
-  //     })
-  //     .catch(err => {
-  //       logger({
-  //         desc: "post_usingle_new_note",
-  //         req: "Body: " + JSON.stringify(req.body),
-  //         res: "New note not saved",
-  //         headers: req.rawHeaders[9] + " -|- " +
-  //           req.rawHeaders[13] + " -|- " +
-  //           req.rawHeaders[21] + " -|- " +
-  //           req.rawHeaders[22] + "-" +
-  //           req.rawHeaders[23],
-  //         message: JSON.stringify(err)
-  //       });
+    //   getQueryValues(insert_note_query, insert_values)
+    //     .then(data => {
+    //       res.status(200).send({ message: "New note saved", data: { id: data.rows[0].id } });
+    //     })
+    //     .catch(err => {
+    //       logger({
+    //         desc: "post_usingle_new_note",
+    //         req: "Body: " + JSON.stringify(req.body),
+    //         res: "New note not saved",
+    //         headers: req.rawHeaders[9] + " -|- " +
+    //           req.rawHeaders[13] + " -|- " +
+    //           req.rawHeaders[21] + " -|- " +
+    //           req.rawHeaders[22] + "-" +
+    //           req.rawHeaders[23],
+    //         message: JSON.stringify(err)
+    //       });
 
-  //       console.log(err);
+    //       console.log(err);
 
-  //       res.status(500).send({ message: "New note not saved", code: 200 });
-  //     });
-  // } else {
-  //   const update_values = [
-  //     note_body,
-  //     note_timestamp,
-  //     converted_datetime,
-  //     converted_datetime,
-  //     note_id,
-  //     media_id
-  //   ];
+    //       res.status(500).send({ message: "New note not saved", code: 200 });
+    //     });
+    // } else {
+    //   const update_values = [
+    //     note_body,
+    //     note_timestamp,
+    //     converted_datetime,
+    //     converted_datetime,
+    //     note_id,
+    //     media_id
+    //   ];
 
-  //   getQueryValues(update_note_query, update_values)
-  //     .then(() => {
-  //       res.status(200).send({ message: "Updated note saved" });
-  //     })
-  //     .catch((err) => {
-  //       logger({
-  //         desc: "post_usingle_updated_note",
-  //         req: req.query,
-  //         res: "Updated note not saved",
-  //         headers: req.rawHeaders[9] + " -|- " +
-  //           req.rawHeaders[13] + " -|- " +
-  //           req.rawHeaders[21] + " -|- " +
-  //           req.rawHeaders[22] + "-" +
-  //           req.rawHeaders[23],
-  //         message: err
-  //       });
+    //   getQueryValues(update_note_query, update_values)
+    //     .then(() => {
+    //       res.status(200).send({ message: "Updated note saved" });
+    //     })
+    //     .catch((err) => {
+    //       logger({
+    //         desc: "post_usingle_updated_note",
+    //         req: req.query,
+    //         res: "Updated note not saved",
+    //         headers: req.rawHeaders[9] + " -|- " +
+    //           req.rawHeaders[13] + " -|- " +
+    //           req.rawHeaders[21] + " -|- " +
+    //           req.rawHeaders[22] + "-" +
+    //           req.rawHeaders[23],
+    //         message: err
+    //       });
 
-  //       res.status(500).send({ message: "Updated note not saved", code: 200 });
-  //     });
-  // }
-});
+    //       res.status(500).send({ message: "Updated note not saved", code: 200 });
+    //     });
+    // }
+  }
+);
 
 /**
  * Get audio upload form data. Respond with status object
  * 
  * Component making Axios call: AdminUploadMedia
  */
-app.post("/api/upload", (req, res) => {
-  res.status(200).send(`Upload created`);
-  // const { fileName, description, mediaType, projectName } = req.body;
-  // const { mediaFileToUpload } = req.files;
+app.post("/api/upload",
+  body('fileName').trim().escape().not().isEmpty(),
+  body('description').trim().escape().not().isEmpty(),
+  body('mediaType').trim().escape().not().isEmpty(),
+  body('projectName').trim().escape().not().isEmpty(),
+  body('imageName').trim().escape().not().isEmpty(),
+  (req, res) => {
+    const errors = validationResult(req);
 
-  // const isValid = mediaFileToUpload !== undefined && projectName !== undefined
-  //   && mediaFileToUpload !== 0 && projectName !== 0
-  //   && mediaFileToUpload !== null && projectName !== null
-  //   && mediaFileToUpload !== "" && projectName !== "";
+    if (!errors.isEmpty()) {
+      logger({
+        desc: "validate_upload",
+        req: "Body: " + JSON.stringify(req.body),
+        res: "N/A - Sent a 400",
+        headers: req.rawHeaders[9] + " -|- " +
+          req.rawHeaders[13] + " -|- " +
+          req.rawHeaders[21] + " -|- " +
+          req.rawHeaders[22] + "-" +
+          req.rawHeaders[23],
+        message: JSON.stringify(errors)
+      });
 
-  // if (!isValid) res.status(500).send({ message: "File upload failed" });
+      return res.status(400).json({ errors: errors.array() });
+    }
+    res.status(200).send(`Upload created`);
+    // const { fileName, description, imageName, mediaType, projectName } = req.body;
+    // const { mediaFileToUpload, imageUpload } = req.files; // TODO still have to verify these types
 
-  // const file_directory = __dirname + "/files/";
-  // const converted_datetime = new Date();
+    // const isValid = mediaFileToUpload !== undefined && imageUpload !== undefined
+    //   && mediaFileToUpload !== 0 && imageUpload !== 0
+    //   && mediaFileToUpload !== null && imageUpload !== null
+    //   && mediaFileToUpload !== "" && imageUpload !== "";
 
-  // mediaFileToUpload.mv(`${file_directory}${fileName}`, (err) => {
-  //   if (err) {
-  //     res.status(500).send({ message: "File upload failed", code: 200 });
-  //   }
+    // if (!isValid) res.status(500).send({ message: "File upload failed" });
 
-  //   const media_values = [description, fileName, mediaType, projectName, converted_datetime, file_directory, converted_datetime, converted_datetime];
+    // const file_directory = __dirname + "/files/";
+    // const converted_datetime = new Date();
 
-  //   getQueryValues(media_upload_query_statement, media_values)
-  //     .then(() => {
-  //       res.status(200).send({ message: "File Uploaded" });
-  //     })
-  //     .catch((err) => {
-  //       logger({
-  //         desc: "post_media",
-  //         req: req.query,
-  //         res: "Promise rejection error",
-  //         headers: req.rawHeaders[9] + " -|- " +
-  //           req.rawHeaders[13] + " -|- " +
-  //           req.rawHeaders[21] + " -|- " +
-  //           req.rawHeaders[22] + "-" +
-  //           req.rawHeaders[23],
-  //         message: err
-  //       });
+    // mediaFileToUpload.mv(`${file_directory}${fileName}`, (err) => {
+    //   if (err) {
+    //     res.status(500).send({ message: "File upload failed", code: 200 });
+    //   }
 
-  //       console.error("Promise rejection error: " + err);
-  //     });
-  // });
-});
+    //   const media_values = [description, fileName, mediaType, projectName, converted_datetime, file_directory, converted_datetime, converted_datetime];
+
+    //   getQueryValues(media_upload_query_statement, media_values)
+    //     .then(() => {
+    //       res.status(200).send({ message: "File Uploaded" });
+    //     })
+    //     .catch((err) => {
+    //       logger({
+    //         desc: "post_media",
+    //         req: req.query,
+    //         res: "Promise rejection error",
+    //         headers: req.rawHeaders[9] + " -|- " +
+    //           req.rawHeaders[13] + " -|- " +
+    //           req.rawHeaders[21] + " -|- " +
+    //           req.rawHeaders[22] + "-" +
+    //           req.rawHeaders[23],
+    //         message: err
+    //       });
+
+    //       console.error("Promise rejection error: " + err);
+    //     });
+    // });
+  }
+);
 
 /**
  * Respond with pre-defined password
