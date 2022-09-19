@@ -59,6 +59,11 @@ const App = () => {
     }
   }, []);
 
+  if (document.getElementById("splasher")) {
+    console.log("yes");
+    document.body.removeChild(document.getElementById("splasher"));
+  }
+
   return (
     <Router>
       <header>
