@@ -14,6 +14,7 @@ const {
 } = require("./server/database/query_strings.js");
 const { Client } = require("pg");
 const fs = require("fs");
+const { setMediaStorage } = require("./server/tools/server_helper_functions");
 require("dotenv").config();
 
 app.use(express.json());

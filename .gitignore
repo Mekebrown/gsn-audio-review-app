@@ -9,7 +9,6 @@ gsndb.dump
 
 # environment variables
 .env
-client/~.env
 
 # misc
 files
