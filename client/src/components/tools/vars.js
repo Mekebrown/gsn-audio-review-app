@@ -79,6 +79,8 @@ export {
     mediaId,
     noteId,
     noteInfo,
+    returnFileSize,
     reviewerId,
-    reviewerPath
+    reviewerPath,
+    validFileType
 };
