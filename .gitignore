@@ -3,16 +3,14 @@
 client/node_modules
 node_modules
 
-# database
-server/database 
-gsndb.dump
-
 # environment variables
 .env
 
-# misc
+# local docs
 files
 etc
+
+# misc
 .DS_Store
 .vscode/
 .aLayouts
