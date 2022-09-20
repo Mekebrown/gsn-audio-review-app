@@ -12,9 +12,9 @@ import { validFileType, returnFileSize } from "../tools/vars";
  */
 const AdminUploadMedia = () => {
     const [projectFiles, setProjectFiles] = useState({
-        image: null,
+        imageUpload: null,
         imageName: null,
-        mediaFile: null,
+        mediaFileToUpload: null,
         mediaFileName: null,
         projectName: null,
         description: null,
@@ -35,11 +35,11 @@ const AdminUploadMedia = () => {
     };
 
     const saveMediaFile = (e) => {
-        // Have to check file size: e.target.files[0].size <- in bytes
+        // TODO: Have to check file size with returnFileSize(e.target.files[0].size) <- in bytes
         setProjectFiles(prev => {
             return {
                 ...prev,
-                mediaFile: e.target.files[0],
+                mediaFileToUpload: e.target.files[0],
                 mediaFileName: e.target.files[0].name
             };
         });
@@ -48,7 +48,6 @@ const AdminUploadMedia = () => {
     const saveImage = (e) => {
         setUploadMsg("");
 
-        console.log(projectFiles.imageName);
         const preview = document.querySelector(".preview");
 
         while (preview.childNodes[0].nodeName === "IMG") { preview.removeChild(preview.firstChild); }
@@ -65,12 +64,10 @@ const AdminUploadMedia = () => {
 
             preview.prepend(img);
 
-            console.log(returnFileSize(e.target.files[0].size));
-
             setProjectFiles(prev => {
                 return {
                     ...prev,
-                    image: e.target.files[0],
+                    imageUpload: e.target.files[0],
                     imageName: e.target.files[0].name
                 };
             });
@@ -83,19 +80,16 @@ const AdminUploadMedia = () => {
         const formData = new FormData();
 
         formData.append("description", projectFiles.description);
-        formData.append("mediaFileToUpload", projectFiles.file);
-        formData.append("fileName", projectFiles.fileName);
+        formData.append("mediaFileToUpload", projectFiles.mediaFileToUpload);
+        formData.append("mediaFileName", projectFiles.mediaFileName);
         formData.append("mediaType", projectFiles.mediaType);
         formData.append("projectName", projectFiles.projectName);
-        formData.append("image", projectFiles.image);
+        formData.append("imageUpload", projectFiles.imageUpload);
         formData.append("imageName", projectFiles.imageName);
 
         try {
             await axios.post("/api/upload", formData)
-                .then((initialInfo) => {
-                    console.log(initialInfo);
-                    setUploadMsg(`Media file ${fileName} uploaded!`);
-                });
+                .then(() => setUploadMsg(`Media file ${projectFiles.mediaFileName} uploaded!`));
         } catch (ex) {
             console.log(ex);
         }
@@ -138,7 +132,7 @@ const AdminUploadMedia = () => {
                     {/* BUTTONS */}
                     <button type="submit" className="public">Public</button> {' '} <button type="submit" className="private">Private</button>
 
-                    <button type="submit" className="signupbtn" disabled={!projectFiles.image && !projectFiles.imageName && !projectFiles.file && !projectFiles.fileName && !projectFiles.projectName && !projectFiles.description && !projectFiles.mediaType}>UPLOAD</button>
+                    <button type="submit" className="signupbtn" disabled={!projectFiles.imageUpload && !projectFiles.imageName && !projectFiles.mediaFileToUpload && !projectFiles.mediaFileName && !projectFiles.projectName && !projectFiles.description && !projectFiles.mediaType}>UPLOAD</button>
 
                     <button type="button" className="cancelbtn" onClick={() => mediaForm.current.reset()}>CANCEL</button>
                 </form>
@@ -148,4 +142,3 @@ const AdminUploadMedia = () => {
 };
 
 export default AdminUploadMedia;
-
