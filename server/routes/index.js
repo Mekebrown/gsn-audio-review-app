@@ -1,4 +1,40 @@
 const router = require('express').Router();
+const passport = require('passport');
+const bcrypt = require('bcrypt');
+const { body, validationResult } = require("express-validator");
+const { client } = require("../database/db_details");
+
+const {
+    media_upload_query_statement,
+    media_query_statement,
+    insert_note_query,
+    update_note_query,
+    notes_query_statement,
+    login_query,
+    set_pw_query
+} = require("../database/query_strings");
+const { setMediaStorage } = require("../tools/server_helpers");
+
+require("dotenv").config();
+
+const getQueryValues = (queryStatement, params = []) => {
+    return new Promise((resolve, reject) => {
+        client.query(queryStatement, params, (err, rows) => {
+            if (err || rows === undefined) {
+                logger({
+                    desc: "getQueryValues",
+                    req: "Query statement: " + queryStatement + " -|- Params: " + params,
+                    res: "Rows: " + JSON.stringify(rows),
+                    headers: "N/A",
+                    message: JSON.stringify(err)
+                });
+                reject(new Error(err));
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
 
 /** 
  * Get login form data. Respond with user id AND all media info.
@@ -16,12 +52,8 @@ router.post("/api/login",
         .withMessage('Password cannot be empty')
         .matches(/[LTa-z-]/g)
         .withMessage('Password not correct'),
-    // passport.authenticate('local', {
-    //   successRedirect: "/",
-    //   failureRedirect: "/",
-    //   failureFlash: true
-    // }),
-    (req, res) => {
+    passport.authenticate('local'),
+    (req, res, next) => {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -83,7 +115,7 @@ router.post("/api/login",
 * Component making Axios call: AdminShowAllUsers (type: User) - Temporary. Eventually will go through home page
 * Component making Axios call: AdminShowAllProjects (type: Media) - Temporary. Eventually will go through home page
 */
-router.get("/api/:type", function (req, res) {
+router.get("/api/:type", function (req, res, next) {
     res.status(200).send(`All info for ${req.params.type} sent to front end`);
     // let retrieve_all_media = "SELECT * FROM media;";
     // let retrieve_all_notes = "SELECT * FROM notes;";
@@ -123,7 +155,7 @@ router.get("/api/:type", function (req, res) {
 * Component making Axios call: AdminSingleProject (type: Media)
 * Component making Axios call: AdminShowSingleUser (type: User)
 */
-router.get("/api/:type/:id", (req, res) => {
+router.get("/api/:type/:id", (req, res, next) => {
     res.status(200).send(`${req.params.id} of type ${req.params.type} sent to front end`);
     // const media_id = parseInt(req.params.media_id) ? parseInt(req.params.media_id) : 1;
     // const user_id = 1;
@@ -160,7 +192,7 @@ router.get("/api/:type/:id", (req, res) => {
 * 
 * Component making Axios call: App
 */
-router.get("/api/retrieve-info/media/:media_id", function (req, res) {
+router.get("/api/retrieve-info/media/:media_id", function (req, res, next) {
     res.status(200).send(`${req.params.media_id} sent to front end`);
     // let media_id = req.params.media_id;
     // let tbd = "";
@@ -209,7 +241,7 @@ router.post("/api/new-note",
         .withMessage('Note has to say something')
         .isLength({ max: 500 })
         .withMessage('Note contents too large. Consider writing an email.'),
-    async (req, res) => {
+    async (req, res, next) => {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -315,7 +347,7 @@ router.post("/api/upload",
     body('mediaType').trim().escape().not().isEmpty(),
     body('projectName').trim().escape().not().isEmpty(),
     body('imageName').trim().escape().not().isEmpty(),
-    (req, res) => {
+    (req, res, next) => {
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
@@ -382,7 +414,7 @@ router.post("/api/upload",
 * 
 * Component making Axios call: AdminSendPW
 */
-router.get("/api/send-pw", (req, res) => {
+router.get("/api/send-pw", (req, res, next) => {
     let rounds = parseInt(process.env.SALT_ROUNDS);
 
     bcrypt.genSalt(rounds, function (err, salt) {
@@ -394,11 +426,11 @@ router.get("/api/send-pw", (req, res) => {
     res.status(200).send("Password generated");
 });
 
-router.delete('/api/:type', (req, res) => {
+router.delete('/api/:type', (req, res, next) => {
     res.send('Got a DELETE request');
 });
 
-router.post("/error", (req, res) => {
+router.post("/error", (req, res, next) => {
     console.log(req.body);
 
     logger({
@@ -411,8 +443,13 @@ router.post("/error", (req, res) => {
     res.status(200).send({ message: "Message received" });
 });
 
+router.get("/logout", (req, res, next) => {
+    req.logout();
+    res.redirect("/");
+});
+
 // Fallback route. Respond with default index.html page
-router.get("/*", function (req, res) {
+router.get("/*", function (req, res, next) {
     res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
