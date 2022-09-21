@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-module.exports = function logger(details) {
+const logger = (details) => {
   let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
   let file_name = `./files/logs/${details.desc}${current}.log`;
 
@@ -15,3 +15,5 @@ module.exports = function logger(details) {
     console.log(`Write complete! Error: ${error} | Data: ${data}`);
   });
 };
+
+module.exports = logger;

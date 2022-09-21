@@ -22,16 +22,8 @@ const AdminSendPW = () => {
         {userId ?
             <section>
                 <header>
-                    <h2>Single Note from user [USER NAME], UID #{userId}</h2>
+                    <h2>Send A New Password</h2>
                 </header>
-
-                Note body
-
-                Note timestamp
-
-                created on
-
-                Updated? No/Yes, on datetime
             </section> : <Home />
         }
     </>);

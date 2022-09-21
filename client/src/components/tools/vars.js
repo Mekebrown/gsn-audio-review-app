@@ -7,9 +7,9 @@ const indexPath = "/";
 const adminPath = "/admin"; // Temporary, for testing
 const adminUploadPath = "/upload";
 const adminSendDashPW = "/send-pw";
-const adminInfoMediaPath = "/info/media";
-const adminInfoNotesPath = "/info/notes";
-const adminInfoUsersPath = "/info/users";
+const adminInfoMediaPath = "/media";
+const adminInfoNotesPath = "/notes";
+const adminInfoUsersPath = "/users";
 
 const reviewerPath = "/review";
 
