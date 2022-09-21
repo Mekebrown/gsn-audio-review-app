@@ -125,13 +125,13 @@ const projectsList = [
     }
 ];
 
-const singleAdmin =  {
+const singleAdmin = {
     user_name: "Admin Admin",
     last_login: "01-02-2020",
     recent_activity: [
         {
             recent_notes: [
-                "One note here",  
+                "One note here",
                 "A note from the sounds of the forest"
             ],
             recent_users: "Moose"
@@ -140,13 +140,13 @@ const singleAdmin =  {
     projects: [
         {
             key: 1, name: "Prince's \"If I Was Your Girlfriend\""
-        }, 
+        },
         {
             key: 2, name: "The 4400"
-        }, 
+        },
         {
             key: 3, name: "TikTok Vybes"
-        }, 
+        },
         {
             key: 4, name: "Vox Machina"
         }
@@ -228,119 +228,147 @@ const allUsers = [
     }
 ];
 
-const singleProject =  {
+const singleProjectNotes = [
+    {
+        noteId: 12,
+        userId: 100,
+        createdAt: "2-1-2022",
+        updatedAt: "2-1-2022",
+        noteBody: "This will always be note one",
+        noteTimestamp: "0.03"
+    },
+    {
+        noteId: 1,
+        userId: 200,
+        createdAt: "7-5-2021",
+        updatedAt: "7-5-2021",
+        noteBody: "The second note",
+        noteTimestamp: "1.03"
+    },
+    {
+        noteId: 41,
+        userId: 300,
+        createdAt: "12-1-2020",
+        updatedAt: "12-1-2020",
+        noteBody: "Three is the magic number",
+        noteTimestamp: "2.43"
+    },
+    {
+        noteId: 111,
+        userId: 300,
+        createdAt: "12-1-2020",
+        updatedAt: "12-1-2020",
+        noteBody: "Three is the magic number",
+        noteTimestamp: "2.43"
+    }
+];
+
+const singleProject = [{
+    key: 1,
     project_name: "Prince's \"If I Was Your Girlfriend\"",
     file_name: "audio_surface.mp3",
     length: "2 minutes",
-    totalNotes: 5,
+    totalNotes: singleProjectNotes,
     creation_datetime: "01-01-2020"
-};
+}];
 
 const allNotesForAllProjects = [
-    [
-        {
-            key: 1,
-            name: "Vox Machina",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 2,
-            name: "TikTok Vybes",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 3,
-            name: "The 4400",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ],
-    [
-        {
-            key: 4,
-            name: "Prince's \"If I Was Your Girlfriend\"",
-            notes: [
-                {
-                    id: 1,
-                    user: "Norma",
-                    posted: "2-1-2022",
-                    content: "This will always be note one"
-                },
-                {
-                    id: 2,
-                    user: "Brohan",
-                    posted: "7-5-2021",
-                    content: "The second note"
-                },
-                {
-                    id: 3,
-                    user: "Tyrel",
-                    posted: "12-1-2020",
-                    content: "Three is the magic number"
-                }
-            ]
-        }
-    ]
+    {
+        key: 1,
+        name: "Vox Machina",
+        notes: [
+            {
+                id: 1,
+                user: "Norma",
+                posted: "2-1-2022",
+                content: "This will always be note one"
+            },
+            {
+                id: 2,
+                user: "Brohan",
+                posted: "7-5-2021",
+                content: "The second note"
+            },
+            {
+                id: 3,
+                user: "Tyrel",
+                posted: "12-1-2020",
+                content: "Three is the magic number"
+            }
+        ]
+    },
+    {
+        key: 2,
+        name: "TikTok Vybes",
+        notes: [
+            {
+                id: 1,
+                user: "Norma",
+                posted: "2-1-2022",
+                content: "This will always be note one"
+            },
+            {
+                id: 2,
+                user: "Brohan",
+                posted: "7-5-2021",
+                content: "The second note"
+            },
+            {
+                id: 3,
+                user: "Tyrel",
+                posted: "12-1-2020",
+                content: "Three is the magic number"
+            }
+        ]
+    },
+    {
+        key: 3,
+        name: "The 4400",
+        notes: [
+            {
+                id: 1,
+                user: "Norma",
+                posted: "2-1-2022",
+                content: "This will always be note one"
+            },
+            {
+                id: 2,
+                user: "Brohan",
+                posted: "7-5-2021",
+                content: "The second note"
+            },
+            {
+                id: 3,
+                user: "Tyrel",
+                posted: "12-1-2020",
+                content: "Three is the magic number"
+            }
+        ]
+    },
+    {
+        key: 4,
+        name: "Prince's \"If I Was Your Girlfriend\"",
+        notes: [
+            {
+                id: 1,
+                user: "Norma",
+                posted: "2-1-2022",
+                content: "This will always be note one"
+            },
+            {
+                id: 2,
+                user: "Brohan",
+                posted: "7-5-2021",
+                content: "The second note"
+            },
+            {
+                id: 3,
+                user: "Tyrel",
+                posted: "12-1-2020",
+                content: "Three is the magic number"
+            }
+        ]
+    }
 ];
 
 const currDateTime = new Date();
@@ -398,7 +426,7 @@ const allMediaToReview = [
                 content: "Oh cool. Lemme get back to you."
             }
         ]
-    }, 
+    },
     {
         key: 2,
         userName: "Meke",
@@ -429,11 +457,11 @@ export default dataForProd;
 
 export {
     allMediaToReview,
-    allUsers, 
-    allNotesForAllProjects, 
-    projectsList, 
-    singleAdmin, 
-    singleProject, 
-    newSampleNote, 
+    allUsers,
+    allNotesForAllProjects,
+    projectsList,
+    singleAdmin,
+    singleProject,
+    newSampleNote,
     updatedSampleNote
 };

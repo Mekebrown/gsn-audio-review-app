@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../UserLogin";
 import axios from "axios";
 import Home from "../Home";
+import { allNotesForAllProjects } from "../tools/dummy_data";
 
 /**
  * This page will show every note pertaining to every project that exists.
@@ -20,17 +21,27 @@ const AdminSingleNote = () => {
     return (<>
         {userId ?
             <section>
-                <header>
-                    <h2>Single Note from user [USER NAME], UID #{userId}</h2>
-                </header>
+                {allNotesForAllProjects.map(project =>
+                    <li key={project.key} className="clickable tooltip">
+                        <h4>Project Name: {project.name}</h4>
 
-                Note body
+                        <figure>
+                            <blockquote>
+                                <p>
+                                    {project.notes.map(note => {
+                                        return <a href="/" key={note.id}>
+                                            {note.content}
+                                        </a>;
+                                    })}
+                                </p>
+                            </blockquote>
+                        </figure>
 
-                Note timestamp
+                        <span className="tooltiptext">Want this whole block clickable or nah?</span>
 
-                created on
-
-                Updated? No/Yes, on datetime
+                        <hr />
+                    </li>)
+                }
             </section> : <Home />
         }
     </>);
