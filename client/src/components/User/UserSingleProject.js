@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { UserContext } from "../../UserLogin";
 import Home from "../Home";
+import AudioTrack from "../tools/AudioTrack";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Page for a single media work and notes opportunity
@@ -19,6 +21,7 @@ import Home from "../Home";
  * @returns {Node} UserSingleProject
  */
 const UserSingleProject = ({ mediaId }) => {
+    const [fileLocAndName, setFileLocAndName] = useState();
     const [testAudio, setTestAudio] = useState(null);
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
     const [activeNoteInTextArea, setActiveNoteInTextArea] = useState("");
@@ -97,6 +100,20 @@ const UserSingleProject = ({ mediaId }) => {
 
     const { userId } = useContext(UserContext);
 
+    const getAudioTracks = (fileLocAndFileName) => {
+        const trackCollection = [];
+
+        const MP3 = "audio/mpeg";
+        const OGG = "audio/ogg";
+        const fileMP3 = `${fileLocAndFileName}.mp3`;
+        const fileOGG = `${fileLocAndFileName}.ogg`;
+
+        trackCollection.push(new AudioTrack(fileMP3, MP3));
+        trackCollection.push(new AudioTrack(fileOGG, OGG));
+
+        return trackCollection;
+    };
+
     useEffect(() => {
         // let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
 
@@ -143,7 +160,11 @@ const UserSingleProject = ({ mediaId }) => {
     return (<>
         {userId ? <section>
             <audio controls preload="auto" ref={player}>
-                <source key="wearenotokay" src="https://gsnaudioreviewapp.s3.amazonaws.com/media/audio/t.mp3" type="audio/mpeg" />
+                {
+                    getAudioTracks(fileLocAndName).map((track) => {
+                        return <source key={uuidv4()} src={track.file} type={track.fileType} />;
+                    })
+                }
                 Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
             </audio>
 
