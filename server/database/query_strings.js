@@ -6,7 +6,7 @@ const media_upload_query_statement = `INSERT INTO media (
                                     last_retrieved, 
                                     file_directory,
                                     created_at) 
-                                    VALUES ($1, $2, $3, $4, $5, $6, $7)`;                                      
+                                    VALUES ($1, $2, $3, $4, $5, $6, $7)`;
 const insert_note_query = `INSERT INTO notes ( 
                                     user_id, 
                                     media_id,
@@ -40,7 +40,9 @@ const notes_query_statement = `SELECT
                               LIMIT 5
 `;
 
-const login_query = `INSERT INTO users (
+const login_query = `SELECT * FROM users WHERE username = $1`;
+
+const set_pw_query = `INSERT INTO users (
                     username, 
                     country_loc, 
                     device_info, 
@@ -56,5 +58,6 @@ module.exports = {
     update_note_query,
     ratings_query_statement,
     notes_query_statement,
-    login_query
-}
+    login_query,
+    set_pw_query
+};
