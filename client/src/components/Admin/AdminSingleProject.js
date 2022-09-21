@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import Home from "../Home";
 import { UserContext } from "../../UserLogin";
-import singleProject from "../tools/dummy_data";
+import { singleProject } from "../tools/dummy_data";
 import axios from "axios";
 
 /**
@@ -77,22 +77,22 @@ const AdminSingleProject = () => {
                     </div>
                 </div>
                 {singleProject.map(project =>
-                    <section key={project[0].key}>
+                    <section key={project.key}>
                         <h3>
-                            <a href="/">{project[0].name}</a>
+                            <a href="/">{project.project_name}</a>
                         </h3>
 
                         <ul>
-                            {project[0].notes.map(note =>
-                                <li key={note.id} className="clickable tooltip">
-                                    <h4>Reviewer: {note.user}</h4>
+                            {project.totalNotes.map(note =>
+                                <li key={note.noteId} className="clickable tooltip">
+                                    <h4>Reviewer: {note.userId}</h4>
 
-                                    <p>Posted on: {note.posted}</p>
+                                    <p>Posted on: {note.updatedAt}</p>
 
                                     <figure>
                                         <blockquote>
                                             <p><a href="/">
-                                                {note.content}
+                                                {note.noteBody}
                                             </a></p>
                                         </blockquote>
                                     </figure>
