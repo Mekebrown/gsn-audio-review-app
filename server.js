@@ -4,6 +4,8 @@ const cors = require("cors");
 const path = require("path");
 const bp = require("body-parser");
 const fileupload = require("express-fileupload");
+const passport = require('passport');
+const session = require("express-session");
 const { body, validationResult } = require("express-validator");
 
 const {
@@ -14,10 +16,11 @@ const {
   notes_query_statement,
   login_query
 } = require("./server/database/query_strings.js");
-const { Client } = require("pg");
-const fs = require("fs");
-const { setMediaStorage } = require("./server/tools/server_helper_functions");
+const logger = require("./server/tools/logger");
+const router = require("./server/routes/index.js");
+
 require("dotenv").config();
+require("./server/tools/client_passport");
 
 app.use(express.json());
 app.use(fileupload());
@@ -28,474 +31,45 @@ app.use(express.static(path.join(__dirname, "client", "public")));
 app.use(express.static(path.join(__dirname, "files", "logs")));
 app.use(cors(require("./server/tools/cors_options")));
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL || process.env.PG_URI_APP,
-  ssl: {
-    rejectUnauthorized: false
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+}
+
+app.use(session({
+  store: new (require("connect-pg-simple")(session))({
+    createTableIfMissing: true,
+    pgPromise: require('pg-promise')({ promiseLib: require('bluebird') })({
+      user: process.env.PGUSER,
+      password: process.env.PGPASSWORD,
+      host: process.env.PGHOST,
+      port: process.env.PGPORT,
+      database: process.env.PGDATABASE
+    })
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // One day
   }
+}));
+app.use((req, res, next) => {
+  if (req.session.visits) {
+    req.session.visits++;
+  } else {
+    req.session.visits = 1;
+  }
+
+  next();
 });
-
-client.connect()
-  .then(() => console.log("Connection has been established successfully."))
-  .catch((err) => {
-    logger({
-      desc: "pg_client_connect",
-      req: "client variable: " + JSON.stringify(client) +
-        " -|- process.env.PGUSER: " + process.env.PGUSER +
-        " -|- process.env.PGHOST: " + process.env.PGHOST +
-        " -|- process.env.PGPASSWORD: " + process.env.PGPASSWORD +
-        " -|- process.env.PGDATABASE: " + process.env.PGDATABASE +
-        " -|- process.env.PGPORT: " + process.env.PGPORT,
-      message: err
-    });
-
-    console.error("Unable to connect to the database:", err);
-  });
-
-const getQueryValues = (queryStatement, params = []) => {
-  return new Promise((resolve, reject) => {
-    client.query(queryStatement, params, (err, rows) => {
-      if (err || rows === undefined) {
-        logger({
-          desc: "getQueryValues",
-          req: "Query statement: " + queryStatement + " -|- Params: " + params,
-          res: "Rows: " + JSON.stringify(rows),
-          headers: "N/A",
-          message: JSON.stringify(err)
-        });
-
-        reject(new Error(err));
-      } else {
-        console.log(rows);
-        resolve(rows);
-      }
-    }
-    );
-  }
-  );
-};
+app.use(passport.initialize());
+app.use(passport.session());
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client", "build")));
-  app.use(express.static(path.join(__dirname, "client", "build", "static", "js")));
-  app.use(express.static(path.join(__dirname, "client", "build", "static", "css")));
 }
 
-app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
-
-/** 
- * Get login form data. Respond with user id AND all media info.
- * 
- * Component making Axios call: Home
- */
-app.post("/api/login",
-  body('username').trim().escape().not().isEmpty()
-    .withMessage('Username cannot be empty')
-    .isLength({ min: 5 })
-    .withMessage('Username must be five or more characters long')
-    .isLength({ max: 25 })
-    .withMessage('Username must be up to 25 characters long'),
-  body('password').trim().escape().not().isEmpty()
-    .withMessage('Password cannot be empty')
-    .matches(/[LTa-z-]/g)
-    .withMessage('Password not correct'),
-  (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger({
-        desc: "validate_login",
-        req: "Body: " + JSON.stringify(req.body),
-        res: "N/A - Sent a 400",
-        headers: req.rawHeaders[9] + " -|- " +
-          req.rawHeaders[13] + " -|- " +
-          req.rawHeaders[21] + " -|- " +
-          req.rawHeaders[22] + "-" +
-          req.rawHeaders[23],
-        message: JSON.stringify(errors)
-      });
-
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    res.status(200).send(`Log in received: ${req.body.username} and ${req.body.password}`);
-    // const { username, password } = req.body;
-
-    // const isValid = username !== undefined && password !== undefined
-    //   && username !== 0 && password !== 0
-    //   && username !== null && password !== null
-    //   && username !== "" && password !== ""
-    //   && username.match(/[A-Za-z0-9 ,.!-]/g) && !password.match(/[^LTa-z-]/g)
-    //   && password.length === 25;
-
-    // if (!isValid) res.status(403).send("Information not accepted");
-
-    // const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ?
-    //   "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ?
-    //     "reviewer" : null;
-
-    // if (visitor_role) {
-    //   const reroute_loc = visitor_role === "reviewer" ?
-    //     "/review" : "/admin";
-
-    //   const country_loc = req.rawHeaders[9];
-    //   const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
-
-    //   const current_date = new Date();
-
-    //   const login_values = [username, country_loc, device_info, visitor_role, current_date];
-
-    //   getQueryValues(login_query, login_values)
-    //     .then((data) => res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id }))
-    //     .catch((err) => console.log(err));
-    // } else {
-    //   logger({
-    //     desc: "post_homepage_login_check",
-    //     req: "Body: " + JSON.stringify(req.body),
-    //     res: "N/A",
-    //     headers: country_loc + " " + device_info,
-    //     message: "N/A"
-    //   });
-
-    //   res.status(403).send("Information not accepted");
-    // }
-  }
-);
-
-/**
- * Get type of info. Respond with all data for the type (notes, media, or users)
- * 
- * Component making Axios call: App/Home
- * Component making Axios call: AdminShowAllNotes (type: Notes) - Temporary. Eventually will go through home page
- * Component making Axios call: AdminShowAllUsers (type: User) - Temporary. Eventually will go through home page
- * Component making Axios call: AdminShowAllProjects (type: Media) - Temporary. Eventually will go through home page
- */
-app.get("/api/:type", function (req, res) {
-  res.status(200).send(`All info for ${req.params.type} sent to front end`);
-  // let retrieve_all_media = "SELECT * FROM media;";
-  // let retrieve_all_notes = "SELECT * FROM notes;";
-  // let dataToSend = {};
-
-  // getQueryValues(retrieve_all_media)
-  //   .then((data) => {
-  //     dataToSend = data.rows;
-
-  //     return getQueryValues(retrieve_all_notes);
-  //   })
-  //   .then((data) => {
-  //     dataToSend = { ...dataToSend, "totalNotesFromServer": data.rows };
-
-  //     res.status(200).send({ message: "Success", media: dataToSend });
-  //   })
-  //   .catch((err) => {
-  //     logger({
-  //       desc: "get_retrieve_info_media_id",
-  //       req: "",
-  //       res: "N/A",
-  //       headers: "N/A",
-  //       message: JSON.stringify(err)
-  //     });
-
-  //     console.error("Promise rejection error: " + err);
-
-  //     throw err;
-  //   });
-});
-
-/**
- * Get a type and its id (media, note, user). Respond with that type's data.
- * 
- * Component making Axios call: UserSingleProject (type: Media)
- * Component making Axios call: AdminSingleNote (type: Note)
- * Component making Axios call: AdminSingleProject (type: Media)
- * Component making Axios call: AdminShowSingleUser (type: User)
- */
-app.get("/api/:type/:id", (req, res) => {
-  res.status(200).send(`${req.params.id} of type ${req.params.type} sent to front end`);
-  // const media_id = parseInt(req.params.media_id) ? parseInt(req.params.media_id) : 1;
-  // const user_id = 1;
-  // let dataToSend = {};
-
-  // getQueryValues(media_query_statement, [media_id])
-  //   .then((data) => {
-  //     dataToSend = data.rows[0];
-
-  //     return getQueryValues(notes_query_statement, [media_id, user_id]);
-  //   })
-  //   .then((data) => {
-  //     dataToSend = { ...dataToSend, "totalNotesFromServer": data.rows };
-
-  //     res.status(200).send(dataToSend);
-  //   })
-  //   .catch((err) => {
-  //     logger({
-  //       desc: "get_usingle_mediaQuery",
-  //       req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement,
-  //       res: "N/A",
-  //       headers: "N/A",
-  //       message: JSON.stringify(err)
-  //     });
-
-  //     console.error("Promise rejection error (Media): " + err);
-
-  //     throw err;
-  //   });
-});
-
-/**
- * Get a media id. Respond with that media's data.
- * 
- * Component making Axios call: App
- */
-app.get("/api/retrieve-info/media/:media_id", function (req, res) {
-  res.status(200).send(`${req.params.media_id} sent to front end`);
-  // let media_id = req.params.media_id;
-  // let tbd = "";
-  // let dataToSend = {};
-
-  // getQueryValues(tbd, [ media_id ])
-  // .then((data) => {
-  //   dataToSend = data.rows[0];
-
-  //   return getQueryValues(notes_query_statement, [ media_id, user_id ]);
-  // })
-  // .then((data) => {
-  //   dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
-
-  // res.status(200).send({ message: "Success", media: media_id });
-  // })
-  // .catch((err) => {
-  //   logger({
-  //      desc: "get_retrieve_info_media_id", 
-  //     req: "", 
-  //     res: "N/A",
-  //     headers: "N/A",
-  //     message: JSON.stringify(err)
-  //   });      
-
-  //   console.error("Promise rejection error (Media): " + err);
-
-  //   throw err;
-  // });
-});
-
-/**
- * Create a note. Respond with a status code.
- * 
- * Component making Axios call: UserSingleProject
- */
-app.post("/api/new-note",
-  body('is_note_updated').trim().escape().not().isEmpty().toBoolean(),
-  body('note_timestamp').trim().escape().not().isEmpty(),
-  body('note_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
-  body('media_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
-  body('user_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
-  body('note_body').trim().escape().not().isEmpty()
-    .withMessage('Note cannot be empty')
-    .isLength({ min: 5 })
-    .withMessage('Note has to say something')
-    .isLength({ max: 500 })
-    .withMessage('Note contents too large. Consider writing an email.'),
-  async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger({
-        desc: "validate_new_" + req.params.type,
-        req: "Body: " + JSON.stringify(req.body),
-        res: "N/A - Sent a 400",
-        headers: req.rawHeaders[9] + " -|- " +
-          req.rawHeaders[13] + " -|- " +
-          req.rawHeaders[21] + " -|- " +
-          req.rawHeaders[22] + "-" +
-          req.rawHeaders[23],
-        message: JSON.stringify(errors)
-      });
-
-      return res.status(400).json({ errors: errors.array() });
-    }
-    res.status(200).send(`${req.params.type} created with info ${req.body.note_body}`);
-    // const {
-    //   is_note_updated,
-    //   note_id,
-    //   note_body,
-    //   note_timestamp,
-    //   media_id,
-    //   user_id,
-    // } = req.body;
-
-    // const converted_datetime = new Date();
-
-    // if (!is_note_updated) {
-    //   const insert_values = [
-    //     user_id,
-    //     media_id,
-    //     note_body,
-    //     note_timestamp,
-    //     converted_datetime,
-    //     converted_datetime,
-    //     converted_datetime
-    //   ];
-
-    //   getQueryValues(insert_note_query, insert_values)
-    //     .then(data => {
-    //       res.status(200).send({ message: "New note saved", data: { id: data.rows[0].id } });
-    //     })
-    //     .catch(err => {
-    //       logger({
-    //         desc: "post_usingle_new_note",
-    //         req: "Body: " + JSON.stringify(req.body),
-    //         res: "New note not saved",
-    //         headers: req.rawHeaders[9] + " -|- " +
-    //           req.rawHeaders[13] + " -|- " +
-    //           req.rawHeaders[21] + " -|- " +
-    //           req.rawHeaders[22] + "-" +
-    //           req.rawHeaders[23],
-    //         message: JSON.stringify(err)
-    //       });
-
-    //       console.log(err);
-
-    //       res.status(500).send({ message: "New note not saved", code: 200 });
-    //     });
-    // } else {
-    //   const update_values = [
-    //     note_body,
-    //     note_timestamp,
-    //     converted_datetime,
-    //     converted_datetime,
-    //     note_id,
-    //     media_id
-    //   ];
-
-    //   getQueryValues(update_note_query, update_values)
-    //     .then(() => {
-    //       res.status(200).send({ message: "Updated note saved" });
-    //     })
-    //     .catch((err) => {
-    //       logger({
-    //         desc: "post_usingle_updated_note",
-    //         req: req.query,
-    //         res: "Updated note not saved",
-    //         headers: req.rawHeaders[9] + " -|- " +
-    //           req.rawHeaders[13] + " -|- " +
-    //           req.rawHeaders[21] + " -|- " +
-    //           req.rawHeaders[22] + "-" +
-    //           req.rawHeaders[23],
-    //         message: err
-    //       });
-
-    //       res.status(500).send({ message: "Updated note not saved", code: 200 });
-    //     });
-    // }
-  }
-);
-
-/**
- * Get audio upload form data. Respond with status object
- * 
- * Component making Axios call: AdminUploadMedia
- */
-app.post("/api/upload",
-  body('fileName').trim().escape().not().isEmpty(),
-  body('description').trim().escape().not().isEmpty(),
-  body('mediaType').trim().escape().not().isEmpty(),
-  body('projectName').trim().escape().not().isEmpty(),
-  body('imageName').trim().escape().not().isEmpty(),
-  (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      logger({
-        desc: "validate_upload",
-        req: "Body: " + JSON.stringify(req.body),
-        res: "N/A - Sent a 400",
-        headers: req.rawHeaders[9] + " -|- " +
-          req.rawHeaders[13] + " -|- " +
-          req.rawHeaders[21] + " -|- " +
-          req.rawHeaders[22] + "-" +
-          req.rawHeaders[23],
-        message: JSON.stringify(errors)
-      });
-
-      return res.status(400).json({ errors: errors.array() });
-    }
-    res.status(200).send(`Upload created`);
-    // const { fileName, description, imageName, mediaType, projectName } = req.body;
-    // const { mediaFileToUpload, imageUpload } = req.files; // TODO still have to verify these types
-
-    // const isValid = mediaFileToUpload !== undefined && imageUpload !== undefined
-    //   && mediaFileToUpload !== 0 && imageUpload !== 0
-    //   && mediaFileToUpload !== null && imageUpload !== null
-    //   && mediaFileToUpload !== "" && imageUpload !== "";
-
-    // if (!isValid) res.status(500).send({ message: "File upload failed" });
-
-    // const file_directory = __dirname + "/files/";
-    // const converted_datetime = new Date();
-
-    // mediaFileToUpload.mv(`${file_directory}${fileName}`, (err) => {
-    //   if (err) {
-    //     res.status(500).send({ message: "File upload failed", code: 200 });
-    //   }
-
-    //   const media_values = [description, fileName, mediaType, projectName, converted_datetime, file_directory, converted_datetime, converted_datetime];
-
-    //   getQueryValues(media_upload_query_statement, media_values)
-    //     .then(() => {
-    //       res.status(200).send({ message: "File Uploaded" });
-    //     })
-    //     .catch((err) => {
-    //       logger({
-    //         desc: "post_media",
-    //         req: req.query,
-    //         res: "Promise rejection error",
-    //         headers: req.rawHeaders[9] + " -|- " +
-    //           req.rawHeaders[13] + " -|- " +
-    //           req.rawHeaders[21] + " -|- " +
-    //           req.rawHeaders[22] + "-" +
-    //           req.rawHeaders[23],
-    //         message: err
-    //       });
-
-    //       console.error("Promise rejection error: " + err);
-    //     });
-    // });
-  }
-);
-
-/**
- * Respond with pre-defined password
- * 
- * Component making Axios call: AdminSendPW
- */
-app.get("/api/send-pw", (req, res) => {
-  res.status(200).send("Password generated");
-});
-
-app.delete('/api/:type', (req, res) => {
-  res.send('Got a DELETE request');
-});
-
-app.post("/error", (req, res) => {
-  console.log(req.body);
-
-  logger({
-    location: "./files/logs/",
-    desc: "error_boundary_trigger",
-    headers: "N/A",
-    message: `${req.body.error}\n Error Info: ${req.body.errorInfo}`
-  });
-
-  res.status(200).send({ message: "Message received" });
-});
-
-// Fallback route. Respond with default index.html page
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+app.use("/api", router);
 
 // Uncaught error handling catch
 app.use((err, req, res, next) => {
@@ -511,22 +85,6 @@ app.use((err, req, res, next) => {
 
   res.status(500).send('Something broke!').redirect('/login');;
 });
-
-const logger = (details) => {
-  let current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
-  let file_name = `./files/logs/${details.desc}${current}.log`;
-
-  let log_data = {
-    message: details.message,
-    req: details.req ? details.req : "N/A",
-    res: details.res ? details.res : "N/A",
-    headers: details.headers ? details.headers : "N/A",
-  };
-
-  fs.writeFile(file_name, JSON.stringify(log_data, null, "\t"), "utf8", (error, data) => {
-    console.log("Write complete"); console.log(error); console.log(data);
-  });
-};
 
 app.listen(process.env.PORT || 3001, function () {
   console.log(process.env.SERVER_PORT);
