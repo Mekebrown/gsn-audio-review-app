@@ -2,7 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require("express-validator");
-const { client } = require("../database/db_details");
+const { client } = require("../tools/client_passport");
 
 const {
     media_upload_query_statement,
@@ -41,40 +41,40 @@ const getQueryValues = (queryStatement, params = []) => {
  * 
  * Component making Axios call: Home
  */
-router.post("/api/login",
-    body('username').trim().escape().not().isEmpty()
-        .withMessage('Username cannot be empty')
-        .isLength({ min: 5 })
-        .withMessage('Username must be five or more characters long')
-        .isLength({ max: 25 })
-        .withMessage('Username must be up to 25 characters long'),
-    body('password').trim().escape().not().isEmpty()
-        .withMessage('Password cannot be empty')
-        .matches(/[LTa-z-]/g)
-        .withMessage('Password not correct'),
-    passport.authenticate('local'),
+router.post("/login",
+    // body('username').trim().escape().not().isEmpty()
+    //     .withMessage('Username cannot be empty')
+    //     .isLength({ min: 5 })
+    //     .withMessage('Username must be five or more characters long')
+    //     .isLength({ max: 25 })
+    //     .withMessage('Username must be up to 25 characters long'),
+    // body('password').trim().escape().not().isEmpty()
+    //     .withMessage('Password cannot be empty')
+    //     .matches(/[LTa-z-]/g)
+    //     .withMessage('Password not correct'),
+    passport.authenticate('local'), //          admin@email.enter        aLotmosdef-behemoth-souls
     (req, res, next) => {
-        const errors = validationResult(req);
+        // const errors = validationResult(req);
 
-        if (!errors.isEmpty()) {
-            logger({
-                desc: "validate_login",
-                req: "Body: " + JSON.stringify(req.body),
-                res: "N/A - Sent a 400",
-                headers: req.rawHeaders[9] + " -|- " +
-                    req.rawHeaders[13] + " -|- " +
-                    req.rawHeaders[21] + " -|- " +
-                    req.rawHeaders[22] + "-" +
-                    req.rawHeaders[23],
-                message: JSON.stringify(errors)
-            });
+        // if (!errors.isEmpty()) {
+        //     logger({
+        //         desc: "validate_login",
+        //         req: "Body: " + JSON.stringify(req.body),
+        //         res: "N/A - Sent a 400",
+        //         headers: req.rawHeaders[9] + " -|- " +
+        //             req.rawHeaders[13] + " -|- " +
+        //             req.rawHeaders[21] + " -|- " +
+        //             req.rawHeaders[22] + "-" +
+        //             req.rawHeaders[23],
+        //         message: JSON.stringify(errors)
+        //     });
 
-            return res.status(400).json({ errors: errors.array() });
-        }
+        //     return res.status(400).json({ errors: errors.array() });
+        // }
 
         const { username, password } = req.body;
 
-        res.status(200).send(`Information accepted ${req.session.visits}`);
+        res.status(200).send(`Information accepted`);
         // const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ?
         //   "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ?
         //     "reviewer" : null;
@@ -115,7 +115,7 @@ router.post("/api/login",
 * Component making Axios call: AdminShowAllUsers (type: User) - Temporary. Eventually will go through home page
 * Component making Axios call: AdminShowAllProjects (type: Media) - Temporary. Eventually will go through home page
 */
-router.get("/api/:type", function (req, res, next) {
+router.get("/:type", function (req, res, next) {
     res.status(200).send(`All info for ${req.params.type} sent to front end`);
     // let retrieve_all_media = "SELECT * FROM media;";
     // let retrieve_all_notes = "SELECT * FROM notes;";
@@ -155,7 +155,7 @@ router.get("/api/:type", function (req, res, next) {
 * Component making Axios call: AdminSingleProject (type: Media)
 * Component making Axios call: AdminShowSingleUser (type: User)
 */
-router.get("/api/:type/:id", (req, res, next) => {
+router.get("/:type/:id", (req, res, next) => {
     res.status(200).send(`${req.params.id} of type ${req.params.type} sent to front end`);
     // const media_id = parseInt(req.params.media_id) ? parseInt(req.params.media_id) : 1;
     // const user_id = 1;
@@ -192,7 +192,7 @@ router.get("/api/:type/:id", (req, res, next) => {
 * 
 * Component making Axios call: App
 */
-router.get("/api/retrieve-info/media/:media_id", function (req, res, next) {
+router.get("/retrieve-info/media/:media_id", function (req, res, next) {
     res.status(200).send(`${req.params.media_id} sent to front end`);
     // let media_id = req.params.media_id;
     // let tbd = "";
@@ -229,7 +229,7 @@ router.get("/api/retrieve-info/media/:media_id", function (req, res, next) {
 * 
 * Component making Axios call: UserSingleProject
 */
-router.post("/api/new-note",
+router.post("/new-note",
     body('is_note_updated').trim().escape().not().isEmpty().toBoolean(),
     body('note_timestamp').trim().escape().not().isEmpty(),
     body('note_id').trim().escape().not().isEmpty().matches(/\d/g).toInt(),
@@ -341,7 +341,7 @@ router.post("/api/new-note",
 * 
 * Component making Axios call: AdminUploadMedia
 */
-router.post("/api/upload",
+router.post("/upload",
     body('fileName').trim().escape().not().isEmpty(),
     body('description').trim().escape().not().isEmpty(),
     body('mediaType').trim().escape().not().isEmpty(),
@@ -414,7 +414,7 @@ router.post("/api/upload",
 * 
 * Component making Axios call: AdminSendPW
 */
-router.get("/api/send-pw", (req, res, next) => {
+router.get("/send-pw", (req, res, next) => {
     let rounds = parseInt(process.env.SALT_ROUNDS);
 
     bcrypt.genSalt(rounds, function (err, salt) {
@@ -426,7 +426,7 @@ router.get("/api/send-pw", (req, res, next) => {
     res.status(200).send("Password generated");
 });
 
-router.delete('/api/:type', (req, res, next) => {
+router.delete('/:type/:id', (req, res, next) => {
     res.send('Got a DELETE request');
 });
 
