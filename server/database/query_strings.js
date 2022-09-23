@@ -40,6 +40,12 @@ const notes_query_statement = `SELECT
                               LIMIT 5
 `;
 
+const update_user_login_query = `UPDATE users 
+                                    SET header_info = $1,
+                                    last_login = $2
+                                WHERE username = $3
+                                RETURNING role`;
+
 const login_query = `SELECT * FROM users WHERE username = $1`;
 
 const set_pw_query = `INSERT INTO users (
@@ -55,9 +61,10 @@ module.exports = {
     media_upload_query_statement,
     media_query_statement,
     insert_note_query,
+    login_query,
     update_note_query,
     ratings_query_statement,
     notes_query_statement,
-    login_query,
+    update_user_login_query,
     set_pw_query
 };
