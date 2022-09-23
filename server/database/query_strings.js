@@ -25,7 +25,9 @@ const update_note_query = `UPDATE notes
                                     WHERE id = $5 
                                     AND media_id = $6`;
 
-const media_query_statement = "SELECT * FROM media WHERE id = $1";
+const all_media_query_statement = "SELECT * FROM media";
+
+const single_media_query_statement = "SELECT * FROM media WHERE id = $1";
 
 const ratings_query_statement = "SELECT * FROM ratings WHERE media_id = $1";
 
@@ -58,8 +60,9 @@ const set_pw_query = `INSERT INTO users (
                     RETURNING id`;
 
 module.exports = {
+    all_media_query_statement,
     media_upload_query_statement,
-    media_query_statement,
+    single_media_query_statement,
     insert_note_query,
     login_query,
     update_note_query,
