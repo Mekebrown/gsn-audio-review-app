@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,12 +37,11 @@ import AdminShowAllNotes from "./components/Admin/AdminShowAllNotes";
 import UserSingleProject from "./components/User/UserSingleProject";
 import UserAllMediaToReview from "./components/User/UserAllMediaToReview";
 
-import { UserLoginProvider } from "./UserLogin";
-
 const App = () => {
   const [userId, setUserId] = useState(null);
-
-  const providerValue = useMemo(() => ({ userId, setUserId }), [userId, setUserId]);
+  const [isSingleNoteModalOpen, setIsSingleNoteModalOpen] = useState(false);
+  const [isSingleUserOpen, setIsSingleUserOpen] = useState(false);
+  const [isSendPWOpen, setIsSendPWOpen] = useState(false);
 
   let cx = classNames.bind(styles);
   let topBarOverallCont = cx({ loggedIn: userId, loggedOut: !userId });
@@ -51,16 +50,8 @@ const App = () => {
   let topBarLinks = cx({ displayInline: userId, rightSection: userId });
   let searchBarInput = cx({ hideOption: userId });
 
-  useEffect(() => {
-    let storedUserId = window.localStorage.getItem("userId");
-
-    if (storedUserId && !userId) {
-      setUserId(storedUserId);
-    }
-  }, []);
 
   if (document.getElementById("splasher")) {
-    console.log("yes");
     document.body.removeChild(document.getElementById("splasher"));
   }
 
@@ -101,61 +92,57 @@ const App = () => {
               <Link to={indexPath} className={topBarLinks}>
                 <i className="fa fa-bell"></i>
               </Link>
-              <button onClick={() => { setUserId(null); window.localStorage.removeItem('userId'); }}>Log Out</button>
             </section>
           </menu>
         </nav>
       </header>
 
       <div>
-        <Link to={indexPath}>Login ID #{userId}</Link> {" "} <br /><br />
-
         {/* Temporary, for testing */}
         <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
         {/* Temporary, for testing */}
 
         <Link to={`${adminInfoMediaPath}/${mediaId}`}>Admin - Single Media Information</Link><br /> {/** /admin/retrieve-info/media/media_id */}
-        <Link to={`${adminInfoNotesPath}/${noteId}`}>Admin - Show individual note</Link><br /> {/** /admin/review-info/note/:note_id */}
+        <Link to={`${adminInfoNotesPath}/${noteId}`} onClick={() => setIsSingleNoteModalOpen(true)}>Admin - Show individual note</Link><br /> {/** /admin/review-info/note/:note_id */}
         <Link to={adminUploadPath}>Admin - Upload Media</Link><br /> {/** /review/add-media */}
-        <Link to={adminSendDashPW}>Admin - Send A Password</Link><br />{/**  */}
+        <Link to={adminSendDashPW} onClick={() => setIsSendPWOpen(true)}>Admin - Send A Password</Link><br />{/**  */}
         <Link to={adminInfoUsersPath}>Admin - All Users</Link><br />{/** /admin/users */}
-        <Link to={`${adminInfoUsersPath}/${reviewerId}`}>Admin - Show Single User</Link><br /> {/** /admin/retrieve-info/user */}
+        <Link to={`${adminInfoUsersPath}/${reviewerId}`} onClick={() => setIsSingleUserOpen(true)}>Admin - Show Single User</Link><br /> {/** /admin/retrieve-info/user */}
         <Link to={adminInfoNotesPath}>Admin - Show All Notes</Link><br /><br />{/** /admin/users */}
 
         <Link to={reviewerPath}>User - All Media</Link><br /> {/** /review */}
         <Link to={`${reviewerPath}/${mediaId}`}>User - Single Media</Link><br /> {/** /review/:media_id */}
+        <Link to="/logout">Log out</Link>
       </div>
 
       <main>
-        <UserLoginProvider value={providerValue}>
-          <Routes>
-            <Route exact path={indexPath} element={<Home />} />
-            {/* AudioPlayerOnly to be used inside of AllProjects and AdminSingleProject components */}
-            {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
-            {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
-            {/* NoteTaker to be used inside of UserSingleProject component */}
+        <Routes>
+          <Route exact path={indexPath} element={<Home />} />
+          {/* AudioPlayerOnly to be used inside of AllProjects and AdminSingleProject components */}
+          {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
+          {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
+          {/* NoteTaker to be used inside of UserSingleProject component */}
 
-            {/* ADMIN'S ROUTES */}
-            {/* Temporary, for testing */}
-            <Route path={adminPath} element={<AdminShowAllProjects />} />
-            {/* Temporary, for testing */}
+          {/* ADMIN'S ROUTES */}
+          {/* Temporary, for testing */}
+          <Route path={adminPath} element={<AdminShowAllProjects />} />
+          {/* Temporary, for testing */}
 
-            <Route path={`${adminInfoMediaPath}/${mediaId}`} element={<AdminSingleProject />} />
-            <Route path={`${adminInfoNotesPath}/${noteId}`} element={<AdminSingleNote />} />
-            <Route path={adminUploadPath} element={<AdminUploadMedia />} />
-            <Route path={adminSendDashPW} element={<AdminSendPW />} />
-            <Route path={adminInfoUsersPath} element={<AdminShowAllUsers />} />
-            <Route path={`${adminInfoUsersPath}/${reviewerId}`} element={<AdminShowSingleUser />} />
-            <Route path={adminInfoNotesPath} element={<AdminShowAllNotes />} />
+          <Route path={`${adminInfoMediaPath}/${mediaId}`} element={<AdminSingleProject mediaId={mediaId} />} />
+          <Route path={`${adminInfoNotesPath}/${noteId}`} element={<AdminSingleNote noteId={noteId} open={isSingleNoteModalOpen} onClose={() => { setIsSingleNoteModalOpen(false); }} />} />
+          <Route path={adminUploadPath} element={<AdminUploadMedia />} />
+          <Route path={adminSendDashPW} element={<AdminSendPW open={isSendPWOpen} onClose={() => { setIsSendPWOpen(false); }} />} />
+          <Route path={adminInfoUsersPath} element={<AdminShowAllUsers />} />
+          <Route path={`${adminInfoUsersPath}/${reviewerId}`} element={<AdminShowSingleUser userId={reviewerId} open={isSingleUserOpen} onClose={() => { setIsSingleUserOpen(false); }} />} />
+          <Route path={adminInfoNotesPath} element={<AdminShowAllNotes />} />
 
-            {/* USER'S REVIEWER ROUTES */}
-            <Route path={reviewerPath} element={<UserAllMediaToReview />} />
-            <Route path={`${reviewerPath}/${mediaId}`} element={<UserSingleProject mediaId={mediaId} />} />
+          {/* USER'S REVIEWER ROUTES */}
+          <Route path={reviewerPath} element={<UserAllMediaToReview />} />
+          <Route path={`${reviewerPath}/${mediaId}`} element={<UserSingleProject mediaId={mediaId} />} />
 
-            {/* FALLBACK */}
-            <Route path="/*" element={<Home />} />
-          </Routes>
-        </UserLoginProvider>
+          {/* FALLBACK */}
+          <Route path="/*" element={<Home />} />
+        </Routes>
       </main>
 
       <footer>
