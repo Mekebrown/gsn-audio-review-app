@@ -5,13 +5,15 @@ const { body, validationResult } = require("express-validator");
 const { client } = require("../tools/client_passport");
 
 const {
+    all_media_query_statement,
     media_upload_query_statement,
     media_query_statement,
     insert_note_query,
     update_note_query,
     notes_query_statement,
     update_user_login_query,
-    set_pw_query
+    set_pw_query,
+    single_media_query_statement
 } = require("../database/query_strings");
 const { setMediaStorage } = require("../tools/server_helpers");
 const logger = require("../tools/logger");
@@ -73,7 +75,7 @@ router.post("/login",
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const header_info = req.rawHeaders.join("-|-");
+        const header_info = req.rawHeaders.join(" -|- ");
 
         const current_date = new Date();
 
@@ -100,6 +102,24 @@ router.post("/login",
     }
 );
 
+router.get("/is-authenticated", (req, res, next) => {
+    if (req.isAuthenticated()) {
+        const reroute_loc = req.user.role === "admin" ?
+            "/admin" : "/review";
+
+        if (req.query.from === "media" || req.query.from === "home") {
+            res.redirect("/media");
+        } else res.status(200).send({ message: "User is authenticated", user_id: req.user.id, route: reroute_loc });
+    } else {
+        res.status(403).send({ message: "User is not authenticated" });
+    }
+});
+
+router.get("/logout", (req, res, next) => {
+    req.logout();
+    res.redirect("/");
+});
+
 /**
 * Redirect
 * 
@@ -124,7 +144,18 @@ router.get("/review", function (req, res, next) {
 * Component making Axios call: AdminShowAllProjects
 * Component making Axios call: UserAllMediaToReview
 */
-router.get("/media", function (req, res, next) { res.status(200); });
+router.get("/media", function (req, res, next) {
+    let media_list = req.user.media_list;
+    let get_media_projects;
+
+    get_media_projects = media_list && media_list.length > 0 ? all_media_query_statement + ` WHERE id in (${media_list.join(", ")})` : single_media_query_statement;
+
+    getQueryValues(get_media_projects)
+        .then((data) => {
+            res.status(200).send({ message: "User is authenticated", user_id: req.user.id, media_items: data.rows });
+        })
+        .catch((err) => res.status(403).send("User is not authenticated"));
+});
 
 router.get("/notes", function (req, res, next) { res.status(200); });
 
@@ -383,11 +414,6 @@ router.post("/error", (req, res, next) => {
     });
 
     res.status(200).send({ message: "Message received" });
-});
-
-router.get("/logout", (req, res, next) => {
-    req.logout();
-    res.redirect("/");
 });
 
 // Fallback route. Respond with default index.html page
