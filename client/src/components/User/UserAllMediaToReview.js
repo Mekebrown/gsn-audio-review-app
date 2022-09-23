@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { userProjectsList } from "../tools/dummy_data";
+import { userOneMediaProject } from "../tools/dummy_data";
 import axios from "axios";
 
 /**
@@ -14,7 +14,7 @@ const UserAllMediaToReview = () => {
         try {
             axios.get("/api/media")
                 .then(data => {
-                    setAllUserProjectsInfo(userProjectsList);
+                    setAllUserProjectsInfo(userOneMediaProject);
                 })
                 .catch(error => console.log(error));
         } catch (error) {
