@@ -1,7 +1,5 @@
 // https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore (mp3 and ogg)
 
-const { REACT_APP_FULL_TITLE } = process.env;
-
 const indexPath = "/";
 
 const adminPath = "/admin"; // Temporary, for testing
@@ -13,9 +11,14 @@ const adminInfoUsersPath = "/users";
 
 const reviewerPath = "/review";
 
-const mediaId = 1;
-const reviewerId = 1;
-const noteId = 1;
+const adminId = 1;
+const reviewerId = 2;
+const mediaId = 4;
+const noteId = 11;
+
+const userIds = [1, 2];
+const noteIds = [7, 8, 9, 10, 11, 13];
+const mediaIds = [2, 3, 4, 5, 6];
 
 const noteInfo = (noteId, userId, mediaId, noteBody, noteTimestamp, createdAt, updatedAt) => {
     this.noteId = noteId ? noteId : null;
@@ -66,13 +69,13 @@ const returnFileSize = (number) => {
     }
 };
 
-export default REACT_APP_FULL_TITLE;
+export default adminPath; // Temporary, for testing
 
 export {
+    adminId,
     adminInfoMediaPath,
     adminInfoNotesPath,
     adminInfoUsersPath,
-    adminPath, // Temporary, for testing
     adminSendDashPW,
     adminUploadPath,
     indexPath,
@@ -82,5 +85,8 @@ export {
     returnFileSize,
     reviewerId,
     reviewerPath,
-    validFileType
+    validFileType,
+    userIds,
+    noteIds,
+    mediaIds
 };
