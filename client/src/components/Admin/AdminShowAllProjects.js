@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { projectsList } from "../tools/dummy_data";
+import { allProjectsList } from "../tools/dummy_data";
 import axios from "axios";
 import "./AdminShowAllProjects.css";
 import { Link } from "react-router-dom";
@@ -28,15 +28,16 @@ const AdminShowAllProjects = () => {
     };
 
     useEffect(() => {
-        try {
-            axios.get("/api/media")
-                .then(data => {
-                    setAllProjectsInfo(projectsList);
-                })
-                .catch(error => console.log(error));
-        } catch (error) {
-            console.log(error);
-        }
+        axios.get("/api/is-authenticated?from=media")
+            .then((res) => {
+                if (res.status === 200) {
+                    // setAllProjectsInfo(res.data.results);
+                    // setAllProjectsInfo(res.media_items);
+
+                    setAllProjectsInfo(allProjectsList);
+                }
+            })
+            .catch(() => /* do nothing*/ { });
     }, []);
 
     return (<>
@@ -161,7 +162,8 @@ const AdminShowAllProjects = () => {
                 <h1>Welcome!</h1>
                 <p>Here, you will be seeing your uploaded media. Click the button to get started.</p>
                 <button>Upload Media</button>
-                <a href="/logout">Log Out</a><a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
+                <br /><br />
+                <a href="/logout">Log Out</a> &nbsp; {' '} &nbsp; <a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
             </>)
         }
     </>);
