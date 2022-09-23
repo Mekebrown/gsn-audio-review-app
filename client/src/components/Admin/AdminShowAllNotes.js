@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { UserContext } from "../../UserLogin";
+import React, { useEffect } from "react";
 import axios from "axios";
-import Home from "../Home";
 import { allNotesForAllProjects } from "../tools/dummy_data";
 
 /**
@@ -10,8 +8,6 @@ import { allNotesForAllProjects } from "../tools/dummy_data";
  * @returns {Node} AdminSingleNote
  */
 const AdminSingleNote = () => {
-    const { userId } = useContext(UserContext);
-
     useEffect(() => {
         axios.get("/api/notes")
             .then(data => console.log(data))
@@ -19,31 +15,29 @@ const AdminSingleNote = () => {
     });
 
     return (<>
-        {userId ?
-            <section>
-                {allNotesForAllProjects.map(project =>
-                    <li key={project.key} className="clickable tooltip">
-                        <h4>Project Name: {project.name}</h4>
+        <section>
+            {allNotesForAllProjects.map(project =>
+                <li key={project.key} className="clickable tooltip">
+                    <h4>Project Name: {project.name}</h4>
 
-                        <figure>
-                            <blockquote>
-                                <p>
-                                    {project.notes.map(note => {
-                                        return <a href="/" key={note.id}>
-                                            {note.content}
-                                        </a>;
-                                    })}
-                                </p>
-                            </blockquote>
-                        </figure>
+                    <figure>
+                        <blockquote>
+                            <p>
+                                {project.notes.map(note => {
+                                    return <a href="/" key={note.id}>
+                                        {note.content}
+                                    </a>;
+                                })}
+                            </p>
+                        </blockquote>
+                    </figure>
 
-                        <span className="tooltiptext">Want this whole block clickable or nah?</span>
+                    <span className="tooltiptext">Want this whole block clickable or nah?</span>
 
-                        <hr />
-                    </li>)
-                }
-            </section> : <Home />
-        }
+                    <hr />
+                </li>)
+            }
+        </section>
     </>);
 };
 

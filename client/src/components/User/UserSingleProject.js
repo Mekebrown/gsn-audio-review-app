@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { UserContext } from "../../UserLogin";
-import Home from "../Home";
 import AudioTrack from "../tools/AudioTrack";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -98,8 +96,6 @@ const UserSingleProject = ({ mediaId }) => {
         }
     };
 
-    const { userId } = useContext(UserContext);
-
     const getAudioTracks = (fileLocAndFileName) => {
         const trackCollection = [];
 
@@ -115,24 +111,6 @@ const UserSingleProject = ({ mediaId }) => {
     };
 
     useEffect(() => {
-        // let userIdFromLocalStorage = window.localStorage.getItem('userId') ? window.localStorage.getItem('userId') : null;
-
-        // if (!userIdFromLocalStorage && window.location.href.split("uid=")[1]) {
-        //     window.localStorage.setItem('userId', window.location.href.split("uid=")[1]);
-        //     setIsLoggedIn(true);
-        // }
-
-        // let collectedCookies = document.cookie.split(';');
-
-        // collectedCookies.forEach((item) => {
-        //     let cookieInfo = item.split("=");
-
-        //     if (cookieInfo[0] === "reviewPortal") {
-        //         setLoggedIn(true);
-
-        //     }
-        // });
-
         axios.get(`/api/media/${mediaId}`)
             .then((res) => {
                 if (res.status === 200) {
@@ -157,57 +135,56 @@ const UserSingleProject = ({ mediaId }) => {
         /* eslint-disable-next-line */
     }, [currentTimestamp]);
 
-    return (<>
-        {userId ? <section>
-            <audio controls preload="auto" ref={player}>
-                {
-                    getAudioTracks(fileLocAndName).map((track) => {
-                        return <source key={uuidv4()} src={track.file} type={track.fileType} />;
-                    })
-                }
-                Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
-            </audio>
+    return (<> <section>
+        <audio controls preload="auto" ref={player}>
+            {
+                getAudioTracks(fileLocAndName).map((track) => {
+                    return <source key={uuidv4()} src={track.file} type={track.fileType} />;
+                })
+            }
+            Unfortunately, audio tags are not supported on your device. Please install this app on another device to use.
+        </audio>
 
-            {projectName && <p>Project: {projectName}</p>}
-            {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
+        {projectName && <p>Project: {projectName}</p>}
+        {mediaDesc && <p>About this project: <em>{mediaDesc}</em></p>}
 
-            <div className="audioControls">
-                <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
+        <div className="audioControls">
+            <button className="playPause" onClick={() => handleAudioControlsClick("togglePlayPause")}>{playPauseBtnText}</button>
 
-                <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
+            <button className="reload" onClick={() => handleAudioControlsClick("reload")}>Reload</button>
+        </div>
+
+        <section className="notesContainer">
+            <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
+
+            <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
+
+                <hr />
+
+                <form className="hereThere" onSubmit={handleNoteSubmit}>
+                    <textarea className="notePadTextarea"
+                        rows="10"
+                        cols="50"
+                        title="Note pad text area"
+                        placeholder={"Note for " + currentTimestamp + ":"}
+                        name="note"
+                        maxLength="500"
+                        required
+                        value={activeNoteInTextArea}
+                        onChange={(event) => setActiveNoteInTextArea(event.target.value)}
+                        onFocus={() => setCurrentTimestamp(player.current.currentTime.toFixed(2))}
+                    >
+                    </textarea>
+
+                    <br />
+
+                    <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
+                </form>
             </div>
 
-            <section className="notesContainer">
-                <button className="createHide" onClick={handleNotePadToggle}>Create A Note</button>
-
-                <div className={hideNotePad ? "notePad hideNotePad" : "notePad"}>
-
-                    <hr />
-
-                    <form className="hereThere" onSubmit={handleNoteSubmit}>
-                        <textarea className="notePadTextarea"
-                            rows="10"
-                            cols="50"
-                            title="Note pad text area"
-                            placeholder={"Note for " + currentTimestamp + ":"}
-                            name="note"
-                            maxLength="500"
-                            required
-                            value={activeNoteInTextArea}
-                            onChange={(event) => setActiveNoteInTextArea(event.target.value)}
-                            onFocus={() => setCurrentTimestamp(player.current.currentTime.toFixed(2))}
-                        >
-                        </textarea>
-
-                        <br />
-
-                        <input className="notePadSave" name="notePadSave" type="submit" value="Save" />
-                    </form>
-                </div>
-
-                <p ref={thankYouMsg}></p>
-            </section>
-        </section> : <Home />}
+            <p ref={thankYouMsg}></p>
+        </section>
+    </section>
     </>);
 };
 

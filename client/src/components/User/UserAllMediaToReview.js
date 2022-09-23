@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from "react";
-import { allMediaToReview } from "../tools/dummy_data";
-import { UserContext } from "../../UserLogin";
-import Home from "../Home";
+import React, { useEffect, useState } from "react";
+import { userProjectsList } from "../tools/dummy_data";
 import axios from "axios";
 
 /**
@@ -10,51 +8,41 @@ import axios from "axios";
  * @returns {Node} UserAllMediaToReview
  */
 const UserAllMediaToReview = () => {
-    const { userId } = useContext(UserContext);
+    const [allUserProjectsInfo, setAllUserProjectsInfo] = useState(null);
 
     useEffect(() => {
-        axios.get("/api/users")
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        try {
+            axios.get("/api/media")
+                .then(data => {
+                    setAllUserProjectsInfo(userProjectsList);
+                })
+                .catch(error => console.log(error));
+        } catch (error) {
+            console.log(error);
+        }
     }, []);
 
     return (<>
-        {userId ?
+        {allUserProjectsInfo ?
             <section>
                 <header>
                     <h2>All Media to Review</h2>
                 </header>
 
-                {allMediaToReview.map(track =>
+                {allUserProjectsInfo.map(track =>
                     <section key={track.key}>
                         <h3>
-                            <a href="/">{track.userName}</a>
+                            <a href="/">{track.projectName}</a>
                         </h3>
-
-                        <ul>
-                            {track.usersNotes.map(note =>
-                                <li key={note.id} className="clickable tooltip">
-                                    <h4>Project: {note.project}</h4>
-
-                                    <p>Posted note on: {note.posted}</p>
-
-                                    <figure>
-                                        <blockquote>
-                                            <p><a href="/">
-                                                {note.content}
-                                            </a></p>
-                                        </blockquote>
-                                    </figure>
-                                    <hr />
-                                </li>)}
-                        </ul>
                     </section>
                 )}
-            </section> : <Home />
+            </section> : (<>
+                <h1>Welcome!</h1>
+                <p>Here, you will be seeing your uploaded media. Click the button to get started.</p>
+                <button>Upload Media</button>
+                <br />
+                <a href="/logout">Log Out</a><a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
+            </>)
         }
     </>);
 };

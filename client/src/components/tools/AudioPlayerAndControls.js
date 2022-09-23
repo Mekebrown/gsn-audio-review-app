@@ -9,12 +9,11 @@ import Axios from "axios";
  * @param {String} fileName
  * @param {Number} thumbRating
  * @param {Number} mediaId
- * @param {String} mediaDesc
- * @param {Number} userId
+ * @param {String} mediaDesc 
  * 
  * @returns {Node} AudioPlayerAndControls
  */
-const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, userId}) => {
+const AudioPlayerAndControls = ({ fileName, thumbRating, mediaId, mediaDesc }) => {
     // const [currentThumbRating, setCurrentThumbRating] = useState(thumbRating);
     // const [duration, setDuration] = useState(0);
     // const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
@@ -28,8 +27,8 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
 
     // const handleThumbRatingClick = (clickedBtn) => {
     //     setCurrentThumbRating(clickedBtn);
-        
-    //     const infoToSend = [mediaId, userId, currentThumbRating];
+
+    //     const infoToSend = [mediaId,  currentThumbRating];
     // };
 
     // Play, pause, reset - TODO volume change, stop
@@ -62,22 +61,22 @@ const AudioPlayerAndControls = ({fileName, thumbRating, mediaId, mediaDesc, user
             method: 'GET',
             body: formData
         }).then((results) => {
-            retrievalPath = <source key={source.item} src={results} type={source.type} />
+            retrievalPath = <source key={source.item} src={results} type={source.type} />;
         });
-        
+
         return retrievalPath;
     };
 
     const calculateTime = (seconds) => {
-            const actualMinutes = Math.floor(seconds / 60);
-            const FormattedMinutes = actualMinutes < 10 ? `0${actualMinutes}` : `${actualMinutes}`;
-            const secsRemainder =  Math.floor(seconds % 60);
-            const FormattedSeconds = secsRemainder < 10 ? `0${secsRemainder}` : `${secsRemainder}`;
+        const actualMinutes = Math.floor(seconds / 60);
+        const FormattedMinutes = actualMinutes < 10 ? `0${actualMinutes}` : `${actualMinutes}`;
+        const secsRemainder = Math.floor(seconds % 60);
+        const FormattedSeconds = secsRemainder < 10 ? `0${secsRemainder}` : `${secsRemainder}`;
 
-            return `${FormattedMinutes}:${FormattedSeconds}`;
-        }
+        return `${FormattedMinutes}:${FormattedSeconds}`;
+    };
 
-        console.log("Not available");
+    console.log("Not available");
 
     // useEffect(() => {
     //     if (thePlayer?.current?.duration) {

@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { allUsers } from "../tools/dummy_data";
-import { UserContext } from "../../UserLogin";
-import Home from "../Home";
 import axios from "axios";
 
 /**
@@ -10,8 +8,6 @@ import axios from "axios";
  * @returns {Node} AdminShowAllUsers
  */
 const AdminShowAllUsers = () => {
-    const { userId } = useContext(UserContext);
-
     useEffect(() => {
         axios.get("/api/users")
             .then(data => {
@@ -23,39 +19,37 @@ const AdminShowAllUsers = () => {
     }, []);
 
     return (<>
-        {userId ?
-            <section>
-                <header>
-                    <h2>Users</h2>
-                </header>
+        <section>
+            <header>
+                <h2>Users</h2>
+            </header>
 
-                {allUsers.map(user =>
-                    <section key={user.key}>
-                        <h3>
-                            <a href="/">{user.userName}</a>
-                        </h3>
+            {allUsers.map(user =>
+                <section key={user.key}>
+                    <h3>
+                        <a href="/">{user.userName}</a>
+                    </h3>
 
-                        <ul>
-                            {user.usersNotes.map(note =>
-                                <li key={note.id} className="clickable tooltip">
-                                    <h4>Project: {note.project}</h4>
+                    <ul>
+                        {user.usersNotes.map(note =>
+                            <li key={note.id} className="clickable tooltip">
+                                <h4>Project: {note.project}</h4>
 
-                                    <p>Posted note on: {note.posted}</p>
+                                <p>Posted note on: {note.posted}</p>
 
-                                    <figure>
-                                        <blockquote>
-                                            <p><a href="/">
-                                                {note.content}
-                                            </a></p>
-                                        </blockquote>
-                                    </figure>
-                                    <hr />
-                                </li>)}
-                        </ul>
-                    </section>
-                )}
-            </section> : <Home />
-        }
+                                <figure>
+                                    <blockquote>
+                                        <p><a href="/">
+                                            {note.content}
+                                        </a></p>
+                                    </blockquote>
+                                </figure>
+                                <hr />
+                            </li>)}
+                    </ul>
+                </section>
+            )}
+        </section>
     </>);
 };
 

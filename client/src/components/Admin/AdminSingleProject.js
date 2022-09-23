@@ -1,6 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import Home from "../Home";
-import { UserContext } from "../../UserLogin";
+import React, { useEffect } from "react";
 import { singleProject } from "../tools/dummy_data";
 import axios from "axios";
 
@@ -9,11 +7,7 @@ import axios from "axios";
  * 
  * @returns {Node} AdminSingleProject
  */
-const AdminSingleProject = () => {
-    const mediaId = window.location.href.split("media/")[1];
-    const { userId } = useContext(UserContext);
-
-
+const AdminSingleProject = ({ mediaId }) => {
     useEffect(() => {
         axios.get(`/api/media/${mediaId}`)
             .then(response => { return JSON.parse(response); })
@@ -22,90 +16,88 @@ const AdminSingleProject = () => {
     });
 
     return (<>
-        {userId ?
-            <section>
-                <div style={{ border: "1px solid grey" }}>
-                    <div>
-                        <img src="" alt="Play button default" />
-                    </div>
-
-                    <div className="wavForm">
-                        <small>00:00</small>
-                        <small>48:12</small>
-                    </div>
-
-                    <div>
-                        <h3>Team Name</h3>
-                        <h2>Project Name</h2>
-                        <p>This will have some kind of text, I dunno</p>
-                    </div>
+        <section>
+            <div style={{ border: "1px solid grey" }}>
+                <div>
+                    <img src="" alt="Play button default" />
                 </div>
 
-                <div style={{ border: "1px solid grey" }}>
-                    <nav>
-                        <button>Share</button>
-                        <button>Make A Note</button>
-                        <button>Delete</button>
-                    </nav>
-
-                    <nav>
-                        <button>Share</button>
-                        <button>Make A Note</button>
-                        <button>Delete</button>
-                    </nav>
+                <div className="wavForm">
+                    <small>00:00</small>
+                    <small>48:12</small>
                 </div>
 
-                <div style={{ border: "1px solid grey" }}>
+                <div>
+                    <h3>Team Name</h3>
+                    <h2>Project Name</h2>
+                    <p>This will have some kind of text, I dunno</p>
+                </div>
+            </div>
+
+            <div style={{ border: "1px solid grey" }}>
+                <nav>
+                    <button>Share</button>
+                    <button>Make A Note</button>
+                    <button>Delete</button>
+                </nav>
+
+                <nav>
+                    <button>Share</button>
+                    <button>Make A Note</button>
+                    <button>Delete</button>
+                </nav>
+            </div>
+
+            <div style={{ border: "1px solid grey" }}>
+                <img src="" alt="" />
+                <p>Some text will go here, the description of the media itself. The other description will be about the project (which can have more than one media work).</p>
+                <div style={{ backgroundColor: "purple", width: "35px" }}>Tag</div>
+            </div>
+
+            <div style={{ border: "1px solid grey" }}>
+                Write A Note
+            </div>
+
+            <div style={{ border: "1px solid grey" }}>
+                <div>
                     <img src="" alt="" />
-                    <p>Some text will go here, the description of the media itself. The other description will be about the project (which can have more than one media work).</p>
-                    <div style={{ backgroundColor: "purple", width: "35px" }}>Tag</div>
                 </div>
-
-                <div style={{ border: "1px solid grey" }}>
-                    Write A Note
+                <div>
+                    <h4>Duane Frank</h4>
+                    <p>
+                        Lorem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum. Lorem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum. Lorem ipsum orem ipsum orem ipsum.
+                    </p>
                 </div>
+            </div>
+            {singleProject.map(project =>
+                <section key={project.key}>
+                    <h3>
+                        <a href="/">{project.project_name}</a>
+                    </h3>
 
-                <div style={{ border: "1px solid grey" }}>
-                    <div>
-                        <img src="" alt="" />
-                    </div>
-                    <div>
-                        <h4>Duane Frank</h4>
-                        <p>
-                            Lorem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum. Lorem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum orem ipsum. Lorem ipsum orem ipsum orem ipsum.
-                        </p>
-                    </div>
-                </div>
-                {singleProject.map(project =>
-                    <section key={project.key}>
-                        <h3>
-                            <a href="/">{project.project_name}</a>
-                        </h3>
+                    <ul>
+                        {project.totalNotes.map(note =>
+                            <li key={note.noteId} className="clickable tooltip">
+                                <h4>Reviewer: {note.userId}</h4>
 
-                        <ul>
-                            {project.totalNotes.map(note =>
-                                <li key={note.noteId} className="clickable tooltip">
-                                    <h4>Reviewer: {note.userId}</h4>
+                                <p>Posted on: {note.updatedAt}</p>
 
-                                    <p>Posted on: {note.updatedAt}</p>
+                                <figure>
+                                    <blockquote>
+                                        <p><a href="/">
+                                            {note.noteBody}
+                                        </a></p>
+                                    </blockquote>
+                                </figure>
 
-                                    <figure>
-                                        <blockquote>
-                                            <p><a href="/">
-                                                {note.noteBody}
-                                            </a></p>
-                                        </blockquote>
-                                    </figure>
+                                <span className="tooltiptext">Want this whole block clickable or nah?</span>
 
-                                    <span className="tooltiptext">Want this whole block clickable or nah?</span>
-
-                                    <hr />
-                                </li>)}
-                        </ul>
-                    </section>
-                )}
-            </section> : <Home />
-        }
+                                <hr />
+                            </li>)}
+                    </ul>
+                </section>
+            )}
+        </section>
     </>);
 };
 

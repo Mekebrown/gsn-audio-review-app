@@ -1,7 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { projectsList } from "../tools/dummy_data";
-import { UserContext } from "../../UserLogin";
-import Home from "../Home";
 import axios from "axios";
 import "./AdminShowAllProjects.css";
 import { Link } from "react-router-dom";
@@ -15,8 +13,6 @@ import { Link } from "react-router-dom";
  */
 const AdminShowAllProjects = () => {
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
-    const { userId, setUserId } = useContext(UserContext);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleNoteSubmit = (e) => {
         e.preventDefault();
@@ -32,27 +28,19 @@ const AdminShowAllProjects = () => {
     };
 
     useEffect(() => {
-        axios.get("/api/media")
-            .then(data => {
-                setAllProjectsInfo(projectsList);
-
-                if (!userId) {
-                    let userIdFromLocalStorage = parseInt(window.localStorage.getItem('userId'));
-
-                    if (userIdFromLocalStorage) {
-                        setUserId(userIdFromLocalStorage);
-
-                        setIsLoggedIn(true);
-                    } else setIsLoggedIn(false);
-                } else setIsLoggedIn(true);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        try {
+            axios.get("/api/media")
+                .then(data => {
+                    setAllProjectsInfo(projectsList);
+                })
+                .catch(error => console.log(error));
+        } catch (error) {
+            console.log(error);
+        }
     }, []);
 
     return (<>
-        {isLoggedIn ?
+        {allProjectsInfo ?
             <section>
                 {/** Search Filters */}
                 <section className="search">
@@ -153,7 +141,6 @@ const AdminShowAllProjects = () => {
                         <form className={`note-${project.key} hiddenComment`} onSubmit={handleNoteSubmit}>
                             <textarea title="addComment" placeholder={"Note for " + audio.currentTime.toFixed(2) + ":"} />
                             <input type="hidden" title="mediaId" value={project.mediaId} />
-                            <input type="hidden" title="userId" value={project.userId} />
                             <input type="hidden" title="timestamp" value={audio.currentTime.toFixed(2)} />
                             <button type="submit">Add Note</button>
                         </form>
@@ -170,7 +157,12 @@ const AdminShowAllProjects = () => {
                         <Link to={`/admin/retrieve-info/media/${project.mediaId}`}>View</Link>
                     </div>;
                 })}
-            </section> : <Home />
+            </section> : (<>
+                <h1>Welcome!</h1>
+                <p>Here, you will be seeing your uploaded media. Click the button to get started.</p>
+                <button>Upload Media</button>
+                <a href="/logout">Log Out</a><a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
+            </>)
         }
     </>);
 };

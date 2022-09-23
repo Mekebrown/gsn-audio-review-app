@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { UserContext } from "../UserLogin";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
@@ -16,8 +15,6 @@ const Home = () => {
         width: undefined,
         height: undefined,
     });
-
-    const { userId, setUserId } = useContext(UserContext);
 
     let cx = classNames.bind(styles);
 
@@ -50,18 +47,12 @@ const Home = () => {
                 }
             })
             .then(data => {
-                setUserId(data.user_id);
-                window.localStorage.setItem('userId', data.user_id);
                 userMsg.textContent = "Log in accepted. Loading review section...";
 
                 return data.loc;
             })
-            .then((forwardLocation) => {
-                setTimeout(() => {
-                    window.location.href = forwardLocation;
-                }, 3000);
-            })
-            .catch((error) => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
+            .then((forwardLocation) => window.location.href = forwardLocation)
+            .catch(() => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
     };
 
     useEffect(() => {
@@ -85,35 +76,34 @@ const Home = () => {
     }, []);
 
     return (<>
-        {!userId ?
-            <main className="cont">
-                <section className="sect" aria-labelledby="log-in">
-                    <p>
-                        <span className="yellow">Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears.
-                    </p>
-                    <small className="specialColoring">
-                        Enter your given password to review your project...
-                    </small>
+        <main className="cont">
+            <section className="sect" aria-labelledby="log-in">
+                <p>
+                    <span className="yellow">Gifted Sounds</span> gives you instant access to the audio, video, images, ANY media you create, from the moment it’s ready for your eyes and ears.
+                </p>
+                <small className="specialColoring">
+                    Enter your given password to review your project...
+                </small>
 
-                    <form id="log-in" onSubmit={handleSubmit}>
-                        <p title="userMsg" id="userMsg"></p>
-                        <div className={loginFields}>
-                            <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
+                <form id="log-in" onSubmit={handleSubmit}>
+                    <p title="userMsg" id="userMsg"></p>
+                    <div className={loginFields}>
+                        <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
 
-                            {' '}
+                        {' '}
 
-                            <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
-                        </div>
-                        <br />
-                        <button title="submit" type="submit">
-                            <FontAwesomeIcon icon={faPaperPlane} />
-                            {' '}
-                            Login
-                        </button>
-                    </form>
-                </section>
+                        <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
+                    </div>
+                    <br />
+                    <button title="submit" type="submit">
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                        {' '}
+                        Login
+                    </button>
+                </form>
+            </section>
 
-                {/* <section className={showAnimation}>
+            {/* <section className={showAnimation}>
                     <div className="largePurple"></div>
                     <div className="largWhite"></div>
                     <div className="purpleCircle"></div>                   
@@ -124,8 +114,7 @@ const Home = () => {
                     
                     <svg className="playCircle" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-play" className="svg-inline--fa fa-circle-play playCircle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#c98f27" d="M512 256C512 397.4 397.4 512 256 512C114.6 512 0 397.4 0 256C0 114.6 114.6 0 256 0C397.4 0 512 114.6 512 256zM176 168V344C176 352.7 180.7 360.7 188.3 364.9C195.8 369.2 205.1 369 212.5 364.5L356.5 276.5C363.6 272.1 368 264.4 368 256C368 247.6 363.6 239.9 356.5 235.5L212.5 147.5C205.1 142.1 195.8 142.8 188.3 147.1C180.7 151.3 176 159.3 176 168V168z"></path></svg>
                 </section> */}
-            </main> : <div>Thank you for visiting</div>
-        }
+        </main>
     </>);
 };
 
