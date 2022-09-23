@@ -10,10 +10,11 @@ const {
     insert_note_query,
     update_note_query,
     notes_query_statement,
-    login_query,
+    update_user_login_query,
     set_pw_query
 } = require("../database/query_strings");
 const { setMediaStorage } = require("../tools/server_helpers");
+const logger = require("../tools/logger");
 
 require("dotenv").config();
 
@@ -42,109 +43,103 @@ const getQueryValues = (queryStatement, params = []) => {
  * Component making Axios call: Home
  */
 router.post("/login",
-    // body('username').trim().escape().not().isEmpty()
-    //     .withMessage('Username cannot be empty')
-    //     .isLength({ min: 5 })
-    //     .withMessage('Username must be five or more characters long')
-    //     .isLength({ max: 25 })
-    //     .withMessage('Username must be up to 25 characters long'),
-    // body('password').trim().escape().not().isEmpty()
-    //     .withMessage('Password cannot be empty')
-    //     .matches(/[LTa-z-]/g)
-    //     .withMessage('Password not correct'),
+    body('username').trim().escape().not().isEmpty()
+        .withMessage('Username cannot be empty')
+        .isLength({ min: 5 })
+        .withMessage('Username must be five or more characters long')
+        .isLength({ max: 25 })
+        .withMessage('Username must be up to 25 characters long'),
+    body('password').trim().escape().not().isEmpty()
+        .withMessage('Password cannot be empty')
+        .matches(/[LTa-z-]/g)
+        .withMessage('Password not correct'),
     passport.authenticate('local'), //          admin@email.enter        aLotmosdef-behemoth-souls
     (req, res, next) => {
-        // const errors = validationResult(req);
+        const errors = validationResult(req);
 
-        // if (!errors.isEmpty()) {
-        //     logger({
-        //         desc: "validate_login",
-        //         req: "Body: " + JSON.stringify(req.body),
-        //         res: "N/A - Sent a 400",
-        //         headers: req.rawHeaders[9] + " -|- " +
-        //             req.rawHeaders[13] + " -|- " +
-        //             req.rawHeaders[21] + " -|- " +
-        //             req.rawHeaders[22] + "-" +
-        //             req.rawHeaders[23],
-        //         message: JSON.stringify(errors)
-        //     });
+        if (!errors.isEmpty()) {
+            logger({
+                desc: "validate_login",
+                req: "Body: " + JSON.stringify(req.body),
+                res: "N/A - Sent a 400",
+                headers: req.rawHeaders[9] + " -|- " +
+                    req.rawHeaders[13] + " -|- " +
+                    req.rawHeaders[21] + " -|- " +
+                    req.rawHeaders[22] + "-" +
+                    req.rawHeaders[23],
+                message: JSON.stringify(errors)
+            });
 
-        //     return res.status(400).json({ errors: errors.array() });
-        // }
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-        const { username, password } = req.body;
+        const header_info = req.rawHeaders.join("-|-");
 
-        res.status(200).send(`Information accepted`);
-        // const visitor_role = password === process.env.SECRET_ENTRY_ADMIN_VALUE ?
-        //   "admin" : password === process.env.SECRET_ENTRY_REVIEWER_VALUE ?
-        //     "reviewer" : null;
+        const current_date = new Date();
 
-        // if (visitor_role) {
-        //   const reroute_loc = visitor_role === "reviewer" ?
-        //     "/review" : "/admin";
+        const update_user_login_values = [header_info, current_date, req.body.username];
 
-        //   const country_loc = req.rawHeaders[9];
-        //   const device_info = req.rawHeaders[22] + " - " + req.rawHeaders[23];
+        req.session.role = req.user.role;
 
-        //   const current_date = new Date();
+        getQueryValues(update_user_login_query, update_user_login_values)
+            .then((data) => {
+                const reroute_loc = data.rows[0].role === "admin" ?
+                    "/admin" : "/review";
 
-        //   const login_values = [username, country_loc, device_info, visitor_role, current_date];
+                req.session.role = data.rows[0].role;
 
-        //   getQueryValues(login_query, login_values)
-        //     .then((data) => res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id }))
-        //     .catch((err) => console.log(err));
-        // } else {
-        //   logger({
-        //     desc: "post_homepage_login_check",
-        //     req: "Body: " + JSON.stringify(req.body),
-        //     res: "N/A",
-        //     headers: country_loc + " " + device_info,
-        //     message: "N/A"
-        //   });
+                if (req.session.views) {
+                    req.session.views++;
+                } else {
+                    req.session.views = 1;
+                }
 
-        //   res.status(403).send("Information not accepted");
-        // }
+                res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id });
+            })
+            .catch((err) => res.status(403).send("Information not accepted"));
     }
 );
 
 /**
-* Get type of info. Respond with all data for the type (notes, media, or users)
+* Redirect
 * 
-* Component making Axios call: App/Home
-* Component making Axios call: AdminShowAllNotes (type: Notes) - Temporary. Eventually will go through home page
-* Component making Axios call: AdminShowAllUsers (type: User) - Temporary. Eventually will go through home page
-* Component making Axios call: AdminShowAllProjects (type: Media) - Temporary. Eventually will go through home page
+* Internal redirect
 */
-router.get("/:type", function (req, res, next) {
-    res.status(200).send(`All info for ${req.params.type} sent to front end`);
-    // let retrieve_all_media = "SELECT * FROM media;";
-    // let retrieve_all_notes = "SELECT * FROM notes;";
-    // let dataToSend = {};
+router.get("/admin", function (req, res, next) {
+    res.status(200).send(`All info will be sent to the front end`);
+});
 
-    // getQueryValues(retrieve_all_media)
-    //   .then((data) => {
-    //     dataToSend = data.rows;
+/**
+* Redirect
+* 
+* Internal redirect
+*/
+router.get("/review", function (req, res, next) {
+    res.status(200).send(`All info will be sent to the front end`);
+});
 
-    //     return getQueryValues(retrieve_all_notes);
-    //   })
-    //   .then((data) => {
-    //     dataToSend = { ...dataToSend, "totalNotesFromServer": data.rows };
+/**
+* Respond with all media info
+* 
+* Component making Axios call: AdminShowAllProjects
+* Component making Axios call: UserAllMediaToReview
+*/
+router.get("/media", function (req, res, next) { res.status(200); });
 
-    //     res.status(200).send({ message: "Success", media: dataToSend });
-    //   })
-    //   .catch((err) => {
-    //     logger({
-    //       desc: "get_retrieve_info_media_id",
-    //       req: "",
-    //       res: "N/A",
-    //       headers: "N/A",
-    //       message: JSON.stringify(err)
-    //     });
+router.get("/notes", function (req, res, next) { res.status(200); });
 
-    //     console.error("Promise rejection error: " + err);
+router.get("/users", function (req, res, next) { res.status(200); });
 
-    //     throw err;
-    //   });
+/**
+* Get a type and its id (media, note, user). Respond with that type's data.
+* 
+* Component making Axios call: UserSingleProject (type: Media)
+* Component making Axios call: AdminSingleNote (type: Note)
+* Component making Axios call: AdminSingleProject (type: Media)
+* Component making Axios call: AdminShowSingleUser (type: User)
+*/
+router.get("/media/:id", (req, res, next) => {
+    res.status(200);
 });
 
 /**
@@ -155,73 +150,20 @@ router.get("/:type", function (req, res, next) {
 * Component making Axios call: AdminSingleProject (type: Media)
 * Component making Axios call: AdminShowSingleUser (type: User)
 */
-router.get("/:type/:id", (req, res, next) => {
-    res.status(200).send(`${req.params.id} of type ${req.params.type} sent to front end`);
-    // const media_id = parseInt(req.params.media_id) ? parseInt(req.params.media_id) : 1;
-    // const user_id = 1;
-    // let dataToSend = {};
-
-    // getQueryValues(media_query_statement, [media_id])
-    //   .then((data) => {
-    //     dataToSend = data.rows[0];
-
-    //     return getQueryValues(notes_query_statement, [media_id, user_id]);
-    //   })
-    //   .then((data) => {
-    //     dataToSend = { ...dataToSend, "totalNotesFromServer": data.rows };
-
-    //     res.status(200).send(dataToSend);
-    //   })
-    //   .catch((err) => {
-    //     logger({
-    //       desc: "get_usingle_mediaQuery",
-    //       req: "media_query_statement: " + media_query_statement + " -|- notes_query_statement: " + notes_query_statement,
-    //       res: "N/A",
-    //       headers: "N/A",
-    //       message: JSON.stringify(err)
-    //     });
-
-    //     console.error("Promise rejection error (Media): " + err);
-
-    //     throw err;
-    //   });
+router.get("/notes/:id", (req, res, next) => {
+    res.status(200);
 });
 
 /**
-* Get a media id. Respond with that media's data.
+* Get a type and its id (media, note, user). Respond with that type's data.
 * 
-* Component making Axios call: App
+* Component making Axios call: UserSingleProject (type: Media)
+* Component making Axios call: AdminSingleNote (type: Note)
+* Component making Axios call: AdminSingleProject (type: Media)
+* Component making Axios call: AdminShowSingleUser (type: User)
 */
-router.get("/retrieve-info/media/:media_id", function (req, res, next) {
-    res.status(200).send(`${req.params.media_id} sent to front end`);
-    // let media_id = req.params.media_id;
-    // let tbd = "";
-    // let dataToSend = {};
-
-    // getQueryValues(tbd, [ media_id ])
-    // .then((data) => {
-    //   dataToSend = data.rows[0];
-
-    //   return getQueryValues(notes_query_statement, [ media_id, user_id ]);
-    // })
-    // .then((data) => {
-    //   dataToSend = {...dataToSend, "totalNotesFromServer": data.rows};
-
-    // res.status(200).send({ message: "Success", media: media_id });
-    // })
-    // .catch((err) => {
-    //   logger({
-    //      desc: "get_retrieve_info_media_id", 
-    //     req: "", 
-    //     res: "N/A",
-    //     headers: "N/A",
-    //     message: JSON.stringify(err)
-    //   });      
-
-    //   console.error("Promise rejection error (Media): " + err);
-
-    //   throw err;
-    // });
+router.get("/users/:id", (req, res, next) => {
+    res.status(200);
 });
 
 /**
@@ -426,7 +368,7 @@ router.get("/send-pw", (req, res, next) => {
     res.status(200).send("Password generated");
 });
 
-router.delete('/:type/:id', (req, res, next) => {
+router.delete('/users/:id', (req, res, next) => {
     res.send('Got a DELETE request');
 });
 
