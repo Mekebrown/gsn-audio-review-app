@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -6,9 +6,8 @@ import {
   Link
 } from "react-router-dom";
 import logo from "./components/tools/logo.png";
-import {
+import adminPath, {
   indexPath,
-  adminPath,
   adminInfoMediaPath,
   adminUploadPath,
   adminSendDashPW,
@@ -36,9 +35,11 @@ import AdminShowAllNotes from "./components/Admin/AdminShowAllNotes";
 
 import UserSingleProject from "./components/User/UserSingleProject";
 import UserAllMediaToReview from "./components/User/UserAllMediaToReview";
+import axios from "axios";
 
 const App = () => {
   const [userId, setUserId] = useState(null);
+  const [userRoute, setUserRoute] = useState("/");
   const [isSingleNoteModalOpen, setIsSingleNoteModalOpen] = useState(false);
   const [isSingleUserOpen, setIsSingleUserOpen] = useState(false);
   const [isSendPWOpen, setIsSendPWOpen] = useState(false);
@@ -49,11 +50,22 @@ const App = () => {
   let topBarLinksCont = cx({ hideOption: !userId });
   let topBarLinks = cx({ displayInline: userId, rightSection: userId });
   let searchBarInput = cx({ hideOption: userId });
-
+  let linksSection = cx({ hideOption: !userId });
 
   if (document.getElementById("splasher")) {
     document.body.removeChild(document.getElementById("splasher"));
   }
+
+  useEffect(() => {
+    axios.get("/api/is-authenticated")
+      .then((res) => {
+        if (res.status === 200) {
+          setUserId(res.data.user_id);
+          setUserRoute(res.data.route);
+        }
+      })
+      .catch(() => /* do nothing*/ { });
+  }, []);
 
   return (
     <Router>
@@ -97,7 +109,7 @@ const App = () => {
         </nav>
       </header>
 
-      <div>
+      <div className={linksSection}>
         {/* Temporary, for testing */}
         <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
         {/* Temporary, for testing */}
@@ -112,12 +124,12 @@ const App = () => {
 
         <Link to={reviewerPath}>User - All Media</Link><br /> {/** /review */}
         <Link to={`${reviewerPath}/${mediaId}`}>User - Single Media</Link><br /> {/** /review/:media_id */}
-        <Link to="/logout">Log out</Link>
+        {userId && <Link to="/api/logout">Log out</Link>}
       </div>
 
       <main>
         <Routes>
-          <Route exact path={indexPath} element={<Home />} />
+          <Route exact path={indexPath} element={<Home route={userRoute} />} />
           {/* AudioPlayerOnly to be used inside of AllProjects and AdminSingleProject components */}
           {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
           {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
@@ -141,7 +153,7 @@ const App = () => {
           <Route path={`${reviewerPath}/${mediaId}`} element={<UserSingleProject mediaId={mediaId} />} />
 
           {/* FALLBACK */}
-          <Route path="/*" element={<Home />} />
+          <Route path="/*" element={<Home route={userRoute} />} />
         </Routes>
       </main>
 
