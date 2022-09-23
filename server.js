@@ -53,15 +53,6 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24 // One day
   }
 }));
-app.use((req, res, next) => {
-  if (req.session.visits) {
-    req.session.visits++;
-  } else {
-    req.session.visits = 1;
-  }
-
-  next();
-});
 app.use(passport.initialize());
 app.use(passport.session());
 
