@@ -74,7 +74,7 @@ app.use((err, req, res, next) => {
     message: JSON.stringify(err)
   });
 
-  res.status(500).send('Something broke!').redirect('/login');;
+  res.status(500).redirect('/');;
 });
 
 app.listen(process.env.PORT || 3001, function () {
