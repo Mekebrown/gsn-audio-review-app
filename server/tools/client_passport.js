@@ -2,7 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const { login_query } = require("../database/query_strings");
-const { logger } = require("./logger");
+const logger = require("./logger");
 const { Client } = require('pg');
 
 require("dotenv").config();
@@ -37,7 +37,6 @@ client.connect()
     }
     );
 
-// admin@email.enter|||aLotmosdef-behemoth-souls
 passport.use(new LocalStrategy(
     function (username, password, done) {
         client.query(login_query, [username], (err, res) => {
@@ -54,8 +53,6 @@ passport.use(new LocalStrategy(
             }
 
             if (res.rows.length === 0) {
-                console.log('Looks like the record was not retrieved');
-                console.log('===================================');
                 return done(null, false, { message: 'Incorrect username.' });
             }
 
@@ -64,8 +61,6 @@ passport.use(new LocalStrategy(
 
             bcrypt.compare(password, hashed_password).then(function (result) {
                 if (!result) return done(null, false, { message: 'Incorrect password.' });
-                console.log('Okay, the password is correct.');
-                console.log('===================================');
 
                 return done(null, user);
             });
