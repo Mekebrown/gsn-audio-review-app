@@ -125,33 +125,16 @@ const projectsList = [
     }
 ];
 
-const singleAdmin = {
-    user_name: "Admin Admin",
-    last_login: "01-02-2020",
-    recent_activity: [
-        {
-            recent_notes: [
-                "One note here",
-                "A note from the sounds of the forest"
-            ],
-            recent_users: "Moose"
-        }
-    ],
-    projects: [
-        {
-            key: 1, name: "Prince's \"If I Was Your Girlfriend\""
-        },
-        {
-            key: 2, name: "The 4400"
-        },
-        {
-            key: 3, name: "TikTok Vybes"
-        },
-        {
-            key: 4, name: "Vox Machina"
-        }
-    ]
-};
+const userProjectsList = [
+    {
+        key: 1,
+        mediaId: 1,
+        mediaFile: "https://ia801404.us.archive.org/6/items/maurice-level-_-la-mysterieuse-lady-dunmoore/Maurice_level_-_La_Mysterieuse_Lady_Dunmoore.mp3",
+        projectName: "Vox Machina",
+        projectDesc: "Vox Machina - This will have a description eventually",
+        projectThumb: "https://www.firstbenefits.org/wp-content/uploads/2017/10/placeholder.png"
+    }
+];
 
 const allUsers = [
     {
@@ -373,7 +356,7 @@ const allNotesForAllProjects = [
 
 const currDateTime = new Date();
 
-const newSampleNote = {
+const singleNote = {
     media_id: 1,
     user_id: 1001,
     note_id: 11111,
@@ -381,6 +364,33 @@ const newSampleNote = {
     note_last_retrieved: currDateTime,
     note_timestamp: currDateTime,
 };
+
+const singleUser = [
+    {
+        key: 1,
+        userName: "Norma",
+        usersNotes: [
+            {
+                id: 11,
+                project: "Blah",
+                posted: "2-1-2022",
+                content: "This will always be note one"
+            },
+            {
+                id: 12,
+                project: "Blah",
+                posted: "7-5-2021",
+                content: "This will always be note two"
+            },
+            {
+                id: 13,
+                project: "Blah",
+                posted: "12-1-2020",
+                content: "This will always be note three"
+            }
+        ]
+    }
+];
 
 const updatedSampleNote = {
     media_id: 1,
@@ -460,8 +470,9 @@ export {
     allUsers,
     allNotesForAllProjects,
     projectsList,
-    singleAdmin,
     singleProject,
-    newSampleNote,
-    updatedSampleNote
+    singleNote,
+    singleUser,
+    updatedSampleNote,
+    userProjectsList
 };
