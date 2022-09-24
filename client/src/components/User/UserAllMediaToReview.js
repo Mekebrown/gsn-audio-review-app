@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { userOneMediaProject } from "../tools/dummy_data";
 import axios from "axios";
+
+import { userOneMediaProject } from "../tools/dummy_data";
+import NoMediaDisplay from "../General/NoMediaDisplay";
 
 /**
  * This page will show every user and their notes.
@@ -36,13 +38,7 @@ const UserAllMediaToReview = () => {
                         </h3>
                     </section>
                 )}
-            </section> : (<>
-                <h1>Welcome!</h1>
-                <p>Here, you will be seeing your uploaded media. Click the button to get started.</p>
-                <button>Upload Media</button>
-                <br />
-                <a href="/logout">Log Out</a><a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
-            </>)
+            </section> : (<NoMediaDisplay />)
         }
     </>);
 };

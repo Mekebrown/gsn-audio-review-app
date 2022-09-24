@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { allProjectsList } from "../tools/dummy_data";
-import axios from "axios";
-import "./AdminShowAllProjects.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+import { allProjectsList } from "../tools/dummy_data";
+import "./AdminShowAllProjects.css";
+import NoMediaDisplay from "../General/NoMediaDisplay";
 
 /**
  * This page will show all projects.
@@ -158,13 +160,7 @@ const AdminShowAllProjects = () => {
                         <Link to={`/admin/retrieve-info/media/${project.mediaId}`}>View</Link>
                     </div>;
                 })}
-            </section> : (<>
-                <h1>Welcome!</h1>
-                <p>Here, you will be seeing your uploaded media. Click the button to get started.</p>
-                <button>Upload Media</button>
-                <br /><br />
-                <a href="/logout">Log Out</a> &nbsp; {' '} &nbsp; <a href="https://www.giftedsounds.com">Gifted Sounds Network</a>
-            </>)
+            </section> : (<NoMediaDisplay />)
         }
     </>);
 };
