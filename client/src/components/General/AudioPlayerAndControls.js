@@ -76,8 +76,6 @@ const AudioPlayerAndControls = ({ fileName, thumbRating, mediaId, mediaDesc }) =
         return `${FormattedMinutes}:${FormattedSeconds}`;
     };
 
-    console.log("Not available");
-
     // useEffect(() => {
     //     if (thePlayer?.current?.duration) {
     //         const sec = Math.floor(thePlayer.current.duration);
