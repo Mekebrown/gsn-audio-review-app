@@ -6,6 +6,7 @@ const { client } = require("../tools/client_passport");
 
 const {
     all_media_query_statement,
+    contact_query_statement,
     media_upload_query_statement,
     media_query_statement,
     insert_note_query,
@@ -107,9 +108,7 @@ router.get("/is-authenticated", (req, res, next) => {
         const reroute_loc = req.user.role === "admin" ?
             "/admin" : "/review";
 
-        if (req.query.from === "media" || req.query.from === "home") {
-            res.redirect("/media");
-        } else res.status(200).send({ message: "User is authenticated", user_id: req.user.id, route: reroute_loc });
+        res.status(200).send({ message: "User is authenticated", user_id: req.user.id, route: reroute_loc });
     } else {
         res.status(403).send({ message: "User is not authenticated" });
     }
@@ -401,6 +400,41 @@ router.get("/send-pw", (req, res, next) => {
 
 router.delete('/users/:id', (req, res, next) => {
     res.send('Got a DELETE request');
+});
+
+/**
+ * Form values: checkbox of reason for contact, message 
+ * 
+ * Component making Axios call: ContactForm - Modal from App.js icon
+ */
+router.post("/contact", (req, res, next) => {
+    const { reason, message } = req.body;
+
+    const current_datetime = new Date();
+
+    const contact_values = { reason: reason, message: message, date_time: current_datetime };
+
+    getQueryValues(contact_query_statement, [contact_values, req.user.id])
+        .then((data) => {
+            logger({
+                location: "./files/logs/",
+                desc: "contact",
+                headers: req.rawHeaders.join(" -|- "),
+                message: JSON.stringify(contact_values) + " -|- " + JSON.stringify(data)
+            });
+
+            res.status(200).send({ message: "Contact form submitted" });
+        })
+        .catch((err) => {
+            logger({
+                location: "./files/logs/",
+                desc: "contact_error",
+                headers: req.rawHeaders.join(" -|- "),
+                message: JSON.stringify(contact_values) + " -|- " + JSON.stringify(err)
+            });
+
+            res.status(403).send({ message: "Contact form not submitted" });
+        });
 });
 
 router.post("/error", (req, res, next) => {
