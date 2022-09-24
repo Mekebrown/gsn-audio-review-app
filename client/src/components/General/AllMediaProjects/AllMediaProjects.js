@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 import "./AllMediaProjects.css";
 import NoMediaDisplay from "../NoMediaDisplay";
@@ -12,7 +13,9 @@ import NoMediaDisplay from "../NoMediaDisplay";
  * 
  * @returns {Node} AllMediaProjects
  */
-const AllMediaProjects = () => {
+const AllMediaProjects = ({ userId }) => {
+    const navigate = useNavigate();
+
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
 
     const handleNoteSubmit = (e) => {
@@ -27,13 +30,15 @@ const AllMediaProjects = () => {
     };
 
     useEffect(() => {
-        axios.get("/api/media")
-            .then((res) => {
-                if (res.status === 200) {
-                    setAllProjectsInfo(res.data.media_items);
-                }
-            })
-            .catch(() => /* do nothing*/ { });
+        if (!userId) {
+            axios.get("/api/media")
+                .then((res) => {
+                    if (res.status && res.status === 200) {
+                        setAllProjectsInfo(res.data.media_items);
+                    } else navigate('/');
+                })
+                .catch(() => /* do nothing*/ { });
+        }
     }, []);
 
     return (<>
