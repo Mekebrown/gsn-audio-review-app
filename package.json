@@ -26,6 +26,7 @@
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
+    "generate-password": "^1.7.0",
     "http-errors": "^2.0.0",
     "minimist": "^1.2.6",
     "moment-timezone": "^0.5.34",
