@@ -59,8 +59,14 @@ const set_pw_query = `INSERT INTO users (
                     VALUES ($1, $2, $3, $4, $5) 
                     RETURNING id`;
 
+const contact_query_statement = `UPDATE users
+                                    SET contact_request = $1
+                                    WHERE id = $2
+                                    VALUES ($1, $2)`;
+
 module.exports = {
     all_media_query_statement,
+    contact_query_statement,
     media_upload_query_statement,
     single_media_query_statement,
     insert_note_query,
