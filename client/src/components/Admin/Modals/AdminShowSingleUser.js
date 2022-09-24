@@ -37,9 +37,9 @@ const AdminShowSingleUser = ({ open, onClose, userId }) => {
                 .then(data => {
                     setUserInfo(singleUser);
                 })
-                .catch(error => console.log(error));
+                .catch(error => console.error(error));
         } catch (error) {
-            console.log(error);
+            console.error(error);
         };
     }, []);
 

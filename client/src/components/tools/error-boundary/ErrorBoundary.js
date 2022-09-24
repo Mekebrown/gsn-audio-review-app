@@ -20,7 +20,7 @@ class ErrorBoundary extends React.Component {
 
         SendAxiosMsg("post", "/error", { error: error, errorInfo: JSON.stringify(errorInfo) })
             .then(data => console.log(data))
-            .catch(error => console.log(error));
+            .catch(error => console.error(error));
 
         this.setState({
             error: error,

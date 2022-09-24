@@ -19,7 +19,7 @@ const setMediaStorage = async (file) => {
         const results = await s3Client.send(new PutObjectCommand(params));
 
         return results.$metadata.httpStatusCode;
-    } catch (err) { console.log(err); }
+    } catch (err) { console.error(err); }
 };
 
 module.exports = { setMediaStorage };

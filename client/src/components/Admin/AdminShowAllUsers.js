@@ -14,7 +14,7 @@ const AdminShowAllUsers = () => {
                 console.log(data);
             })
             .catch(error => {
-                console.log(error);
+                console.error(error);
             });
     }, []);
 

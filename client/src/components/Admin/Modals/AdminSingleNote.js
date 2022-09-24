@@ -37,9 +37,9 @@ const AdminSingleNote = ({ open, onClose, noteId }) => {
                 .then(data => {
                     setUserNote(singleNote);
                 })
-                .catch(error => console.log(error));
+                .catch(error => console.error(error));
         } catch (error) {
-            console.log(error);
+            console.error(error);
         };
     }, []);
 

@@ -86,7 +86,7 @@ const AdminUploadMedia = () => {
         try {
             await axios.post("/api/upload", formData)
                 .then(() => setUploadMsg(`Media file ${projectFiles.mediaFileName} uploaded!`));
-        } catch (err) { console.log(err); }
+        } catch (err) { console.error(err); }
     };
 
     return (<>

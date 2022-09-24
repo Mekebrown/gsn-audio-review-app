@@ -11,7 +11,7 @@ const AdminSingleNote = () => {
     useEffect(() => {
         axios.get("/api/notes")
             .then(data => console.log(data))
-            .catch(error => console.log(error));
+            .catch(error => console.error(error));
     });
 
     return (<>
