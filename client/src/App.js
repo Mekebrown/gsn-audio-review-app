@@ -5,37 +5,33 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import logo from "./components/tools/logo.png";
-import adminPath, {
-  indexPath,
-  adminInfoMediaPath,
+import axios from "axios";
+import classNames from "classnames/bind";
+
+import adminInfoNotesPath, {
   adminUploadPath,
   adminSendDashPW,
   adminInfoUsersPath,
-  adminInfoNotesPath,
-  reviewerPath,
+  allMediaPath,
+  contactPath,
+  indexPath,
+  loginPath,
+  noteId,
   mediaId,
-  reviewerId,
-  noteId
+  reviewerId
 } from "./components/tools/vars";
-
-import styles from "./App.css";
-import classNames from "classnames/bind";
-
+import logo from "./components/tools/logo.png";
 import Home from "./components/Home";
-
-import AdminShowAllProjects from "./components/Admin/AdminShowAllProjects";
-import AdminSingleProject from "./components/Admin/AdminSingleProject";
+import AllMediaProjects from "./components/General/AllMediaProjects/AllMediaProjects";
+import SingleMediaProject from "./components/General/SingleMediaProject/SingleMediaProject";
 import AdminSingleNote from "./components/Admin/Modals/AdminSingleNote";
 import AdminShowAllUsers from "./components/Admin/AdminShowAllUsers";
 import AdminUploadMedia from "./components/Admin/AdminUploadMedia";
 import AdminSendPW from "./components/Admin/Modals/AdminSendPW";
 import AdminShowSingleUser from "./components/Admin/Modals/AdminShowSingleUser";
 import AdminShowAllNotes from "./components/Admin/AdminShowAllNotes";
-
-import UserSingleProject from "./components/User/UserSingleProject";
-import UserAllMediaToReview from "./components/User/UserAllMediaToReview";
-import axios from "axios";
+import ContactForm from "./components/General/ContactForm";
+import styles from "./App.css";
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -43,64 +39,84 @@ const App = () => {
   const [isSingleNoteModalOpen, setIsSingleNoteModalOpen] = useState(false);
   const [isSingleUserOpen, setIsSingleUserOpen] = useState(false);
   const [isSendPWOpen, setIsSendPWOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   let cx = classNames.bind(styles);
-  let topBarOverallCont = cx({ loggedIn: userId, loggedOut: !userId });
-  let topBarLogoCont = cx({ topBarSection: userId });
-  let topBarLinksCont = cx({ hideOption: !userId });
-  let topBarLinks = cx({ displayInline: userId, rightSection: userId });
+  let topBarMenu = cx({ loggedIn: userId, loggedOut: !userId });
+  let topBarLogo = cx({ topBarSections: userId });
+  let imgMiddleAlign = cx({ imgMiddleAlign: true });
+  let topBarLinksCont = cx({ hideOption: !userId, topBarSections: userId, topBarRightAlign: userId });
+  let topBarLinks = cx({ displayInline: userId, rightSection: userId, hideOption: userRoute === "/review" });
   let searchBarInput = cx({ hideOption: userId });
   let linksSection = cx({ hideOption: !userId });
+  let contactGSN = cx({ hideOption: !userId || userRoute === "/admin" });
 
   if (document.getElementById("splasher")) {
     document.body.removeChild(document.getElementById("splasher"));
   }
 
   useEffect(() => {
-    axios.get("/api/is-authenticated")
-      .then((res) => {
-        if (res.status === 200) {
-          setUserId(res.data.user_id);
-          setUserRoute(res.data.route);
-        }
-      })
-      .catch(() => /* do nothing*/ { });
+    if (!userId) {
+      axios.get("/api/is-authenticated")
+        .then((res) => {
+          if (res.status === 200) {
+            setUserId(res.data.user_id);
+            setUserRoute(res.data.route);
+          }
+        })
+        .catch(() => /* do nothing*/ { });
+    }
   }, []);
 
   return (
     <Router>
       <header>
         <nav>
-          <menu className={topBarOverallCont}>
-            <section className={topBarLogoCont}>
-              <li>
-                <Link to={indexPath} className="topBarLogo">
-                  <img src={logo} alt="Gifted Sounds Network logo" />
-                  <span>GIFTED SOUNDS</span>
-                </Link>
-              </li>
+          <menu className={topBarMenu}>
+            {/* Top bar when not logged in*/}
+            <section className={topBarLogo}>
+              <Link to={indexPath} className={topBarLogo}>
+                <img src={logo} className={imgMiddleAlign} alt="Gifted Sounds Network logo" />
+                {' '}
+                <span>GIFTED SOUNDS</span>
+              </Link>
             </section>
 
+            {/* Top bar when logged in; Above logo pushed to the left */}
             <section className={topBarLinksCont}>
-              <i className="fa fa-upload"></i>{' '}
-              <Link to={adminUploadPath} className={topBarLinks}>Upload</Link>
+              <Link to={adminUploadPath} className={topBarLinks}>
+                <i className="fa fa-upload"></i>{' '}
+                Upload
+              </Link>
               {' '} &nbsp; {' '} &nbsp;
-              <i className="fa fa-search"></i>
-              <input className={`${searchBarInput} ${topBarLinksCont}`} type="text" id="searchBar" title="searchBar" name="searchBar" placeholder="" />
+
+              <i className={`fa fa-search ${topBarLinks}`}></i>
+              <input
+                className={`${searchBarInput} ${topBarLinks}`}
+                type="text"
+                id="searchBar"
+                title="searchBar"
+                name="searchBar"
+                placeholder=""
+              />
               {' '} &nbsp; {' '} &nbsp;
+
               <Link to={indexPath} className={topBarLinks}>
                 <i className="fa fa-user"></i>
                 Username
               </Link>
               {' '} &nbsp; {' '} &nbsp;
+
               <Link to={indexPath} className={topBarLinks}>
                 <i className="fa fa-cog"></i>
               </Link>
               {' '} &nbsp; {' '} &nbsp;
+
               <Link to={indexPath} className={topBarLinks}>
                 <i className="fa fa-comments"></i>
               </Link>
               {' '} &nbsp; {' '} &nbsp;
+
               <Link to={indexPath} className={topBarLinks}>
                 <i className="fa fa-bell"></i>
               </Link>
@@ -110,11 +126,7 @@ const App = () => {
       </header>
 
       <div className={linksSection}>
-        {/* Temporary, for testing */}
-        <Link to={adminPath}>Admin - All Projects</Link><br />{/** /admin */}
-        {/* Temporary, for testing */}
-
-        <Link to={`${adminInfoMediaPath}/${mediaId}`}>Admin - Single Media Information</Link><br /> {/** /admin/retrieve-info/media/media_id */}
+        <Link to={`${allMediaPath}/${mediaId}`}>Admin - Single Media Information</Link><br /> {/** /admin/retrieve-info/media/media_id */}
         <Link to={`${adminInfoNotesPath}/${noteId}`} onClick={() => setIsSingleNoteModalOpen(true)}>Admin - Show individual note</Link><br /> {/** /admin/review-info/note/:note_id */}
         <Link to={adminUploadPath}>Admin - Upload Media</Link><br /> {/** /review/add-media */}
         <Link to={adminSendDashPW} onClick={() => setIsSendPWOpen(true)}>Admin - Send A Password</Link><br />{/**  */}
@@ -122,25 +134,19 @@ const App = () => {
         <Link to={`${adminInfoUsersPath}/${reviewerId}`} onClick={() => setIsSingleUserOpen(true)}>Admin - Show Single User</Link><br /> {/** /admin/retrieve-info/user */}
         <Link to={adminInfoNotesPath}>Admin - Show All Notes</Link><br /><br />{/** /admin/users */}
 
-        <Link to={reviewerPath}>User - All Media</Link><br /> {/** /review */}
-        <Link to={`${reviewerPath}/${mediaId}`}>User - Single Media</Link><br /> {/** /review/:media_id */}
         {userId && <Link to="/api/logout">Log out</Link>}
       </div>
 
       <main>
         <Routes>
-          <Route exact path={indexPath} element={<Home route={userRoute} />} />
-          {/* AudioPlayerOnly to be used inside of AllProjects and AdminSingleProject components */}
-          {/* Notes to be used inside of AllProjects and AdminSingleProject components */}
+          <Route exact path={loginPath} element={<Home route={userRoute} />} />
+          {/* AudioPlayerOnly to be used inside of AllProjects and SingleMediaProject components */}
+          {/* Notes to be used inside of AllProjects and SingleMediaProject components */}
           {/* AudioPlayerAndControls to be used inside of UserSingleProject component */}
           {/* NoteTaker to be used inside of UserSingleProject component */}
 
           {/* ADMIN'S ROUTES */}
-          {/* Temporary, for testing */}
-          <Route path={adminPath} element={<AdminShowAllProjects />} />
-          {/* Temporary, for testing */}
-
-          <Route path={`${adminInfoMediaPath}/${mediaId}`} element={<AdminSingleProject mediaId={mediaId} />} />
+          <Route path={`${allMediaPath}/${mediaId}`} element={<SingleMediaProject mediaId={mediaId} />} />
           <Route path={`${adminInfoNotesPath}/${noteId}`} element={<AdminSingleNote noteId={noteId} open={isSingleNoteModalOpen} onClose={() => { setIsSingleNoteModalOpen(false); }} />} />
           <Route path={adminUploadPath} element={<AdminUploadMedia />} />
           <Route path={adminSendDashPW} element={<AdminSendPW open={isSendPWOpen} onClose={() => { setIsSendPWOpen(false); }} />} />
@@ -149,12 +155,15 @@ const App = () => {
           <Route path={adminInfoNotesPath} element={<AdminShowAllNotes />} />
 
           {/* USER'S REVIEWER ROUTES */}
-          <Route path={reviewerPath} element={<UserAllMediaToReview />} />
-          <Route path={`${reviewerPath}/${mediaId}`} element={<UserSingleProject mediaId={mediaId} />} />
+          <Route path={contactPath} element={<ContactForm open={isContactModalOpen} onClose={() => { setIsContactModalOpen(false); }} />} />
 
           {/* FALLBACK */}
           <Route path="/*" element={<Home route={userRoute} />} />
         </Routes>
+
+        <Link to={contactPath} className={contactGSN} onClick={() => setIsContactModalOpen(true)} title="contact-icon">
+          <i className="fa fa-envelope contactIcon"></i>
+        </Link>
       </main>
 
       <footer>
