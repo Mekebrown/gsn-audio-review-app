@@ -7,8 +7,9 @@ const adminSendDashPW = "/send-pw";
 const allMediaPath = "/media";
 const adminInfoNotesPath = "/notes";
 const adminInfoUsersPath = "/users";
-const contactPath = "/contact";
 const loginPath = "/login";
+const logoutPath = "/logout";
+const contactPath = "/contact";
 
 const adminId = 1;
 const reviewerId = 2;
@@ -80,6 +81,7 @@ export {
     contactPath,
     indexPath,
     loginPath,
+    logoutPath,
     mediaId,
     noteId,
     noteInfo,
