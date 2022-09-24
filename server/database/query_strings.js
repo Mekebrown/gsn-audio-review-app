@@ -52,12 +52,12 @@ const update_user_login_query = `UPDATE users
 const login_query = `SELECT * FROM users WHERE username = $1`;
 
 const set_pw_query = `INSERT INTO users (
-                    username, 
-                    country_loc, 
-                    device_info, 
                     role, 
+                    username, 
+                    hashed_password,
+                    media_list,
                     created_at) 
-                    VALUES ($1, $2, $3, $4, $5) 
+                    VALUES ($1, $2, $3, $4, now()) 
                     RETURNING id`;
 
 const contact_query_statement = `UPDATE users
