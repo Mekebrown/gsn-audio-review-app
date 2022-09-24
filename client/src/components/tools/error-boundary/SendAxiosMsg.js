@@ -15,9 +15,7 @@ const SendAxiosMsg = async (method, url, options) => {
 
             return await axios.post(url, formData);
         }
-    } catch (error) {
-        console.log(`getAxiosMsgError: ${error}`);
-    }
+    } catch (error) { console.log(error); }
 
 };
 
