@@ -2,6 +2,7 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require("express-validator");
+const generator = require('generate-password');
 
 const { client } = require("../tools/client_passport");
 const {
@@ -86,9 +87,6 @@ router.post("/login",
 
         getQueryValues(update_user_login_query, update_user_login_values)
             .then((data) => {
-                const reroute_loc = data.rows[0].role === "admin" ?
-                    "/admin" : "/review";
-
                 req.session.role = data.rows[0].role;
 
                 if (req.session.views) {
@@ -97,7 +95,7 @@ router.post("/login",
                     req.session.views = 1;
                 }
 
-                res.status(200).send({ message: "Login info accepted", loc: reroute_loc, user_id: data.rows[0].id });
+                res.status(200).send({ message: "Login info accepted", user_role: res.user.role, user_id: data.rows[0].id });
             })
             .catch((err) => res.status(403).send("Information not accepted"));
     }
@@ -105,18 +103,23 @@ router.post("/login",
 
 router.get("/is-authenticated", (req, res, next) => {
     if (req.isAuthenticated()) {
-        const reroute_loc = req.user.role === "admin" ?
-            "/admin" : "/review";
-
-        res.status(200).send({ message: "User is authenticated", user_id: req.user.id, route: reroute_loc });
+        res.status(200).send({ message: "User is authenticated", user_id: req.user.id, user_role: req.user.role });
     } else {
-        res.status(403).send({ message: "User is not authenticated" });
+        res.send({ message: "User is not authenticated" });
     }
 });
 
 router.get("/logout", (req, res, next) => {
-    req.logout();
-    res.redirect("/");
+    try {
+        req.session.destroy();
+        req.logout();
+
+        res.status(200);
+    } catch (e) {
+        console.error(e);
+
+        res.status(500);
+    }
 });
 
 /**
@@ -184,12 +187,12 @@ router.get("/media", function (req, res, next) {
                     message: JSON.stringify(err)
                 });
 
-                console.log(err);
+                console.error(err);
 
                 res.status(403).send("Media is not retrieved");
             });
     } else {
-        res.redirect("/api/login");
+        res.send({ message: "User is not authenticated" });
     }
 });
 
@@ -228,7 +231,7 @@ router.get("/media/:id", (req, res, next) => {
             })
             .catch((err) => res.status(403).send("Media info not retrieved"));
     } else {
-        res.redirect("/api/login");
+        res.send({ message: "User is not authenticated" });
     }
 });
 
@@ -327,7 +330,7 @@ router.post("/new-note",
         //         message: JSON.stringify(err)
         //       });
 
-        //       console.log(err);
+        //       console.error(err);
 
         //       res.status(500).send({ message: "New note not saved", code: 200 });
         //     });
@@ -436,14 +439,32 @@ router.post("/upload",
 */
 router.get("/send-pw", (req, res, next) => {
     let rounds = parseInt(process.env.SALT_ROUNDS);
+    let new_password = generator.generate({
+        length: 15,
+        numbers: true,
+        symbols: true
+    });
 
     bcrypt.genSalt(rounds, function (err, salt) {
-        bcrypt.hash(req.body.password, salt, function (err, hash) {
+        bcrypt.hash(new_password, salt, function (err, hash) {
 
         });
     });
 
-    res.status(200).send("Password generated");
+    // or
+
+    // const hashedPassword = bcrypt.hashSync(new_password, 10);
+
+    // const data = await client.query(
+    //     set_pw_query,
+    //     ["reviewer", req.body.email, hashedPassword, [x, y, z]]
+    // );
+
+    // if (data.rows.length === 0) {
+    //     res.sendStatus(403).send("Password not generated");
+    // }
+
+    res.status(200).send({ message: "Password generated", });
 });
 
 router.delete('/users/:id', (req, res, next) => {
@@ -486,7 +507,7 @@ router.post("/contact", (req, res, next) => {
 });
 
 router.post("/error", (req, res, next) => {
-    console.log(req.body);
+    console.error(req.body);
 
     logger({
         location: "./files/logs/",
