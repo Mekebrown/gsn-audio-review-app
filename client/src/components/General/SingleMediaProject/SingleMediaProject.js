@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from 'uuid';
-
-import AudioTrack from "../../tools/audio_track_constructor";
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Page for a single media work and notes opportunity
@@ -20,6 +18,8 @@ import AudioTrack from "../../tools/audio_track_constructor";
  * @returns {Node} SingleMediaProject
  */
 const SingleMediaProject = ({ mediaId }) => {
+    const navigate = useNavigate();
+
     const [fileLocAndName, setFileLocAndName] = useState(null);
     const [notes, setNotes] = useState([]);
     const [playPauseBtnText, setPlayPauseBtnText] = useState("Play");
@@ -121,7 +121,7 @@ const SingleMediaProject = ({ mediaId }) => {
                     setMediaDesc(media_desc);
                     setProjectName(project_name);
                     setNotes(notes);
-                } else window.location.href = "/";
+                } else navigate('/');
             })
             .catch(error => console.log(error));
 
