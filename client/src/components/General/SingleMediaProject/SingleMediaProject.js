@@ -85,7 +85,7 @@ const SingleMediaProject = ({ mediaId }) => {
                 .then((res) => res.status === 200 ? thankYouMsg.current.innerHTML = res.data.message : null)
                 .catch(error => {
                     thankYouMsg.current.innerHTML = "Sorry, the note was not saved. Please try again.";
-                    console.log(error);
+                    console.error(error);
                 });
 
             setActiveNoteInTextArea("");
@@ -108,7 +108,7 @@ const SingleMediaProject = ({ mediaId }) => {
     useEffect(() => {
         axios.get(`/api/media/${mediaId}`)
             .then((res) => {
-                if (res.status === 200) {
+                if (res.status && res.status === 200) {
                     const {
                         file_directory,
                         file_name,
@@ -121,7 +121,7 @@ const SingleMediaProject = ({ mediaId }) => {
                     setMediaDesc(media_desc);
                     setProjectName(project_name);
                     setNotes(notes);
-                }
+                } else window.location.href = "/";
             })
             .catch(error => console.log(error));
 
