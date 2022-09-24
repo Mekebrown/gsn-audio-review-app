@@ -6,16 +6,7 @@ const bp = require("body-parser");
 const fileupload = require("express-fileupload");
 const passport = require('passport');
 const session = require("express-session");
-const { body, validationResult } = require("express-validator");
 
-const {
-  media_upload_query_statement,
-  media_query_statement,
-  insert_note_query,
-  update_note_query,
-  notes_query_statement,
-  login_query
-} = require("./server/database/query_strings.js");
 const logger = require("./server/tools/logger");
 const router = require("./server/routes/index.js");
 
