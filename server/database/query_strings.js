@@ -7,6 +7,7 @@ const media_upload_query_statement = `INSERT INTO media (
                                     file_directory,
                                     created_at) 
                                     VALUES ($1, $2, $3, $4, $5, $6, $7)`;
+
 const insert_note_query = `INSERT INTO notes ( 
                                     user_id, 
                                     media_id,
@@ -25,7 +26,7 @@ const update_note_query = `UPDATE notes
                                     WHERE id = $5 
                                     AND media_id = $6`;
 
-const all_media_query_statement = "SELECT * FROM media";
+const all_media_query_statement = "SELECT id, project_name, media_desc, file_name, project_thumb, file_directory FROM media";
 
 const single_media_query_statement = "SELECT * FROM media WHERE id = $1";
 
