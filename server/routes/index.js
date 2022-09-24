@@ -2,8 +2,8 @@ const router = require('express').Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require("express-validator");
-const { client } = require("../tools/client_passport");
 
+const { client } = require("../tools/client_passport");
 const {
     all_media_query_statement,
     contact_query_statement,
@@ -144,16 +144,53 @@ router.get("/review", function (req, res, next) {
 * Component making Axios call: UserAllMediaToReview
 */
 router.get("/media", function (req, res, next) {
-    let media_list = req.user.media_list;
-    let get_media_projects;
+    if (req.isAuthenticated()) {
+        let media_list = req.user.media_list;
+        let get_media_projects;
+        let data_to_send = [];
 
-    get_media_projects = media_list && media_list.length > 0 ? all_media_query_statement + ` WHERE id in (${media_list.join(", ")})` : single_media_query_statement;
+        get_media_projects = media_list && media_list.length > 0 ? all_media_query_statement + ` WHERE id in (${media_list.join(", ")})` : all_media_query_statement;
 
-    getQueryValues(get_media_projects)
-        .then((data) => {
-            res.status(200).send({ message: "User is authenticated", user_id: req.user.id, media_items: data.rows });
-        })
-        .catch((err) => res.status(403).send("User is not authenticated"));
+        getQueryValues(get_media_projects)
+            .then((data) => {
+                data_to_send.push(data.rows);
+
+                current_notes_query_statement = req.user.role === "admin" ? `SELECT id, media_id, note_body, note_timestamp
+                    FROM notes ORDER BY created_at DESC` :
+                    `SELECT id, media_id, note_body, note_timestamp FROM notes WHERE media_id in (${media_list.join(", ")}) AND user_id = $1 ORDER BY created_at DESC`;
+
+                return getQueryValues(current_notes_query_statement, [req.user.id]);
+            })
+            .then((data) => {
+                data_to_send.push(data.rows);
+
+                for (let i = 0; i < data_to_send[0].length; i++) {
+                    data_to_send[0][i].notes = [];
+                    for (let j = 0; j < data_to_send[1].length; j++) {
+                        if (data_to_send[0][i].id === data_to_send[1][j].media_id) {
+                            data_to_send[0][i].notes.push(data_to_send[1][j]);
+                        }
+                    }
+                }
+
+                res.status(200).send({ message: "Media is retrieved", user_id: req.user.id, media_items: data_to_send[0] });
+            })
+            .catch((err) => {
+                logger({
+                    desc: "all_media_retrieval",
+                    req: "N/A",
+                    res: "N/A",
+                    headers: JSON.stringify(req.rawHeaders),
+                    message: JSON.stringify(err)
+                });
+
+                console.log(err);
+
+                res.status(403).send("Media is not retrieved");
+            });
+    } else {
+        res.redirect("/api/login");
+    }
 });
 
 router.get("/notes", function (req, res, next) { res.status(200); });
@@ -169,7 +206,30 @@ router.get("/users", function (req, res, next) { res.status(200); });
 * Component making Axios call: AdminShowSingleUser (type: User)
 */
 router.get("/media/:id", (req, res, next) => {
-    res.status(200);
+    if (req.isAuthenticated() && parseInt(req.params.id)) {
+        let data_to_send = {};
+
+        getQueryValues(single_media_query_statement, [req.params.id])
+            .then((data) => {
+                data_to_send = data.rows[0];
+
+                notes_query_statement = req.user.role === "admin" ? `SELECT id, note_body, note_timestamp
+                FROM notes 
+                WHERE media_id = $1 
+                ORDER BY created_at 
+                DESC` : notes_query_statement;
+
+                return getQueryValues(notes_query_statement, [req.params.id, req.user.id]);
+            })
+            .then((data) => {
+                data_to_send["notes"] = data.rows;
+
+                res.status(200).send({ message: "Media info retrieved", media_info: data_to_send });
+            })
+            .catch((err) => res.status(403).send("Media info not retrieved"));
+    } else {
+        res.redirect("/api/login");
+    }
 });
 
 /**
@@ -263,11 +323,7 @@ router.post("/new-note",
         //         desc: "post_usingle_new_note",
         //         req: "Body: " + JSON.stringify(req.body),
         //         res: "New note not saved",
-        //         headers: req.rawHeaders[9] + " -|- " +
-        //           req.rawHeaders[13] + " -|- " +
-        //           req.rawHeaders[21] + " -|- " +
-        //           req.rawHeaders[22] + "-" +
-        //           req.rawHeaders[23],
+        //         headers: JSON.stringify(req.rawHeaders),
         //         message: JSON.stringify(err)
         //       });
 
@@ -294,11 +350,7 @@ router.post("/new-note",
         //         desc: "post_usingle_updated_note",
         //         req: req.query,
         //         res: "Updated note not saved",
-        //         headers: req.rawHeaders[9] + " -|- " +
-        //           req.rawHeaders[13] + " -|- " +
-        //           req.rawHeaders[21] + " -|- " +
-        //           req.rawHeaders[22] + "-" +
-        //           req.rawHeaders[23],
+        //         headers: JSON.stringify(req.rawHeaders),
         //         message: err
         //       });
 
@@ -367,11 +419,7 @@ router.post("/upload",
         //         desc: "post_media",
         //         req: req.query,
         //         res: "Promise rejection error",
-        //         headers: req.rawHeaders[9] + " -|- " +
-        //           req.rawHeaders[13] + " -|- " +
-        //           req.rawHeaders[21] + " -|- " +
-        //           req.rawHeaders[22] + "-" +
-        //           req.rawHeaders[23],
+        //         headers: JSON.stringify(req.rawHeaders),
         //         message: err
         //       });
 
