@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import AudioTrack from "../tools/AudioTrack";
+import AudioTrack from "../General/AudioTrack";
 import { v4 as uuidv4 } from 'uuid';
 
 /**
