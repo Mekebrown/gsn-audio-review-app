@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-
-import styles from "./Login.css";
+import { useNavigate } from 'react-router-dom';
 import classNames from "classnames/bind";
 
+import UserGlobalContext from '../../tools/UserGlobalContext';
+import styles from "./Login.css";
+
 const Login = () => {
+    const userGlobalContext = useContext(UserGlobalContext);
+
+    const navigate = useNavigate();
+
     const [inputUN, setInputUN] = useState(null);
     const [inputPW, setInputPW] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -34,7 +40,12 @@ const Login = () => {
         formData.append("username", inputUN);
         formData.append("password", inputPW);
 
-        await axios.post("/api/login", formData)
+        await axios.post("/api/login", formData, {
+            withCredentials: true,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
             .then((res) => {
                 if (res.status !== 200) {
                     userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team";
@@ -43,7 +54,10 @@ const Login = () => {
                     throw "Not logged in";
                 } else {
                     userMsg.textContent = "Log in accepted. Loading review section...";
-                    // Handle successful login
+
+                    userGlobalContext.setUser(res.data.user);
+
+                    navigate('/');
                 }
             })
             .catch(() => userMsg.textContent = "Unfortunately your information is not accepted. Please try again or contact the team");
