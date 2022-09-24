@@ -103,7 +103,7 @@ router.post("/login",
 
 router.get("/is-authenticated", (req, res, next) => {
     if (req.isAuthenticated()) {
-        res.status(200).send({ message: "User is authenticated", user_id: req.user.id, user_role: req.user.role });
+        res.status(200).send({ message: "User is authenticated", user: { user_id: req.user.id, user_role: req.user.role } });
     } else {
         res.send({ message: "User is not authenticated" });
     }
