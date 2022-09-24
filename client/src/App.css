@@ -42,13 +42,28 @@ li {  list-style-type: none; }
 
   .loggedIn { display: flex; }
 
-  .topBarSection { flex: 1; width: 50%; }
+  .topBarSections { flex: 1; }
+
+  .topBarRightAlign { text-align: right; }
 
   .displayInline { display: inline; }
 
-  .topBarLogo img { vertical-align:middle; }
+  .imgMiddleAlign { vertical-align: middle; }
+
   .topBarLogo span { padding-left: 20px; font-family: 'Nunito', sans-serif; }
 
   .hideOption { visibility: hidden; display: none; }
 
   .rightSection { margin-right: 20px; }
+
+/* Contact Icon */
+  .contactIcon {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    width: 43px;
+    height: 43px;
+    border-radius: 50%;
+    border: 15px solid #fec865;
+    background-color: #fec865;
+  }
