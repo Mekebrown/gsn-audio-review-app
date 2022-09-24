@@ -2,15 +2,13 @@
 
 const indexPath = "/";
 
-const adminPath = "/admin"; // Temporary, for testing
 const adminUploadPath = "/upload";
 const adminSendDashPW = "/send-pw";
-const adminInfoMediaPath = "/media";
+const allMediaPath = "/media";
 const adminInfoNotesPath = "/notes";
 const adminInfoUsersPath = "/users";
 const contactPath = "/contact";
 const loginPath = "/login";
-const reviewerPath = "/review";
 
 const adminId = 1;
 const reviewerId = 2;
@@ -70,15 +68,15 @@ const returnFileSize = (number) => {
     }
 };
 
-export default adminPath; // Temporary, for testing
+export default adminInfoNotesPath; // Temporary, for testing
 
 export {
     adminId,
-    adminInfoMediaPath,
     adminInfoNotesPath,
     adminInfoUsersPath,
     adminSendDashPW,
     adminUploadPath,
+    allMediaPath,
     contactPath,
     indexPath,
     loginPath,
@@ -87,7 +85,6 @@ export {
     noteInfo,
     returnFileSize,
     reviewerId,
-    reviewerPath,
     validFileType,
     userIds,
     noteIds,
