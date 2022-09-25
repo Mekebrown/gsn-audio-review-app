@@ -106,27 +106,27 @@ const SingleMediaProject = ({ mediaId }) => {
     };
 
     useEffect(() => {
-        axios.get(`/api/media/${mediaId}`)
-            .then((res) => {
-                if (res.status && res.status === 200) {
-                    const {
-                        file_directory,
-                        file_name,
-                        media_desc,
-                        project_name,
-                        notes
-                    } = res.data.media_info;
+        //     axios.get(`/api/media/${mediaId}`)
+        //         .then((res) => {
+        //             if (res.status && res.status === 200) {
+        //                 const {
+        //                     file_directory,
+        //                     file_name,
+        //                     media_desc,
+        //                     project_name,
+        //                     notes
+        //                 } = res.data.media_info;
 
-                    setFileLocAndName(file_directory + file_name);
-                    setMediaDesc(media_desc);
-                    setProjectName(project_name);
-                    setNotes(notes);
-                } else navigate('/');
-            })
-            .catch(error => console.log(error));
+        //                 setFileLocAndName(file_directory + file_name);
+        //                 setMediaDesc(media_desc);
+        //                 setProjectName(project_name);
+        //                 setNotes(notes);
+        //             } else navigate('/');
+        //         })
+        //         .catch(error => console.log(error));
 
         /* eslint-disable-next-line */
-    }, [fileLocAndName]);
+    }, []);
 
     return (<> <section>
         <AudioTracks />

@@ -9,9 +9,9 @@ import { allNotesForAllProjects } from "../tools/dummy_data";
  */
 const AdminSingleNote = () => {
     useEffect(() => {
-        axios.get("/api/notes")
-            .then(data => console.log(data))
-            .catch(error => console.error(error));
+        // axios.get("/api/notes")
+        //     .then(data => console.log(data))
+        //     .catch(error => console.error(error));
     });
 
     return (<>

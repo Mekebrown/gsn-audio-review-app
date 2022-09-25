@@ -9,13 +9,13 @@ import axios from "axios";
  */
 const AdminShowAllUsers = () => {
     useEffect(() => {
-        axios.get("/api/users")
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        // axios.get("/api/users")
+        //     .then(data => {
+        //         console.log(data);
+        //     })
+        //     .catch(error => {
+        //         console.error(error);
+        //     });
     }, []);
 
     return (<>

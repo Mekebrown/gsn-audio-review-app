@@ -32,15 +32,15 @@ const AdminShowSingleUser = ({ open, onClose, userId }) => {
     };
 
     useEffect(() => {
-        try {
-            axios.get(`/api/users/${userId}`)
-                .then(data => {
-                    setUserInfo(singleUser);
-                })
-                .catch(error => console.error(error));
-        } catch (error) {
-            console.error(error);
-        };
+        // try {
+        //     axios.get(`/api/users/${userId}`)
+        //         .then(data => {
+        //             setUserInfo(singleUser);
+        //         })
+        //         .catch(error => console.error(error));
+        // } catch (error) {
+        //     console.error(error);
+        // };
     }, []);
 
     if (!open) return null;

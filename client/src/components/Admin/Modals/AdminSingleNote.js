@@ -32,15 +32,15 @@ const AdminSingleNote = ({ open, onClose, noteId }) => {
     };
 
     useEffect(() => {
-        try {
-            axios.get(`/api/notes/${noteId}`)
-                .then(data => {
-                    setUserNote(singleNote);
-                })
-                .catch(error => console.error(error));
-        } catch (error) {
-            console.error(error);
-        };
+        // try {
+        //     axios.get(`/api/notes/${noteId}`)
+        //         .then(data => {
+        //             setUserNote(singleNote);
+        //         })
+        //         .catch(error => console.error(error));
+        // } catch (error) {
+        //     console.error(error);
+        // };
     }, []);
 
     if (!open) return null;
