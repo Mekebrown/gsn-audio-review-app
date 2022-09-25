@@ -114,7 +114,7 @@ const Login = () => {
 
                 <form id="log-in" onSubmit={handleSubmit}>
                     <p title="userMsg" id="userMsg"></p>
-                    admin@email.enter aLotmosdef-behemoth-souls
+
                     <div className={loginFields}>
                         <input
                             type="text"
