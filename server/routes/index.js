@@ -112,9 +112,7 @@ router.get("/is-authenticated", (req, res, next) => {
 router.get("/logout", (req, res, next) => {
     try {
         req.session.destroy();
-        req.logout();
-
-        res.status(200);
+        req.logout(() => res.status(200));
     } catch (e) {
         console.error(e);
 
@@ -158,11 +156,13 @@ router.get("/media", function (req, res, next) {
             .then((data) => {
                 data_to_send.push(data.rows);
 
-                current_notes_query_statement = req.user.role === "admin" ? `SELECT id, media_id, note_body, note_timestamp
+                let current_notes_query_statement = req.user.role === "admin" ? `SELECT id, media_id, note_body, note_timestamp
                     FROM notes ORDER BY created_at DESC` :
                     `SELECT id, media_id, note_body, note_timestamp FROM notes WHERE media_id in (${media_list.join(", ")}) AND user_id = $1 ORDER BY created_at DESC`;
 
-                return getQueryValues(current_notes_query_statement, [req.user.id]);
+                let current_notes_query_values = req.user.role === "admin" ? [] : [req.user.id];
+
+                return getQueryValues(current_notes_query_statement, current_notes_query_values);
             })
             .then((data) => {
                 data_to_send.push(data.rows);
