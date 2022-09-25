@@ -5,9 +5,9 @@ import axios from "axios";
 /**
  * A modal for reviewers to message the admin.
  * 
- * @returns {Node} ContactForm
+ * @returns {Node} ReviewerContactForm
  */
-const ContactForm = ({ open, onClose }) => {
+const ReviewerContactForm = ({ open, onClose }) => {
     const [reasonGiven, setReasonGiven] = useState("");
     const [message, setMessage] = useState("");
     const [formSent, setFormSent] = useState(false);
@@ -89,4 +89,4 @@ const ContactForm = ({ open, onClose }) => {
     );
 };
 
-export default ContactForm;
+export default ReviewerContactForm;
