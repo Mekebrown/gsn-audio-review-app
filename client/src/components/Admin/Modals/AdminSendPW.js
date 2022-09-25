@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";
 import axios from "axios";
 
@@ -9,7 +9,12 @@ import axios from "axios";
  */
 const AdminSendPW = ({ open, onClose }) => {
     const [isNewUserCreated, setIsNewUserCreated] = useState(false);
-    const [isPWGenerated, setIsPWGenerated] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [projectsToAssign, setProjectsToAssign] = useState([]);
+    const [formData, setFormData] = useState({
+        email: '',
+        projects: [],
+    });
 
     const modalStyles = {
         position: 'fixed',
@@ -31,23 +36,71 @@ const AdminSendPW = ({ open, onClose }) => {
         zIndex: 1000
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let setPWMsg = document.getElementById("setPWMsg");
+        setPWMsg.setAttribute("role", "alert");
+
+        setLoading(true);
+
+        axios.post("/api/send-pw", formData, {
+            withCredentials: true,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log(response.data.user);
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch((error) => {
+                setPWMsg.textContent = "Registration failed";
+            })
+            .finally(() => {
+                setLoading(false);
+                setIsNewUserCreated(true);
+            });
+    };
+
+    useEffect(() => {
+        // axios.get("/api/media")
+        //     .then(data => setProjectsToAssign(data.data))
+        //     .catch(err => console.error(err));
+    }, []);
+
+
     if (!open) return null;
 
     return ReactDom.createPortal(
         <>
             <div style={overlayStyles} />
+
             <div style={modalStyles}>
                 <button onClick={onClose}>X</button>
+                <p id="setPWMsg"></p>
                 {isNewUserCreated ? <p>Success! A user will be created and a password will be sent to them.</p> :
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <label htmlFor="email">Email</label>
-                        <input type="email" name="email" id="email" />
+                        <input type="email" name="email" id="email" onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
 
-                        <button onclick={setIsPWGenerated(true)}>Generate Password</button>
+                        {projectsToAssign.map((project) => {
+                            return <label htmlFor={`project-${project.id}`}>{project.project_name}
+                                <input
+                                    type="checkbox"
+                                    name="assign-projects"
+                                    id={`project-${project.id}`}
+                                    value={project.id}
+                                    onChange={(e) => setFormData({ ...formData, projects: [...formData.projects, e.target.value] })} />
+                                <span>{project.media_desc}</span>
+                            </label>;
+                        })}
+                        <p>When ready, click the button below to send them an invite.</p>
 
-                        {isPWGenerated ? <>
-                            <p>When ready, click the button below to send them a password.</p>
-                            <button onClick={setIsNewUserCreated(true)}>Send Password</button> </> : null}
+                        <button type="submit" loading={loading}>Send Password</button>
                     </form>
                 }
             </div>
