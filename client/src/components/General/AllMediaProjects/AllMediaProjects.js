@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '../../tools/user-context/UserGlobalContextProvider';
 import "./AllMediaProjects.css";
 import NoMediaDisplay from "../NoMediaDisplay";
 
@@ -13,10 +14,12 @@ import NoMediaDisplay from "../NoMediaDisplay";
  * 
  * @returns {Node} AllMediaProjects
  */
-const AllMediaProjects = ({ userId }) => {
+const AllMediaProjects = () => {
     const navigate = useNavigate();
 
     const [allProjectsInfo, setAllProjectsInfo] = useState(null);
+
+    const { user } = useAuth();
 
     const handleNoteSubmit = (e) => {
         e.preventDefault();
@@ -30,7 +33,7 @@ const AllMediaProjects = ({ userId }) => {
     };
 
     useEffect(() => {
-        if (!userId) {
+        if (user !== {}) {
             axios.get("/api/media")
                 .then((res) => {
                     if (res.status && res.status === 200) {
@@ -38,7 +41,7 @@ const AllMediaProjects = ({ userId }) => {
                     } else navigate('/');
                 })
                 .catch(() => /* do nothing*/ { });
-        }
+        } else navigate('/login');
     }, []);
 
     return (<>
@@ -157,7 +160,7 @@ const AllMediaProjects = ({ userId }) => {
                         <Link to={`/api/media/${project.id}`}>View</Link>
                     </div>;
                 })}
-            </section> : (<NoMediaDisplay />)
+            </section> : <NoMediaDisplay />
         }
     </>);
 };
