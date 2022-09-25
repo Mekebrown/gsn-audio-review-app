@@ -1,15 +1,18 @@
-import { useEffect, useContext, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 
-import UserGlobalContext from '../../tools/UserGlobalContext';
+import { useAuth } from '../../tools/user-context/UserGlobalContextProvider';
+import { indexPath } from '../../tools/vars';
+import logo from "../../tools/logo.png";
 import styles from "./Login.css";
 
 const Login = () => {
-    const userGlobalContext = useContext(UserGlobalContext);
+    const { user, setUser } = useAuth();
 
     const navigate = useNavigate();
 
@@ -21,11 +24,16 @@ const Login = () => {
         height: undefined,
     });
 
+    let isUserSet = user !== undefined;
+
     let cx = classNames.bind(styles);
 
     let loginFields = cx({ displayFlex: !isMobile });
     let unField = cx({ displayInline: !isMobile });
     let pwField = cx({ displayInline: !isMobile });
+    let topBarMenu = cx({ loggedIn: isUserSet, loggedOut: !isUserSet });
+    let topBarLogo = cx({ topBarSections: isUserSet });
+    let imgMiddleAlign = cx({ imgMiddleAlign: true });
     let showAnimation = cx({ mobileInvisible: isMobile, sect: true, animation: true });
 
     const handleSubmit = async (e) => {
@@ -55,7 +63,7 @@ const Login = () => {
                 } else {
                     userMsg.textContent = "Log in accepted. Loading review section...";
 
-                    userGlobalContext.setUser(res.data.user);
+                    setUser(res.data.user);
 
                     navigate('/');
                 }
@@ -81,6 +89,20 @@ const Login = () => {
     }, []);
 
     return (<>
+        <header>
+            <nav>
+                <menu className={topBarMenu}>
+                    <section className={topBarLogo}>
+                        <Link to={indexPath} className={topBarLogo}>
+                            <img src={logo} className={imgMiddleAlign} alt="Gifted Sounds Network logo" />
+                            {' '}
+                            <span>GIFTED SOUNDS</span>
+                        </Link>
+                    </section>
+                </menu>
+            </nav>
+        </header>
+
         <main className="cont">
             <section className="sect" aria-labelledby="log-in">
                 <p>
@@ -94,11 +116,30 @@ const Login = () => {
                     <p title="userMsg" id="userMsg"></p>
                     admin@email.enter aLotmosdef-behemoth-souls
                     <div className={loginFields}>
-                        <input type="text" title="unField" className={unField} placeholder="&#xF007; &nbsp; Lance, gifted, etc." onChange={(e) => setInputUN(e.target.value)} minLength="3" maxLength="50" autoFocus required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
+                        <input
+                            type="text"
+                            title="unField"
+                            className={unField}
+                            placeholder="&#xF007; &nbsp; Lance, gifted, etc."
+                            onChange={(e) => setInputUN(e.target.value)}
+                            minLength="3"
+                            maxLength="50"
+                            autoFocus
+                            required
+                            style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
 
                         {' '}
 
-                        <input className={pwField} type="text" title="pwField" placeholder="&#xf044; &nbsp; Password" onChange={(e) => setInputPW(e.target.value)} minLength="8" maxLength="50" required style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
+                        <input
+                            className={pwField}
+                            type="text"
+                            title="pwField"
+                            placeholder="&#xf044; &nbsp; Password"
+                            onChange={(e) => setInputPW(e.target.value)}
+                            minLength="8"
+                            maxLength="50"
+                            required
+                            style={{ fontFamily: "Arial, 'Font Awesome 5 Free'", padding: "10px" }} />
                     </div>
                     <br />
                     <button title="submit" type="submit">
