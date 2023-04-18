@@ -8,7 +8,6 @@ export default function Document() {
       <Head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta http-equiv="Accept-CH" content="Sec-CH-UA-Platform-Version, Sec-CH-UA-Model" />
         <meta name="description" content="Gifted Sounds Network Audio Review, an app presenting clients with unapproved tracks to take notes, listen to and review at their leisure." />
 
@@ -32,18 +31,6 @@ export default function Document() {
         <link rel="canonical" href="https://www.giftedsounds.com/studios"/>
         <link rel="apple-touch-icon" href="/logo192.png" />
         <link rel="manifest" href="/manifest.json" />
-        
-        <script type="application/ld+json">
-          {"url":"https://www.giftedsounds.com/studios","name":"Gifted Sounds Network","description":"","@context":"http://schema.org","@type":"WebSite"}
-        </script>
-        <script type="application/ld+json">
-          {"legalName":"","address":"","email":"giftedsoundsnetwork@gmail.com","telephone":" (646) 893-9658 ","sameAs":[],"@context":"http://schema.org","@type":"Organization"}
-        </script>
-        <script type="application/ld+json">
-          {"address":"","name":"","openingHours":", , , , , , ","@context":"http://schema.org","@type":"LocalBusiness"}
-        </script>
-      
-        <title>GSN Audio Review App</title>
       </Head>
 
       <body>
