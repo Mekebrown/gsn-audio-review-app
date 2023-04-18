@@ -1,0 +1,15 @@
+# dependencies
+.git
+node_modules
+
+# environment variables
+.env.local
+
+# local docs
+lib/files
+etc
+
+# misc
+.DS_Store
+.vscode/
+.aLayouts
