@@ -1,13 +1,12 @@
 # dependencies
 .git
-client/node_modules
 node_modules
 
 # environment variables
-.env
+.env.local
 
 # local docs
-files
+lib/files
 etc
 
 # misc
