@@ -2,6 +2,9 @@
 .git
 node_modules
 
+# development builds
+.next
+
 # environment variables
 .env.local
 
