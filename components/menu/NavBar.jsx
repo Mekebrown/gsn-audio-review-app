@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
-import Hamburger from "./menu/Hamburger";
+
+import Hamburger from "./Hamburger";
+import { AuthContext } from "../../lib/context/AuthContext";
 
 const VisitorNavBar = ({href = "/login"}) => {
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
@@ -42,7 +44,7 @@ const AdminNavBar = ({ href = "/", open, setOpen }) => {
     </menu>;
 };
 
-const UserNavBar = ({href = "/", open, setOpen}) => {
+const UserNavBar = ({href = "/"}) => {
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <section className="text-black">
             <Link
@@ -54,24 +56,28 @@ const UserNavBar = ({href = "/", open, setOpen}) => {
                         alt="GSN Logo" 
                         className="h-8 mr-2 inline" 
                     />
-                    User View
+                    {user.username}
                 </span>
             </Link>
         </section>
 
         <section className="text-gray">
-            <Hamburger role="user" />
+            <Hamburger />
         </section>
     </menu>;
 };
 
 const NavBar = () => {
-    const [loggedIn, setLoggedIn] = useState("admin");
+    // const { user } = useContext(AuthContext);
+    const user = {
+        role: "admin",
+        username: "admin"
+    };
 
     const ShowNavBar = () => {
-        if (loggedIn === "admin") {
-            return <AdminNavBar />;
-        } else if (loggedIn === "user") {
+        if (user.role === "admin") {
+            return <AdminNavBar  />;
+        } else if (user.role === "user") {
             return <UserNavBar />;
         } else {
             return <VisitorNavBar />;
