@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Link from "next/link";
 
 import Hamburger from "./Hamburger";
 import { AuthContext } from "../../lib/context/AuthContext";
 
-const VisitorNavBar = ({href = "/login"}) => {
+const VisitorNavBar = () => {
+    const href = "/";
+
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <Link 
             href={href} 
@@ -21,7 +23,9 @@ const VisitorNavBar = ({href = "/login"}) => {
     </menu>;
 };
 
-const AdminNavBar = ({ href = "/", open, setOpen }) => {
+const AdminNavBar = ({ open, setOpen }) => {
+    const href = "/";
+    
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <section className=" text-black">
             <Link 
@@ -39,12 +43,14 @@ const AdminNavBar = ({ href = "/", open, setOpen }) => {
         </section>
 
         <section className="text-gray">
-            <Hamburger role="admin" />
+            <Hamburger open={open} setOpen={setOpen} onClick={setOpen} />
         </section>
     </menu>;
 };
 
-const UserNavBar = ({href = "/"}) => {
+const UserNavBar = ({ open, setOpen }) => {
+    const href = "/";
+
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <section className="text-black">
             <Link
@@ -62,23 +68,24 @@ const UserNavBar = ({href = "/"}) => {
         </section>
 
         <section className="text-gray">
-            <Hamburger />
+            <Hamburger open={open} setOpen={setOpen} onClick={setOpen} />
         </section>
     </menu>;
 };
 
 const NavBar = () => {
-    // const { user } = useContext(AuthContext);
+    const [open, setOpen] = useState(false);
+    const data = useContext(AuthContext);
+
     const user = {
         role: "admin",
-        username: "admin"
     };
 
     const ShowNavBar = () => {
         if (user.role === "admin") {
-            return <AdminNavBar  />;
+            return <AdminNavBar open={open} setOpen={() => setOpen(!open)} />;
         } else if (user.role === "user") {
-            return <UserNavBar />;
+            return <UserNavBar open={open} setOpen={() => setOpen(!open)} />;
         } else {
             return <VisitorNavBar />;
         }
