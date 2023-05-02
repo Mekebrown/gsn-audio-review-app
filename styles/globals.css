@@ -84,3 +84,98 @@ li {  list-style-type: none; }
     --background-end-rgb: 0, 0, 0;
   }
 }
+
+/* Light/Dark Mode */
+  .lightMode {
+    background-color: #f9fbff;
+    color: #000;
+  }
+
+  .darkMode {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .lightMode .contactIcon {
+    border: 15px solid #fec865;
+    background-color: #fec865;
+  }
+
+  .darkMode .contactIcon {
+    border: 15px solid #fec865;
+    background-color: #fec865;
+  }
+
+  .lightMode .topBarLogo span {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo span:hover {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span:hover {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo span:active {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span:active {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo span:focus {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span:focus {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo span:visited {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span:visited {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo span:link {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo span:link {
+    color: #fff;
+  }
+
+  .lightMode .topBarLogo
+    span:hover
+    .topBarLogo
+    span:active
+    .topBarLogo
+    span:focus
+    .topBarLogo
+    span:link
+    .topBarLogo
+    span:visited {
+    color: #000;
+  }
+
+  .darkMode .topBarLogo
+    span:hover
+    .topBarLogo
+    span:active
+    .topBarLogo
+    span:focus
+    .topBarLogo
+    span:link
+    .topBarLogo
+    span:visited {
+    color: #fff;
+  }
