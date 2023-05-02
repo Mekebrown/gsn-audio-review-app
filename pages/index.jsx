@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+
 import analyticsService from '../lib/analytics';
+import { AuthContext } from "../lib/context/AuthContext";
+
+analyticsService.logEvent('Page Viewed');
 
 const Home = () => {
-  {/* Default Head with default <title> to be loaded in NavBar */}
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  analyticsService.logEvent('Page Viewed');
+  const { user } = useContext(AuthContext);
 
   const handleLogin = () => {
     window.location.href = '/login';
   };
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    {!loggedIn ? (<>
+    {!user ? (<>
       <h1>Entertaining Others the Way YOU Want</h1>
 
       <p>
@@ -25,7 +26,29 @@ const Home = () => {
       
       <div id="portal"></div>
     </>) : (<>
-      
+      <p>Media View</p>
+      I want to show:<br />
+      <hr />
+      THIS | Media project name<br />
+      SIDE | A player with preloaded audio of each media item<br />
+      HAS | A preview of the latest note added to each media...<br />
+      LOGO | Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users<br />
+      <hr />
+      THIS | Media project name<br />
+      SIDE | A player with preloaded audio of each media item<br />
+      HAS | A preview of the latest note added to each media...<br />
+      LOGO | Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users<br />
+      <hr />
+      THIS | Media project name<br />
+      SIDE | A player with preloaded audio of each media item<br />
+      HAS | A preview of the latest note added to each media...<br />
+      LOGO | Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users<br />
+      <hr />
+      THIS | Media project name<br />
+      SIDE | A player with preloaded audio of each media item<br />
+      HAS | A preview of the latest note added to each media...<br />
+      LOGO | Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users<br />
+      <hr />
     </>)}
   </main>;
 }
