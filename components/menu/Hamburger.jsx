@@ -1,11 +1,8 @@
 import React from "react";
 
 const Hamburger = ({ role, open, setOpen }) => {
-    console.log("open: ", open);
-
     const Menu = () => {
         if (open) {
-            console.log("open: ", open);
             return <div 
                 className="hamburger bg-red-500" 
             >
