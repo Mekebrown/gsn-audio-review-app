@@ -35,7 +35,6 @@ import { faCog, faCopy, faUsers, faComments, faEnvelope, faCheck, faExclamationT
 import axios from 'axios';
 
 import ShowNoteModal from './modals/ShowNoteModal';
-import logo from './logo192.png';
 
 // User icon - faUsers - For users
 export const UsersIcon = () => {

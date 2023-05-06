@@ -6,6 +6,7 @@ import { AuthContext } from "../../lib/context/AuthContext";
 
 const VisitorNavBar = () => {
     const href = "/";
+    const logoImg = "/logo192.png";
 
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <Link 
@@ -13,7 +14,7 @@ const VisitorNavBar = () => {
             className="flex items-center flex-shrink-0 text-black mr-6">
             <span className="font-semibold text-xl tracking-tight">
                 <img 
-                    src="/logo192.png" 
+                    src={logoImg} 
                     alt="GSN Logo" 
                     className="h-8 mr-2" 
                 />
@@ -25,6 +26,7 @@ const VisitorNavBar = () => {
 
 const AdminNavBar = ({ open, setOpen }) => {
     const href = "/";
+    const logoImg = "/logo192.png";
     
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <section className=" text-black">
@@ -33,7 +35,7 @@ const AdminNavBar = ({ open, setOpen }) => {
             >
                 <span className="font-semibold text-xl tracking-tight">
                     <img 
-                        src="/logo192.png" 
+                        src={logoImg} 
                         alt="GSN Logo" 
                         className="h-8 mr-2 inline" 
                     />
@@ -50,6 +52,7 @@ const AdminNavBar = ({ open, setOpen }) => {
 
 const UserNavBar = ({ open, setOpen }) => {
     const href = "/";
+    const logoImg = "/logo192.png";
 
     return <menu className="flex items-center justify-between flex-wrap bg-white p-6">
         <section className="text-black">
@@ -58,7 +61,7 @@ const UserNavBar = ({ open, setOpen }) => {
             >
                 <span className="font-semibold text-xl tracking-tight">
                     <img 
-                        src="/logo192.png" 
+                        src={logoImg} 
                         alt="GSN Logo" 
                         className="h-8 mr-2 inline" 
                     />
