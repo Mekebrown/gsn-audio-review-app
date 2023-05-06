@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import AuthContextProvider from "../lib/context/AuthContext";
-import '@/styles/globals.css';
+import "../styles/globals.css";
 
 function App({ Component, pageProps }) {
   return <AuthContextProvider>
