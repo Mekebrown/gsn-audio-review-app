@@ -8,6 +8,7 @@ export default function Document() {
       <Head>
         {/* General tags */}
         <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <meta httpEquiv="Accept-CH" content="Sec-CH-UA-Platform-Version, Sec-CH-UA-Model" />
         <meta name="description" content="Gifted Sounds Network Audio Review, an app presenting clients with unapproved tracks to take notes, listen to and review at their leisure." />
