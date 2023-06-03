@@ -5,8 +5,10 @@ const logger = require("../../lib/logger");
 const { login_query } = require("../../lib/db/pg_pr_query_strings");
 
 export default function handler(req, res) {
+    const { email, password } = req.body;
+
     if (req) {
-        client.query(login_query, [username], (err, res) => {
+        client.query(login_query, [email], (err, res) => {
             if (err) {
                 logger({
                     desc: "login query",

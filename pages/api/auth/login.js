@@ -8,7 +8,9 @@ const { login_query } = require("../../lib/db/pg_pr_query_strings");
 const secret = process.env.NEXTAUTH_SECRET;
 
 export default async function handler(req, res) {
-  client.query(login_query, [username])
+  const { email, password } = req.body;
+  
+  client.query(login_query, [email])
     .then((q_err, q_res) => {
     if (q_err) {
         logger({

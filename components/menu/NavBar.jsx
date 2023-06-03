@@ -65,7 +65,7 @@ const UserNavBar = ({ open, setOpen }) => {
                         alt="GSN Logo" 
                         className="h-8 mr-2 inline" 
                     />
-                    {user.username}
+                    {user.email}
                 </span>
             </Link>
         </section>

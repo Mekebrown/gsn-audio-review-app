@@ -1,7 +1,7 @@
 /* 
 id (number)
 tag (string) - uuid
-username (email)
+email (string)
 password (string) - bcrypt
 role (enum: admin, user, testadmin, testuser)
 ip (array)

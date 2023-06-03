@@ -2,7 +2,6 @@ const user_info = {
     id: 1,
     note_ids: [1, 2, 3],
     tag: "(string) - uuid",
-    username: "user@name.org",
     email: "admin@gsn.net",
     lastLogin: "01-04-2021 00:00:00",
     role: "admin",

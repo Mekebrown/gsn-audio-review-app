@@ -10,7 +10,7 @@
     /delete-upload* - close icon, msg, confirm button, cancel link
     /users - msg, users (link to each user, preview of latest note, list of media, last login, reset pw link, delete user link)
     /notes - msg, notes (note copy, media project name/link, created date)
-    /users/:user - username, role, lastLogin, notes, media, created, reset pw link, delete user link
+    /users/:user - email, role, lastLogin, notes, media, created, reset pw link, delete user link
     /notes/:note* - note copy, media project name/link, created date
     /media/:media - msg, project name, description, form (textarea, submit button, cancel button), notes list
     /media/:media - msg (edit), project name (edit), description (edit), list of each note (reply to note link (form: textarea, submit button, cancel button)) 
