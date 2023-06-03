@@ -154,6 +154,16 @@ li {  list-style-type: none; }
     color: #fff;
   }
 
+
+  /* Login Page */
+  .login-form-container {
+    text-align: center;
+  }
+
+  .login-form-container form {
+    margin: 20px 0;
+  }
+
   .lightMode .topBarLogo
     span:hover
     .topBarLogo
