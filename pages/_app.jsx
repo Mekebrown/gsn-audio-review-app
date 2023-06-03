@@ -1,17 +1,22 @@
 import React from 'react';
 import Head from 'next/head';
+import { SessionProvider } from 'next-auth/react';
 
-import AuthContextProvider from "../lib/context/AuthContext";
 import "../styles/globals.css";
 
-function App({ Component, pageProps }) {
-  return <AuthContextProvider>
+function App({ 
+  Component, 
+  pageProps: { session, ...pageProps } 
+}) {
+  return <SessionProvider session={session}>
       <Head>
         <title>GSN Audio Review App</title>
       </Head>
       
       <Component {...pageProps} />
-  </AuthContextProvider>;
+
+      <div id="portal"></div>
+  </SessionProvider>;
 }
 
 export default App;
