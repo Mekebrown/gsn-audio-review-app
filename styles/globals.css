@@ -47,9 +47,9 @@ li {  list-style-type: none; }
 
 
 /* Top Navigation */
-  .loggedOut { display: flex; align-items: center; justify-content: center; }
+  .signedOut { display: flex; align-items: center; justify-content: center; }
 
-  .loggedIn { display: flex; }
+  .signedIn { display: flex; }
 
   .topBarSections { flex: 1; }
 
@@ -155,12 +155,12 @@ li {  list-style-type: none; }
   }
 
 
-  /* Login Page */
-  .login-form-container {
+  /* Sign In Page */
+  .sign-in-form-container {
     text-align: center;
   }
 
-  .login-form-container form {
+  .sign-in-form-container form {
     margin: 20px 0;
   }
 

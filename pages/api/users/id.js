@@ -3,7 +3,7 @@ const user_info = {
     note_ids: [1, 2, 3],
     tag: "(string) - uuid",
     email: "admin@gsn.net",
-    lastLogin: "01-04-2021 00:00:00",
+    lastSignin: "01-04-2021 00:00:00",
     role: "admin",
     image: "https://i.pravatar.cc/300",
     media: [1],
