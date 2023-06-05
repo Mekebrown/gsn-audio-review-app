@@ -1,32 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSession } from 'next-auth/react';
+
 import analyticsService from '../lib/analytics';
+import VisitorIndex from '../components/credentials/VisitorIndex';
+import UserIndex from '../components/credentials/UserIndex';
+
+analyticsService.logEvent('Index Page Viewed');
 
 const Home = () => {
-  {/* Default Head with default <title> to be loaded in NavBar */}
-  const [loggedIn, setLoggedIn] = useState(false);
+  const { data, status } = useSession();
 
-  analyticsService.logEvent('Page Viewed');
-
-  const handleLogin = () => {
-    window.location.href = '/login';
-  };
+  if (status === "loading") {
+    return "Loading or not authenticated..."
+  }
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    {!loggedIn ? (<>
-      <h1>Entertaining Others the Way YOU Want</h1>
-
-      <p>
-        The Gifted Sounds Network's Audio Review App is a straightforward audio player and <br />notes taker that lets you give real-time feedback on your recordings. <br /><br />Since you're the primary visionary, we do as you say.
-      </p>
-
-      <button className="ml-[41%]" onClick={handleLogin}>
-        Enter Your Given Password to Continue
-      </button>
-      
-      <div id="portal"></div>
-    </>) : (<>
-      
-    </>)}
+    { !data ? <VisitorIndex /> : <UserIndex /> }
   </main>;
 }
 

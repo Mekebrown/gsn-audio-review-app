@@ -21,5 +21,32 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "description": "GSN App",
+  "dir": "ltr",
+  "lang": "en-US",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Gifted Sounds Network - Audio Reviewer App",
+      "short_name": "GSN",
+      "description": "Internal Audio Reviewing Application",
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "ss1.jpg",
+      "type": "image/jpg",
+      "sizes": "540x720",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "ss2.jpg",
+      "type": "image/jpg",
+      "sizes": "720x540",
+      "form_factor": "wide"
+    }
+  ]
 }

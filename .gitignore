@@ -6,7 +6,8 @@ node_modules
 .next
 
 # environment variables
-.env.local
+.env
+.env.*
 
 # local docs
 lib/files

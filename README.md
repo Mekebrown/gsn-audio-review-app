@@ -53,10 +53,10 @@ I am thinking of using the [Pino](https://www.npmjs.com/package/pino) logging pa
 - A [helpful dev.to post](https://dev.to/i5han3/git-commit-message-convention-that-you-can-follow-1709) about adding clarity by formatting commit messages
 - README.md suggestions pulled from [Make a README](https://readthedocs.org/) and other sites by suggestion of Mark Nyon in [Issue #4](https://github.com/Githubbubber/gsn-audio-review-app/issues/4)
 - I found a [nifty, tiny player interface](https://codepen.io/websitebeaver/pen/vKdWxW?editors=0010), in CodePen, where an admin can play an audio track in their feed on the home page.
-- There is an alert message used for the log in form. Instead of the status message being saved in state I grab it through the DOM and add an alert role attribute once the form is submitted because [in MDN it says the following](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/alert_role#description): "Warning: Because of its intrusive nature, the alert role must be used sparingly and only in situations where the user's immediate attention is required." and "The alert role is added to the node containing an alert message, not the element causing the alert to be triggered." GTK.
+- There is an alert message used for the sign in form. Instead of the status message being saved in state I grab it through the DOM and add an alert role attribute once the form is submitted because [in MDN it says the following](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/alert_role#description): "Warning: Because of its intrusive nature, the alert role must be used sparingly and only in situations where the user's immediate attention is required." and "The alert role is added to the node containing an alert message, not the element causing the alert to be triggered." GTK.
 - [Font Awesome Cheatsheet](https://fontawesome.com/v5/cheatsheet)
 - [Helpful pull request thread](https://github.com/aws/aws-sdk-js/issues/2961) with suggestions on how to handle S3 file upload issues with larg binary
-- This blog helped me out with some difficulties with a logged-in user context on the client-side. [Implement Node/Express Sessions With Postgres](https://justacoding.blog/implement-node-express-sessions-with-postgres/) Thx [@justa{coding}blog!](https://twitter.com/justacodingblog)
+- This blog helped me out with some difficulties with a signed-in user context on the client-side. [Implement Node/Express Sessions With Postgres](https://justacoding.blog/implement-node-express-sessions-with-postgres/) Thx [@justa{coding}blog!](https://twitter.com/justacodingblog)
 
 ## Code Style
 
@@ -67,13 +67,9 @@ I also chose to use the same variable names for the frontend and backend to make
 I always capitalize SQL keywords so for the PostgreSQL initialization options I set "capSQL = true".
 
 ## Support and Feedback
-## Support and Feedback
 
-Please feel free to open an Issue with any questions, suggestions, or concerns.
 Please feel free to open an Issue with any questions, suggestions, or concerns.
 
 ## Acknowledgements
-## Acknowledgements
 
-Lance John, Mark Nyon
 Lance John, Mark Nyon
