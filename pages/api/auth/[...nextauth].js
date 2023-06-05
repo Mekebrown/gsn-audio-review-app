@@ -2,8 +2,6 @@ import axios from 'axios';
 import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import logger from "../../../lib/logger";
-
 /**
  * ONLY requests to /api/auth/* will be processed 
  * by NextAuth I would like to use, in the session 
@@ -12,35 +10,50 @@ import logger from "../../../lib/logger";
  * Credentials: Email/Password ONLY!
  */
 
+/*
+* Resources:
+* - [Credentials Provider](https://next-auth.js.org/providers/credentials)
+* - [User database model](https://authjs.dev/reference/adapters#user)
+*/
+
 const providers = [
-    CredentialsProvider({
+    CredentialsProvider.default({
         id: 'credentials',
         type: 'credentials',
         name: 'Credentials',
+        session: {
+            strategy: 'jwt'
+        },
         credentials: {
-            email: { label: "email", type: "email", placeholder: "lj@lj.co" },
-            password: { label: "Password", type: "password" },
+            email: { label: "email", type: "email", placeholder: "jsmith" },
+            password: { label: "password", type: "password", placeholder: "********" }
         },
         authorize: async (credentials, req) => {
-            try {
-                const user = await axios.post(process.env.NEXTAUTH_API_URL + 'auth/login', {
-                    password: credentials.password,
-                    email: credentials.email
-                });
+            console.log('Starting the signup/login process ---');
+            if (!credentials) return null;
 
-                const details = {
-                    desc: "authorize-credentialsProvider",
-                    message: "authorization attempt",
-                    req: { headers: req.headers },
+            try {
+            //     const user = await axios.post(process.env.NEXTAUTH_API_URL + '/auth/signin', {
+            //         password: credentials.password,
+            //         email: credentials.email
+            //     });
+
+            //     if (user.data.token) {
+            //         return user;
+            //     }
+
+            //     return null;
+                console.log('Ending the signup/login process ---');
+
+                const user = {
+                    data: {
+                        email: credentials.email,
+                        token: '1234567890',
+                        route: '/signin'
+                    }
                 };
 
-                logger(details);
-
-                if (user.data.token) {
-                    return user;
-                }
-
-                return null;
+                return user;
             } catch (e) {
                 throw new Error(e);
             }
@@ -52,17 +65,22 @@ const providers = [
  * If CredentialsProvider is used, the jwt and session are both required.
  */
 const callbacks = {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user }) => { // Needs to return a token
+        console.log('fire jwt Callback');
+
         if (user) {
-            // This will only be executed after a successful login. Each next invocation will skip this part.
+            // This will only be executed after a successful signin. Each next invocation will skip this part.
             token.user.email = user.data.email;
+            token.user.token = user.data.token;
         }
 
         const session_time = 60 * 60 * 24 * 30; // 30 days
 
         return Promise.resolve(token);
     },
-    session: async ({ session, token, user }) => {
+    session: async ({ session, token, user }) => { // Needs to return a session
+        console.log('fire SESSION Callback');
+
         if (user && token) {
             session.user.email = user.data.email;
 
@@ -72,8 +90,8 @@ const callbacks = {
 }
 
 const pages = {
-    signIn: '/auth/login',
-    signOut: '/auth/logout',
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
 };
 
 /**
@@ -83,36 +101,12 @@ const pages = {
  */
 const logger = {
     debug: (code, metadata) => {
-        const details = {
-            desc: "debug",
-            message: "tbd",
-            req: { metadata: metadata, code: code },
-        };
-
-        logger(details);
-
         console.log(code, metadata);
     },
     warn: (code, metadata) => {
-        const details = {
-            desc: "warn",
-            message: "tbd",
-            req: { metadata: metadata, code: code },
-        };
-
-        logger(details);
-
         console.warn(code, metadata);
     },
     error: (code, metadata) => {
-        const details = {
-            desc: "error",
-            message: "tbd",
-            req: { metadata: metadata, code: code },
-        };
-
-        logger(details);
-
         console.error(code, metadata);
     },
 }
@@ -121,9 +115,8 @@ export const auto_options = {
     providers,
     callbacks,
     pages,
-    secret: process.env.NEXTAUTH_SECRET,
+    logger,
+    secret: process.env.NEXTAUTH_SECRET
 }
 
-export default function Auth(req, res) {
-    NextAuth(req, res, auto_options);
-}
+export default NextAuth.default(auto_options);
