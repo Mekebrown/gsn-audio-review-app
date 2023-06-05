@@ -1,17 +1,14 @@
 import React from 'react';
 
-export default function Media(props) {
-  console.log('props:', props);
-  // const { content } = props;
+import analyticsService from '../lib/analytics';
+import UserIndex from '../components/credentials/UserIndex';
 
-  return <div>
-    <h1>Users</h1>
-    {/* {
-        content.maps((item) => {
-            return <div key={item.id}>item #{item.id}</div>;
-        })
-    } */}
-  </div>;
+analyticsService.logEvent('Media Page Viewed');
+
+export default function Media(props) {
+  return <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <UserIndex />
+  </main>;
 }
 
 export async function getStaticProps() {

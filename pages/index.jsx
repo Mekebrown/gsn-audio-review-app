@@ -3,9 +3,9 @@ import { useSession } from 'next-auth/react';
 
 import analyticsService from '../lib/analytics';
 import VisitorIndex from '../components/credentials/VisitorIndex';
-import ClientIndex from '../components/credentials/ClientIndex';
+import UserIndex from '../components/credentials/UserIndex';
 
-analyticsService.logEvent('Page Viewed');
+analyticsService.logEvent('Index Page Viewed');
 
 const Home = () => {
   const { data, status } = useSession();
@@ -14,10 +14,8 @@ const Home = () => {
     return "Loading or not authenticated..."
   }
 
-  console.log("Is there data? ", data);
-
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    { !data ? <VisitorIndex /> : <ClientIndex /> }
+    { !data ? <VisitorIndex /> : <UserIndex /> }
   </main>;
 }
 
