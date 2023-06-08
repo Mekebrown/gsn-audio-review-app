@@ -1,21 +1,30 @@
 import React from 'react';
 import { useSession } from 'next-auth/react';
 
+import SignInOutBtn from "../components/credentials/SignInOutBtn";
 import analyticsService from '../lib/analytics';
-import VisitorIndex from '../components/credentials/VisitorIndex';
-import UserIndex from '../components/credentials/UserIndex';
 
 analyticsService.logEvent('Index Page Viewed');
 
 const Home = () => {
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   if (status === "loading") {
     return "Loading or not authenticated..."
   }
 
+  if (status !== "unauthenticated") {
+    window.location.href = "/media";
+  }
+
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    { !data ? <VisitorIndex /> : <UserIndex /> }
+    <h1>Entertaining Others the Way YOU Want</h1>
+  
+    <p>
+      The Gifted Sounds Network's Audio Review App is a straightforward audio player and <br />notes taker that lets you give real-time feedback on your recordings. <br /><br />Since you're the primary visionary, we do as you say.
+    </p>
+
+    <SignInOutBtn />
   </main>;
 }
 

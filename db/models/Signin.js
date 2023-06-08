@@ -5,7 +5,7 @@
  * Table: signins
 
     sign_in_id - varchar, primary - uuid-generated
-    sign_in_headers - varchar, not null
+    sign_in_headers - varchar
     sign_in_ts - timestamp, not null, default now()
     sign_out_ts - timestamp
 

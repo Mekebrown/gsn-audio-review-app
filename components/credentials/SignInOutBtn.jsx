@@ -1,17 +1,15 @@
-export default function SignInOutBtn() {
-    const signOut = () => {
-        console.log("out"); 
-    };
+import { useSession, signOut } from "next-auth/react";
 
+export default function SignInOutBtn() {
     const signIn = () => {
         window.location.href = "/auth/signin";
     };
 
-    const session = false;
+    const { data } = useSession();
 
-    if (session) {
+    if (data) {
         return <>
-            Signed in as {session.user.email} <br />
+            Signed in as {data.user.email} <br />
             <button 
                 onClick={signOut}
                 type="button"
