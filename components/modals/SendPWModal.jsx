@@ -1,24 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCopy, faCheckCircle, faTimes, faEnvelope, faCheck, faExclamationTriangle, faSpinner, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-
-import { useAuth } from '../contexts/AuthContext';
-import { useMedia } from '../contexts/MediaContext';
-import { useNotes } from '../contexts/NotesContext';
-import { useUsers } from '../contexts/UsersContext';
-import { useSendPW } from '../contexts/SendPWContext';
-import { useAlert } from '../contexts/AlertContext';
+import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SendPWModal = () => {
-    const { currentUser } = useAuth();
-    const { media } = useMedia();
-    const { notes } = useNotes();
-    const { users } = useUsers();
-
-    const { sendPW, setSendPW } = useSendPW();
-
-    const { alert, setAlert } = useAlert();
+    const media = [{id: 1, title: "test1"}, {id: 2, title: "test2"}];
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
