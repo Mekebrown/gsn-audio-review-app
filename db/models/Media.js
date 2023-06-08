@@ -7,12 +7,13 @@
     media_type - enum (audio, video, image), not null, default audio
     media_description - varchar
     has_media_markers - boolean, not null, default false
-    media_markers_s3_url - varchar - Will be a csv file
+    media_markers_s3_csv_url - varchar - Will be a csv file
     media_s3_url - varchar, not null - Will be a media file
     media_created_ts - timestamp, not null, default now()
     media_updated_ts - timestamp
 
-    media -> user is only admin
+    media -> user is only created by an admin
+            but is assigned to zero or more users
     media -> notes is zero to many
     media -> project is one to one
 */
@@ -28,9 +29,9 @@
 const createMedia = (db, media) => {
     return db.one(
         `INSERT INTO media 
-            (media_type, media_description, has_media_markers, media_markers_s3_url, media_s3_url) 
+            (media_type, media_description, has_media_markers, media_markers_s3_csv_url, media_s3_url) 
         VALUES 
-            ($[media_type], $[media_description], $[has_media_markers], $[media_markers_s3_url], $[media_s3_url])`,
+            ($[media_type], $[media_description], $[has_media_markers], $[media_markers_s3_csv_url], $[media_s3_url])`,
         media
     );
 };
@@ -70,7 +71,7 @@ const updateMedia = (db, media) => {
     return db.one(
         `UPDATE media 
         SET 
-            media_type = $[media_type], media_description = $[media_description], has_media_markers = $[has_media_markers], media_markers_s3_url = $[media_markers_s3_url], media_s3_url = $[media_s3_url] 
+            media_type = $[media_type], media_description = $[media_description], has_media_markers = $[has_media_markers], media_markers_s3_csv_url = $[media_markers_s3_csv_url], media_s3_url = $[media_s3_url] 
         WHERE id = $[id]`,
         media
     );
