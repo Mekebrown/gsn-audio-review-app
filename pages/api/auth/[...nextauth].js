@@ -1,6 +1,9 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
+import SequelizeAdapter from "@next-auth/sequelize-adapter";
+
+import sequelize from "../../../lib/db/pgp_connect";
 
 /**
  * ONLY requests to /api/auth/* will be processed 
@@ -17,7 +20,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 */
 
 const providers = [
-    CredentialsProvider.default({
+    CredentialsProvider({
         id: 'credentials',
         type: 'credentials',
         name: 'Credentials',
@@ -28,66 +31,66 @@ const providers = [
             email: { label: "email", type: "email", placeholder: "jsmith" },
             password: { label: "password", type: "password", placeholder: "********" }
         },
-        authorize: async (credentials, req) => {
-            console.log('Starting the signup/login process ---');
+        authorize: async (credentials) => {
             if (!credentials) return null;
 
             try {
-            //     const user = await axios.post(process.env.NEXTAUTH_API_URL + '/auth/signin', {
-            //         password: credentials.password,
-            //         email: credentials.email
-            //     });
-
-            //     if (user.data.token) {
-            //         return user;
-            //     }
-
-            //     return null;
-                console.log('Ending the signup/login process ---');
-
-                const user = {
-                    data: {
-                        email: credentials.email,
-                        token: '1234567890',
-                        route: '/signin'
+                const user = await axios.post(
+                    process.env.NEXTAUTH_API_URL + '/auth/signin', 
+                    {
+                        password: credentials.password,
+                        email: credentials.email
                     }
-                };
+                );
 
-                return user;
+                if (user.data.token) {
+                    return user;
+                }
+
+                return null;
             } catch (e) {
                 throw new Error(e);
             }
         }
     })
-]
+];
 
 /**
- * If CredentialsProvider is used, the jwt and session are both required.
+ * The session object returned has user and expires properties.
+ * The jwt returned object has name, email, image, and token properties.
  */
 const callbacks = {
-    jwt: async ({ token, user }) => { // Needs to return a token
-        console.log('fire jwt Callback');
+    async redirect({ url, baseUrl }) {
+        const str_to_search = url.toLowerCase();
 
+        if (str_to_search.includes("/auth/signin")) {
+            return `${baseUrl}/media`;
+        } else if (str_to_search.startsWith("/")) {
+            return `${baseUrl}${url}`;
+        } else {
+            return `${baseUrl}/auth/signin`;
+        }
+    },
+    jwt: async ({ token, user }) => { 
         if (user) {
             // This will only be executed after a successful signin. Each next invocation will skip this part.
-            token.user.email = user.data.email;
-            token.user.token = user.data.token;
+            token.name = user.data.email;
+            token.email = user.data.email;
+            token.image = "https://media.istockphoto.com/id/492418894/vector/fun-sign.jpg?s=612x612&w=0&k=20&c=hPUa8EdrNAyf2UuPWAIMFZYFsIGKxTX0kyPhPwZBu48=";
+            token.image = user.data.image;
+            token.token = user.data.token;
         }
 
         const session_time = 60 * 60 * 24 * 30; // 30 days
 
         return Promise.resolve(token);
     },
-    session: async ({ session, token, user }) => { // Needs to return a session
-        console.log('fire SESSION Callback');
-
-        if (user && token) {
-            session.user.email = user.data.email;
-
+    session: async ({ session, token }) => {
+        if (token) {
             return Promise.resolve(session);
         }
     },
-}
+};
 
 const pages = {
     signIn: '/auth/signin',
@@ -109,14 +112,15 @@ const logger = {
     error: (code, metadata) => {
         console.error(code, metadata);
     },
-}
+};
 
 export const auto_options = {
+    secret: process.env.NEXTAUTH_SECRET,
     providers,
+    adapter: SequelizeAdapter(sequelize),
     callbacks,
     pages,
-    logger,
-    secret: process.env.NEXTAUTH_SECRET
-}
+    logger
+};
 
-export default NextAuth.default(auto_options);
+export default NextAuth(auto_options);
