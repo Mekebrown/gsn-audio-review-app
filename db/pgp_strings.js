@@ -1,19 +1,5 @@
 const query_strings = {
-    all_media_query_statement: [
-        "SELECT",
-            "id, project_name, media_desc", 
-            "file_name, project_thumb, file_directory",
-        "FROM media"
-    ].join(" "),
-    insert_note_query: [
-        'INSERT INTO notes', 
-            '(user_id, media_id, note_body, note_timestamp,',
-            'last_retrieved, created_at, updated_at)',
-        'VALUES ',
-            '($1, $2, $3, $4, $5, $6, $7)',
-        'RETURNING id',
-    ].join(" "),
-    media_upload_query_statement: [
+    insert_media: [
         'INSERT INTO media',
             '(media_desc, file_name, media_type,', 
             'project_name, last_retrieved,',
@@ -21,7 +7,23 @@ const query_strings = {
         'VALUES ',
             '($1, $2, $3, $4, $5, $6, $7)'
     ].join(" "),
-    notes_query_statement: [
+    insert_note: [
+        'INSERT INTO notes', 
+            '(user_id, media_id, note_body, note_timestamp,',
+            'last_retrieved, created_at, updated_at)',
+        'VALUES ',
+            '($1, $2, $3, $4, $5, $6, $7)',
+        'RETURNING id',
+    ].join(" "),
+    insert_user: [
+        "INSERT INTO users",
+            "(role, email, hashed_password,",
+            "media_list, created_at)", 
+        "VALUES",
+            "($1, $2, $3, $4, now())", 
+        "RETURNING id"
+    ].join(" "),
+    select_notes: [
         "SELECT",
             "id, note_body, note_timestamp",
         "FROM",
@@ -31,23 +33,21 @@ const query_strings = {
         "ORDER BY created_at", 
         "DESC LIMIT 5"
     ].join(" "),
-    set_pw_query: [
-        "INSERT INTO users",
-            "(role, email, hashed_password,",
-            "media_list, created_at)", 
-        "VALUES",
-            "($1, $2, $3, $4, now())", 
-        "RETURNING id"
+    select_all_media: [
+        "SELECT",
+            "id, project_name, media_desc", 
+            "file_name, project_thumb, file_directory",
+        "FROM media"
     ].join(" "),
-    sign_in_query: [
+    select_users: [
         "SELECT * FROM users",
         "WHERE email = $1"
     ].join(" "),
-    single_media_query_statement: [
+    select_media: [
         "SELECT * FROM media",
         "WHERE id = $1"
     ].join(" "),
-    update_note_query: [
+    update_notes: [
         'UPDATE notes ',
         'SET',
             'note_body = $1,',
@@ -57,18 +57,17 @@ const query_strings = {
         'WHERE id = $5 ',
         'AND media_id = $6',
     ].join(" "),
-    update_user_sign_in_query: [
-        "UPDATE users", 
-        "SET header_info = $1,",
-        "last_sign_in = $2",
-        "WHERE email = $3",
-        "RETURNING role"
-    ].join(" "),
     update_users: [
-        'UPDATE users',
-        'SET contact_request = $1',
-        'WHERE id = $2',
-        'VALUES ($1, $2)'
+        "UPDATE users", 
+        "SET" + 
+            "user_email = $1,",
+            "user_created_ts = $2,",
+            "user_media_list = $3",
+            "last_sign_in_ts = $4",
+            "user_role = $5",
+            "user_hashed_pw = $6",
+        'WHERE user_id = $7',
+        'VALUES ($1, $2, $3, $4, $5, $6, $7)'
     ].join(" "),
 };
 
