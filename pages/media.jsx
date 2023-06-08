@@ -1,15 +1,38 @@
 import React from 'react';
+import { useSession } from 'next-auth/react';
 
+import SignInOutBtn from "../components/credentials/SignInOutBtn";
 import analyticsService from '../lib/analytics';
-import UserIndex from '../components/credentials/UserIndex';
 
 analyticsService.logEvent('Media Page Viewed');
 
-export default function Media(props) {
+export default function Media({content}) {
+  const { data, status } = useSession();
+
+  if (status === "loading") {
+    return "Loading or not authenticated..."
+  }
+
+  if (status !== "authenticated") {
+    window.location.href = "/";
+  }
+
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    <UserIndex />
+    <SignInOutBtn />
+    <p>Media View</p>
+    I want to show:<br />
+    <hr />
+    {content.map(project => {
+      return <div>
+        THIS | Media project #{project.id}<br />
+        SIDE | A player with preloaded audio of each media item<br />
+        HAS | A preview of the latest note added to each media...<br />
+        LOGO | Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users<br />
+        <hr />
+      </div>;
+    })}
   </main>;
-}
+};
 
 export async function getStaticProps() {
   // const { content } = await fetch('/api/media').then((res) => res.json());
