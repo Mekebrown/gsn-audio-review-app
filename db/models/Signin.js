@@ -1,79 +1,82 @@
-/**
- * The SignIn model is for information about sign ins
- * associated with a User.
- * 
- * Table: signins
+const { DataTypes, Model } = require('sequelize');
 
-    sign_in_id - varchar, primary - uuid-generated
-    sign_in_headers - varchar
-    sign_in_ts - timestamp, not null, default now()
-    sign_out_ts - timestamp
+const sequelize = require('../sequelize');
+
+/**
+ * @class SignIn
+ * 
+ * @classdesc The SignIn model is for information about sign ins associated with a User.
+ * 
+ * Instantiate -> SignIn.build()
+ * Create -> SignIn.create(). Have to add its id to a user's sign_in_ids array.
+ * Get all -> SignIn.findAll(). Have to find their users.
+ * Get one -> SignIn.findOne(). Have to find its related user.
 
     sign in -> user is one to one
+
+    * @extends {Model}
+
+    @property {number} sign_in_id - varchar, primary - uuid-generated
+    @property {number} sign_in_ts - timestamp, not null, default now()
+    @property {number} user_id - varchar, foreign key - users.user_id
+    @property {number} [sign_out_ts] - timestamp
+    @property {number} [sign_in_headers] - varchar
 */
+class SignIn extends Model {
+    /**
+     * Get all sign ins information for a user.
+     * 
+     * @param {String} user_id - The user_id of the user to get sign ins for.
+     * 
+     * @returns {Object}
+     */
+    getAllSignInsPerUser(user_id) {};
+    
+    async getUserForSignIn(sign_in_id) {};
+}
 
-/**
- * Create a sign in entry.
- * 
- * @param {Object} db - The database object.
- * @param {Object} sign_in - The sign in object to be inserted.
- * 
- * @returns {Promise} - A promise that resolves to the inserted sign in.
- */
-const createSignIn = (db, sign_in) => {
-    return db.one(
-        `INSERT INTO signins 
-            (sign_in_id, sign_in_headers, sign_in_ts)
-        VALUES 
-            ($[sign_in_id], $[sign_in_headers], $[sign_in_ts])`, 
-        sign_in
-    );
+SignIn.init({
+    signInId: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+        field: 'sign_in_id'
+    },
+    signInTS: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'sign_in_ts'
+    },
+    userId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        field: 'user_id'
+    },
+    signOutTS: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'sign_out_ts'
+    },
+    signInHeaders: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'sign_in_headers'
+    }
+}, {
+    sequelize,
+    modelName: 'SignIn',
+    tableName: 'signins',
+    timestamps: true,
+    createdAt: 'sign_in_ts',
+    updatedAt: 'sign_out_ts',
+    underscored: true
+});
+
+SignIn.associate = (models) => {
+    SignIn.belongsTo(models.User, {
+        foreignKey: 'user_id'
+    });
 };
 
-/**
- * Get a sign in's info.
- * 
- * @param {Object} db - The database object.
- * @param {String} sign_in_id - The sign_in_id of the sign in to be retrieved.
- * 
- * @returns {Promise} - A promise that resolves to the retrieved sign in.
- */
-const getSignIn = (db, sign_in_id) => {
-    return db.one(
-        `SELECT * FROM signins WHERE sign_in_id = $1`, 
-        [sign_in_id]
-    );
-};
-
-/**
- * Get all sign ins information for a user.
- * 
- * @param {Object} db - The database object.
- * @param {String} user_id - The user_id of the user to get sign ins for.
- * 
- * @returns {Promise} - A promise that resolves to the retrieved sign ins.
- */
-const getAllSignInsPerUser = (db, user_id) => {
-    return db.any(
-        `SELECT * FROM signins WHERE user_id = $1`, 
-        [user_id]
-    );
-};
-
-/**
- * Get all sign in information from all users.
- * 
- * @param {Object} db - The database object.
- * 
- * @returns {Promise} - A promise that resolves to the retrieved sign ins.
- */
-const getAllSignIns = (db) => {
-    return db.any( `SELECT * FROM signins` );
-};
-
-module.exports = {
-    createSignIn,
-    getSignIn,
-    getAllSignInsPerUser,
-    getAllSignIns
-};
+module.exports = SignIn;

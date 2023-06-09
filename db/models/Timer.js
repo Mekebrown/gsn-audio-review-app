@@ -1,87 +1,119 @@
+const { DataTypes, Model } = require('sequelize');
+
+const sequelize = require('../sequelize');
+
 /**
- * The Timer model shows information about a typical timer session.
+ * @class Timer
  * 
- * Table: timers
+ * @classdesc The Timer model shows information about a typical timer session.
  * 
- *  id - integer, primary key, serialized
- *  timer_created_ts - timestamp, not null, default now()
- *  timer_current_sec - integer, not null, default 0
- *  is_timer_paused - boolean, not null, default false
- *  is_timer_cleared - boolean, not null, default false
- *  is_timer_restarted - boolean, not null, default false
+ * @description A timer can only be created by the Producer and any user can connect to it in a session.
  * 
- *  timer -> user one to one
+ * Instantiate -> Timer.build()
+ * Create -> Timer.create(). Have to add its id to the project's timer_ids array.
+ * Get all -> Timer.findAll(). Have to find their projects and users.
+ * Get one -> Timer.findOne(). Have to find its related project and user(s).
+ * Update -> Timer.update({}, {}) and timer.save()
+ * Delete -> timer.destroy(). Have to find its related project and user, and delete the timer_id from their timers_ids arrays. TODO: Maybe have each have a field of former_timers_ids?
+ * 
+ *  timer -> user none to many
  *  timer -> project one to one
+ * 
+ * @extends {Model}
+ * 
+ *  @property {number} timer_id - The timer's id.
+ *  @property {Date} timer_created_ts - The timer's created timestamp.
+ *  @property {number} timer_current_sec - The timer's current time in seconds.
+ *  @property {boolean} is_timer_paused - Is the timer paused?
+ *  @property {boolean} is_timer_cleared - Is the timer cleared?
+ *  @property {boolean} is_timer_restarted - Is the timer restarted?
+ *  @property {number} project_id - The timer's project it's set to.
+ *  @property {Date} [timer_updated_ts] - The recently-updated timer's ts.
+ * @property {number[]} [users_ids] - The timer's users' ids.
  */
+class Timer extends Model {
+    /**
+     * Get the project that a timer is related to.
+     */
+    getProjectForTimer() {};
 
-/**
- * Create a new timer.
- * 
- * @param {Object} db - The database connection.
- * @param {Object} timer - The timer object to be created.
- * 
- * @returns {Promise} - A promise that resolves to the newly created timer.
- */
-const createTimer = (db, timer) => {
-    return db.one(
-        `INSERT INTO timers 
-            (timer_created_ts, timer_current_sec)
-        VALUES 
-            ($[timer_created_ts], $[timer_current_sec])`,
-        timer
-    );
+    /**
+     * Get all users that a timer is related to.
+     */
+    getAllUsersForTimer() {};
+
+    /**
+     * Add a timer id to a user's timers ids.
+     */
+    addTimerIdToUserTimersIds() {};
+
+    /**
+     * Add a timer id to a project's timers ids.
+     */
+    addTimerIdToProjectTimersIds() {};
+}
+
+Timer.init({
+    timerId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    timerCreatedTS: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'timer_created_ts'
+    },
+    timerCurrentSec: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'timer_current_sec'
+    },
+    isTimerPaused: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_timer_paused'
+    },
+    isTimerCleared: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_timer_cleared'
+    },
+    isTimerRestarted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_timer_restarted'
+    },
+    projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'project_id'
+    },
+    timerUpdatedTS: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'timer_updated_ts'
+    }
+}, {
+    sequelize,
+    modelName: 'timer',
+    tableName: 'timers',
+    timestamps: true,
+    createdAt: 'timer_created_ts',
+    updatedAt: 'timer_updated_ts',
+    underscored: true
+});
+
+Timer.associate = (models) => {
+    Timer.belongsTo(models.Project, {
+        foreignKey: 'project_id',
+        as: 'project'
+    });
 };
 
-/**
- * Get a timer by its id.
- * 
- * @param {Object} db - The database connection.
- * @param {Number} timer_id - The id of the timer to be retrieved.
- * 
- * @returns {Promise} - A promise that resolves to the retrieved timer.
- */
-const getTimer = (db, timer_id) => {
-    return db.one(
-        `SELECT * FROM timers WHERE timer_id = $1`, 
-        [timer_id]
-    );
-};
-
-/**
- * Get info on all timers.
- * 
- * @param {Object} db - The database connection.
- * 
- * @returns {Promise} - A promise that resolves to all timers.
- */
-const getAllTimers = (db) => {
-    return db.any( `SELECT * FROM timers` );
-};
-
-/**
- * Update a timer.
- * 
- * @param {Object} db - The database connection.
- * @param {Object} timer - The timer object to be updated.
- * 
- * @returns {Promise} - A promise that resolves to the updated timer.
- */
-const updateTimer = (db, timer) => {
-    return db.one(
-        `UPDATE timers 
-        SET 
-            timer_current_sec = $[timer_current_sec],
-            is_timer_paused = $[is_timer_paused],
-            is_timer_cleared = $[is_timer_cleared],
-            is_timer_restarted = $[is_timer_restarted]
-        WHERE timer_id = $[timer_id]`,
-        timer
-    );
-};
-
-module.exports = {
-    createTimer,
-    getTimer,
-    getAllTimers,
-    updateTimer
-};
+module.exports = Timer;

@@ -1,11 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
-const { 
-    get_user_info,
-    users_sign_ins_info,
-    add_sign_ins_for_admin 
-} = require("../pgp_strings");
 
 /**
  * @class User
@@ -20,7 +15,7 @@ const {
  * Get one -> User.findOne(). Add an indicator for the requestor's role.
  * Update -> User.update({}, {}) and user.save()
  * Delete -> user.destroy()
- * Get notifs -> user.getUserNotifications(). Notifications to be calculated from notes and media dates.
+ * Get notifs -> user.getUserNotifications(). Notifications to be calculated from notes and media dates. If the user is an admin, they will get notifications such as new notes and their replies, and new sign ins. If the user is a client, they will get notifications such as new replies of notes, new projects, and new media works.
  * 
  *  user -> sign ins    one to many
  *  user -> media       zero to many
@@ -35,20 +30,20 @@ const {
  * 
  * @extends {Model}
  * 
- * @property {string} id - The user's UUIDV4-generated id.
+ * @property {string} user_id - The user's UUIDV4-generated id.
  * @property {string} user_email - The user's email. Unique.
  * @property {Date} user_created_ts - The user's created timestamp.
+ * @property {string} user_hashed_pw - A Bcrypt-hashed password.
  * @property {string[]} [user_media_list] - The user's media list array.
- * @property {Date} [last_sign_in_ts] - The user's last sign in timestamp.
- * @property {Date} [last_sign_out_ts] - The user's last sign out timestamp.
+ * @property {Date} [last_sign_in_ts] - The user's last sign in ts.
+ * @property {Date} [last_sign_out_ts] - The user's last sign out ts.
  * @property {string} [user_internal_note] - The user's note from admin.
- * @property {Date} [user_discl_agreed_ts] - The disclaimer agreement's ts.
- * @property {boolean} [is_discl_agreed] - The user's disclaimer agreed boolean.
+ * @property {Date} [user_discl_agreed_ts] - Disclaimer agreement's ts.
+ * @property {boolean} [is_discl_agreed] - Disclaimer agreed boolean.
  * @property {string} [user_updated_field] - The recently-updated field.
  * @property {boolean} [is_user_updated] - The "Was it updated?" answer.
- * @property {Date} [user_updated_ts] - The recently-updated field's timestamp.
+ * @property {Date} [user_updated_ts] - The recently-updated field's ts.
  * @property {string} [user_role] - The user's role (admin, client).
- * @property {string} user_hashed_pw - The user's Bcrypt-hashed password.
  * @property {number[]} [notes_ids] - The user's media list array.
  * @property {number[]} [projects_ids] - The user's media list array.
  * @property {number[]} [timers_ids] - The user's media list array.
@@ -95,23 +90,41 @@ class User extends Model {
      * 
      * @returns {Object} - A promise that resolves to the json object.
      */
-    getUserNotifications() {
-        // For a client, get the amount of notes replying to their notes, amount of new media added for them, and amount of new projects added for them.
-        // For an admin, get the amount of new users signed in by checking if the last_sign_in_ts is not null and amount of new notes by adding new notes since this user's last sign in.
+    async getUserNotifications() {
+        const requesting_user = await User.findByPk(this.user_id);
+
+        if (requesting_user.user_role === 'client') {
+            // Get the amount of notes replying to their notes, amount of new media added for them, and amount of new projects added for them.
+        } else if (requesting_user.user_role === 'admin') {
+            // Get the amount of new users signed in by checking if the last_sign_in_ts is not null and amount of new notes by adding new notes since the admin's last sign in.
+        }
     };
 }
 
 User.init({
-    id: {
+    userId: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
+        field: 'user_id'
     },
     userEmail: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true, 
         field: 'user_email'
+    },
+    userCreatedTS: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+        field: 'user_created_ts'
+    },
+    userHashedPW: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true, 
+        field: 'user_hashed_pw'
     },
     userMediaList: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
@@ -155,17 +168,16 @@ User.init({
         defaultValue: false, 
         field: 'is_user_updated'
     },
+    userUpdatedTS: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'user_updated_ts'
+    },
     userRole: {
         type: DataTypes.ENUM('admin', 'client'),
         allowNull: false,
         defaultValue: 'client', 
         field: 'user_role'
-    },
-    userHashedPW: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true, 
-        field: 'user_hashed_pw'
     },
     notesIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
@@ -218,15 +230,16 @@ User.init({
     tableName: 'users',
     timestamps: true,
     createdAt: 'user_created_ts',
-    updatedAt: 'user_updated_ts'
+    updatedAt: 'user_updated_ts',
+    underscored: true
 });
 
-module.exports = {
-    createUser,
-    getUser,
-    getAllUsers,
-    updateUser,
-    deleteUser,
-    getUserNotifications,
-    User
+User.associate = (models) => {
+    User.hasMany(models.Note, { foreignKey: 'user_id' });
+    User.hasMany(models.SignIn, { foreignKey: 'user_id' });
+    User.hasMany(models.Media, { foreignKey: 'user_id' });
+    User.hasMany(models.Project, { foreignKey: 'user_id' });
+    User.hasMany(models.Timer, { foreignKey: 'user_id' });
 };
+
+module.exports = User;
