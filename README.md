@@ -2,17 +2,19 @@
 
 A React/Node/PostgreSQL media reviewing web application to be used by producers and their clients.
 
-List of main technologies required: [Node JS](https://nodejs.org), [React JS](https://reactjs.org/), [PostgreSQL](https://www.postgresql.org/), [Amazon S3](https://aws.amazon.com/s3/) for storing uploaded media, [Axios](https://axios-http.com/docs/intro) for the frontend HTTP requests, [Jest](https://jestjs.io/) for testing React components, and a few packages for [Font Awesome](https://cdnjs.com/libraries/font-awesome) icons.
+List of main technologies required: [Next JS](https://nextjs.org/) has ALL the goods of [Node JS](https://nodejs.org) and [React JS](https://reactjs.org/), [PostgreSQL](https://www.postgresql.org/), [Amazon S3](https://aws.amazon.com/s3/) for storing uploaded media, [Axios](https://axios-http.com/docs/intro) for the frontend's HTTP requests, [Jest](https://jestjs.io/) for testing React components, and a few packages for [Font Awesome](https://cdnjs.com/libraries/font-awesome) icons.
 
 ## Installation
 
 - Clone the repo
 - Run in the CLI `npm install`
 - Set the following environment variables either in a .env file or set in your machine's configuration:
-  [PG_USER, PG_PASSWORD, PG_HOST, PG_PORT, PG_DATABASE](https://www.postgresql.org/docs/current/libpq-envars.html). When retrieving PostgreSQL data remotely you will need a variable to store a formatted connection url string such as "postgres://[PG_USER]:[PG_PASSWORD]@[PG_HOST]:[PG_PORT]/[PG_DATABASE]"
-- You can either split your terminal window into two tabs (recommended in VS Code) or have two terminal instances running with the following:
-  --- Run in the root directory `npm start` to start up the Node server on port 3001
-  --- Run in the /client directory `npm start` to start up react-scripts on port 3000
+---[PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE](https://www.postgresql.org/docs/current/libpq-envars.html). When retrieving PostgreSQL data remotely you will need a variable to store a formatted connection url string such as "postgres://[PGUSER]:[PGPASSWORD]@[PGHOST]:[PGPORT]/[PGDATABASE]"
+---[AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_DEFAULT_REGION, AWS_BUCKET_NAME](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/loading-node-credentials-environment.html). When retrieving S3 data remotely you will need a variable to store a formatted connection url string such as "s3://[AWS_ACCESS_KEY_ID]:[AWS_SECRET_ACCESS_KEY]@[AWS_DEFAULT_REGION]/[AWS_BUCKET_NAME]"
+---NEXTAUTH_API_URL, S/E, for the NextAuth.js package
+---[NEXTAUTH_URL](https://next-auth.js.org/getting-started/example) for the NextAuth.js package
+---[NEXTAUTH_SECRET](https://next-auth.js.org/getting-started/example) for the NextAuth.js package
+---[NEXTAUTH_DATABASE_URL](https://next-auth.js.org/getting-started/example) for the NextAuth.js package. The PostgreSQL connection url would be this constant's value.
 
 ## Usage Tips
 
@@ -60,11 +62,11 @@ I am thinking of using the [Pino](https://www.npmjs.com/package/pino) logging pa
 
 ## Code Style
 
-I chose to create frontend variable names in camelcase and backend variables in snake case. Also, for the frontend I used ES6 modules (import/export syntax) and for the backend I chose to use commonjs (require syntax). These serve as differentiators of the sections and intentions.
+I chose to create frontend variable names in camelcase and backend variables in snake case. So you'll see that a lot. Also, for the frontend I used ES6 modules (import/export syntax) and for the backend I may have used commonjs.
 
-I also chose to use the same variable names for the frontend and backend to make it easier to keep track of what is being passed around.
+I also chose to use the same variable names for the frontend and backend to make it easier to keep track of what is being passed around. I did my best to be consistent in that.
 
-I always capitalize SQL keywords so for the PostgreSQL initialization options I set "capSQL = true".
+I always capitalize SQL keywords, too.
 
 ## Support and Feedback
 
