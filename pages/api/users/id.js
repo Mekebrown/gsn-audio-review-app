@@ -1,20 +1,78 @@
-const user_info = {
-    id: 1,
-    note_ids: [1, 2, 3],
-    tag: "(string) - uuid",
-    email: "admin@gsn.net",
-    lastSignin: "01-04-2021 00:00:00",
-    role: "admin",
-    image: "https://i.pravatar.cc/300",
-    media: [1],
-    notifs: {
-        users: 2,
-        notes: 2,
-        media: 1,
-    },
-    settings: {
-        light_mode: true
-    },
+import { User } from "../../db/models";
+
+/**
+ * @param {string} id
+ * 
+ * @returns {Object}
+ */
+const getUserInfo = async (id) => {
+    const user = await User.findOne({
+        where: {
+            id: id
+        }
+    });
+
+    return user;
+};
+
+/** 
+ * @param {Object} updated_user_info
+ * 
+ * @returns {Boolean}
+ */
+const updateAUser = async (updated_user_info) => {
+    const user = await User.save(updated_user_info);
+  
+    // Does this return the updated user?
+    const updated_user = await user.saveUser();
+
+    if (updated_user) {
+        return true;
+    }
+
+    return false;
+};
+
+/** 
+ * @param {Object} deleted_user_info
+ * 
+ * @returns {Boolean}
+ */
+const deleteAUser = async (deleted_user_info) => {
+    const user = await User.destroy(deleted_user_info);
+  
+    const is_deleted = await user.destroyUser();
+
+    if (is_deleted) {
+        return true;
+    }
+
+    return false;
+};
+
+/**
+ * @param {Object} info
+ * 
+ * @returns {Object}
+ */
+const validateUserInfo = (info) => {
+    const { email, password } = info;
+
+    if (!email || !password) {
+        return {
+            error: "Email and password are required."
+        };
+    }
+
+    return validated_user_info;
+};
+
+/**
+ * @param {Object} info
+ * 
+ * @returns {Object}
+ */
+const sanitizeUsersInfo = (info) => {
 };
 
 /**
@@ -22,17 +80,37 @@ const user_info = {
  * @param {Object} res 
  */
 export default function handler( req, res ) {
-    if (req.method === "GET") {
+    const { method } = req;
+    const { id } = req.query;
+
+    if (method === "GET") {
+        const user_info = getUserInfo(id);
+
         res.status(200).json({ 
-            route: "users/id", 
-            method: "GET",
+            route: "users/id",
             user: user_info 
         });
-    } else if (req.method === "DELETE") {
+    } else if (method === "PUT") {
+        const updated_user_info = req.body;
+    
+        const is_user_updated = updateAUser(updated_user_info);
+    
         res.status(200).json({ 
-            route: "users/id", 
-            method: "DELETE",
-            is_user_deleted: true 
+          route: "users",
+          is_user_updated 
+        });
+    } else if (method === "DELETE") {
+        const is_user_deleted = deleteAUser(id);
+
+        res.status(200).json({ 
+            route: "users/id", is_user_deleted
         });
     }
+
+    handleErrors(res, 405, "Method not allowed", "users");
+    
+    res.status(405).json({
+      error: "Method not allowed",
+      route: "users"
+    });
 };
