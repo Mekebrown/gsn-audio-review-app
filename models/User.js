@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -104,7 +104,7 @@ class User extends Model {
 User.init({
     userId: {
         type: DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         field: 'user_id'
     },
@@ -117,7 +117,7 @@ User.init({
     userCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
+        defaultValue: DataTypes.NOW,
         field: 'user_created_ts'
     },
     userHashedPW: {
