@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 import SignInOutBtn from "../components/credentials/SignInOutBtn";
-import analyticsService from '../lib/analytics';
-
-analyticsService.logEvent('Index Page Viewed');
+import analytics from  "../lib/analytics_handler";
 
 const Home = () => {
   const { status } = useSession();
@@ -16,6 +14,10 @@ const Home = () => {
   if (status !== "unauthenticated") {
     window.location.href = "/media";
   }
+
+  useEffect(() => {
+    analytics.logEvent('Index Page Loaded');
+  }, []);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <h1>Entertaining Others the Way YOU Want</h1>
