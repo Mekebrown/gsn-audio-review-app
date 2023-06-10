@@ -3,7 +3,7 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
 import SequelizeAdapter from "@next-auth/sequelize-adapter";
 
-import sequelize from "../../../db/pgp_connect";
+import sequelize from "../../../lib/db-related/seq_connect";
 
 /**
  * ONLY requests to /api/auth/* will be processed 
