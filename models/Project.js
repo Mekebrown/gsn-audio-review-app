@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -57,7 +57,7 @@ Project.init({
     projectCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: Sequelize.NOW,
         field: 'project_created_ts'
     },
     projectLogoS3URL: {
@@ -73,12 +73,12 @@ Project.init({
     projectUpdatedTS: {
         type: DataTypes.DATE,
         allowNull: true,
-        defaultValue: DataTypes.NOW,
         field: 'project_updated_ts'
     },
     mediaIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
+        defaultValue: "{}",
         field: 'media_ids'
     }
 }, {

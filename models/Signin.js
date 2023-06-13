@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -45,7 +45,7 @@ SignIn.init({
     signInTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: Sequelize.NOW,
         field: 'sign_in_ts'
     },
     userId: {

@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -59,10 +59,15 @@ Timer.init({
         primaryKey: true,
         autoIncrement: true
     },
+    projectId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'project_id'
+    },
     timerCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: Sequelize.NOW,
         field: 'timer_created_ts'
     },
     timerCurrentSec: {
@@ -88,11 +93,6 @@ Timer.init({
         allowNull: false,
         defaultValue: false,
         field: 'is_timer_restarted'
-    },
-    projectId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        field: 'project_id'
     },
     timerUpdatedTS: {
         type: DataTypes.DATE,

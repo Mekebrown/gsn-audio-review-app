@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -117,7 +117,7 @@ User.init({
     userCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW,
+        defaultValue: Sequelize.NOW,
         field: 'user_created_ts'
     },
     userHashedPW: {
@@ -129,6 +129,7 @@ User.init({
     userMediaList: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true, 
+        defaultValue: "{}",
         field: 'user_media_list'
     },
     lastSignInTS: {

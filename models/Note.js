@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -84,6 +84,22 @@ Note.init({
         allowNull: false,
         field: 'note_content'
     },
+    mediaId: {
+        type: DataTypes.INTEGER,
+        allowNull: false, 
+        field: 'media_id'
+    },
+    noteCreatedTS: {
+        type: DataTypes.DATE,
+        allowNull: false, 
+        defaultValue: Sequelize.NOW,
+        field: 'note_created_ts'
+    },
+    noteUpdatedTS: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'note_updated_ts'
+    },
     noteDeletedTS: {
         type: DataTypes.DATE,
         allowNull: true, 
@@ -93,11 +109,6 @@ Note.init({
         type: DataTypes.INTEGER,
         allowNull: true, 
         field: 'reply_to_note_id'
-    },
-    mediaId: {
-        type: DataTypes.INTEGER,
-        allowNull: false, 
-        field: 'media_id'
     },
 }, {
     sequelize,

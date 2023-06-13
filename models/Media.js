@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require('sequelize');
+const { Sequelize, DataTypes, Model } = require('sequelize');
 
 const sequelize = require('../sequelize');
 
@@ -94,12 +94,6 @@ Media.init({
         allowNull: false,
         field: 'media_description'
     },
-    mediaType: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: 'audio',
-        field: 'media_type'
-    },
     mediaS3URL: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -108,7 +102,14 @@ Media.init({
     mediaCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: Sequelize.NOW,
         field: 'media_created_ts'
+    },
+    mediaType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'audio',
+        field: 'media_type'
     },
     hasMediaMarkers: {
         type: DataTypes.BOOLEAN,
@@ -123,17 +124,19 @@ Media.init({
     },
     mediaUpdatedTS: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         field: 'media_updated_ts'
     },
     notesIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
+        defaultValue: "{}",
         field: 'notes_ids'
     },
     usersIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
+        defaultValue: "{}",
         field: 'users_ids'
     }
 }, {
