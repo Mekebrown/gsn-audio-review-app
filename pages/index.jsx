@@ -16,7 +16,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    analytics.logEvent('Index Page Loaded');
+    analytics.gaEvent('Index Page Loaded');
   }, []);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">

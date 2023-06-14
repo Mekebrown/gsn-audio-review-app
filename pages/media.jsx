@@ -17,7 +17,7 @@ export default function Media({content}) {
   }
 
   useEffect(() => {
-    analytics.logEvent('Media Page Loaded');
+    analytics.gaEvent('Media Page Loaded');
   }, []);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
