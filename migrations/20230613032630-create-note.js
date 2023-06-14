@@ -17,6 +17,8 @@ module.exports = {
           table: 'users',
           key: 'userId'
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       noteContent: {
           type: Sequelize.STRING,
@@ -28,7 +30,9 @@ module.exports = {
           references: {
             table: 'media',
             key: 'id'
-          }
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE'
       },
       noteCreatedTS: {
           type: Sequelize.DATE,
@@ -50,6 +54,8 @@ module.exports = {
             table: 'notes',
             key: 'id'
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE'
       }
     });
   },

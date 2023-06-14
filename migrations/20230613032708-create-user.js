@@ -36,7 +36,9 @@ module.exports = {
           references: {
             table: 'signins',
             key: 'signInId'
-          }
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE'
       },
       lastSignOutTS: {
           type: Sequelize.DATE,
@@ -44,7 +46,9 @@ module.exports = {
           references: {
             table: 'signins',
             key: 'signOutTS'
-          }
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE'
       },
       userInternalNote: {
           type: Sequelize.STRING,

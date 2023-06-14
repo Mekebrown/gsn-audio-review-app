@@ -17,6 +17,8 @@ module.exports = {
             table: 'projects',
             key: 'id'
           },
+          onUpdate: 'CASCADE',
+          onDelete: 'CASCADE'
       },
       mediaDescription: {
           type: Sequelize.STRING,
