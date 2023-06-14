@@ -1,33 +1,32 @@
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
-    const [userRole, setUserRole] = useState(null);
-    const { data, status } = useSession();
 
-    if (status !== "unauthenticated" && data) {
-        setUserRole(data.user.role);
-    }
-
+    const { data: session, status } = useSession();
+    const userRole = "client";
+    
     const Hamburger = () => {
-        return (
-            ( open && <div 
+        return <>
+            {open ? (
+                <div 
                     className="hamburger bg-red-500" 
                 >
-                <p>{userRole} role</p>
-                <div className="hamburger__line">
-                    one
+                    <p>{userRole} role</p>
+                    <div className="hamburger__line">
+                        one
+                    </div>
+                    <div className="hamburger__line">
+                        two
+                    </div>
+                    <div className="hamburger__line">
+                        three
+                    </div>
                 </div>
-                <div className="hamburger__line">
-                    two
-                </div>
-                <div className="hamburger__line">
-                    three
-                </div>
-            </div>)
-            ( !open && <button 
+                ):
+            (!open && <button 
                 type="button" 
                 className="px-3 py-2 border rounded text-black border-black"
                 onClick={() => setOpen(!open)} 
@@ -37,8 +36,8 @@ const NavBar = () => {
     
                     <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
                 </svg>
-            </button>)
-        )
+            </button>)}
+        </>;
     };
 
     return <header className="box-sizing: border-box; margin: 0 auto 3em;">
@@ -79,7 +78,7 @@ const NavBar = () => {
                                     alt="GSN Logo" 
                                     className="h-8 mr-2 inline" 
                                 />
-                                {user.email}
+                                {session && session.user && session.user.email ? session.user.email : "N/A"}
                             </span>
                         </Link>
                     </section>
