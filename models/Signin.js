@@ -8,7 +8,7 @@ const sequelize = require('../sequelize');
  * @classdesc The SignIn model is for information about sign ins associated with a User.
  * 
  * Instantiate -> SignIn.build()
- * Create -> SignIn.create(). Have to add its id to a user's sign_in_ids array.
+ * Create -> SignIn.create(). Have to add its id to a user's signInsIds array.
  * Get all -> SignIn.findAll(). Have to find their users.
  * Get one -> SignIn.findOne(). Have to find its related user.
 
@@ -16,66 +16,58 @@ const sequelize = require('../sequelize');
 
     * @extends {Model}
 
-    @property {number} sign_in_id - varchar, primary - uuid-generated
-    @property {number} sign_in_ts - timestamp, not null, default now()
-    @property {number} user_id - varchar, foreign key - users.user_id
-    @property {number} [sign_out_ts] - timestamp
-    @property {number} [sign_in_headers] - varchar
+    @property {number} signInId - varchar, primary - uuid-generated
+    @property {number} signInTS - timestamp, not null, default now()
+    @property {number} userId - varchar, foreign key - users.userId
+    @property {number} [signOutTS] - timestamp
+    @property {number} [signInHeaders] - varchar
 */
 class SignIn extends Model {
     /**
      * Get all sign ins information for a user.
      * 
-     * @param {String} user_id - The user_id of the user to get sign ins for.
+     * @param {String} userId - The userId of the user to get sign ins for.
      * 
      * @returns {Object}
      */
-    getAllSignInsPerUser(user_id) {};
+    getAllSignInsPerUser(userId) {};
     
-    async getUserForSignIn(sign_in_id) {};
+    async getUserForSignIn(signInId) {};
 }
 
 SignIn.init({
     signInId: {
         type: DataTypes.UUID,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
-        field: 'sign_in_id'
+        defaultValue: DataTypes.UUIDV4
     },
     signInTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        field: 'sign_in_ts'
+        defaultValue: Sequelize.NOW
     },
     userId: {
         type: DataTypes.UUID,
-        allowNull: false,
-        field: 'user_id'
+        allowNull: false
     },
     signOutTS: {
         type: DataTypes.DATE,
-        allowNull: true,
-        field: 'sign_out_ts'
+        allowNull: true
     },
     signInHeaders: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: 'sign_in_headers'
+        allowNull: true
     }
 }, {
     sequelize,
     modelName: 'SignIn',
     tableName: 'signins',
-    timestamps: true,
-    createdAt: 'sign_in_ts',
-    updatedAt: 'sign_out_ts',
-    underscored: true
+    timestamps: true
 });
 
 SignIn.associate = (models) => {
     SignIn.belongsTo(models.User, {
-        foreignKey: 'user_id'
+        foreignKey: 'userId'
     });
 };
 

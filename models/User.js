@@ -24,35 +24,35 @@ const sequelize = require('../sequelize');
  *  user -> timers      zero to many
  *
  *  Future fields:
- *  user_settings (json)
- *  is_user_deleted (boolean) - If we want to keep users in the database
- *  user_deleted_ts (timestamp) - If we want to keep users in the database
+ *  userSettings (json)
+ *  isUserDeleted (boolean) - If we want to keep users in the database
+ *  userDeletedTS (timestamp) - If we want to keep users in the database
  * 
  * @extends {Model}
  * 
- * @property {string} user_id - The user's UUIDV4-generated id.
- * @property {string} user_email - The user's email. Unique.
- * @property {Date} user_created_ts - The user's created timestamp.
- * @property {string} user_hashed_pw - A Bcrypt-hashed password.
- * @property {string[]} [user_media_list] - The user's media list array.
- * @property {Date} [last_sign_in_ts] - The user's last sign in ts.
- * @property {Date} [last_sign_out_ts] - The user's last sign out ts.
- * @property {string} [user_internal_note] - The user's note from admin.
- * @property {Date} [user_discl_agreed_ts] - Disclaimer agreement's ts.
- * @property {boolean} [is_discl_agreed] - Disclaimer agreed boolean.
- * @property {string} [user_updated_field] - The recently-updated field.
- * @property {boolean} [is_user_updated] - The "Was it updated?" answer.
- * @property {Date} [user_updated_ts] - The recently-updated field's ts.
- * @property {string} [user_role] - The user's role (admin, client).
- * @property {number[]} [notes_ids] - The user's media list array.
- * @property {number[]} [projects_ids] - The user's media list array.
- * @property {number[]} [timers_ids] - The user's media list array.
- * @property {number[]} [sign_ins_ids] - The user's media list array.
- * @property {number[]} [media_ids] - The user's media list array.
+ * @property {string} userId - The user's UUIDV4-generated id.
+ * @property {string} userEmail - The user's email. Unique.
+ * @property {Date} userCreatedTS - The user's created timestamp.
+ * @property {string} userNhashedPw - A Bcrypt-hashed password.
+ * @property {string[]} [userNmediaNlist] - The user's media list array.
+ * @property {Date} [lastSignInTS] - The user's last sign in ts.
+ * @property {Date} [lastSignOutTS] - The user's last sign out ts.
+ * @property {string} [userInternalNote] - The user's note from admin.
+ * @property {Date} [userDisclAgreedTS] - Disclaimer agreement's ts.
+ * @property {boolean} [isDisclAgreed] - Disclaimer agreed boolean.
+ * @property {string} [userUpdatedNfield] - The recently-updated field.
+ * @property {boolean} [isUserUpdated] - The "Was it updated?" answer.
+ * @property {Date} [userUpdatedTS] - The recently-updated field's ts.
+ * @property {string} [userNrole] - The user's role (admin, client).
+ * @property {number[]} [notesIds] - The user's media list array.
+ * @property {number[]} [projectsIds] - The user's media list array.
+ * @property {number[]} [timersIds] - The user's media list array.
+ * @property {number[]} [signInsIds] - The user's media list array.
+ * @property {number[]} [mediaIds] - The user's media list array.
  */
 class User extends Model {
     /**
-     * Get a user. Items in json object. Everything associated with the user_id will be retrieved. The join tables will be checked: user_sign_ins, user_media, user_notes, user_projects.
+     * Get a user. Items in json object. Everything associated with the userId will be retrieved. The join tables will be checked: userSignIns, userNmedia, userNotes, userProjects.
      * 
      * If the requesting user role is of "client" then they will get:
      * - all projects they are added to
@@ -85,18 +85,18 @@ class User extends Model {
      * - amount of new projects added for them
      * 
      * If the user has a role of "admin" then they will get:
-     * - amount of new users signed in by checking if the last_sign_in_ts is not null
+     * - amount of new users signed in by checking if the lastSignInTS is not null
      * - amount of new notes by adding new notes since this user's last sign in
      * 
      * @returns {Object} - A promise that resolves to the json object.
      */
     async getUserNotifications() {
-        const requesting_user = await User.findByPk(this.user_id);
+        const requesting_user = await User.findByPk(this.userId);
 
-        if (requesting_user.user_role === 'client') {
+        if (requesting_user.userNrole === 'client') {
             // Get the amount of notes replying to their notes, amount of new media added for them, and amount of new projects added for them.
-        } else if (requesting_user.user_role === 'admin') {
-            // Get the amount of new users signed in by checking if the last_sign_in_ts is not null and amount of new notes by adding new notes since the admin's last sign in.
+        } else if (requesting_user.userNrole === 'admin') {
+            // Get the amount of new users signed in by checking if the lastSignInTS is not null and amount of new notes by adding new notes since the admin's last sign in.
         }
     };
 }
@@ -105,85 +105,70 @@ User.init({
     userId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        field: 'user_id'
+        primaryKey: true
     },
     userEmail: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true, 
-        field: 'user_email'
+        unique: true
     },
     userCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        field: 'user_created_ts'
+        defaultValue: Sequelize.NOW
     },
     userHashedPW: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true, 
-        field: 'user_hashed_pw'
+        unique: true
     },
     userMediaList: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true, 
-        defaultValue: "{}",
-        field: 'user_media_list'
+        defaultValue: "{}"
     },
     lastSignInTS: {
         type: DataTypes.DATE,
-        allowNull: true, 
-        field: 'last_sign_in_ts'
+        allowNull: true
     },
     lastSignOutTS: {
         type: DataTypes.DATE,
-        allowNull: true, 
-        field: 'last_sign_out_ts'
+        allowNull: true
     },
     userInternalNote: {
         type: DataTypes.STRING,
-        allowNull: true, 
-        field: 'user_internal_note'
+        allowNull: true
     },
     userDisclAgreedTS: {
         type: DataTypes.DATE,
-        allowNull: true, 
-        field: 'user_discl_agreed_ts'
+        allowNull: true
     },
     isDisclAgreed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false, 
-        field: 'is_discl_agreed'
+        defaultValue: false
     },
     userUpdatedField: {
         type: DataTypes.STRING,
-        allowNull: true, 
-        field: 'user_updated_field'
+        allowNull: true
     },
     isUserUpdated: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false, 
-        field: 'is_user_updated'
+        defaultValue: false
     },
     userUpdatedTS: {
         type: DataTypes.DATE,
-        allowNull: true,
-        field: 'user_updated_ts'
+        allowNull: true
     },
     userRole: {
         type: DataTypes.ENUM('admin', 'client'),
         allowNull: false,
-        defaultValue: 'client', 
-        field: 'user_role'
+        defaultValue: 'client'
     },
     notesIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true, 
-        field: 'notes_ids',
+        allowNull: true,
         references: {
             model: 'notes',
             key: 'id'
@@ -191,8 +176,7 @@ User.init({
     },
     projectsIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true, 
-        field: 'projects_ids',
+        allowNull: true,
         references: {
             model: 'projects',
             key: 'id'
@@ -200,8 +184,7 @@ User.init({
     },
     timersIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true, 
-        field: 'timers_ids',
+        allowNull: true,
         references: {
             model: 'timers',
             key: 'id'
@@ -210,16 +193,14 @@ User.init({
     signInsIds: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
-        field: 'sign_ins_ids',
         references: {
-            model: 'sign_ins',
+            model: 'signIns',
             key: 'id'
         }
     },
     mediaIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
-        allowNull: true, 
-        field: 'media_ids',
+        allowNull: true,
         references: {
             model: 'media',
             key: 'id'
@@ -229,18 +210,25 @@ User.init({
     sequelize,
     modelName: 'User',
     tableName: 'users',
-    timestamps: true,
-    createdAt: 'user_created_ts',
-    updatedAt: 'user_updated_ts',
-    underscored: true
+    timestamps: true
 });
 
 User.associate = (models) => {
-    User.hasMany(models.Note, { foreignKey: 'user_id' });
-    User.hasMany(models.SignIn, { foreignKey: 'user_id' });
-    User.hasMany(models.Media, { foreignKey: 'user_id' });
-    User.hasMany(models.Project, { foreignKey: 'user_id' });
-    User.hasMany(models.Timer, { foreignKey: 'user_id' });
+    User.hasMany(models.Note, { 
+        foreignKey: 'userId' 
+    });
+    User.hasMany(models.SignIn, { 
+        foreignKey: 'userId' 
+    });
+    User.hasMany(models.Media, { 
+        foreignKey: 'userId' 
+    });
+    User.hasMany(models.Project, { 
+        foreignKey: 'userId' 
+    });
+    User.hasMany(models.Timer, { 
+        foreignKey: 'userId' 
+    });
 };
 
 module.exports = User;

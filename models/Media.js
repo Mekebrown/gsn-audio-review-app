@@ -8,11 +8,11 @@ const sequelize = require('../sequelize');
  * @classdesc The Media model is for information such as what project the media belongs to.
  * 
  * Instantiate -> Media.build()
- * Create -> Media.create(). Have to add the media_id to a project's media_ids array.
+ * Create -> Media.create(). Have to add the mediaId to a project's mediaIds array.
  * Get all -> Media.findAll(). Have to find their related projects.
  * Get one -> Media.findOne(). Have to find its related project.
  * Update -> Media.update({}, {}) and media.save()
- * Delete -> media.destroy(). Have to find its related project, and delete the media_id from its media_ids array.
+ * Delete -> media.destroy(). Have to find its related project, and delete the mediaId from its mediaIds array.
  * Get the media work's notes -> media.getNotesOfMediaWork()
  * Get the media work's users -> media.getUsersOfMediaWork()
  * Get the media work's project -> media.getProjectOfMediaWork()
@@ -24,25 +24,25 @@ const sequelize = require('../sequelize');
 
  * @extends {Model}
  
- * @property {number} media_id - The media's id.
- * @property {number} project_id - The media's project it's set to.
- * @property {string} media_description - The media's description.
- * @property {string} media_type - The media's type (audio, video, image).
- * @property {string} media_s3_url - The media's url to the S3 file.
- * @property {Date} media_created_ts - The media's created timestamp.
- * @property {boolean} [has_media_markers] - Does this have markers saved in a csv file?
- * @property {string} [media_markers_s3_csv_url] -... if so,  the url to the csv file.
- * @property {Date} [media_updated_ts] - The recently-updated media's ts.
- * @property {number[]} [notes_ids] - The media's notes ids.
- * @property {number[]} [users_ids] - The media's users ids.
+ * @property {number} mediaId - The media's id.
+ * @property {number} projectId - The media's project it's set to.
+ * @property {string} mediaDescription - The media's description.
+ * @property {string} mediaType - The media's type (audio, video, image).
+ * @property {string} mediaS3URL - The media's url to the S3 file.
+ * @property {Date} mediaCreatedTS - The media's created timestamp.
+ * @property {boolean} [hasMediaMarkers] - Does this have markers saved in a csv file?
+ * @property {string} [mediaMarkersS3CSVURL] -... if so,  the url to the csv file.
+ * @property {Date} [mediaUpdatedTS] - The recently-updated media's ts.
+ * @property {number[]} [notesIds] - The media's notes ids.
+ * @property {number[]} [usersIds] - The media's users ids.
 */
 class Media extends Model {
-    getUsersOfMediaWork = async (media_id) => {
+    getUsersOfMediaWork = async (mediaId) => {
         const users = await User.findAll({
             include: [{
                 model: Media,
                 where: {
-                    media_id: media_id
+                    mediaId: mediaId
                 }
             }]
         });
@@ -50,12 +50,12 @@ class Media extends Model {
         return users;
     };
 
-    getProjectOfMediaWork = async (media_id) => {
+    getProjectOfMediaWork = async (mediaId) => {
         const project = await Project.findOne({
             include: [{
                 model: Media,
                 where: {
-                    media_id: media_id
+                    mediaId: mediaId
                 }
             }]
         });
@@ -63,12 +63,12 @@ class Media extends Model {
         return project;
     };
 
-    getNotesOfMediaWork = async (media_id) => {
+    getNotesOfMediaWork = async (mediaId) => {
         const notes = await Note.findAll({
             include: [{
                 model: Media,
                 where: {
-                    media_id: media_id
+                    mediaId: mediaId
                 }
             }]
         });
@@ -78,92 +78,76 @@ class Media extends Model {
 }
 
 Media.init({
-    mediaId: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        field: 'media_id'
     },
     projectId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        field: 'project_id'
+        allowNull: false
     },
     mediaDescription: {
         type: DataTypes.STRING,
-        allowNull: false,
-        field: 'media_description'
+        allowNull: false
     },
     mediaS3URL: {
         type: DataTypes.STRING,
-        allowNull: false,
-        field: 'media_s3_url'
+        allowNull: false
     },
     mediaCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        field: 'media_created_ts'
+        defaultValue: Sequelize.NOW
     },
     mediaType: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'audio',
-        field: 'media_type'
+        defaultValue: 'audio'
     },
     hasMediaMarkers: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
-        field: 'has_media_markers'
+        defaultValue: false
     },
     mediaMarkersS3CSVURL: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: 'media_markers_s3_csv_url'
+        allowNull: true
     },
     mediaUpdatedTS: {
         type: DataTypes.DATE,
-        allowNull: true,
-        field: 'media_updated_ts'
+        allowNull: true
     },
     notesIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
-        defaultValue: "{}",
-        field: 'notes_ids'
+        defaultValue: "{}"
     },
     usersIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
-        defaultValue: "{}",
-        field: 'users_ids'
+        defaultValue: "{}"
     }
 }, {
     sequelize,
     modelName: 'Media',
     tableName: 'media',
-    timestamps: true,
-    createdAt: 'media_created_ts',
-    updatedAt: 'media_updated_ts',
-    underscored: true,
+    timestamps: true
 });
 
 Media.associate = (models) => {
     Media.belongsTo(models.Project, {
-        foreignKey: 'project_id'
+        foreignKey: 'projectId'
     });
 
     Media.belongsToMany(models.User, {
-        through: 'media_users',
-        foreignKey: 'media_id',
-        otherKey: 'user_id'
+        foreignKey: 'mediaId',
+        otherKey: 'userId'
     });
 
     Media.belongsToMany(models.Note, {
-        through: 'media_notes',
-        foreignKey: 'media_id',
-        otherKey: 'note_id'
+        foreignKey: 'mediaId',
+        otherKey: 'noteId'
     });
 };
 

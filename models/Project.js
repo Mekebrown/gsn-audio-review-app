@@ -19,21 +19,21 @@ const sequelize = require('../sequelize');
  * 
  * @extends {Model}
  * 
- * @property {number} project_id - The project's id.
- * @property {string} project_name - The project's name.
- * @property {Date} project_created_ts - The project's created timestamp.
- * @property {string} [project_logo_s3_url] - The project's logo url.
- * @property {string} [project_description] - The project's description.
- * @property {Date} [project_updated_ts] - The recently-updated project's ts.
- * @property {number[]} [media_ids] - The project's media ids.
+ * @property {number} projectId - The project's id.
+ * @property {string} projectName - The project's name.
+ * @property {Date} projectCreatedTS - The project's created timestamp.
+ * @property {string} [projectLogoS3URL] - The project's logo url.
+ * @property {string} [projectDescription] - The project's description.
+ * @property {Date} [projectUpdatedTS] - The recently-updated project's ts.
+ * @property {number[]} [mediaIds] - The project's media ids.
  */
 class Project extends Model {
-    getMediaOfProject = async (project_id) => {
+    getMediaOfProject = async (projectId) => {
         const media = await Media.findAll({
             include: [{
                 model: Project,
                 where: {
-                    project_id: project_id
+                    projectId: projectId
                 }
             }]
         });
@@ -46,49 +46,39 @@ Project.init({
     projectId: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        field: 'project_id'
+        primaryKey: true
     },
     projectName: {
         type: DataTypes.STRING,
-        allowNull: false,
-        field: 'project_name'
+        allowNull: false
     },
     projectCreatedTS: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.NOW,
-        field: 'project_created_ts'
+        defaultValue: Sequelize.NOW
     },
     projectLogoS3URL: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: 'project_logo_s3_url'
+        allowNull: true
     },
     projectDescription: {
         type: DataTypes.STRING,
-        allowNull: true,
-        field: 'project_description'
+        allowNull: true
     },
     projectUpdatedTS: {
         type: DataTypes.DATE,
-        allowNull: true,
-        field: 'project_updated_ts'
+        allowNull: true
     },
     mediaIds: {
         type: DataTypes.ARRAY(DataTypes.INTEGER),
         allowNull: true,
-        defaultValue: "{}",
-        field: 'media_ids'
+        defaultValue: "{}"
     }
 }, {
     sequelize,
     modelName: 'Project',
     tableName: 'projects',
-    timestamps: true,
-    createdAt: 'project_created_ts',
-    updatedAt: 'project_updated_ts',
-    underscored: true,
+    timestamps: true
 });
 
 module.exports = Project;
