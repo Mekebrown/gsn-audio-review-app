@@ -2,19 +2,18 @@ import React, { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 
 import SignInOutBtn from "../components/credentials/SignInOutBtn";
-import analytics from  "../lib/analytics_handler";
+import analytics from "../lib/analytics_handler";
 
-analytics.logEvent('Media Page Viewed');
+analytics.gaEvent('Media Page Viewed');
 
 export default function Media({content}) {
   const { data, status } = useSession();
 
   if (status === "loading") {
     return "Loading or not authenticated..."
-  }
-
-  if (status !== "authenticated") {
+  }else if (status !== "authenticated") {
     window.location.href = "/";
+    return null;
   }
 
   useEffect(() => {
@@ -22,12 +21,13 @@ export default function Media({content}) {
   }, []);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    <SignInOutBtn />
+    <SignInOutBtn data={data} />
+    
     <p>Media View</p>
     I want to show:<br />
     <hr />
     {content.map(project => {
-      return <div>
+      return <div key={project.id}>
         THIS | Media project #{project.id}<br />
         SIDE | A player with preloaded audio of each media item<br />
         HAS | A preview of the latest note added to each media...<br />

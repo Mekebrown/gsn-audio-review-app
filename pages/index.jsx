@@ -5,7 +5,7 @@ import SignInOutBtn from "../components/credentials/SignInOutBtn";
 import analytics from  "../lib/analytics_handler";
 
 const Home = () => {
-  const { status } = useSession();
+  const { data, status } = useSession();
 
   if (status === "loading") {
     return "Loading or not authenticated..."
@@ -26,7 +26,7 @@ const Home = () => {
       The Gifted Sounds Network's Audio Review App is a straightforward audio player and <br />notes taker that lets you give real-time feedback on your recordings. <br /><br />Since you're the primary visionary, we do as you say.
     </p>
 
-    <SignInOutBtn />
+    <SignInOutBtn data={data} />
   </main>;
 }
 
