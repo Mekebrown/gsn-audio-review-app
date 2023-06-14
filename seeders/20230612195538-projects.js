@@ -7,12 +7,12 @@ const aws_s3_url = process.env.NEXT_PUBLIC_AWS_S3_URL;
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('projects', [{
-      project_name: 'Test Project',
+      projectName: 'Test Project',
     },{
-      project_name: 'Test Project',
-      project_logo_s3_url: `${aws_s3_url}/images/png/logo.png`,
-      project_description: 'This is a test project.',
-      media_ids: [1],
+      projectName: 'Test Project',
+      projectLogoS3URL: `${aws_s3_url}/images/png/logo.png`,
+      projectDescription: 'This is a test project.',
+      mediaIds: [1],
     }], {});
   },
 
