@@ -3,6 +3,7 @@ import { signOut } from "next-auth/react";
 export default function SignInOutBtn({data}) {
     const signInForm = () => {
         window.location.href = "/auth/signin";
+        return null;
     };
 
     if (data && data.user) {
