@@ -69,15 +69,9 @@ const SignIn = ({csrfToken}) => {
 export default SignIn;
 
 export async function getServerSideProps(context) {
-    const csrfToken = await getCsrfToken(context);
+    let csrfToken = await getCsrfToken(context);
 
-    if (!csrfToken) {
-        return {
-            props: {
-                csrfToken: "",
-            },
-        };
-    }
+    csrfToken = csrfToken || "";
 
     return {
         props: {

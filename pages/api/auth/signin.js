@@ -53,15 +53,16 @@ export default async function handler(req, res) {
         res.status(200).json({ 
           data: { 
             user: {
-              name: email,
-              email: email, 
-              role: user.userRole,
               id: user.id,
+              name: email,
+              email: email,
+              token: csrfToken, 
+              role: user.userRole,
               mediaList: user.userMediaList,
               notesIds: user.notesIds,
               projectsIds: user.projectsIds
             },
-            token: csrfToken,
+            token: csrfToken
           }
         });
       })

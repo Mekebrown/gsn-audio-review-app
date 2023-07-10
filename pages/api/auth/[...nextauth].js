@@ -25,16 +25,12 @@ const providers = [
         session: {
             strategy: 'jwt' // TODO: https://authjs.dev/concepts/faq#json-web-tokens
         },
-        credentials: {
-            email: { label: "email", type: "email", placeholder: "jsmith" },
-            password: { label: "password", type: "password", placeholder: "********" }
-        },
         authorize: async (credentials) => {
             if (!credentials) return null;
 
             try {
                 const { data } = await axios.post(
-                    process.env.NEXTAUTH_API_URL + '/auth/signin', 
+                    '/auth/signin', 
                     {
                         password: credentials.password,
                         email: credentials.email
@@ -43,10 +39,11 @@ const providers = [
 
                 if (data?.token) {
                     return user;
-                } else if (data.error) {
-                    return null;
                 }
+
+                return null;
             } catch (e) {
+                console.error(e);
                 throw new Error("Sign in error. Please try again!");
             }
         }
@@ -54,8 +51,8 @@ const providers = [
 ];
 
 /**
+ * The jwt returned object has name, email, image (not needed), and token properties.
  * The session object returned has user and expires properties.
- * The jwt returned object has name, email, image, and token properties.
  */
 const callbacks = {
     redirect: ({ url, baseUrl }) => {
@@ -70,18 +67,27 @@ const callbacks = {
         }
     },
     jwt: async ({ token, user, account, profile, isNewUser }) => { 
+        const token_w_info = {};
         const current_token = token ? token : process.env.NEXTAUTH_SECRET;
 
-        if (user && user.data) {
-            current_token.email = user.email;
+        token_w_info.token = current_token
+        token_w_info.accessToken = current_token;
+
+        if (user) {
+            token_w_info.id = user.id;
+            token_w_info.name = user.name;
+            token_w_info.email = user.email;
         }
 
-        return Promise.resolve(current_token);
+        return Promise.resolve(token_w_info);
     },
     session: async ({ session, token, user }) => {
         if (session && token) {
-            return Promise.resolve(session);
+            session.accessToken = token.accessToken
+            session.user.id = token.id
         }
+
+        return Promise.resolve(session);
     },
 };
 
@@ -105,8 +111,8 @@ const logger = {
 };
 
 const options = {
-    secret: process.env.NEXTAUTH_SECRET,
     providers,
+    secret: process.env.NEXTAUTH_SECRET,
     adapter: SequelizeAdapter(sequelize, {
         models: {
             Media: {
