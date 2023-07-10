@@ -7,6 +7,7 @@ const NavBar = () => {
 
     const { data: session, status } = useSession();
     const userRole = "client";
+    const weGotAnEmail = session && session.user && session.user.email;
     
     const Hamburger = () => {
         return <>
@@ -29,7 +30,7 @@ const NavBar = () => {
             (!open && <button 
                 type="button" 
                 className="px-3 py-2 border rounded text-black border-black"
-                onClick={() => setOpen(!open)} 
+                onClick={() => setOpen(prev => !prev)} 
             >
                 <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <title>Menu</title>
@@ -44,41 +45,19 @@ const NavBar = () => {
         <nav
         className="bg-white p-6"
         >
-            {userRole === "admin" && (
+            {status !== "unauthenticated" && (
                 <menu className="flex items-center justify-between flex-wrap bg-white p-6">
                     <section className=" text-black">
-                        <Link 
-                            href="/"
-                        >
+                        <Link href="/" >
                             <span className="font-semibold text-xl tracking-tight">
                                 <img 
                                     src="/logo192.png" 
                                     alt="GSN Logo" 
                                     className="h-8 mr-2 inline" 
                                 />
-                                Admin View
-                            </span>
-                        </Link>
-                    </section>
-
-                    <section className="text-gray">
-                        <Hamburger />
-                    </section>
-                </menu>
-            )}
-            {userRole === "client" && (
-                <menu className="flex items-center justify-between flex-wrap bg-white p-6">
-                    <section className="text-black">
-                        <Link
-                            href="/"
-                        >
-                            <span className="font-semibold text-xl tracking-tight">
-                                <img 
-                                    src="/logo192.png" 
-                                    alt="GSN Logo" 
-                                    className="h-8 mr-2 inline" 
-                                />
-                                {session && session.user && session.user.email ? session.user.email : "N/A"}
+                                {
+                                    weGotAnEmail && <span>{session.user.email}</span>
+                                }
                             </span>
                         </Link>
                     </section>
