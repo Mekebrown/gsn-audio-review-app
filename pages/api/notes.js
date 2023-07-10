@@ -1,8 +1,8 @@
-import { Note } from "../../db/models";
+import { Note } from "../../models";
 import handleErrors from "../../lib/error_handler";
 
 /** 
- * Add new note's id to the media work's notes_ids array, the user's notes_ids array, and if it is a reply, a note's notes_ids.
+ * Add new note's id to the media work's notesIds array, the user's notesIds array, and if it is a reply, a note's notesIds.
  * 
  * @param {Object} new_note_info
  * 
@@ -17,15 +17,15 @@ const createANote = async (new_note_info) => {
 
   await new_note.createNote();
 
-  const note_author_id = new_note.user_id;
-  const media_work_id = new_note.media_id;
+  const note_author_id = new_note.userId;
+  const media_work_id = new_note.mediaId;
   const replied_note_id = new_note.reply_to_note_id;
 
-  const is_in_user_notes_ids = new_note.addNoteIdToUserNotesIds(note_author_id);
-  const is_in_media_work_notes_ids = new_note.addNoteIdToMediaWorkNotesIds(media_work_id);
-  const is_reply_in_notes_ids = new_note.addReplyNoteIdToNotesIds(replied_note_id);
+  const is_in_user_notesIds = new_note.addNoteIdToUserNotesIds(note_author_id);
+  const is_in_media_work_notesIds = new_note.addNoteIdToMediaWorkNotesIds(media_work_id);
+  const is_reply_in_notesIds = new_note.addReplyNoteIdToNotesIds(replied_note_id);
 
-  if (is_in_user_notes_ids && is_in_media_work_notes_ids && is_reply_in_notes_ids) {
+  if (is_in_user_notesIds && is_in_media_work_notesIds && is_reply_in_notesIds) {
     return new_note;
   }
 
@@ -90,7 +90,7 @@ const validateNoteInfo = (info) => {
 /**
  * GET will get all notes. This includes the users that wrote each note, the reply notes to each note, and the media work each belongs to.
  * 
- * POST will create a new note. This will include the user_id of the author and the media work's id it belongs to. Then the note's new id will be returned. This id will be added to the media work's notes array and the user's notes array.
+ * POST will create a new note. This will include the user id of the author and the media work's id it belongs to. Then the note's new id will be returned. This id will be added to the media work's notes array and the user's notes array.
  * 
  * @param {Object} req
  * @param {Object} res
@@ -117,7 +117,7 @@ export default function handler(req, res) {
   }
 
   // If the method is not GET or POST, return a 405 error.
-  handleErrors(res, 405, "Method not allowed", "signins");
+  handleErrors(res, {code: 405}, "Method not allowed", "signins");
   
   res.status(405).json({
     error: "Method not allowed",

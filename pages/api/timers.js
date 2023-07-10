@@ -1,4 +1,4 @@
-import { Timer } from "../../db/models";
+import { Timer } from "../../models";
 
 /** 
  * @param {Object} timer_info

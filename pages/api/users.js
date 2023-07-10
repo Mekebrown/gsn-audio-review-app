@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { User } from "../../db/models";
+import { User } from "../../models";
 import handleErrors from "../../lib/error_handler";
 
 /** 
@@ -35,7 +35,7 @@ const getAllUsers = async () => {
   const users = await User.findAll();
 
   users.forEach(user => {
-    const notifs = getNotificationsPerUser(user.user_id);
+    const notifs = getNotificationsPerUser(user.id);
 
     user.notifications = notifs;
 
@@ -46,12 +46,12 @@ const getAllUsers = async () => {
 };
 
 /**
- * @param {string} user_id 
+ * @param {string} userId 
  * 
  * @returns {Array} notifications
  */
-const getNotificationsPerUser = async (user_id) => {
-  const user = await User.findByPk(user_id);
+const getNotificationsPerUser = async (userId) => {
+  const user = await User.findByPk(userId);
 
   const notifications = await user.getUserNotifications();
 
@@ -95,16 +95,16 @@ export default function handler(req, res) {
   } else if (method === "POST") {
     const info = req.body;
 
-    const is_user_created = createAUser(info);
+    const is_userCreated = createAUser(info);
 
     res.status(200).json({ 
       route: "users",
-      user_created: is_user_created
+      userCreated: is_userCreated
     });
   }
 
   // If the method is not GET or POST, return a 405 error.
-  handleErrors(res, 405, "Method not allowed", "users");
+  handleErrors(res, { code: 405}, "Method not allowed", "users");
 
   res.status(405).json({
     error: "Method not allowed",

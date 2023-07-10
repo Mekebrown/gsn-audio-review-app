@@ -1,9 +1,10 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
-import SequelizeAdapter from "@next-auth/sequelize-adapter";
+import SequelizeAdapter from "@auth/sequelize-adapter";
+import { DataTypes } from "sequelize";
 
-import sequelize from "../../../lib/db-related/seq_connect";
+import sequelize from '../../../lib/db-related/seq_connect';
 
 /**
  * ONLY requests to /api/auth/* will be processed 
@@ -11,21 +12,18 @@ import sequelize from "../../../lib/db-related/seq_connect";
  * option, a strategy of database.
  * 
  * Credentials: Email/Password ONLY!
- */
-
-/*
-* Resources:
-* - [Credentials Provider](https://next-auth.js.org/providers/credentials)
-* - [User database model](https://authjs.dev/reference/adapters#user)
+ * 
+ * Resources:
+ * - [Credentials Provider](https://next-auth.js.org/providers/credentials)
+ * - [User database model](https://authjs.dev/reference/adapters#user)
 */
 
 const providers = [
     CredentialsProvider({
         id: 'credentials',
-        type: 'credentials',
         name: 'Credentials',
         session: {
-            strategy: 'jwt'
+            strategy: 'jwt' // TODO: https://authjs.dev/concepts/faq#json-web-tokens
         },
         credentials: {
             email: { label: "email", type: "email", placeholder: "jsmith" },
@@ -35,7 +33,7 @@ const providers = [
             if (!credentials) return null;
 
             try {
-                const user = await axios.post(
+                const { data } = await axios.post(
                     process.env.NEXTAUTH_API_URL + '/auth/signin', 
                     {
                         password: credentials.password,
@@ -43,13 +41,13 @@ const providers = [
                     }
                 );
 
-                if (user.data.token) {
+                if (data?.token) {
                     return user;
+                } else if (data.error) {
+                    return null;
                 }
-
-                return null;
             } catch (e) {
-                throw new Error(e);
+                throw new Error("Sign in error. Please try again!");
             }
         }
     })
@@ -60,7 +58,7 @@ const providers = [
  * The jwt returned object has name, email, image, and token properties.
  */
 const callbacks = {
-    async redirect({ url, baseUrl }) {
+    redirect: ({ url, baseUrl }) => {
         const str_to_search = url.toLowerCase();
 
         if (str_to_search.includes("/auth/signin")) {
@@ -71,30 +69,20 @@ const callbacks = {
             return `${baseUrl}/auth/signin`;
         }
     },
-    jwt: async ({ token, user }) => { 
-        if (user) {
-            // This will only be executed after a successful signin. Each next invocation will skip this part.
-            token.name = user.data.email;
-            token.email = user.data.email;
-            token.image = "https://media.istockphoto.com/id/492418894/vector/fun-sign.jpg?s=612x612&w=0&k=20&c=hPUa8EdrNAyf2UuPWAIMFZYFsIGKxTX0kyPhPwZBu48=";
-            token.image = user.data.image;
-            token.token = user.data.token;
+    jwt: async ({ token, user, account, profile, isNewUser }) => { 
+        const current_token = token ? token : process.env.NEXTAUTH_SECRET;
+
+        if (user && user.data) {
+            current_token.email = user.email;
         }
 
-        const session_time = 60 * 60 * 24 * 30; // 30 days
-
-        return Promise.resolve(token);
+        return Promise.resolve(current_token);
     },
-    session: async ({ session, token }) => {
-        if (token) {
+    session: async ({ session, token, user }) => {
+        if (session && token) {
             return Promise.resolve(session);
         }
     },
-};
-
-const pages = {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
 };
 
 /**
@@ -104,23 +92,57 @@ const pages = {
  */
 const logger = {
     debug: (code, metadata) => {
-        console.log(code, metadata);
+        console.log({code});
+        console.log({metadata});
     },
-    warn: (code, metadata) => {
-        console.warn(code, metadata);
+    warn: (code) => {
+        console.warn({code});
     },
     error: (code, metadata) => {
-        console.error(code, metadata);
+        console.error({code});
+        console.error({metadata});
     },
 };
 
-export const auto_options = {
+const options = {
     secret: process.env.NEXTAUTH_SECRET,
     providers,
-    adapter: SequelizeAdapter(sequelize),
+    adapter: SequelizeAdapter(sequelize, {
+        models: {
+            Media: {
+                projectId: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+            },
+            Note: {
+                userId: {
+                    type: DataTypes.UUID,
+                    allowNull: false
+                },
+            },
+            Project: {
+                projectName: {
+                    type: DataTypes.STRING,
+                    allowNull: false
+                },
+            },
+            Signin: {
+                userId: {
+                    type: DataTypes.UUID,
+                    allowNull: false
+                },
+            },
+            Timer: {
+                projectId: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                }
+            }
+        },
+    }),
     callbacks,
-    pages,
     logger
 };
 
-export default NextAuth(auto_options);
+export default NextAuth(options);

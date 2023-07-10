@@ -1,4 +1,4 @@
-import { User } from "../../db/models";
+const User = { id: 1, email: "two @ two.com", password: "two" };
 
 /**
  * @param {string} id
@@ -107,7 +107,7 @@ export default function handler( req, res ) {
         });
     }
 
-    handleErrors(res, 405, "Method not allowed", "users");
+    handleErrors(res, { code: 405}, "Method not allowed", "users");
     
     res.status(405).json({
       error: "Method not allowed",

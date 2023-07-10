@@ -1,4 +1,4 @@
-import { Media } from "../../db/models";
+import { Media } from "../../models";
 
 /** 
  * @param {Object} media_info

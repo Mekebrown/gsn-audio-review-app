@@ -1,92 +1,89 @@
 import bcrypt from "bcrypt";
+import { getCsrfToken } from "next-auth/react";
 
-import client from "../../lib/db/pg_pr_connect";
-import logger from "../../lib/logger";
-import { query_strings } from "../../lib/db/pg_pr_strings";
+import sequelize from "../../../lib/db-related/seq_connect";
 
 export default async function handler(req, res) {
-  const { email, password } = req.body;
+  if (req.method === 'POST') {
+    const { email, password } = req.body;
+    const User = sequelize.models.User;
 
-  console.log("email: " + email);
-  console.log("password: " + password);
-  
-  client.query(query_strings.sign_in_query, [email])
-  .then((response) => {
-    if (response.error) {
-        logger({
-            desc: "sign in query",
-            req: "Body: " + JSON.stringify(req.body) + "Error: " + response.stack,
-            res: "N/A",
-            headers: "N/A",
-            message: JSON.stringify(response)
-        });
+    const csrfToken = await getCsrfToken({ req });
 
-        console.error(response.stack);
+    if (email && password && User) {
+      User.findOne({ where: { email: email } })
+      .then((response) => {
+        if (response.error) {
+            res.status(500).json({ 
+              data: { 
+                error: "sign in query error"
+              }
+            });
+        } else if (response.rows.length === 0) {
+          res.status(403).json({
+            data: { 
+              error: 'Incorrect sign in information.'
+            }
+          });
+        } else {
+          const user = response.rows[0];
+          const hashed_password = user.userHashedPW;
 
-        res.status(500).json({ 
+          bcrypt.compare(password, hashed_password)
+          .then(result => {
+            if (!result) {
+              return done( null, false, { 
+                message: 'Incorrect password.' 
+              });
+            } else {
+              return done(null, user);
+            }
+          });
+        }
+      })
+      .then(user => {
+        if (!user) {
+          res.status(403).json({ 
+            data: { 
+              error: "sign in error"
+            }
+          });
+        }
+
+        res.status(200).json({ 
           data: { 
-            error: "sign in query error", 
-            route: "signin" 
+            user: {
+              name: email,
+              email: email, 
+              role: user.userRole,
+              id: user.id,
+              mediaList: user.userMediaList,
+              notesIds: user.notesIds,
+              projectsIds: user.projectsIds
+            },
+            token: csrfToken,
           }
         });
-    } else if (response.rows.length === 0) {
-      console.log('Incorrect sign in information.');
-
-      res.status(200).json({
-        data: { 
-          error: 'Incorrect sign in information.', 
-          route: "signin" 
+      })
+      .catch((err) => {
+        res.status(403).json({ 
+          data: { 
+            error: "sign in error"
+          }
+        });
+      });
+    } else { // email and/or password is missing
+      res.status(401).json({
+        data: {
+          error: "sign in error"
         }
       });
-    } else {
-      const user = response.rows[0];
-      const hashed_password = user.hashed_password;
-
-      bcrypt.compare(password, hashed_password).then(result => {
-          if (!result) {
-            return done(
-              null, 
-              false, 
-              { message: 'Incorrect password.' }
-            );
-          } else {
-            return done(null, user);
-          }
-      });
     }
-  })
-  .then(user => {
-    logger({
-        desc: "sign in query",
-        req: "Body: " + JSON.stringify(req.body),
-        res: "N/A",
-        headers: "N/A",
-        message: JSON.stringify(user_or_null)
-    });
-
-    res.status(200).json({ 
-      data: { 
-        email: req.body.email, 
-        route: "signin",
-        token: "token"
+  } else { // req.method === 'GET'
+    res.status(405).json({
+      data: {
+        error: 'sign in error'
       }
     });
-  })
-  .catch((err) => {
-    logger({
-        desc: "sign in query",
-        req: "Body: " + JSON.stringify(req.body) + "Error: " + err.stack,
-        res: "N/A",
-        headers: "N/A",
-    });
-
-    console.error(err.stack);
-
-    res.status(200).json({ 
-      data: { 
-        error: "sign in error", 
-        route: "signin" 
-      }
-    });
-  });
+  }
 };

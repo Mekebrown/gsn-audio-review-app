@@ -1,8 +1,8 @@
-import { Media } from "../../db/models";
+import { Media } from "../../models";
 import handleErrors from "../../lib/error_handler";
 
-/** 
- * Create a new media work. Also add the new media_id to a project's media_ids field.
+/**
+ * Create a new media work. Also add the new media id to a project's media ids field.
  * 
  * @param {Object} new_media_info
  * 
@@ -32,7 +32,7 @@ const getAllMediaWorks = async () => {
   const media_works = await Media.findAll();
 
   media_works.forEach(media_work => {
-    const { users, project, notes } = getRelatedInfo(media_work.media_id);
+    const { users, project, notes } = getRelatedInfo(media_work.id);
 
     media_work.users = users;
     media_work.project = project;
@@ -81,7 +81,7 @@ const validateMediaInfo = (info) => {
 /**
  * GET will get all the media works. This includes the users assigned to the media work, the project it belongs to, and every note posted about it.
  * 
- * POST will create a new media work. This will include the project it belongs to. A new id will be generated for the media work. This new id will be added to the project's media_ids array.
+ * POST will create a new media work. This will include the project it belongs to. A new id will be generated for the media work. This new id will be added to the project's media ids array.
  * 
  * @param {Object} req
  * @param {Object} res
@@ -108,7 +108,7 @@ export default function handler(req, res) {
   }
 
   // If the method is not GET or POST, return a 405 error.
-  handleErrors(res, 405, "Method not allowed", "signins");
+  handleErrors(res, {code: 405}, "Method not allowed", "signins");
   
   res.status(405).json({
     error: "Method not allowed",

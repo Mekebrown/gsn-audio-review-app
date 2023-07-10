@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { SignIn } from "../../db/models";
+import { Signin } from "../../models";
 import handleErrors from "../../lib/error_handler";
 
 /** 
@@ -14,7 +14,7 @@ const createASignIn = async (new_sign_in_info) => {
   // Make sure to use uuidv4() to generate a unique id.
   validated_sign_in_info.id = uuidv4();
 
-  const sign_in = await SignIn.create(validated_sign_in_info);
+  const sign_in = await Signin.create(validated_sign_in_info);
 
   await sign_in.createSignIn();
 
@@ -32,10 +32,10 @@ const createASignIn = async (new_sign_in_info) => {
  * @returns {Array} sign_ins
  */
 const getAllSignIns = async () => {
-  const sign_ins = await SignIn.findAll();
+  const sign_ins = await Signin.findAll();
 
   sign_ins.forEach(sign_in => {
-    const user = getUserOfSignIn(sign_in.sign_in_id);
+    const user = getUserOfSignIn(sign_in.id);
 
     sign_in.user = user;
 
@@ -46,12 +46,12 @@ const getAllSignIns = async () => {
 };
 
 /**
- * @param {string} sign_in_id 
+ * @param {string} signInId 
  * 
  * @returns {Array|Object|null} user
  */
-const getUserOfSignIn = async (sign_in_id) => {
-  const sign_in = await SignIn.findByPk(sign_in_id);
+const getUserOfSignIn = async (signInId) => {
+  const sign_in = await Signin.findByPk(signInId);
 
   const user = await sign_in.getUser();
 
@@ -94,16 +94,16 @@ export default function handler(req, res) {
   } else if (method === "POST") {
     const info = req.body;
 
-    const is_note_created = createASignIn(info);
+    const is_noteCreated = createASignIn(info);
 
     res.status(200).json({ 
       route: "signins",
-      note_created: is_note_created
+      noteCreated: is_noteCreated
     });
   }
 
   // If the method is not GET or POST, return a 405 error.
-  handleErrors(res, 405, "Method not allowed", "signins");
+  handleErrors(res, { code: 405}, "Method not allowed", "signins");
   
   res.status(405).json({
     error: "Method not allowed",

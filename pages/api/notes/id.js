@@ -1,4 +1,4 @@
-import { Note } from "../../db/models";
+const Note = { id: 1, email: "two @ two.com", password: "two" };
 import handleErrors from "../../lib/error_handler";
 
 /**
@@ -107,7 +107,7 @@ export default function handler( req, res ) {
       });
     }
 
-    handleErrors(res, 405, "Method not allowed", "notes");
+    handleErrors(res, { code: 405}, "Method not allowed", "notes");
     
     res.status(405).json({
       error: "Method not allowed",

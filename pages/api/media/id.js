@@ -1,4 +1,4 @@
-import { Media } from "../../db/models";
+const Media = { id: 1, email: "two @ two.com", password: "two" };
 
 /**
  * @param {string} id
@@ -113,7 +113,7 @@ export default function handler( req, res ) {
         });
     }
 
-    handleErrors(res, 405, "Method not allowed", "media");
+    handleErrors(res, { code: 405}, "Method not allowed", "media");
     
     res.status(405).json({
       error: "Method not allowed",
