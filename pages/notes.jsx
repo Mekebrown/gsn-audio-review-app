@@ -3,12 +3,11 @@ import React from 'react';
 export default function Notes({ content }) {
   return <div>
     <h1>Users</h1>
-    {
-        // Make a map of 
-        content.maps((item) => {
-            return <div key={item.id}>item #{item.id}</div>;
-        })
-    }
+    {content.map(item => {
+      return <div key={item.id}>
+        item #{item.id}
+      </div>;
+    })}
   </div>;
 }
 

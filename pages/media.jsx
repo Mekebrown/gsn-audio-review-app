@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSession } from 'next-auth/react';
 
 import SignInOutBtn from "../components/credentials/SignInOutBtn";
@@ -7,18 +7,16 @@ import analytics from "../lib/analytics_handler";
 analytics.gaEvent('Media Page Viewed');
 
 export default function Media({content}) {
-  const { data, status } = useSession();
+  const { data: session, status } = useSession();
 
-  if (status === "loading") {
+  const loading = status === "loading";
+
+  if (loading) {
     return "Loading or not authenticated..."
-  }else if (status !== "authenticated") {
+  } else if (status === "unauthenticated") {
     window.location.href = "/";
     return null;
   }
-
-  useEffect(() => {
-    analytics.gaEvent('Media Page Loaded');
-  }, []);
 
   return <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <SignInOutBtn data={data} />

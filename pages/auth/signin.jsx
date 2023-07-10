@@ -1,8 +1,8 @@
 import React from 'react';
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession, getCsrfToken } from "next-auth/react";
 import { useRouter } from 'next/router';
 
-const SignIn = () => {
+const SignIn = ({csrfToken}) => {
     const message = "New Sign In";
     const router = useRouter();
 
@@ -67,3 +67,21 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+export async function getServerSideProps(context) {
+    const csrfToken = await getCsrfToken(context);
+
+    if (!csrfToken) {
+        return {
+            props: {
+                csrfToken: "",
+            },
+        };
+    }
+
+    return {
+        props: {
+            csrfToken,
+        },
+    };
+};
