@@ -126,13 +126,13 @@ export const Settings = ({ user }) => {
     const [lightMode, setLightMode] = useState(user.settings.light_mode);
 
     const handleCogClick = () => {
-        setShow(!show);
+        setShow(prev => !prev);
     }
 
     const handleModeToggle = () => {
         console.log('toggle light/dark mode');
 
-        setLightMode(!lightMode);
+        setLightMode(prev => !prev);
 
         if (lightMode) {
             document.body.classList.add('darkMode');
@@ -149,10 +149,10 @@ export const Settings = ({ user }) => {
             lightMode: !lightMode
         })
             .then((res) => {
-                console.log(res);
+                console.log({res});
             })
             .catch((err) => {
-                console.log(err);
+                console.log({err});
             });
     }
 

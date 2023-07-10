@@ -4,7 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SendPWModal = () => {
-    const media = [{id: 1, title: "test1"}, {id: 2, title: "test2"}];
+    const media = [
+        {
+            id: 1, title: "test1"
+        },
+        {
+            id: 2, title: "test2"
+        }
+    ];
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -49,7 +56,7 @@ const SendPWModal = () => {
             setMediaChecked([]);
             setMediaCheckedAll(false);
         } else {
-            setMediaChecked(media.map((item) => item.id));
+            setMediaChecked(media.map(item => item.id));
             setMediaCheckedAll(true);
         }
     }
@@ -139,7 +146,7 @@ const SendPWModal = () => {
                                     All
                                 </label>
                             </div>
-                            {media.map((item) => (
+                            {media.map(item => (
                                 <div className="form-check" key={item.id}>
                                     <input className="form-check-input" type="checkbox" value={item.id} id={item.id} checked={mediaChecked.includes(item.id)} onChange={handleCheck} />
                                     <label className="form-check-label" htmlFor={item.id}>
