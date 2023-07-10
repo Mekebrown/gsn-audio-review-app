@@ -5,15 +5,29 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
-      userId: {
+      id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true
       },
-      userEmail: {
+      name: {
+          type: Sequelize.STRING,
+          allowNull: true,
+          defaultValue: 'client',
+      },
+      email: {
           type: Sequelize.STRING,
           allowNull: false,
           unique: true,
+      },
+      emailVerified: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
+      },
+      image: {
+          type: Sequelize.STRING,
+          allowNull: true
       },
       userCreatedTS: {
           type: Sequelize.DATE,
@@ -28,27 +42,15 @@ module.exports = {
       userMediaList: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true, 
-          defaultValue: "{}"
+          defaultValue: []
       },
       lastSignInTS: {
           type: Sequelize.DATE,
-          allowNull: true,
-          references: {
-            table: 'signins',
-            key: 'signInId'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: true
       },
       lastSignOutTS: {
           type: Sequelize.DATE,
-          allowNull: true,
-          references: {
-            table: 'signins',
-            key: 'signOutTS'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: true
       },
       userInternalNote: {
           type: Sequelize.STRING,
@@ -84,22 +86,22 @@ module.exports = {
       notesIds: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       },
       projectsIds: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       },
       timersIds: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       },
       signInIds: {
           type: Sequelize.ARRAY(Sequelize.UUID),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       }
     });
   },

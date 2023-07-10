@@ -34,7 +34,12 @@ module.exports = {
       mediaIds: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
+      },
+      timersIds: {
+          type: Sequelize.ARRAY(Sequelize.INTEGER),
+          allowNull: true,
+          defaultValue: []
       }
     });
   },

@@ -12,13 +12,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          table: 'users',
-          key: 'userId'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        allowNull: false
       },
       noteContent: {
           type: Sequelize.STRING,
@@ -26,13 +20,7 @@ module.exports = {
       },
       mediaId: {
           type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            table: 'media',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: false
       },
       noteCreatedTS: {
           type: Sequelize.DATE,
@@ -49,13 +37,7 @@ module.exports = {
       },
       replyToNoteId: {
           type: Sequelize.INTEGER,
-          allowNull: true,
-          references: {
-            table: 'notes',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: true
       }
     });
   },

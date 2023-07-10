@@ -12,13 +12,7 @@ module.exports = {
       },
       projectId: {
           type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            table: 'projects',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: false
       },
       timerCreatedTS: {
           type: Sequelize.DATE,
@@ -37,12 +31,12 @@ module.exports = {
       },
       isTimerCleared: {
           type: Sequelize.BOOLEAN,
-          allowNull: false,
+          allowNull: true,
           defaultValue: false
       },
       isTimerRestarted: {
           type: Sequelize.BOOLEAN,
-          allowNull: false,
+          allowNull: true,
           defaultValue: false
       },
       timerUpdatedTS: {
@@ -52,7 +46,7 @@ module.exports = {
       usersIds: {
           type: Sequelize.ARRAY(Sequelize.UUID),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       }
     });
   },

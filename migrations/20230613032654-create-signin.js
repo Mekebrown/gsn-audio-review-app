@@ -5,22 +5,18 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('signins', { 
-      signInId: {
+      id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true
       },
       userId: {
           type: Sequelize.UUID,
-          allowNull: false,
-          references: {
-            table: 'users',
-            key: 'userId'
-          },
+          allowNull: false
       },
       signInTS: {
           type: Sequelize.DATE,
-          allowNull: true,
+          allowNull: false,
           defaultValue: Sequelize.NOW
       },
       signOutTS: {

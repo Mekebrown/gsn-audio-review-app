@@ -12,31 +12,29 @@ module.exports = {
       },
       projectId: {
           type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            table: 'projects',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+          allowNull: false
       },
       mediaDescription: {
           type: Sequelize.STRING,
           allowNull: false
       },
-      mediaS3URL: {
+      mediaS3Directory: {
           type: Sequelize.STRING,
           allowNull: false
       },
-      mediaCreatedTS: {
-          type: Sequelize.DATE,
-          allowNull: false,
-          defaultValue: Sequelize.NOW
+      mediaS3FileName: {
+          type: Sequelize.STRING,
+          allowNull: false
       },
       mediaType: {
           type: Sequelize.STRING,
           allowNull: false,
           defaultValue: 'audio'
+      },
+      mediaCreatedTS: {
+          type: Sequelize.DATE,
+          allowNull: false,
+          defaultValue: Sequelize.NOW
       },
       hasMediaMarkers: {
           type: Sequelize.BOOLEAN,
@@ -54,12 +52,12 @@ module.exports = {
       notesIds: {
           type: Sequelize.ARRAY(Sequelize.INTEGER),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       },
       usersIds: {
           type: Sequelize.ARRAY(Sequelize.UUID),
           allowNull: true,
-          defaultValue: "{}"
+          defaultValue: []
       }
     });
   },
