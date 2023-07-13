@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { signIn, useSession, getCsrfToken } from "next-auth/react";
 import { useRouter } from 'next/router';
 
-const SignIn = ({csrfToken}) => {
-    const message = "New Sign In";
+const SignIn = ({ csrfToken }) => {
     const router = useRouter();
+    const [message, setMessage] = useState("Enter here");
 
     const { data: session, status } = useSession();
 
@@ -17,19 +17,24 @@ const SignIn = ({csrfToken}) => {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const email = e.target.email.value;
         const password = e.target.password.value;
     
         const result = await signIn('credentials', { redirect: false, email, password });
-        if (!result.error) {
+
+        console.log({ result });
+        if (!result.ok) {
+            setMessage("Error Signing In. Please try again.");
+        } else if (!result.error) {
           router.push('/media');
         }
     };
     
     return <div className="sign-in-form-container">
-        {<p className="sign-in-form-container-message"> {message} </p>}
+        <h1 className="sign-in-title">New Sign In</h1>
 
-        <h1 className="sign-in-title">Enter here</h1>
+        {<p className="sign-in-form-container-message"> {message} </p>}
 
         <form
             name="normal_sign_in"

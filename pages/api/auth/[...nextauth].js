@@ -2,7 +2,6 @@ import axios from 'axios';
 import NextAuth from 'next-auth';
 import CredentialsProvider from "next-auth/providers/credentials";
 import SequelizeAdapter from "@auth/sequelize-adapter";
-import { DataTypes } from "sequelize";
 
 import sequelize from '../../../lib/db-related/seq_connect';
 
@@ -30,7 +29,7 @@ const providers = [
 
             try {
                 const { data } = await axios.post(
-                    '/auth/signin', 
+                    process.env.NEXTAUTH_API_URL + '/auth/signin', 
                     {
                         password: credentials.password,
                         email: credentials.email
@@ -43,8 +42,7 @@ const providers = [
 
                 return null;
             } catch (e) {
-                console.error(e);
-                throw new Error("Sign in error. Please try again!");
+                throw new Error("API Error");
             }
         }
     })
@@ -113,40 +111,7 @@ const logger = {
 const options = {
     providers,
     secret: process.env.NEXTAUTH_SECRET,
-    adapter: SequelizeAdapter(sequelize, {
-        models: {
-            Media: {
-                projectId: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false
-                },
-            },
-            Note: {
-                userId: {
-                    type: DataTypes.UUID,
-                    allowNull: false
-                },
-            },
-            Project: {
-                projectName: {
-                    type: DataTypes.STRING,
-                    allowNull: false
-                },
-            },
-            Signin: {
-                userId: {
-                    type: DataTypes.UUID,
-                    allowNull: false
-                },
-            },
-            Timer: {
-                projectId: {
-                    type: DataTypes.INTEGER,
-                    allowNull: false
-                }
-            }
-        },
-    }),
+    adapter: SequelizeAdapter(sequelize),
     callbacks,
     logger
 };

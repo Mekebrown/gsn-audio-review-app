@@ -1,16 +1,15 @@
 import bcrypt from "bcrypt";
 import { getCsrfToken } from "next-auth/react";
 
-import sequelize from "../../../lib/db-related/seq_connect";
+import db from "../../../models";
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email, password } = req.body;
-    const User = sequelize.models.User;
-
     const csrfToken = await getCsrfToken({ req });
+    const User = db.User;
 
-    if (email && password && User) {
+    if (email && password && User !== undefined) {
       User.findOne({ where: { email: email } })
       .then((response) => {
         if (response.error) {
@@ -76,7 +75,7 @@ export default async function handler(req, res) {
     } else { // email and/or password is missing
       res.status(401).json({
         data: {
-          error: "sign in error"
+          error: "Sign in error; One or more fields are missing."
         }
       });
     }
