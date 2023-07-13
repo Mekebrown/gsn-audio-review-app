@@ -1,72 +1,66 @@
-import { DataTypes, Model } from 'sequelize';
+import Sequelize, { DataTypes, Model } from 'sequelize';
 
-const Signin = (sequelize, Sequelize) => {
-    /**
-     * @class Signin
-     * 
-     * @classdesc The Signin model is for information about sign ins associated with a User.
-     * 
-     * Instantiate -> Signin.build()
-     * Create -> Signin.create(). Have to add its id to a user's signInsIds array.
-     * Get all -> Signin.findAll(). Have to find their users.
-     * Get one -> Signin.findOne(). Have to find its related user.
+import sequelize from "../lib/db-related/seq_connect";
 
-        sign in -> user is one to one
+/**
+ * @class Signin
+ * 
+ * @classdesc The Signin model is for information about sign ins associated with a User.
+ * 
+ * Instantiate -> Signin.build()
+ * Create -> Signin.create(). Have to add its id to a user's signInsIds array.
+ * Get all -> Signin.findAll(). Have to find their users.
+ * Get one -> Signin.findOne(). Have to find its related user.
 
-    * @extends {Model}
+    sign in -> user is one to one
 
-        @property {string} id - varchar, primary - uuid-generated
-        @property {Date} signInTS - timestamp, not null, default now()
-        @property {string} userId - varchar, foreign key - users.id
-        @property {Date} [signOutTS] - timestamp
-        @property {string} [signInHeaders] - varchar
-    */
-    class Signin extends Model {
-        async getAllSignInsPerUser() {};
-        async getUserForSignIn() {};
+* @extends {Model}
+
+    @property {string} id - varchar, primary - uuid-generated
+    @property {Date} signInTS - timestamp, not null, default now()
+    @property {string} userId - varchar, foreign key - users.id
+    @property {Date} [signOutTS] - timestamp
+    @property {string} [signInHeaders] - varchar
+*/
+class Signin extends Model {
+    async getAllSignInsPerUser() {};
+    async getUserForSignIn() {};
+}
+
+Signin.init({
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
+    userId: {
+        type: DataTypes.UUID,
+        allowNull: false
+    },
+    signInTS: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    signOutTS: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    signInHeaders: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
+}, {
+    sequelize,
+    modelName: 'Signin',
+    tableName: 'signins',
+    timestamps: true,
+    updatedAt: "signOutTS",
+    createdAt: "signInTS"
+});
 
-    Signin.init({
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true
-        },
-        userId: {
-            type: DataTypes.UUID,
-            allowNull: false
-        },
-        signInTS: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: Sequelize.NOW
-        },
-        signOutTS: {
-            type: DataTypes.DATE,
-            allowNull: true
-        },
-        signInHeaders: {
-            type: DataTypes.STRING,
-            allowNull: true
-        }
-    }, {
-        sequelize,
-        modelName: 'Signin',
-        tableName: 'signins',
-        timestamps: true,
-        updatedAt: "signOutTS",
-        createdAt: "signInTS"
-    });
-
-    Signin.associate = (models) => {
-        Signin.belongsTo(models.User);
-    };
-
-    return Signin;
+Signin.associate = (models) => {
+    Signin.belongsTo(models.User);
 };
 
-sequelize.models.modelName = Signin;
-sequelize.models.Signin;
-sequelize.models.Signin === Signin;
-
-export default Signin;
+export { Signin };

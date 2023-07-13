@@ -1,61 +1,29 @@
-'use strict';
-
 import Sequelize from 'sequelize';
 
+import { User } from "./User";
+import { Media } from "./Media";
+import { Note } from "./Note";
+import { Project } from "./Project";
+import { Signin } from "./Signin";
+import { Timer } from "./Timer";
 import sequelize from "../lib/db-related/seq_connect";
 
-const db = {};
-
-const make_db = () => {
-import("./Media")
-.then(media => {
-  db["Media"] = media;
-
-  return import("./Note");
-})
-.then(note => {
-  db["Note"] = note;
-
-  return import("./Project");
-})
-.then(project => {
-  db["Project"] = project;
-
-  return import("./Signin");
-})
-.then(signin => {
-  db["Signin"] = signin;
-
-  return import("./Timer");
-})
-.then(timer => {
-  db["Timer"] = timer;
-
-  return import("./User");
-})
-.then(user => {
-  db["User"] = user;
-
-  return db;
-})
-.then(db => {
-  Object.keys(db).forEach((modelName) => {
-    if (db[modelName].associate) {
-      db[modelName].associate(db);
-    }
-  });
-
-  return db;
-})
-.then(db => {
-  db.sequelize = sequelize;
-  db.Sequelize = Sequelize;
-})
-.catch(err => {
-  console.error(err);
-});
+const db = {
+  sequelize,
+  Sequelize
 };
 
-make_db();
+db["User"] = User;
+db["Media"] = Media;
+db["Note"] = Note;
+db["Project"] = Project;
+db["Signin"] = Signin;
+db["Timer"] = Timer;
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
 export default db;
