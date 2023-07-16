@@ -25,7 +25,7 @@ module.exports = {
       hasMediaMarkers: true,
       mediaMarkersS3CSVURL: `${aws_s3_url}/files/csv/markers.csv`,
       noteIds: [1],
-      usersIds: [1]
+      accountsIds: [1]
     }], {});
   },
 
