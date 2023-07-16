@@ -10,7 +10,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true
       },
-      userId: {
+      accountId: {
         type: Sequelize.UUID,
         allowNull: false
       },

@@ -43,9 +43,9 @@ module.exports = {
           type: Sequelize.DATE,
           allowNull: true
       },
-      usersIds: {
+      accountsIds: {
           type: Sequelize.ARRAY(Sequelize.UUID),
-          allowNull: true,
+          allowNull: false,
           defaultValue: []
       }
     });
