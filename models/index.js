@@ -1,10 +1,9 @@
 import Sequelize from 'sequelize';
 
-import { User } from "./User";
+import { Account } from "./Account";
 import { Media } from "./Media";
 import { Note } from "./Note";
 import { Project } from "./Project";
-import { Signin } from "./Signin";
 import { Timer } from "./Timer";
 import sequelize from "../lib/db-related/seq_connect";
 
@@ -13,11 +12,10 @@ const db = {
   Sequelize
 };
 
-db["User"] = User;
+db["Account"] = Account;
 db["Media"] = Media;
 db["Note"] = Note;
 db["Project"] = Project;
-db["Signin"] = Signin;
 db["Timer"] = Timer;
 
 Object.keys(db).forEach((modelName) => {
