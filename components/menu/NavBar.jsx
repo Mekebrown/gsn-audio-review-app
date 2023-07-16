@@ -6,7 +6,7 @@ const NavBar = () => {
     const [open, setOpen] = useState(false);
 
     const { data: session, status } = useSession();
-    const userRole = "client";
+    const accountRole = "client";
     const weGotAnEmail = session && session.user && session.user.email;
     
     const Hamburger = () => {
@@ -15,7 +15,7 @@ const NavBar = () => {
                 <div 
                     className="hamburger bg-red-500" 
                 >
-                    <p>{userRole} role</p>
+                    <p>{accountRole} role</p>
                     <div className="hamburger__line">
                         one
                     </div>

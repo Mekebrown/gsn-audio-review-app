@@ -1,16 +1,16 @@
 /* 
     Routes: 
     / - msg, sign in link
-    / - msg, media (project name/link, notes and the users, uploaded date, update link, delete link)
-    /signin - msg, form (email input, password input), submit button, cancel button
+    / - msg, media (project name/link, notes and the accounts, uploaded date, update link, delete link)
+    /auth/signin - msg, form (email input, password input), submit button, cancel button
     /signout - redirect to /
     /send-pw* - close icon, msg, form (checkboxes of media, email input, generated pw and "copy" link), submit button, clear button, cancel link
-    /delete-user* - close icon, msg, confirm button, cancel link
+    /delete-account* - close icon, msg, confirm button, cancel link
     /upload* - close icon, msg, form (logo, project name, desc, client, audio, timestamps), submit button, clear button, cancel link
     /delete-upload* - close icon, msg, confirm button, cancel link
-    /users - msg, users (link to each user, preview of latest note, list of media, last sign in, reset pw link, delete user link)
+    /users - msg, users (link to each user and their accounts, preview of latest note(s), list of media, last sign in(s?), reset pw link, delete user link)
     /notes - msg, notes (note copy, media project name/link, created date)
-    /users/:user - email, role, lastSignIn, notes, media, created, reset pw link, delete user link
+    /users/:user - shows account(s) with its email, role, lastSignIn, notes, media, created, reset pw link, and a delete user link. Deleting a user will delete all accounts for that user.
     /notes/:note* - note copy, media project name/link, created date
     /media/:media - msg, project name, description, form (textarea, submit button, cancel button), notes list
     /media/:media - msg (edit), project name (edit), description (edit), list of each note (reply to note link (form: textarea, submit button, cancel button)) 

@@ -7,16 +7,16 @@ import sequelize from "../lib/db-related/seq_connect";
  * 
  * @classdesc The Timer model shows information about a typical timer session.
  * 
- * @description A timer can only be created by the Producer and any user can connect to it in a session.
+ * @description A timer can only be created by the Producer and any account can connect to it in a session.
  * 
  * Instantiate -> Timer.build()
  * Create -> Timer.create(). Have to add its id to the project's timer ids array.
- * Get all -> Timer.findAll(). Have to find their projects and users.
- * Get one -> Timer.findOne(). Have to find its related project and user(s).
+ * Get all -> Timer.findAll(). Have to find their projects and accounts.
+ * Get one -> Timer.findOne(). Have to find its related project an account(s).
  * Update -> Timer.update({}, {}) and timer.save()
- * Delete -> timer.destroy(). Have to find its related project and user, and delete the timer id from their timers ids arrays. TODO: Maybe have each have a field of former timers ids?
+ * Delete -> timer.destroy(). Have to find its related project and account, and delete the timer id from their timers ids arrays. TODO: Maybe have each have a field of former timers ids?
  * 
- *  timer -> user none to many
+ *  timer -> account none to many
  *  timer -> project one to one
  * 
  * @extends {Model}
@@ -29,7 +29,7 @@ import sequelize from "../lib/db-related/seq_connect";
  *  @property {boolean} [isTimerCleared] - Is the timer cleared?
  *  @property {boolean} [isTimerRestarted] - Is the timer restarted?
  *  @property {Date} [timerUpdatedTS] - The recently-updated timer's ts.
- * @property {string[]} [usersIds] - The timer's users' ids.
+ * @property {string[]} [accountsIds] - The timer's account ids.
  */
 class Timer extends Model {
     /**
@@ -38,14 +38,14 @@ class Timer extends Model {
     async getProjectForTimer() {};
 
     /**
-     * Get all users that a timer is related to.
+     * Get all accounts that a timer was accessed from.
      */
-    async getAllUsersForTimer() {};
+    async getAllAccountsForTimer() {};
 
     /**
-     * Add a timer id to a user's timers ids.
+     * Add a timer id to an account's timers ids.
      */
-    async addTimerIdToUserTimersIds() {};
+    async addTimerIdToAccountTimersIds() {};
 
     /**
      * Add a timer id to a project's timers ids.
@@ -92,9 +92,9 @@ Timer.init({
         type: DataTypes.DATE,
         allowNull: true
     },
-    usersIds: {
+    accountsIds: {
         type: DataTypes.ARRAY(DataTypes.UUID),
-        allowNull: true,
+        allowNull: false,
         defaultValue: []
     }
 }, {
@@ -108,7 +108,7 @@ Timer.init({
 
 Timer.associate = (models) => {
     Timer.belongsTo(models.Project);
-    Timer.hasMany(models.User);
+    Timer.hasMany(models.Account);
 };
 
 export { Timer };
