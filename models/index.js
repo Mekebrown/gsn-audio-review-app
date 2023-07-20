@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize';
 
-import { Account } from "./Account";
+import { Profile } from "./Profile";
 import { Media } from "./Media";
 import { Note } from "./Note";
 import { Project } from "./Project";
@@ -12,7 +12,7 @@ const db = {
   Sequelize
 };
 
-db["Account"] = Account;
+db["Profile"] = Profile;
 db["Media"] = Media;
 db["Note"] = Note;
 db["Project"] = Project;

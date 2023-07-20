@@ -7,36 +7,36 @@ import sequelize from "../lib/db-related/seq_connect";
  * 
  * @classdesc The Note model is for information such as a note's contents.
  * 
- * @description A note can be from any account and can be an original note or a reply to another note.
+ * @description A note can be from any profile and can be an original note or a reply to another note.
  * 
  * Instantiate -> Note.build()
- * Create -> Note.create(). Have to add the note id to an account's notesIds array and a media work's notesIds array.
+ * Create -> Note.create(). Have to add the note id to an profile's notesIds array and a media work's notesIds array.
  * Get all -> Note.findAll(). Have to find their related media works and authors.
  * Get one -> Note.findOne(). Have to find its related media work and author.
  * Update -> Note.update({}, {}) and note.save()
  * Delete -> note.destroy(). Have to find its related media work and author, and delete the note id from their notesIds arrays. TODO: Maybe have each have a field of former notes ids?
  * Get all replies to a note -> note.getAllRepliesPerNote()
  * Get the media work that a note is related to -> note.getMediaWorkOfNote()
- * Get the account that created a note -> note.getNoteAccount()
- * "Delete" a note id in media and account -> note.deleteNoteIdInAccountMedia()
- * Add this note id to an account's notes ids -> note.addNoteIdToAccountNotesIds()
+ * Get the profile that created a note -> note.getNoteProfile()
+ * "Delete" a note id in media and profile -> note.deleteNoteIdInProfileMedia()
+ * Add this note id to an profile's notes ids -> note.addNoteIdToProfileNotesIds()
  * Add this note id to a media work's notesIds -> note.addNoteIdToMediaWorkNotesIds
  * Add this note's id, if it is a reply, to a note's notes ids -> note.addReplyNoteIdToNotesIds
 
-note -> account one to one
+note -> profile one to one
 note -> media one to one
 note -> note one to one (reply to note)
 * 
 * @extends {Model}
 * 
 * @property {number} id - The note's id.
-* @property {string} accountId - The account of the author.
+* @property {string} profileId - The profile of the author.
 * @property {string} noteContent - The note's content.
 * @property {number} mediaId - The note's media work it's related to.
 * @property {Date} noteCreatedTS - The note's created timestamp.
 * @property {Date} [noteUpdatedTS] - The recently-updated note's ts.
 * @property {Date} [noteDeletedTS] - When the note was (soft) "deleted".
-* @property {number} [replyToNoteID] - The note's note from an account.
+* @property {number} [replyToNoteID] - The note's note from an profile.
 */
 class Note extends Model {
     /**
@@ -66,42 +66,42 @@ class Note extends Model {
     }
 
     /**
-     * Get the account that created a note.
+     * Get the profile that created a note.
      */
-    async getNoteAccount() {
+    async getNoteProfile() {
         const note = this;
-        const account = await sequelize.models.Account.findOne({
+        const profile = await sequelize.models.Profile.findOne({
             where: {
-                id: note.accountId
+                id: note.profileId
             }
         });
-        return account;
+        return profile;
     };
     
-    async deleteNoteIdInAccountMedia() {
+    async deleteNoteIdInProfileMedia() {
         const note = this;
-        const account = await note.getNoteAccount();
+        const profile = await note.getNoteProfile();
         const mediaWork = await note.getMediaWorkOfNote();
-        const accountNotesIds = account.notesIds;
+        const profileNotesIds = profile.notesIds;
         const mediaWorkNotesIds = mediaWork.notesIds;
-        const accountNotesIdsIndex = accountNotesIds.indexOf(note.id);
+        const profileNotesIdsIndex = profileNotesIds.indexOf(note.id);
         const mediaWorkNotesIdsIndex = mediaWorkNotesIds.indexOf(note.id);
-        if (accountNotesIdsIndex > -1) {
-            accountNotesIds.splice(accountNotesIdsIndex, 1);
+        if (profileNotesIdsIndex > -1) {
+            profileNotesIds.splice(profileNotesIdsIndex, 1);
         }
         if (mediaWorkNotesIdsIndex > -1) {
             mediaWorkNotesIds.splice(mediaWorkNotesIdsIndex, 1);
         }
-        await account.save();
+        await profile.save();
         await mediaWork.save();
     };
 
-    async addNoteIdToAccountNotesIds() {
+    async addNoteIdToProfileNotesIds() {
         const note = this;
-        const account = await note.getNoteAccount();
-        const accountNotesIds = account.notesIds;
-        accountNotesIds.push(note.id);
-        await account.save();
+        const profile = await note.getNoteProfile();
+        const profileNotesIds = profile.notesIds;
+        profileNotesIds.push(note.id);
+        await profile.save();
     };
 
     async addNoteIdToMediaWorkNotesIds() {
@@ -131,7 +131,7 @@ Note.init({
         primaryKey: true,
         autoIncrement: true
     },
-    accountId: {
+    profileId: {
         type: DataTypes.UUID,
         allowNull: false
     },
@@ -172,7 +172,7 @@ Note.init({
 });
 
 Note.associate = (models) => {
-    Note.belongsTo(models.Account);
+    Note.belongsTo(models.Profile);
     Note.belongsTo(models.Media);
 };
 

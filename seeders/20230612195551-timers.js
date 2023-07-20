@@ -9,7 +9,7 @@ module.exports = {
       timerCreatedTS: '2018-01-01 00:00:00',
       timerCurrentSec: 33,
       isTimerPaused: true,
-      accountsIds: [1]
+      profilesIds: [1]
     }, {
       id: 2,
       projectId: 1,

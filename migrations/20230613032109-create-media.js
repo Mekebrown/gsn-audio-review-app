@@ -54,7 +54,7 @@ module.exports = {
           allowNull: true,
           defaultValue: []
       },
-      accountsIds: {
+      profilesIds: {
           type: Sequelize.ARRAY(Sequelize.UUID),
           allowNull: true,
           defaultValue: []

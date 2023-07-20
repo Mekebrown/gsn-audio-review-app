@@ -14,7 +14,7 @@ import sequelize from "../lib/db-related/seq_connect";
  * Update -> Project.update({}, {}) and project.save()
  * Delete -> project.destroy(). Have to find its related media, and delete it all, unless it's to be moved into a new project. The new project has to be made beforehand.
  * 
- *  project -> account is only with an admin role
+ *  project -> profile is only with an admin role
  *  project -> media    one to many
  * 
  * @extends {Model}

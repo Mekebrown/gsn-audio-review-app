@@ -14,12 +14,12 @@ import sequelize from "../lib/db-related/seq_connect";
  * Update -> Media.update({}, {}) and media.save()
  * Delete -> media.destroy(). Have to find its related project, and delete the media id from its media ids array.
  * Get the media work's notes -> media.getNotesOfMediaWork()
- * Get the media work's accounts -> media.getAccountsWithThisMediaWork()
+ * Get the media work's profiles -> media.getProfilesWithThisMediaWork()
  * Get the media work's project -> media.getProjectOfMediaWork()
  * "Delete" a media's id in notes and project -> media.deleteMediaIdInNoteProject()
 
-    media -> account is only created by an admin
-            but is assigned to zero or more accounts
+    media -> profile is only created by an admin
+            but is assigned to zero or more profiles
     media -> notes is zero to many
     media -> project is one to one
 
@@ -37,16 +37,16 @@ import sequelize from "../lib/db-related/seq_connect";
 * @property {Date} [mediaUpdatedTS] - The recently-updated media's ts.
 * @property {Date} [mediaDeletedTS] - When the media work was (soft) "deleted".
 * @property {number[]} [notesIds] - The media's notes ids.
-* @property {string[]} [accountsIds] - The media's accounts ids.
+* @property {string[]} [profilesIds] - The media's profiles ids.
 */
 class Media extends Model {
-    async getAccountsWithThisMediaWork() {
-        const account = await sequelize.models.Account.findAll({
+    async getProfilesWithThisMediaWork() {
+        const profile = await sequelize.models.Profile.findAll({
             where: {
-                id: this.accountsIds
+                id: this.profilesIds
             }
         });
-        return account;
+        return profile;
     };
 
     async getProjectOfMediaWork() {
@@ -141,7 +141,7 @@ Media.init({
         allowNull: true,
         defaultValue: []
     },
-    accountsIds: {
+    profilesIds: {
         type: DataTypes.ARRAY(DataTypes.UUID),
         allowNull: true,
         defaultValue: []
@@ -168,7 +168,7 @@ Media.init({
 
 Media.associate = (models) => {
     Media.belongsTo(models.Project);
-    Media.belongsToMany(models.Account, { through: "MediaAccount" });
+    Media.belongsToMany(models.Profile, { through: "MediaProfile" });
     Media.hasMany(models.Note);
 };
 
