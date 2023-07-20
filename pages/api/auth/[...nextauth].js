@@ -16,35 +16,49 @@ import sequelize from '../../../lib/db-related/seq_connect';
  * - [Credentials Provider](https://next-auth.js.org/providers/credentials)
  * - [User database model](https://authjs.dev/reference/adapters#user)
 */
+const signinAPIURL = process.env.NEXTAUTH_API_URL || "http://localhost:3000/api";
 
 const providers = [
     CredentialsProvider({
+        authorize: async (credentials) => {
+            if (!credentials) return null;
+
+            try {
+                const signinServerResponse = await axios.post(
+                    signinAPIURL + '/auth/signin', 
+                    {
+                        ...credentials,
+                    },
+                    {
+                        headers: { 
+                            "Content-Type": "application/json" 
+                        }
+                    }
+                );
+
+                if (signinServerResponse?.token) {
+                    return signinServerResponse.user;
+                }
+
+                return null;
+            } catch (e) {
+                console.log("Let's see the error:");
+
+                console.error({e});
+                throw new Error("API Error in Credentials Provider");
+            }
+        },
+        credentials: {
+            email: { label: "Email", type: "email", placeholder: "jsmith" },
+            password: { label: "Password", type: "password" }
+        },
         id: 'credentials',
         name: 'Credentials',
         session: {
             strategy: 'jwt' // TODO: https://authjs.dev/concepts/faq#json-web-tokens
         },
-        authorize: async (credentials) => {
-            if (!credentials) return null;
-
-            try {
-                const { data } = await axios.post(
-                    process.env.NEXTAUTH_API_URL + '/auth/signin', 
-                    {
-                        password: credentials.password,
-                        email: credentials.email
-                    }
-                );
-
-                if (data?.token) {
-                    return user;
-                }
-
-                return null;
-            } catch (e) {
-                throw new Error("API Error");
-            }
-        }
+        secret: process.env.NEXTAUTH_SECRET,
+        type: 'credentials',
     })
 ];
 
@@ -64,7 +78,7 @@ const callbacks = {
             return `${baseUrl}/auth/signin`;
         }
     },
-    jwt: async ({ token, user, account, profile, isNewUser }) => { 
+    jwt: async (...allParams) => { 
         const token_w_info = {};
         const current_token = token ? token : process.env.NEXTAUTH_SECRET;
 
@@ -108,12 +122,18 @@ const logger = {
     },
 };
 
+const pages = {
+    signIn: '/auth/signin',
+    error: '/auth/error'
+};
+
 const options = {
     providers,
     secret: process.env.NEXTAUTH_SECRET,
     adapter: SequelizeAdapter(sequelize),
     callbacks,
-    logger
+    logger,
+    pages,
 };
 
 export default NextAuth(options);
