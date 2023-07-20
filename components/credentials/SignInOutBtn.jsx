@@ -1,11 +1,7 @@
 import { signOut } from "next-auth/react";
+import Router from "next/router";
 
-export default function SignInOutBtn({data}) {
-    const signInForm = () => {
-        window.location.href = "/auth/signin";
-        return null;
-    };
-
+export default function SignInOutBtn({ data }) {
     if (data && data.user) {
         return <>
             Signed in as {data.user.email} <br />
@@ -18,7 +14,7 @@ export default function SignInOutBtn({data}) {
         </>;
     } else {
         return <button 
-            onClick={signInForm}
+            onClick={() => { Router.push("/auth/signin"); }}
             type="button"
         >
             Sign in
