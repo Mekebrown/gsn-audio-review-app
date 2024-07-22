@@ -1,0 +1,68 @@
+/* Light/Dark Mode */
+  .lightMode {
+    background-color: #f9fbff;
+    color: #000;
+  }
+
+  .darkMode {
+    background-color: #000;
+    color: #fff;
+  }
+
+  .lightMode .contactIcon {
+    border: 15px solid #fec865;
+    background-color: #fec865;
+  }
+
+  .darkMode .contactIcon {
+    border: 15px solid #fec865;
+    background-color: #fec865;
+  }
+
+  .lightMode .topNavLogo span {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span {
+    color: #fff;
+  }
+
+  .lightMode .topNavLogo span:hover {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span:hover {
+    color: #fff;
+  }
+
+  .lightMode .topNavLogo span:active {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span:active {
+    color: #fff;
+  }
+
+  .lightMode .topNavLogo span:focus {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span:focus {
+    color: #fff;
+  }
+
+  .lightMode .topNavLogo span:visited {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span:visited {
+    color: #fff;
+  }
+
+  .lightMode .topNavLogo span:link {
+    color: #000;
+  }
+
+  .darkMode .topNavLogo span:link {
+    color: #fff;
+  }

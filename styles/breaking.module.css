@@ -1,0 +1,16 @@
+.component {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    flex-direction: column;
+    background-color: aqua;
+    color: black;
+}
+  
+.error {
+    background-color: tomato;
+    color: white;
+}

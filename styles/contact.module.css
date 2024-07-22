@@ -1,0 +1,11 @@
+/* Contact Icon */
+.contactIcon {
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    width: 43px;
+    height: 43px;
+    border-radius: 50%;
+    border: 15px solid #fec865;
+    background-color: #fec865;
+}

@@ -1,0 +1,30 @@
+/* Notes Page */
+.clickable:hover {
+    background-color: aliceblue;
+}
+
+.hideNotePad {
+    display: none;
+}
+
+.hideTimestampText {
+    visibility: hidden;
+}
+
+.tooltip .tooltiptext {
+    /* Tooltip text */
+    visibility: hidden;
+    width: 120px;
+    background-color: grey;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    /* Position the tooltip text */
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}

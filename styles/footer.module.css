@@ -1,0 +1,14 @@
+:root {
+    /* #191c3c */
+    --color-dark-blue: 25, 28, 60;
+    /* #6371c5 */
+    --color-light-blue-purple: 99, 113, 197;
+    /* #e6e6f3 */
+    --color-semi-transparent-purple: 230, 230, 243;
+    /* #6874c5 */
+    --color-purple: 104, 116, 197;
+}
+
+.horizontalRule {
+    color: #6371c5;
+}

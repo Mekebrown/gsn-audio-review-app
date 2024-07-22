@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  font: 14px 'Nunito', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  color: #191c3c;
+  background-color: #f9fbff;
+}
+
+header { /* Stays in global css for "purity" */
+  margin: 0 auto 3em;
+  border: 1px solid darkgray;
+  height: 20px;
+  width: 100%;
+  text-align: center;
+  padding: 5%;
+  margin-bottom: 2%;
+}
+
+a {
+  color: #191c3c;
+  text-decoration: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 50px 0;
+}
+
+input,
+button {
+  margin: 0 0 10px;
+  display: block;
+}
+
+li {
+  list-style-type: none;
+}
+
+.children {
+  width: 100%;
+  text-align: center;
+  padding: 5%;
+}
+
+.twoCols {
+  display: flex;
+}
+
+.twoCols div {
+  flex: 1 1 50%;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+
+  html {
+    color-scheme: dark;
+  } */
+}
