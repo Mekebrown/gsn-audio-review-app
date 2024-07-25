@@ -23,6 +23,18 @@ export const select_all_media = async () => {
 	}
 };
 
+export const select_single_media = async (id) => {
+	const response = await fetch(
+		apiURL + "/portal/media?request_type=single&media_id=" + id
+	);
+
+	// if (!response.ok) {
+	// 	throw new Error("Network response was not ok");
+	// } else {
+	return response.data;
+	// }
+};
+
 export const send_contact_info = async (formData) => {
 	for (let ind of formData) {
 		if (ind in ["name", "email", "subject"]) {
