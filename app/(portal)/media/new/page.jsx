@@ -78,13 +78,13 @@ export default function Page() {
         <p>Upload your audio</p>
 
         <form onSubmit={UploadTrack}>
-            <label htmlFor="projectName">Project name</label>
+            <label htmlFor="title">Project name or title</label>
 
             <input
                 type="text"
-                name="projectName"
-                className="projectName"
-                value={files?.projectName}
+                name="title"
+                className="title"
+                value={files?.title}
             />
 
             <label htmlFor="fileUpload">File upload</label>

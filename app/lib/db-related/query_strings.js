@@ -6,7 +6,7 @@ export const insert_media = async (data) => {
 	const insert_media_query = await sql`
         INSERT INTO media
             (media_desc, file_name, media_type,
-            project_name, last_retrieved,
+            title, last_retrieved,
             file_directory, created_at) 
         VALUES
             ($1, $2, $3, $4, $5, $6, $7)
@@ -44,8 +44,8 @@ export const insert_user = async (data) => {
 export const select_all_media = async () => {
 	const select_all_media_query = await sql`
         SELECT
-            id, project_name, media_desc, 
-            file_name, project_thumb, file_directory
+            id, title, media_desc, 
+            file_name, thumb_url, file_directory
         FROM 
             media
     `;
@@ -263,47 +263,4 @@ export const add_signins_for_admin = async () => {
 //     users.is_discl_agreed,
 //     users.user_role,
 //     users.user_hashed_pw,
-//     users_projects.project_id,
-//     users_projects.project_name,
-//     users_projects.project_description,
-//     users_projects.project_media_list,
-//     users_projects.project_note_list,
-//     users_projects.project_timer_list,
-//     users_projects.project_user_list,
-//     users_projects.project_created_ts,
-//     users_projects.project_updated_ts,
-//     users_projects.project_updated_type,
-//     users_projects.project_settings,
-//     users_projects.project_is_deleted,
-//     users_projects.project_deleted_ts,
-//     users_media.media_id,
-//     users_media.media_name,
-//     users_media.media_description,
-//     users_media.media_type,
-//     users_media.media_url,
-//     users_media.media_note_list,
-//     users_media.media_created_ts,
-//     users_media.media_updated_ts,
-//     users_media.media_updated_type,
-//     users_media.media_settings,
-//     users_media.media_is_deleted,
-//     users_media.media_deleted_ts,
-//     users_notes.note_id,
-//     users_notes.note_content,
-//     users_notes.note_created_ts,
-//     users_notes.note_updated_ts,
-//     users_notes.note_updated_type,
-//     users_notes.note_settings,
-//     users_notes.note_is_deleted,
-//     users_notes.note_deleted_ts,
-//     users_notes.note_reply_list,
-//     users_notes.note_media_list,
-//     users_notes.note_user_list,
-//     users_signins.sign_in_id,
-//     users_signins.sign_in_ts,
-//     users_signins.sign_in_ip,
-//     users_signins.sign_in_user_agent,
-//     users_signins.sign_in_is_successful,
-//     users_signins.sign_in_user_id,
-//     users_signins.sign_in_user_role
 // `;

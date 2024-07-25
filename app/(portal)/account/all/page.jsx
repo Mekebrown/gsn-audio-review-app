@@ -27,7 +27,6 @@ export default function Page() {
       return <article key={client.id}>
         <div className="user">Name: {client.name}</div>
         <div>Package: {client.package}</div>
-        <div>Project(s): {client.projects.join(', ')}</div>
       </article>;
     })}
 

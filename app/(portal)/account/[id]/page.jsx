@@ -25,6 +25,5 @@ export default async function Page({ params }) {
     <h1>Profile</h1>
     <div>Name: {user_info.name}</div>
     <div>Email: {user_info.email}</div>
-    <div>Project(s): {user_info.projects.join(', ')}</div>
   </section >;
 };

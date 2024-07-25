@@ -23,7 +23,7 @@ export async function GET(request) {
                     med.id, med.media_file_name, 
                     med.media_file_ext,
                     med.media_description, 
-                    med.project_thumb, med.created_at,
+                    med.thumb_url, med.created_at,
                     n.user_id, n.note_body, n.note_timestamp,
                     n.created_at
                 FROM 
@@ -44,7 +44,7 @@ export async function GET(request) {
                     med.id, med.media_file_name, 
                     med.media_file_ext,
                     med.media_description, 
-                    med.project_thumb, med.created_at,
+                    med.thumb_url, med.created_at,
                     n.user_id, n.note_body, n.note_timestamp,
                     n.created_at
                 FROM 
@@ -95,24 +95,24 @@ export async function POST(request) {
 		const formData = await request.formData();
 
 		if (formData) {
-			const project_name = formData.get("project_name");
+			const title = formData.get("title");
 			const file_upload = formData.get("file_upload");
 			const file_name = formData.get("file_name");
 			const media_type = formData.get("media_type");
 			const media_desc = formData.get("media_desc");
-			const project_thumb = formData.get("project_thumb");
+			const thumb_url = formData.get("thumb_url");
 			const thumb_upload = formData.get("thumb_upload");
 			const has_media_markers = formData.get("has_media_markers");
 
 			return NextResponse.json({
 				message: "Success",
 				data: {
-					project_name,
+					title,
 					file_upload,
 					file_name,
 					media_type,
 					media_desc,
-					project_thumb,
+					thumb_url,
 					thumb_upload,
 					has_media_markers,
 				},
@@ -147,24 +147,24 @@ export async function PUT(request) {
 		const formData = await request.formData();
 
 		if (formData) {
-			const project_name = formData.get("project_name");
+			const title = formData.get("title");
 			const file_upload = formData.get("file_upload");
 			const file_name = formData.get("file_name");
 			const media_type = formData.get("media_type");
 			const media_desc = formData.get("media_desc");
-			const project_thumb = formData.get("project_thumb");
+			const thumb_url = formData.get("thumb_url");
 			const thumb_upload = formData.get("thumb_upload");
 			const has_media_markers = formData.get("has_media_markers");
 
 			return NextResponse.json({
 				message: "Success",
 				data: {
-					project_name,
+					title,
 					file_upload,
 					file_name,
 					media_type,
 					media_desc,
-					project_thumb,
+					thumb_url,
 					thumb_upload,
 					has_media_markers,
 				},
