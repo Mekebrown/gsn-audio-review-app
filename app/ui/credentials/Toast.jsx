@@ -1,3 +1,8 @@
+/**
+ * S/E 
+ * 
+ * @returns {JSX.Element} <DisclaimerToast />
+ */
 export default function DisclaimerToast() {
     return <div>
         <p>A form with text and checkboxes</p>
@@ -7,6 +12,13 @@ export default function DisclaimerToast() {
     </div>;
 };
 
+/**
+ * S/E 
+ * 
+ * @param {string} message 
+ * 
+ * @returns {JSX.Element} <GeneralToast message=message />
+ */
 export const GeneralToast = ({ message }) => {
     if (message) {
         return <div title="toastAlert">
