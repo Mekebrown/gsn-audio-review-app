@@ -1,6 +1,10 @@
-export default function SideNav() {
-    return <aside style={{ textAlign: "left", borderRight: "1px solid grey", position: "fixed", left: 0, top: 0 }}>
+import "@/styles/sidenav.css";
+
+export default function SideNav({ status }) {
+    return <aside className="sideMenuCont">
         <h2>Browse Media</h2>
+
+        {status}
 
         <h3>Find One</h3>
         <h3>Find Two</h3>
@@ -27,11 +31,11 @@ export default function SideNav() {
 
         <h2>Sponsor</h2>
 
-        <div style={{ border: "1px solid black" }}>
+        <div className="blackBorder">
             Ads
         </div>
 
-        <div style={{ border: "1px solid black" }}>
+        <div className="blackBorder">
             Ads
         </div>
     </aside>;
