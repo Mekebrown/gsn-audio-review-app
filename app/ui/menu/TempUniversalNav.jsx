@@ -11,10 +11,8 @@ import { baseURL } from "@/app/lib/general_variables";
  * @returns {JSX.Element}
  */
 export default function TempUniversalNav() {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
     return <section style={{ textAlign: "left", display: "flex" }}>
-        <article style={{ flex: 1 }}>
+        <div style={{ flex: 1 }}>
             <p>General pages</p>
             <br />
             <ul>
@@ -31,9 +29,9 @@ export default function TempUniversalNav() {
                     <Link href={baseURL + "/signin"}>signin</Link>
                 </li>
             </ul>
-        </article>
+        </div>
 
-        <article style={{ flex: 1 }}>
+        <div style={{ flex: 1 }}>
             <p>Pages to be logged in to see:</p>
             <br />
             <ul>
@@ -49,6 +47,6 @@ export default function TempUniversalNav() {
                     <Link href={baseURL + "/account/all"}>Admin: Seeing all users</Link>
                 </li>
             </ul>
-        </article>
+        </div>
     </section>;
 };
