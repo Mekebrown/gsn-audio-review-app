@@ -225,7 +225,17 @@ export const get_all_media = async () => {
 	const data = await select_all_media();
 	const res = response.json();
 
-	return new Array(res);
+	// return new Array(res);
+	return [
+		{
+			id: 1,
+			thumbURL: "thumbURL",
+		},
+		{
+			id: 2,
+			thumbURL: " Twh thumbURL",
+		},
+	];
 };
 
 

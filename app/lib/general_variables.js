@@ -63,15 +63,13 @@ const setMediaAPIPath = apiURL + "/media"; // POST, PUT, DELETE (hide) requests;
 const allNotesPath = baseURL + "/notes";
 const singleNotePath = baseURL + "/notes/";
 const getAllNotesAPIPath = apiURL + "/notes?request_type=all";
-const getSingleNoteAPIPath =
-	apiURL + "/notes?request_type=single&note_id=";
+const getSingleNoteAPIPath = apiURL + "/notes?request_type=single&note_id=";
 const setNoteAPIPath = apiURL + "/notes"; // POST, PUT, DELETE (hide) requests
 
 const allUsersPath = baseURL + "/account/all"; // Admin-only
 const currentUserPath = baseURL + "/account/"; // If admin, can retrieve any single user's info
 const getAllUsersAPIPath = apiURL + "/account?request_type=all"; // Admin-only
-const getSingleUserAPIPath =
-	apiURL + "/account?request_type=single&user_id="; // If admin, can retrieve any single user's info
+const getSingleUserAPIPath = apiURL + "/account?request_type=single&user_id="; // If admin, can retrieve any single user's info
 const setUserAPIPath = apiURL + "/account"; // POST, PUT, DELETE (hide) requests; Admin-only
 
 const getLastUserSigninAPIPath =

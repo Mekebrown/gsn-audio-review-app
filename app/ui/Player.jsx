@@ -1,18 +1,14 @@
-import mediaTrackExample from "@/app/lib/media_placeholders";
-
 /**
  * @description Component for a media player 
  *
  * @component
  * 
- * @returns {JSX.Element}
- * <Player />
+ * @returns {JSX.Element} <Player />
  */
-export default function Player() {
-    const oneTrack = mediaTrackExample[0];
-
+export default function Player({ title, track }) {
     return <figure>
-        <figcaption>{oneTrack.title}</figcaption>
-        <audio controls src={oneTrack.mp3}></audio>
+        <figcaption>{title}</figcaption>
+
+        <audio controls src={track}></audio>
     </figure>;
 };
