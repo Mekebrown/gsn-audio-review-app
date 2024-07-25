@@ -71,11 +71,12 @@ export async function GET(request) {
 			});
 		}
 	} catch (error) {
-		console.error("Error processing form:", error);
+		console.error("Error processing:", error);
 
 		return NextResponse.json(
 			{
 				message: "Internal Server Error",
+				media: null,
 			},
 			{ status: 500 }
 		);
