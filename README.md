@@ -24,9 +24,8 @@ List of main technologies required: [Next JS](https://nextjs.org/) has ALL the g
 ## Database Info
 
 -   Tables: media, users, notes, signins
--   A media project can have one user (the uploading admin), multiple notes
 -   A user can have multiple notes
--   A note can have only one user (the author) and (refer to) one media project
+-   A note can have only one user (the author)
 
 ## Testing
 
