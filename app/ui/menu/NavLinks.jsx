@@ -22,8 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { baseURL, apiURL } from "@/app/lib/general_variables";
 // import ShowNoteModal from './modals/ShowNoteModal';
 
 // Times circle icon - faTimesCircle - For closing

@@ -1,13 +1,10 @@
 // import { useSession } from 'next-auth/react';
-import { Inter } from 'next/font/google';
-
 import PortalHeader from '@/app/ui/menu/portal/PortalHeader';
 import SideNav from '@/app/ui/menu/SideNav';
 import Player from '@/app/ui/Player';
+import mediaTrackExample from "@/app/lib/media_placeholders";
 
 import "@/styles/portalheader.module.css";
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
     alternates: {

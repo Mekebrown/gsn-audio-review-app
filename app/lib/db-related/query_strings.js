@@ -2,8 +2,6 @@
 
 import sql from './db.js';
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
 export const insert_media = async (data) => {
 	const insert_media_query = await sql`
         INSERT INTO media

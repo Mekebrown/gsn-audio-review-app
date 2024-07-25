@@ -15,6 +15,7 @@ import {
     UploadIcon
 } from "../NavLinks";
 import SearchResults from "@/app/ui/SearchResults";
+import { baseURL, apiURL } from "@/app/lib/general_variables";
 import { GeneralToast } from "../../credentials/Toast";
 
 // Going to have to retrieve the notifs count and display the number
@@ -25,9 +26,6 @@ export default function TopNav({ userInfo = { type: "client" } }) {
     const [clicked, setClicked] = useState(false);
     const [searchEntry, setSearchEntry] = useState("");
     const [toastMessage, setToastMessage] = useState("");
-
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
     const handleSearchClick = (e) => {
         e.preventDefault();

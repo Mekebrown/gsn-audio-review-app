@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { baseURL } from "@/app/lib/general_variables";
+
 /**
  * @description Component for temporarily 
  * showing every page

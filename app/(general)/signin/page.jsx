@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { send_signin_info } from "../lib/db-related/query_strings";
-import { GeneralToast } from "../ui/credentials/Toast";
+import { send_signin_info } from "@/app/lib/db-related/query_strings";
+import { GeneralToast } from "@/app/ui/credentials/Toast";
+import { GSNLogo } from "@/app/lib/general_variables";
 import "@/styles/signin.module.css";
 
 export default function Page() {
@@ -13,7 +13,6 @@ export default function Page() {
     const [toastMessage, setToastMessage] = useState("");
 
     const router = useRouter();
-    const logo = "/logo192.png";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -120,7 +119,7 @@ export default function Page() {
             <div className="twoCols signin noSignin">
                 <div>
                     <h1>
-                        <Image src={logo} alt="GSN Logo" width={35} height={35} /> &nbsp; GSN
+                        <GSNLogo /> &nbsp; GSN
                     </h1>
                     <p>Best Audio Review Platform</p>
                     <LeftBtn />

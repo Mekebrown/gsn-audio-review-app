@@ -4,10 +4,11 @@ import Header from '@/app/ui/menu/Header';
 import Footer from '@/app/ui/menu/Footer';
 import TempUniversalNav from '@/app/ui/menu/TempUniversalNav';
 import DisclaimerToast from "@/app/ui/credentials/Toast"
+import { baseURL } from "@/app/lib/general_variables";
 
 import "@/styles/globals.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   alternates: {

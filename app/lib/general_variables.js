@@ -1,22 +1,43 @@
+import Image from "next/image";
+
 /**
  * General Info on route navigation in the browser
- * 
+ *
  * Features
  * Media, notes, user accounts, sign in, contact, notifs
- * 
+ *
  * Access levels
  * Full - Admins only; Access everything, handle media, grant user email access, handle password generation
  * Review - Users only; Can view all user features, can handle notes
  * View - Users only; Can view all user features
  */
+
+// Entity Types
 export const userTypes = ["admin", "user", "visitor"];
-
 export const userAccess = ["full", "review", "view"];
-
 export const mediaTypes = ["audio", "video", "image"];
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+// Images
+export const tempImage = "/media/imgs/temp.jpg";
+export const logoImage = "/logo192.png";
+export const GSNLogo = ({
+	customAlt = "GSN Logo",
+	customWidth = 35,
+	customHeight = 35,
+}) => {
+	return (
+		<Image
+			src={logoImage}
+			alt={customAlt}
+			width={customWidth}
+			height={customHeight}
+		/>
+	);
+};
+
+// URLs
+export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+export const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 // General paths
 const indexPath = baseURL + "/";

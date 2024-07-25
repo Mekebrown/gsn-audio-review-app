@@ -1,5 +1,6 @@
+import { apiURL } from "@/app/lib/general_variables";
+
 const getNoteInfo = async (id) => {
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
     const queryString = "?request_type=single&note_id=" + id;
 
     const note = await fetch(apiURL + '/portal/notes').then((res) => res.json());

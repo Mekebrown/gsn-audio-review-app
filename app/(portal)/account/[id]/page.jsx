@@ -1,5 +1,6 @@
+import { apiURL } from "@/app/lib/general_variables";
+
 const getUserInfo = async (id) => {
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const queryString = "?request_type=single&user_id=" + id;
 
   const user = await fetch(apiURL + '/portal/account').then((res) => res.json());

@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-export default function Page() {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+import { baseURL } from "@/app/lib/general_variables";
 
+export default function Page() {
     return <section>
         <h2>About Our Company</h2>
 

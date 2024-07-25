@@ -2,12 +2,12 @@
 import { useState } from "react";
 
 import { GeneralToast } from '@/app/ui/credentials/Toast';
+import { apiURL } from "@/app/lib/general_variables";
 
 export default function Page() {
   const [toastMessage, setToastMessage] = useState("");
   let usersExample;
 
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const response = fetch(apiURL + "/portal/account");
 
   if (response.ok) {

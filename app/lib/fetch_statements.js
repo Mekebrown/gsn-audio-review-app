@@ -1,4 +1,4 @@
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { apiURL } from "@/app/lib/general_variables";
 
 export const send_signin_info = async (formData) => {
 	const response = await fetch(apiURL + "/signin", {

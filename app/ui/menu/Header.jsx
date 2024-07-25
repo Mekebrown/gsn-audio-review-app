@@ -1,12 +1,10 @@
 import Link from 'next/link';
-import Image from 'next/image';
+
+import { baseURL, GSNLogo } from "@/app/lib/general_variables";
 
 import "@/styles/header.module.css";
 
 export default function Header() {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-    const logo = "/logo192.png";
-
     return <header>
         <nav>
             <menu style={{ display: "flex" }}>
@@ -14,12 +12,7 @@ export default function Header() {
                     <Link
                         href="/"
                     >
-                        <Image
-                            src={logo}
-                            alt="GSN Logo"
-                            width={35}
-                            height={35}
-                        />
+                        <GSNLogo />
                         <span>Gifted Sounds Network</span>
                     </Link>
                 </div>

@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
+
+import { GSNLogo } from '@/app/lib/general_variables';
 
 export default function Footer() {
-    const logo = "/logo192.png";
-
     return <footer>
         {/* brand bio/mission - subs box - IG feed? - social media - location -  secondary nav links */}
         <section>
@@ -11,15 +10,7 @@ export default function Footer() {
                 href="/"
                 rel="noopener noreferrer"
             >
-                <span>
-                    Powered by
-                    <Image
-                        src={logo}
-                        alt="GSN Logo"
-                        width={35}
-                        height={35}
-                    />
-                </span>
+                <span> Powered by <GSNLogo /> </span>
             </Link>
             <br />
             <p>Thanks for listening!</p><br />

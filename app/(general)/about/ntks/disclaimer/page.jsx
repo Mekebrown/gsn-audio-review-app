@@ -3,9 +3,11 @@
 */
 import Link from 'next/link';
 
+
+import { baseURL } from "@/app/lib/general_variables";
+
 export default function Page() {
-    const choice = "agreed"; // Retrieve from static params
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const choice = "agreed"; // Retrieve from user's session data
 
     return <section>
         <div>

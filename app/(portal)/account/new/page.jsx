@@ -26,8 +26,6 @@ export default function Page() {
 
   const [show, setShow] = useState(true);
 
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
   const media = [
     {
       id: 1,

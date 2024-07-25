@@ -1,17 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Image from 'next/image';
 
+import { apiURL, GSNLogo } from "@/app/lib/general_variables";
 import { GeneralToast } from "../../ui/credentials/Toast";
 import "@/styles/contact.module.css";
 
 export default function Page() {
     const [formInfo, setFormInfo] = useState({});
     const [toastMessage, setToastMessage] = useState(""); // import { ToastContainer, toast } from "react-toastify";
-    const logo = "/logo192.png";
-
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -61,12 +58,7 @@ export default function Page() {
     return <section>
         {toastMessage && <GeneralToast message={toastMessage} />}
 
-        <Image
-            src={logo}
-            alt="GSN Logo"
-            width={35}
-            height={35}
-        /> &nbsp; GSN
+        <GSNLogo /> &nbsp; GSN
 
         <h2>Contact</h2>
         Where to find us: <br />

@@ -3,16 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import mediaTrackExample from "@/app/lib/media_placeholders";
-import { get_all_media } from "@/app/lib/db-related/query_strings";
+import { baseURL } from "@/app/lib/general_variables";
 import { GeneralToast } from "../../ui/credentials/Toast";
 
 export default function Page() {
     const { data: session, status } = { data: "user", status: "authenticated" }; //useSession();
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
     const loading = status === "loading";
-    const allMedia = []; //get_all_media();
+    const allMedia = []; 
 
     if (status === "unauthenticated") {
         window.location.href = baseURL;

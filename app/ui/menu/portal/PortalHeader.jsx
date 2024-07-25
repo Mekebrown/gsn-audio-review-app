@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
 // import { useSession } from "next-auth/react";
 
 import TopNav from "@/app/ui/menu/portal/TopNav";
+import { baseURL, GSNLogo } from "@/app/lib/general_variables";
 
 import "@/styles/header.module.css";
 
@@ -13,20 +13,12 @@ export default function PortalHeader() {
     const weGotAnAdmin = weGotAUser && session.user.role === "admin";
     const weGotAnEmail = weGotAUser && session.user.email ? session.user.email : false;
 
-    const logo = "/logo192.png";
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
     return <header>
         <nav>
             <menu className="topNav" style={{ display: "flex" }}>
                 <div className="topNavSection" style={{ flex: "1" }}>
                     <Link href={baseURL} >
-                        <Image
-                            src={logo}
-                            alt="GSN Logo"
-                            width={35}
-                            height={35}
-                        />
+                        <GSNLogo />
                         <span>Gifted Sounds Network</span>
                     </Link>
                 </div>

@@ -22,8 +22,6 @@ export default function Page({ onClose }) {
     const [success, setSuccess] = useState(false);
     const [newNote, setNewNote] = useState('');
     const [copiedNote, setCopiedNote] = useState(false);
-    const apiURL = process.env.NEXT_PUBLIC_API_URL;
-    const user = "user";
     const mediaId = 1;
     const note = {
         title: "The Title Is Okay",

@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import analytics from "@/app/lib/analytics_handler";
+import { tempImage } from "@/app/lib/general_variables";
 
 analytics.gaEvent('Index Page Loaded');
 
@@ -9,12 +10,9 @@ analytics.gaEvent('Index Page Loaded');
  *
  * @component
  * 
- * @returns {JSX.Element}
- * <Home />
+ * @returns {JSX.Element} <Home />
  */
 export default async function Home() {
-  const tempImage = "/temp.jpg";
-
   return <section>
     <div className="twoCols">
       <section style={{ paddingTop: "10%", flex: "1", textAlign: "left" }}>

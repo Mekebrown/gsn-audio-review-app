@@ -1,9 +1,8 @@
 import Link from "next/link";
 
+import { baseURL } from "@/app/lib/general_variables";
 // Will list links to all the docs: Terms, disclaimer, site map, etc.
 export default function Page() {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
     return <section>
         <h2>Some Need to Knows:</h2>
 
