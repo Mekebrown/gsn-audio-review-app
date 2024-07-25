@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "media/imgs/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "/media/imgs/logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
@@ -32,19 +32,19 @@
       "name": "Gifted Sounds Network - Audio Reviewer App",
       "short_name": "GSN",
       "description": "Internal Audio Reviewing Application",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }],
+      "icons": [{ "src": "media/imgs/logo192.png", "sizes": "192x192" }],
       "url": "/"
     }
   ],
   "screenshots": [
     {
-      "src": "ss1.jpg",
+      "src": "/media/imgs/ss1.jpg",
       "type": "image/jpg",
       "sizes": "540x720",
       "form_factor": "narrow"
     },
     {
-      "src": "ss2.jpg",
+      "src": "/media/imgs/ss2.jpg",
       "type": "image/jpg",
       "sizes": "720x540",
       "form_factor": "wide"
