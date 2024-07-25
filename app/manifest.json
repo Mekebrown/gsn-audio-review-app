@@ -32,7 +32,8 @@
       "name": "Gifted Sounds Network - Audio Reviewer App",
       "short_name": "GSN",
       "description": "Internal Audio Reviewing Application",
-      "icons": [{ "src": "logo192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "logo192.png", "sizes": "192x192" }],
+      "url": "/"
     }
   ],
   "screenshots": [
