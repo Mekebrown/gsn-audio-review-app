@@ -26,17 +26,17 @@ export const metadata = {
   },
   keywords: ['GSN', 'Gifted Sounds Network', 'Lance John', "podcast", "audio", "video", "production", "editing", "media", "digital", "live streaming", "studio"],
   manifest: '/manifest.json',
-  metadataBase: new URL(process.env.BASE_URL),
+  metadataBase: baseURL,
   name: 'Gifted Sounds Network',
   publisher: 'Gifted Sounds Network',
   title: 'Gifted Sounds Network',
   twitter: {
     card: 'summary',
-    creator: 'tbd', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup
-    creatorId: 'tbd',
+    creator: 'TODO', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup
+    creatorId: 'TODO',
     description: "Gifted Sounds is your source of diverse, top-notch podcast, livestreaming, and A/V production studio, providing a unique and immersive experience for viewers by incorporating interactive elements and cutting-edge technology.",
-    images: ['tbd'], // Must be an absolute URL
-    siteId: 'tbd',
+    images: ['TODO'], // Must be an absolute URL
+    siteId: 'TODO',
     title: "Gifted Sounds Network",
     url: "https://www.giftedsounds.com/studios"
   },
