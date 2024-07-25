@@ -7,6 +7,7 @@ export default function Page() {
         <h2>About Our Company</h2>
 
         <Link href={baseURL + "/about/gsn"}>About GSN</Link>
+        <br />
         <Link href={baseURL + "/about/gmp"}>About GMP</Link>
     </section>;
 };
