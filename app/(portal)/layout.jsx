@@ -48,6 +48,6 @@ export default function RootLayout({ children }) {
 
         <SideNav status={status} />
 
-        <Player />
+        <Player title={mediaTrackExample.title} track={mediaTrackExample.mp3} />
     </>;
 };
