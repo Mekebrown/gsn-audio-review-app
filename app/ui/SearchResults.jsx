@@ -9,5 +9,5 @@
  * @returns {JSX.Element}
  */
 export default function SearchResults({ showSection }) {
-    return <div>{showSection ? "Cool" : null}</div>;
+    return <div>{showSection ? "" : null}</div>;
 };
