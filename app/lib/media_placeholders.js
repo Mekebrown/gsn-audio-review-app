@@ -1,4 +1,5 @@
 // The default export is mediaTrackExample
+import { logoImage } from "@/app/lib/general_variables";
 
 export const audioExtensions = [
     "mp3",
@@ -48,7 +49,7 @@ export const mediaTrackFileOnlyExample = {
 };
 
 export const thumbFileOnlyExample = {
-    thumbURL: "/logo192.png",
+	thumbURL: logoImage,
 };
 
 export const isThumbFileImage = (imgFile) => {
@@ -79,78 +80,91 @@ export const getFileSize = (number) => {
     }
 };
 
-export const singleMediaTrackExample = [{
-    id: 1,
-    title: "The Title",
-    thumbURL: "/logo192.png",
-    description: "This will be the track's description. Here you can learn more about it",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-}];
+export const singleMediaTrackExample = [
+	{
+		id: 1,
+		title: "The Title",
+		thumbURL: logoImage,
+		description:
+			"This will be the track's description. Here you can learn more about it",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+];
 
-const mediaTrackExample = [{
-    id: 1,
-    title: "The Title",
-    thumbURL: "/logo192.png",
-    description: "This will be the track's description. Here you can learn more about it",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-}, {
-    id: 2,
-    title: "Second One",
-    thumbURL: "/logo192.png",
-    description: "The second track's description.",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-},{
-    id: 3,
-    title: "Three Litthe Pigs",
-    thumbURL: "/logo192.png",
-    description: "This will be the track's description. Here you can learn more about it",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-}, {
-    id: 4,
-    title: "FOUR SCORES!!!",
-    thumbURL: "/logo192.png",
-    description: "The second track's description.",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-},{
-    id: 5,
-    title: "Titles, g",
-    thumbURL: "/logo192.png",
-    description: "This will be the track's description. Here you can learn more about it",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-}, {
-    id: 6,
-    title: "Sixth One",
-    thumbURL: "/logo192.png",
-    description: "The second track's description.",
-    lengthMS: 5290,
-    notes: "The total notes from all users",
-    project: "A Cool One",
-    mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-    ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg"
-}];
+const mediaTrackExample = [
+	{
+		id: 1,
+		title: "The Title",
+		thumbURL: logoImage,
+		description:
+			"This will be the track's description. Here you can learn more about it",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+	{
+		id: 2,
+		title: "Second One",
+		thumbURL: logoImage,
+		description: "The second track's description.",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+	{
+		id: 3,
+		title: "Three Litthe Pigs",
+		thumbURL: logoImage,
+		description:
+			"This will be the track's description. Here you can learn more about it",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+	{
+		id: 4,
+		title: "FOUR SCORES!!!",
+		thumbURL: logoImage,
+		description: "The second track's description.",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+	{
+		id: 5,
+		title: "Titles, g",
+		thumbURL: logoImage,
+		description:
+			"This will be the track's description. Here you can learn more about it",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+	{
+		id: 6,
+		title: "Sixth One",
+		thumbURL: logoImage,
+		description: "The second track's description.",
+		lengthMS: 5290,
+		notes: "The total notes from all users",
+		project: "A Cool One",
+		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	},
+];
 
 export default mediaTrackExample;

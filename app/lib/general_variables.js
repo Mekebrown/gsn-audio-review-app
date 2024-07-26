@@ -19,7 +19,7 @@ export const mediaTypes = ["audio", "video", "image"];
 
 // Images
 export const tempImage = "/media/imgs/temp.jpg";
-export const logoImage = "/logo192.png";
+export const logoImage = "/media/imgs/logo192.png";
 export const GSNLogo = ({
 	customAlt = "GSN Logo",
 	customWidth = 35,

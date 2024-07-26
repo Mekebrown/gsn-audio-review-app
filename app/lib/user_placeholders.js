@@ -9,18 +9,16 @@ export const setNewuser = ({email, pw, mediaChecked}) => {
 };
 
 export const usersExample = [
-    {
-      id: 1,
-      name: 'Joe',
-      package: "three",
-      projects: ['Math Podcast', 'English Podcast'],
-    },
-    {
-      id: 2,
-      name: 'Janet',
-      package: "one",
-      projects: ['The Social Science Sciences', 'French for Foes'],
-    }
+	{
+		id: 1,
+		name: "Joe",
+		package: "three",
+	},
+	{
+		id: 2,
+		name: "Janet",
+		package: "one",
+	},
 ];
 
 const adminsExample = [
