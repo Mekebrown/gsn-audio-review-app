@@ -5,6 +5,11 @@ Top Navigation
 --top-nav-hr-drop-shadow: #E6E6F0;  - greyish purple 
 */
 
+header {
+    border-bottom: 5px double var(--top-nav-hr-drop-shadow);
+    z-index: 1;
+}
+
 .unpwIcon,
 .uploadIcon,
 .searchIcon,
@@ -14,21 +19,115 @@ Top Navigation
 .notifsIcon,
 .contactIcon,
 .settingsIcon {
-    color: #1B1E3F;
+    color: var(--top-nav-icon);
 }
 
-.adminNavLinks, .clientNavLinks {
-    color: #1B1E3F;
+.adminNavLinks, 
+.clientNavLinks {
+    color: var(--top-nav-right-side-font);
+}
+
+.displayInline {
+    display: inline;
+}
+
+.hideOption {
+    visibility: hidden;
+    display: none;
+}
+
+.imgMiddleAlign {
+    vertical-align: middle;
+}
+
+.notifsDropdown,
+.settingsDropdown {
+    background-color: var(--top-nav-right-side-font);
+    color: white;
+    width: 50px;
+    height: 75px;
+}
+
+.notifsIconBtn,
+.settingsIconBtn {
+    background-color: transparent;
+    border-color: transparent;
+    display: inline-block;
+}
+
+.redNotifsCountPlacement {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
 }
 
 .searchFieldEl {
     display: "none";
 }
 
+.signedIn {
+    display: flex;
+}
+
+.signedOut {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
 .topNav {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.topNavLogo span {
+    padding-left: 20px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.topNavRightAlign {
+    text-align: right;
 }
 
 .topNavSection {

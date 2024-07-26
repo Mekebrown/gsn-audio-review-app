@@ -1,10 +1,8 @@
 // import { useSession } from 'next-auth/react';
-import PortalHeader from '@/app/ui/menu/portal/PortalHeader';
-import SideNav from '@/app/ui/menu/SideNav';
+import SideNav from '@/app/ui/nav/side-nav/SideNav';
 import Player from '@/app/ui/Player';
 import mediaTrackExample from "@/app/lib/media_placeholders";
-
-import "@/styles/portalheader.module.css";
+import { GeneralToast } from "@/app/ui/Toast"
 
 export const metadata = {
     alternates: {
@@ -16,9 +14,9 @@ export const metadata = {
     creator: 'Gifted Sounds Network',
     description: "Gifted Sounds Network Audio Review, an app presenting clients with recently-drafted tracks to take notes, listen to and review at their leisure.",
     icons: {
-        icon: '/logo192.png',
-        shortcut: '/favicon.ico',
-        apple: '/logo192.png',
+        icon: '/media/imgs/logo192.png',
+        shortcut: '/media/imgs/favicon.ico',
+        apple: '/media/imgs/logo192.png',
     },
     keywords: ['GSN', 'Gifted Sounds Network', 'Lance John', "podcast", "audio", "video", "production", "editing", "media", "digital", "live streaming", "studio"],
     manifest: '/manifest.json',
@@ -43,7 +41,12 @@ export default function RootLayout({ children }) {
     const { status } = { status: "authenticated" };
     // useSession(); Status can be "loading", "authenticated", or "unauthenticated"
 
+    // const [toastMessage, setToastMessage] = useState(null);
+    const toastMessage = "A TODO";
+
     return <>
+        <GeneralToast message={toastMessage} />
+
         <main className="children">{children}</main>
 
         <SideNav status={status} />

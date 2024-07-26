@@ -1,11 +1,17 @@
+/* 
+Left Side Navigation
+--side-nav-font-color: #B0B5D2; - light purple
+--side-nav-icon: #8185C4;       - mid purple 
+*/
+
+.blackBorder { 
+    border: 1px solid black; 
+}
+
 .sideMenuCont { 
     text-align: left;
     border-right: 1px solid grey;
     position: fixed;
     left: 0;
     top: 0 
-}
-
-.blackBorder { 
-    border: 1px solid black; 
 }

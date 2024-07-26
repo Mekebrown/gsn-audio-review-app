@@ -82,12 +82,14 @@ export const NotesIcon = () => {
 };
 
 // Bell icon - faBell - For notifications
-export const NotifsIcon = () => {
-    const { data, ok } = fetch(apiURL + "/info/notifs", { method: "GET" });
-
+export const NotifsIcon = ({ notifCount = null }) => {
     return <span className="notifs-icon">
         <FontAwesomeIcon icon={faBell} />
-        {ok && data}
+        {
+            notifCount ? <span className="redNotifsCountPlacement">
+                {notifCount}
+            </span> : null
+        }
     </span>;
 };
 
@@ -172,7 +174,7 @@ export const UploadIcon = () => {
 
 // User icon - faUsers - For users
 export const UsersIcon = () => {
-    return <Link href={baseURL + "/account"} className="users-icon">
+    return <span className="users-icon">
         <FontAwesomeIcon icon={faUsers} />
-    </Link>;
+    </span>;
 };

@@ -1,12 +1,16 @@
 import { Inter } from 'next/font/google';
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from '@fortawesome/fontawesome-svg-core';
 
-import Header from '@/app/ui/menu/Header';
-import Footer from '@/app/ui/menu/Footer';
-import TempUniversalNav from '@/app/ui/menu/TempUniversalNav';
-import DisclaimerToast from "@/app/ui/credentials/Toast"
+import TopNav from '@/app/ui/nav/top-nav/TopNav.jsx';
+import Footer from '@/app/ui/Footer';
+import TempUniversalNav from '@/app/ui/nav/TempUniversalNav';
+import DisclaimerToast from "@/app/ui/Toast"
 import { baseURL } from "@/app/lib/general_variables";
 
 import "@/styles/globals.css";
+
+config.autoAddCss = false; /* eslint-disable import/first */
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,9 +24,9 @@ export const metadata = {
   creator: 'Gifted Sounds Network',
   description: "Gifted Sounds Network Audio Review, an app presenting clients with recently-drafted tracks to take notes, listen to and review at their leisure.",
   icons: {
-    icon: '/logo192.png',
-    shortcut: '/favicon.ico',
-    apple: '/logo192.png',
+    icon: '/media/imgs/logo192.png',
+    shortcut: '/media/imgs/favicon.ico',
+    apple: '/media/imgs/logo192.png',
   },
   keywords: ['GSN', 'Gifted Sounds Network', 'Lance John', "podcast", "audio", "video", "production", "editing", "media", "digital", "live streaming", "studio"],
   manifest: '/manifest.json',
@@ -56,7 +60,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
+        <TopNav />
 
         <TempUniversalNav />
 

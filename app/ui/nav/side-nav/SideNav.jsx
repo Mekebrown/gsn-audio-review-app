@@ -1,4 +1,4 @@
-import "@/styles/sidenav.css";
+import "@/styles/navigation/sidenav.css";
 
 export default function SideNav({ status }) {
     return <aside className="sideMenuCont">
