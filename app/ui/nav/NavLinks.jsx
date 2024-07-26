@@ -23,7 +23,7 @@ import {
 import axios from 'axios';
 
 import { baseURL, apiURL } from "@/app/lib/general_variables";
-// import ShowNoteModal from './modals/ShowNoteModal';
+// Show a Note Modal;
 
 // Times circle icon - faTimesCircle - For closing
 export default function CloseIcon() {
