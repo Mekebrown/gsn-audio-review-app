@@ -1,6 +1,7 @@
 {
-  "short_name": "GSN App",
-  "name": "GSN App",
+  "short_name": "GSN",
+  "name": "GSN - Audio Reviewer App",
+  "description": "Internal Audio Reviewing Application",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +9,7 @@
       "type": "image/x-icon"
     },
     {
-      "src": "media/imgs/logo192.png",
+      "src": "/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
@@ -18,22 +19,28 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "http://localhost:3000",
+  "scope": "/",
+  "url": "/",
   "display": "standalone",
+  "lang": "en-US",
+  "dir": "ltr",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "description": "GSN App",
-  "dir": "ltr",
-  "lang": "en-US",
   "orientation": "portrait-primary",
-  "scope": "/",
   "shortcuts": [
     {
-      "name": "Gifted Sounds Network - Audio Reviewer App",
+      "name": "About Gifted Sounds Network",
       "short_name": "GSN",
-      "description": "Internal Audio Reviewing Application",
-      "icons": [{ "src": "media/imgs/logo192.png", "sizes": "192x192" }],
-      "url": "/"
+      "description": "GSN's About Us Page",
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }],
+      "url": "/about"
+    },
+    {
+      "name": "All Media",
+      "description": "List of the media",
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }],
+      "url": "/media"
     }
   ],
   "screenshots": [
