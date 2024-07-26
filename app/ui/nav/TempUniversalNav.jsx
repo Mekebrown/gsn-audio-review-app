@@ -32,7 +32,7 @@ export default function TempUniversalNav() {
         </div>
 
         <div style={{ flex: 1 }}>
-            <p>Pages to be logged in to see:</p>
+            <p>Pages to be signed in to see:</p>
             <br />
             <ul>
                 <li>

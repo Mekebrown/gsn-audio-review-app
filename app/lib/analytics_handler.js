@@ -6,7 +6,7 @@ import handleErrors from  "./error_handler";
  * TODO: Set up messages to Slack
  */
 const analytics = {
-	loginCount: 0,
+	signinCount: 0,
 	/**
 	 * @param {string|Error|null} eventMsg - The event message to log
 	 */

@@ -20,7 +20,7 @@ export default function Page() {
             /account        [I:T][O:T,M] Client | displays the current user's account
             /search         [I:T][O:T,M] Client | TBD | retrieves response from request and queries
             /notifs         [I:N/A][O:T] Client | TBD | retrieves response from notification results;
-            {/* {n - med: #, n-nts: #} or {n - med: #, n-nts: #, n-us: #, n-logins: #, n-views: #, n-plays: #} */}
+            {/* {n - med: #, n-nts: #} or {n - med: #, n-nts: #, n-us: #, n-signins: #, n-views: #, n-plays: #} */}
             /settings       [I:T][O:T,M] TBD | retrieves response from changes in request body; Agreed to disclaimer/terms/privacy, dark mode, etc.
             ------------------------------------------------------
             /media/:id      [I:T][O:ALL] Client | If current user can access the track: displays specific track, with any notes saved for it

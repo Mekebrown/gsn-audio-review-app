@@ -15,7 +15,7 @@ export default function Page() {
   } else {
     usersExample = [];
 
-    setToastMessage("No clients logged in yet");
+    setToastMessage("No clients signed in yet");
   }
 
   return <section>

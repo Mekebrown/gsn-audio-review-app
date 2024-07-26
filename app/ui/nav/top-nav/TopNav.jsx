@@ -28,12 +28,12 @@ Going to have to create a popup to show the settings values
 and radios to change them
 */
 export default function TopNav() {
-    const [showLoggedInMenu, setShowLoggedInMenu] = useState("client");
+    const [showSignedInMenu, setShowSignedInMenu] = useState("client");
     const [clicked, setClicked] = useState(false);
-    const [newNotifs, setNewNotifs] = useState({ media: 0, notes: 0, logins: 0 });
+    const [newNotifs, setNewNotifs] = useState({ media: 0, notes: 0, signins: 0 });
     const [searchEntry, setSearchEntry] = useState("");
 
-    // Open a dropdown menu to show notifications (client: new media, new notes; admin: new notes, new logins)
+    // Open a dropdown menu to show notifications (client: new media, new notes; admin: new notes, new signins)
     const handleNotifs = () => { };
     const handleSettings = () => { };
 
@@ -129,16 +129,16 @@ export default function TopNav() {
                 <div className="tooltip">
                     <NotifsIcon
                         className="notifsIcon"
-                        notifCount={newNotifs.logins + newNotifs.notes}
+                        notifCount={newNotifs.signins + newNotifs.notes}
                     />
 
                     <select className="hideOption notifsDropdown">
-                        <option>View {newNotifs.logins} new logins</option>
+                        <option>View {newNotifs.signins} new signins</option>
                         <option>View {newNotifs.notes} new notes</option>
                     </select>
 
                     <span className="tooltiptext">
-                        {newNotifs.logins} new logins,
+                        {newNotifs.signins} new signins,
                         {newNotifs.notes} new notes
                     </span>
                 </div>
@@ -201,7 +201,7 @@ export default function TopNav() {
                     </select>
 
                     <span className="tooltiptext">
-                        {newNotifs.logins} new tracks,
+                        {newNotifs.signins} new tracks,
                         {newNotifs.notes} new notes
                     </span>
                 </div>
@@ -226,7 +226,7 @@ export default function TopNav() {
     };
 
     const CurrentNav = () => {
-        switch (showLoggedInMenu) {
+        switch (showSignedInMenu) {
             case "client":
                 return <ClientNav />;
             case "admin":
@@ -237,15 +237,15 @@ export default function TopNav() {
     };
 
     /* 
-    Sends a log in cookie and JWT header with the request. Perhaps use useSession and session data retrieval?
+    Sends a sign-in cookie and JWT header with the request. Perhaps use useSession and session data retrieval?
     */
     useEffect(() => {
-        // Call to see if user is logged in
+        // Call to see if user is signed in
         const retrieveNotifURL = "";
-        const logInCookie = "";
+        const signInCookie = "";
         const jwtInfo = "";
 
-        if (logInCookie && jwtInfo) { // User's logged in: get notifs
+        if (signInCookie && jwtInfo) { // User's signed in: get notifs
             const grabNotifs = async () => {
                 const notifResponse = await axios(
                     retrieveNotifURL,
@@ -254,7 +254,7 @@ export default function TopNav() {
                         headers: {
                             jwtInfo
                         },
-                        body: logInCookie
+                        body: signInCookie
                     }
                 );
 
@@ -265,7 +265,7 @@ export default function TopNav() {
 
             if (data.ok === true) {
                 setNewNotifs(data.new_notifs);
-                setShowLoggedInMenu(data.user_type);
+                setShowSignedInMenu(data.user_type);
             }
         }
     }, []);
