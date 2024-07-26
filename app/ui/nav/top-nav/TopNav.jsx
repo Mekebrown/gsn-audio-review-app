@@ -14,7 +14,7 @@ import {
     SendPWIcon,
     SettingsIcon,
     UploadIcon
-} from "../NavLinks";
+} from "@/app/ui/nav/NavLinks";
 import SearchResults from "@/app/ui/SearchResults";
 import { baseURL, apiURL, GSNLogo } from "@/app/lib/general_variables";
 

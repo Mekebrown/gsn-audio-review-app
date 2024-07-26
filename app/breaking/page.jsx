@@ -1,6 +1,6 @@
 "use client";
 
-import breakingStyles from '../../styles/breaking.module.css';
+import breakingStyles from '@/styles/breaking.module.css';
 
 export default function Page() {
   return (

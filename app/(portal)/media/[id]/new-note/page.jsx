@@ -6,7 +6,7 @@ import { Button, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-import Modal from '../../../../ui/Modal';
+import Modal from '@/app/ui/Modal';
 
 /**
  * @description A Modal component showing a form to 

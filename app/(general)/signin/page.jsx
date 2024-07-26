@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
 import { send_signin_info } from "@/app/lib/db-related/query_strings";
-import { GeneralToast } from "@/app/ui/credentials/Toast";
+import { GeneralToast } from "@/app/ui/Toast";
 import { GSNLogo } from "@/app/lib/general_variables";
-import "@/styles/signin.module.css";
+import "@/styles/pages/signin.module.css";
 
 export default function Page() {
     const [signinType, setSigninType] = useState("user");

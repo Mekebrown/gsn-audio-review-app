@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from 'next/link';
 
-import { GeneralToast } from "../../ui/credentials/Toast";
+import { GeneralToast } from "@/app/ui/Toast";
 import { baseURL, logoImage } from "@/app/lib/general_variables";
 
 export default function Page() {

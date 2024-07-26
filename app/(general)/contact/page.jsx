@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import { apiURL, GSNLogo } from "@/app/lib/general_variables";
-import { GeneralToast } from "../../ui/credentials/Toast";
-import "@/styles/contact.module.css";
+import { GeneralToast } from "@/app/ui/Toast";
+import "@/styles/pages/contact.module.css";
 
 export default function Page() {
     const [formInfo, setFormInfo] = useState({});

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { baseURL } from "@/app/lib/general_variables";
-import { GeneralToast } from "../../ui/credentials/Toast";
+import { GeneralToast } from "@/app/ui/Toast";
 
 export default function Page() {
     const { data: session, status } = { data: "user", status: "authenticated" }; //useSession();

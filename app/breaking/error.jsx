@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
-import styles from '../../styles/breaking.module.css';
+import styles from '@/styles/breaking.module.css';
 
 export default function Error({
   error,
