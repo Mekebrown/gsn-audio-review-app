@@ -1,14 +1,23 @@
+import "@/styles/ui/toast.css";
+
 /**
  * S/E 
  * 
  * @returns {JSX.Element} <DisclaimerToast />
  */
-export default function DisclaimerToast() {
-    return <div>
-        <p>A form with text and checkboxes</p>
-        <input type="checkbox" name="agreed" id="agreed" />
-        Agreed
-        <input type="checkbox" name="disagreed" id="disagreed" />Disagreed
+export default function DisclaimerToast({ show = "hideToast" }) {
+    const classes = `disclaimerToast ` + show;
+
+    return <div className={classes}>
+        <div className="disclaimerToastText">
+            <p>An overlay with text and buttons</p>
+        </div>
+
+        <div className="disclaimerToastChoices">
+            <button type="button" name="agree" id="agree">Agree</button>
+
+            <button type="button" name="disagree" id="disagree" >Disagree</button>
+        </div>
     </div>;
 };
 
@@ -21,7 +30,7 @@ export default function DisclaimerToast() {
  */
 export const GeneralToast = ({ message }) => {
     if (message) {
-        return <div title="toastAlert">
+        return <div title="toastAlert" className="generalToast">
             {message}
         </div>; 
     } else {
