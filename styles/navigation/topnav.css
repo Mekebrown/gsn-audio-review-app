@@ -1,13 +1,18 @@
 /* 
 Top Navigation
---top-nav-icon: #1B1E3F;            - off-black
+--top-nav-icon: #1B1E3F; - off-black
 --top-nav-right-side-font: #1B1E3F; - off-black
---top-nav-hr-drop-shadow: #E6E6F0;  - greyish purple 
+--top-nav-hr-drop-shadow: #E6E6F0; - greyish purple 
+--top-nav-left-gsn-text-color-l: #6069AE; - gradient left (purple to off-black)  
+--top-nav-left-gsn-text-color-r: #18163D; - gradient right (purple to off-black)
 */
 
 header {
-    border-bottom: 5px double var(--top-nav-hr-drop-shadow);
     z-index: 1;
+}
+
+header.portal {
+    border-bottom: 5px double var(--top-nav-hr-drop-shadow);
 }
 
 .unpwIcon,
@@ -67,6 +72,10 @@ header {
     display: "none";
 }
 
+.searchFieldIcon {
+    cursor: pointer;
+}
+
 .signedIn {
     display: flex;
 }
@@ -121,6 +130,22 @@ header {
     justify-content: center;
 }
 
+.topnav input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: none;
+}
+
+.topNavLeftGSNText {
+    font-size: inherit;
+    background: -webkit-linear-gradient(45deg, var(--top-nav-left-gsn-text-color-l), var(--top-nav-left-gsn-text-color-r));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 3%;
+}
+
 .topNavLogo span {
     padding-left: 20px;
     font-family: 'Nunito', sans-serif;
@@ -132,4 +157,22 @@ header {
 
 .topNavSection {
     flex: 1 1 33%;
+}
+
+.topNavSection a img,
+.topNavSection a .topNavLeftGSNText {
+    vertical-align: middle;
+}
+
+.topNavSection.rightLinks,
+.topNavSection.rightLinks a:link,
+.topNavSection.rightLinks a:active,
+.topNavSection.rightLinks a:focus,
+.topNavSection.rightLinks a:visited {
+    font-weight: 400;
+    color: var(--main-font-color);
+}
+
+.topNavSection.rightLinks a.marginLeftSpacer {
+    margin-left: 40px;
 }
