@@ -4,14 +4,36 @@ Left Side Navigation
 --side-nav-icon: #8185C4;       - mid purple 
 */
 
-.blackBorder { 
+.adsBlackBorder { 
     border: 1px solid black; 
 }
 
 .sideMenuCont { 
-    text-align: left;
-    border-right: 1px solid grey;
+    display: none;
+    height: 100%;
+    width: 200px;
     position: fixed;
+    z-index: 1;
+    top: 0;
     left: 0;
-    top: 0 
+    border-right: 1px solid grey;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+.sideMenuCont a {
+    padding: 6px 6px 6px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+  
+.sideMenuCont a:hover {
+    color: #f1f1f1;
+}
+  
+@media screen and (max-height: 450px) {
+    .sideMenuCont {padding-top: 15px;}
+    .sideMenuCont a {font-size: 18px;}
 }
