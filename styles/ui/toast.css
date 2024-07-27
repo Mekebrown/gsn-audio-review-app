@@ -1,0 +1,78 @@
+/* Disclaimer
+--disclaimer-bg-color: #FCDD9C; light orange
+--disclaimer-color: #626EC2; dark purple
+*/
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+  
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+  
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+  
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+.disclaimerToast,
+.disclaimerToastChoices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.disclaimerToast {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 125px;
+    padding: 15px;
+    background-color: var(--disclaimer-bg-color);
+    color: var(--disclaimer-color);
+}
+
+.disclaimerToast div.disclaimerToastChoices button {
+    /* flex: 1 1 33%; */
+    flex-grow: 1;
+}
+
+.disclaimerToast div.disclaimerToastText {
+    flex-grow: 2;
+}
+
+.generalToast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+.generalToast.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 3s;
+    animation: fadein 0.5s, fadeout 0.5s 3s;
+}
+
+.hideToast {
+    visibility: hidden;
+    display: none;
+}
