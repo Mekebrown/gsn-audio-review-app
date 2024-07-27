@@ -4,7 +4,6 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 
 import TopNav from '@/app/ui/nav/top-nav/TopNav.jsx';
 import Footer from '@/app/ui/Footer';
-import TempUniversalNav from '@/app/ui/nav/TempUniversalNav';
 import DisclaimerToast from "@/app/ui/Toast"
 import { baseURL } from "@/app/lib/general_variables";
 
@@ -61,8 +60,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <TopNav />
-
-        <TempUniversalNav />
 
         <div id="portal"></div>
 
