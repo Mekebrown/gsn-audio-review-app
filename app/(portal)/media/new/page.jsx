@@ -78,11 +78,11 @@ export default function Page() {
         <p>Upload your audio</p>
 
         <form onSubmit={UploadTrack}>
-            <label htmlFor="title">Project name or title</label>
+            <label htmlFor="uploadTitle">Project name or title</label>
 
             <input
                 type="text"
-                name="title"
+                id="uploadTitle"
                 className="title"
                 value={files?.title}
             />
@@ -91,7 +91,7 @@ export default function Page() {
 
             <input
                 type="file"
-                name="fileUpload"
+                id="fileUpload"
                 className="fileUpload"
                 value={files?.fileUpload}
             />
@@ -100,7 +100,7 @@ export default function Page() {
 
             <input
                 type="text"
-                name="fileName"
+                id="fileName"
                 className="fileName"
                 value={files?.fileName}
             />
@@ -109,17 +109,14 @@ export default function Page() {
 
             <input
                 type="text"
-                name="mediaType"
+                id="mediaType"
                 className="mediaType"
                 value={files?.mediaType}
             />
 
             <label htmlFor="mediaDesc">Description</label>
 
-            <textarea
-                name="mediaDesc"
-                id="mediaDesc">
-            </textarea>
+            <textarea name="mediaDesc" id="mediaDesc"></textarea>
 
             {files?.thumbURL ? <div>
                 <Image
@@ -129,15 +126,15 @@ export default function Page() {
                     height="200"
                 />
             </div> : <div>
-                <label htmlFor="thumbUpload">Thumbnail</label>
-
+                    <label htmlFor="thumbUpload">Thumbnail</label>
                 <input
                     type="file"
-                    name="thumbUpload"
+                        id="thumbUpload"
                     className="thumbUpload"
                 />
             </div>}
 
+            {/* TODO label for more than one radio button? */}
             <label htmlFor="hasMediaMarkers">Has Media Markers?</label>
             <input
                 type="radio"

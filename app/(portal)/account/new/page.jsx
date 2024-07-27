@@ -184,7 +184,6 @@ export default function Page() {
                 type="text"
                 className="form-control"
                 id="clientName"
-                name="clientName"
                 placeholder="Enter name"
                 value=""
               />
@@ -198,7 +197,6 @@ export default function Page() {
                 type="email"
                 className="form-control"
                 id="email"
-                name="email"
                 placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -220,7 +218,6 @@ export default function Page() {
                   type="text"
                   className="form-control"
                   id="password"
-                  name="password"
                   placeholder="Enter password"
                   value={pw}
                   onChange={(e) => setPw(e.target.value)}
@@ -235,6 +232,7 @@ export default function Page() {
             </div>
 
             {/* Checklist of All Media */}
+            {/* TODO update htmlFor for labels */}
             <div className="form-group">
               <label htmlFor="checklistToggle">Media</label>
 
@@ -244,7 +242,6 @@ export default function Page() {
                   type="checkbox"
                   value={() => mediaChecked.length === media.length}
                   id="checklistToggle"
-                  name="checklistToggle"
                   onChange={handleCheckAll}
                 />
 
@@ -258,7 +255,6 @@ export default function Page() {
                     type="checkbox"
                     value={item.id}
                     id={item.id}
-                    name={item.id}
                     checked={() => mediaChecked.includes(item.id) || mediaChecked.length === media.length}
                     onChange={handleCheck}
                   />

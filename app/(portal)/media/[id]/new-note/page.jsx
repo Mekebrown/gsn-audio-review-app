@@ -121,7 +121,6 @@ export default function Page({ onClose }) {
                         type="text"
                         className="form-control"
                         id="noteBody"
-                        name="noteBody"
                         placeholder="Enter your note"
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}

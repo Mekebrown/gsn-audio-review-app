@@ -60,10 +60,10 @@ export default function Page() {
 
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="userEmail">Your email:</label>
-                    <input type="email" name="userEmail" placeholder="Your email..." required />
+                    <input type="email" id="userEmail" placeholder="Your email..." required />
 
                     <label htmlFor="userPassword">Your password:</label>
-                    <input type="password" name="userPassword" required />
+                    <input type="password" id="userPassword" required />
 
                     <input type="hidden" name="formType" value="user" />
 
@@ -76,17 +76,12 @@ export default function Page() {
                     <h2>Do you need an invite? Please contact your GSN coordinator or submit your information for prompt assistance.</h2>
 
                 <form onSubmit={handleSubmit}>
-                        <label
-                            htmlFor="NoSigninUserName"
-                        >
-                            Your name:
-                        <input type="text" name="NoSigninUserName" placeholder="Your name..." required />
+                        <label htmlFor="NoSigninUserName">Your name:
+                            <input type="text" id="NoSigninUserName" placeholder="Your name..." required />
                         </label>
 
-                        <label htmlFor="userEmail"
-                        >
-                            Your email:
-                        <input type="email" name="userEmail" placeholder="Your email..." required />
+                        <label htmlFor="userEmail">Your email:
+                            <input type="email" id="userEmail" placeholder="Your email..." required />
                         </label>
 
                         <input type="hidden" name="subjectDropdown" value="Sign In Issue" />
