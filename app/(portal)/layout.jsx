@@ -1,7 +1,7 @@
 // import { useSession } from 'next-auth/react';
 import SideNav from '@/app/ui/nav/side-nav/SideNav';
 import Player from '@/app/ui/Player';
-import mediaTrackExample from "@/app/lib/media_placeholders";
+import { singleMediaTrackExample } from "@/app/lib/media_placeholders";
 import { GeneralToast } from "@/app/ui/Toast"
 
 export const metadata = {
@@ -51,6 +51,14 @@ export default function RootLayout({ children }) {
 
         <SideNav status={status} />
 
-        <Player title={mediaTrackExample.title} track={mediaTrackExample.mp3} />
+        <Player
+            title={singleMediaTrackExample.title}
+            track={[
+                singleMediaTrackExample.mp3,
+                singleMediaTrackExample.ogg
+            ]}
+            desc={singleMediaTrackExample.description}
+            captions={singleMediaTrackExample.captions}
+        />
     </>;
 };
