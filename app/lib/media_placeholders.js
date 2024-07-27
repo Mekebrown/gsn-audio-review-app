@@ -80,25 +80,26 @@ export const getFileSize = (number) => {
     }
 };
 
-export const singleMediaTrackExample = [
-	{
-		id: 1,
-		title: "The Title",
-		thumbURL: logoImage,
-		description:
-			"This will be the track's description. Here you can learn more about it",
-		lengthMS: 5290,
-		notes: "The total notes from all users",
-		project: "A Cool One",
-		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
-		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
-	},
-];
+export const singleMediaTrackExample = {
+	id: 1,
+	title: "The Title",
+	thumbURL: logoImage,
+	description:
+		"This will be the track's description. Here you can learn more about it",
+	lengthMS: 5290,
+	notes: "The total notes from all users",
+	project: "A Cool One",
+	mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
+	ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+	date: "2008-02-14",
+	datetime: "2008-02-14 20:00",
+	captions: "fgsubtitles_en.vtt",
+};
 
 const mediaTrackExample = [
 	{
 		id: 1,
-		title: "The Title",
+		title: "Exceptional Title",
 		thumbURL: logoImage,
 		description:
 			"This will be the track's description. Here you can learn more about it",
@@ -107,6 +108,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 	{
 		id: 2,
@@ -118,6 +122,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 	{
 		id: 3,
@@ -130,6 +137,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 	{
 		id: 4,
@@ -141,6 +151,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 	{
 		id: 5,
@@ -153,6 +166,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 	{
 		id: 6,
@@ -164,6 +180,9 @@ const mediaTrackExample = [
 		project: "A Cool One",
 		mp3: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.mp3",
 		ogg: "https://ia800307.us.archive.org/17/items/RTFM-Harp-940531/940531_harp_01_ITH.ogg",
+		date: "2008-02-14",
+		datetime: "2008-02-14 20:00",
+		captions: "fgsubtitles_en.vtt",
 	},
 ];
 
