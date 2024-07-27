@@ -22,8 +22,8 @@ export const tempImage = "/media/imgs/temp.jpg";
 export const logoImage = "/media/imgs/logo192.png";
 export const GSNLogo = ({
 	customAlt = "GSN Logo",
-	customWidth = 35,
-	customHeight = 35,
+	customWidth = 45,
+	customHeight = 45,
 }) => {
 	return (
 		<Image
