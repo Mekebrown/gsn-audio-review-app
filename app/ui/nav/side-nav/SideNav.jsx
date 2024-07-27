@@ -31,11 +31,11 @@ export default function SideNav({ status }) {
 
         <h2>Sponsor</h2>
 
-        <div className="blackBorder">
+        <div className="adsBlackBorder">
             Ads
         </div>
 
-        <div className="blackBorder">
+        <div className="adsBlackBorder">
             Ads
         </div>
     </aside>;
