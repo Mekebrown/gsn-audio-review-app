@@ -1,0 +1,97 @@
+:root {
+    --color-dark-blue: #191c3c; /*25, 28, 60;*/
+    --color-light-blue-purple: #6371c5; /* 99, 113, 197;*/
+    --color-semi-transparent-purple: #e6e6f3; /* 230, 230, 243;*/
+    --color-purple: #6874c5; /* 104, 116, 197;*/
+    --footer-bottom-left-col: #1B1E3F;/* charcoal */
+    --small-light-grey: #A9A9B3;/* grey */
+}
+
+footer {
+    width: 100%;
+    padding: 3% 10%;
+    border-top: 1px solid var(--color-semi-transparent-purple);
+}
+
+/* Top Footer */
+.footerTopSection {
+    display: flex;
+    padding: 0 0 3%;
+}
+
+.footerTopSection div.footerTopLeftCol {
+    flex-grow: 2;
+}
+
+.footerTopSection div.footerTopLeftCol small {
+    color: var(--small-light-grey);
+    display: block;
+    margin-top: 1%;
+}
+
+.footerTopSection div.footerTopLeftCol p,
+.footerTopSection div.footerTopLeftCol small {
+    margin-left: 7%;
+}
+
+.footerTopSection div.footerTopRightCol {
+    flex-grow: 1;
+    text-align: right;
+    margin-top: 4%;
+}
+
+.footerContactUsBtn {
+    background-color: var(--color-semi-transparent-purple);
+    color: var(--color-purple);
+    filter: drop-shadow(1px 1px 2px var(--top-nav-hr-drop-shadow));
+    padding: 4% 10%;
+    border-radius: 4%;
+    font-size: 12px;
+    letter-spacing: normal;
+}
+
+.footerSignInBtn {
+    background-color: var(--color-purple);
+    color: var(--color-semi-transparent-purple);
+    filter: drop-shadow(1px 1px 2px var(--top-nav-hr-drop-shadow));
+    padding: 4% 10%;
+    margin-left: 2%;
+    border-radius: 4%;
+    font-size: 12px;
+    letter-spacing: normal;
+}
+
+/* Bottom Footer */
+.footerBottomSection {
+    display: flex;
+    border-top: 1px solid var(--color-semi-transparent-purple);
+    padding: 3% 0 0;
+}
+
+.footerBottomSection div.footerBottomLeftCol {
+    flex-grow: 1;
+    font-weight: 700;
+}
+
+.footerBottomSection div.footerBottomLeftCol a small {
+    color: var(--footer-bottom-left-col);
+}
+
+.footerBottomSection div.footerBottomRightCol {
+    flex-grow: 1;
+    text-align: right;
+    color: var(--a-color);
+    font-weight: 400;
+}
+
+.footerBottomSection div.footerBottomRightCol a:active,
+.footerBottomSection div.footerBottomRightCol a:link,
+.footerBottomSection div.footerBottomRightCol a:focus,
+.footerBottomSection div.footerBottomRightCol a:visited {
+    font-weight: 400;
+    color: var(--a-color);
+}
+
+.horizontalRule {
+    color: #6371c5;
+}
