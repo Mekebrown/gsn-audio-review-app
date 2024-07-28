@@ -6,10 +6,10 @@ export const insert_media = async (data) => {
 	const insert_media_query = await sql`
         INSERT INTO media
             (media_desc, file_name, media_type,
-            title, last_retrieved,
+            media_title, last_retrieved, thumb_url,
             file_directory, created_at) 
         VALUES
-            ($1, $2, $3, $4, $5, $6, $7)
+            ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
 
 	return insert_media_query;
@@ -18,7 +18,7 @@ export const insert_media = async (data) => {
 export const insert_note = async (data) => {
 	const insert_note_query = await sql`
         INSERT INTO notes 
-            (user_id, media_id, note_body, note_timestamp,
+            (user_id, media_id, note_body, note_datetime,
             last_retrieved, created_at, updated_at)
         VALUES 
             ($1, $2, $3, $4, $5, $6, $7)
@@ -44,7 +44,7 @@ export const insert_user = async (data) => {
 export const select_all_media = async () => {
 	const select_all_media_query = await sql`
         SELECT
-            id, title, media_desc, 
+            id, media_title, media_desc, 
             file_name, thumb_url, file_directory
         FROM 
             media
@@ -78,7 +78,7 @@ export const select_all_users = async () => {
 export const select_a_note = async (note_id) => {
 	const select_one_note_query = await sql`
         SELECT
-            id, note_body, note_timestamp
+            id, note_body, note_datetime
         FROM
             notes 
         WHERE media_id = $1
@@ -138,7 +138,7 @@ export const update_note = async (note_info) => {
         UPDATE notes
         SET
             note_body = $1,
-            note_timestamp = $2,
+            note_datetime = $2,
             last_retrieved = $3,
             updated_at = $4
         WHERE id = $5
@@ -166,6 +166,7 @@ export const update_user = async (user_info) => {
 };
 
 export const update_track = async (user_info) => {
+	// TODO Incorrect query table?
 	const update_track_query = await sql`
         UPDATE media 
         SET 

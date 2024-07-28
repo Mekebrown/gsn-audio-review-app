@@ -52,7 +52,7 @@ export default function Page() {
                 /signout - redirect to /
                 /send-pw* - close icon, msg, form (checkboxes of media, email input, generated pw and "copy" link), submit button, clear button, cancel link
                 /delete-profile* - close icon, msg, confirm button, cancel link
-                /upload* - close icon, msg, form (logo, title, desc, user, audio, timestamps), submit button, clear button, cancel link
+                /upload* - close icon, msg, form (logo, title, desc, user, audio, datetimes), submit button, clear button, cancel link
                 /delete-upload* - close icon, msg, confirm button, cancel link
                 /users - msg, users (link to each user and their profiles, preview of latest note(s), list of media, last sign in(s?), reset pw link, delete user link)
                 /notes - msg, notes (note copy, media title/link, created date)

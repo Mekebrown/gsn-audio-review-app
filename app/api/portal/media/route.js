@@ -24,7 +24,7 @@ export async function GET(request) {
                     med.media_file_ext,
                     med.media_description, 
                     med.thumb_url, med.created_at,
-                    n.user_id, n.note_body, n.note_timestamp,
+                    n.user_id, n.note_body, n.note_datetime,
                     n.created_at
                 FROM 
                     media med
@@ -45,7 +45,7 @@ export async function GET(request) {
                     med.media_file_ext,
                     med.media_description, 
                     med.thumb_url, med.created_at,
-                    n.user_id, n.note_body, n.note_timestamp,
+                    n.user_id, n.note_body, n.note_datetime,
                     n.created_at
                 FROM 
                     media med
