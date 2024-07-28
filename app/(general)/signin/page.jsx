@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { setCookie } from 'cookies-next';
 
 import { send_signin_info } from "@/app/lib/db-related/query_strings";
 import { GeneralToast } from "@/app/ui/Toast";
@@ -34,10 +35,13 @@ export default function Page() {
             if (result.ok) {
                 setToastMessage("Sorry, your information did not go through. Please try again.");
             } else {
+                const { cookie_value } = result.data;
+
+                setCookie('gsn-sign-in-cookie', cookie_value);
+
                 setToastMessage("Success!");
-                setTimeout(() => {
-                    router.push('/media');
-                }, 1500);
+
+                setTimeout(() => { router.push('/media'); }, 1500);
             }
         } catch (error) {
             console.error('Error submitting form:', error);

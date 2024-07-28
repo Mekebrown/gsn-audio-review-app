@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { setCookie } from 'cookies-next';
 
 import TopNav from '@/app/ui/nav/top-nav/TopNav.jsx';
 import Footer from '@/app/ui/Footer';
@@ -56,6 +57,8 @@ export const metadata = {
  * <RootLayout children={children} />
  */
 export default function RootLayout({ children }) {
+  setCookie('gsn-visited-site', true);
+
   return (
     <html lang="en">
       <body className={inter.className}>

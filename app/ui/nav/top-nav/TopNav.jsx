@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
+import { getCookie } from 'cookies-next';
 
 import {
     EmailIcon,
@@ -236,18 +237,20 @@ export default function TopNav() {
         }
     };
 
-    /* 
-    Sends a sign-in cookie and JWT header with the request. Perhaps use useSession and session data retrieval?
-    */
+    /**
+     * Sends a sign-in cookie and JWT header with the request. 
+     * Perhaps use useSession and session data retrieval?
+     * 
+     * Call to see if user is signed in
+     */
     useEffect(() => {
-        // Call to see if user is signed in
-        const retrieveNotifURL = "";
-        const signInCookie = "";
+        const retrieveNotifURL = apiURL + "/users/";
+        const signInCookie = getCookie('gsn-sign-in-cookie');
         const jwtInfo = "";
 
-        if (signInCookie && jwtInfo) { // User's signed in: get notifs
+        if (signInCookie && jwtInfo) { // User's signed in? Get notifs
             const grabNotifs = async () => {
-                const notifResponse = await axios(
+                const response = await axios(
                     retrieveNotifURL,
                     {
                         method: "POST",

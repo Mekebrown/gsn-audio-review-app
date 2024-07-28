@@ -1,11 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { deleteCookie } from 'cookies-next';
 // import { useSession } from 'next-auth/react';
 
 export default function SignInOutBtn() {
     const { data, status } = { data: "user", status: "authenticated" }; 
     const router = useRouter();
+
+    const handleSignOut = () => {
+        deleteCookie("gsn-sign-in-cookie");
+    };
 
     if (data && data.user !== undefined) {
         return <>
@@ -13,6 +18,7 @@ export default function SignInOutBtn() {
 
             <button
                 type="button"
+                onclick={handleSignOut}
             >
                 Sign Out
             </button>
