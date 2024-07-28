@@ -142,12 +142,14 @@ export default function Page() {
       //         media: mediaChecked
       //     })
       // });
-
-      // const data = await response.json();
+   
+      // const resJSON = await response.json();
+      // const {data} = resJSON;
 
       // if (data.error) {
       //     setError(data.error);
       //     setLoading(false);
+      
       //     return;
       // }
 

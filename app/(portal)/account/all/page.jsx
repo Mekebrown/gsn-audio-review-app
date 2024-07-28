@@ -1,22 +1,24 @@
 "use client";
 import { useState } from "react";
 
-import { GeneralToast } from '@/app/ui/credentials/Toast';
-import { apiURL } from "@/app/lib/general_variables";
+import { GeneralToast } from '@/app/ui/Toast';
+import { usersExample } from "@/app/lib/user_placeholders";
+// import { apiURL } from "@/app/lib/general_variables";
 
 export default function Page() {
   const [toastMessage, setToastMessage] = useState("");
-  let usersExample;
+  // let usersExample;
 
-  const response = fetch(apiURL + "/portal/account");
+  // const response = fetch(apiURL + "/portal/account");
 
-  if (response.ok) {
-    usersExample = JSON.parse(response);
-  } else {
-    usersExample = [];
+  // if (response.ok) {
+  // const resJSON = JSON.parse(response);
+  //   usersExample = resJSON.data;
+  // } else {
+  //   usersExample = [];
 
-    setToastMessage("No clients signed in yet");
-  }
+  //   setToastMessage("No clients signed in yet");
+  // }
 
   return <section>
     <GeneralToast message={toastMessage} />
@@ -29,6 +31,5 @@ export default function Page() {
         <div>Package: {client.package}</div>
       </article>;
     })}
-
   </section>;
 };

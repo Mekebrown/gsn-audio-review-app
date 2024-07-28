@@ -4,7 +4,8 @@ const getNoteInfo = async (id) => {
     const queryString = "?request_type=single&note_id=" + id;
 
     const note = await fetch(apiURL + '/portal/notes').then((res) => res.json());
-    const { data } = note;
+    const resJSON = await note.json();
+    const { data } = resJSON;
 
     return data;
 };
@@ -22,8 +23,11 @@ const getNoteInfo = async (id) => {
 export default async function Page({ params }) {
     const noteId = params.id;
     const note_info = await getNoteInfo(noteId);
+    const resJSON = await note_info.json();
+    const { data } = resJSON;
 
     return <section>
         <h2>Note #{noteId}</h2>
+        {data}
     </section>;
 };

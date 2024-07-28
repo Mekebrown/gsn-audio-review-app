@@ -19,7 +19,10 @@ export const select_all_media = async () => {
 	if (!response.ok) {
 		throw new Error("Network response was not ok");
 	} else {
-		return response.media;
+		const resJSON = await response.json();
+		const { data } = resJSON;
+
+		return data;
 	}
 };
 
@@ -31,6 +34,9 @@ export const select_single_media = async (id) => {
 	// if (!response.ok) {
 	// 	throw new Error("Network response was not ok");
 	// } else {
+	// const resJSON = await response.json();
+	// const { data } = resJSON;
+
 	return response.data;
 	// }
 };
@@ -55,12 +61,17 @@ export const send_contact_info = async (formData) => {
 	if (!response.ok) {
 		throw new Error("Network response was not ok");
 	} else {
-		return JSON.stringify(response);
+		const resJSON = await response.json();
+		const { data } = resJSON;
+
+		return JSON.stringify(data);
 	}
 };
 
 export const get_all_media = async () => {
 	const response = await select_all_media();
+	const resJSON = await response.json();
+	const { data } = resJSON;
 
-	return response;
+	return data;
 };

@@ -66,7 +66,8 @@ export default function Page({ onClose }) {
             //     })
             // });
 
-            // const data = await response.json();
+            // const resJSON = await response.json();
+            // const {data} = resJSON;
 
             // if (data.error) {
             //     setError(data.error);

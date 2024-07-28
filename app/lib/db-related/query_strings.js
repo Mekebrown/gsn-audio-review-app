@@ -191,7 +191,10 @@ export const send_signin_info = async (formData) => {
 	if (!response.ok) {
 		throw new Error("Network response was not ok");
 	} else {
-		return JSON.stringify(response);
+		const resJSON = await response.json();
+		const { data } = resJSON;
+
+		return JSON.stringify(data);
 	}
 };
 
@@ -215,27 +218,21 @@ export const send_contact_info = async (formData) => {
 	if (!response.ok) {
 		throw new Error("Network response was not ok");
 	} else {
-		return JSON.stringify(response);
+		const resJSON = await response.json();
+		const { data } = resJSON;
+
+		return JSON.stringify(data);
 	}
 };
 
 export const send_admin_email = () => {};
 
 export const get_all_media = async () => {
-	const data = await select_all_media();
-	const res = response.json();
+	const response = await select_all_media();
+	const resJSON = await response.json();
+	const { data } = resJSON;
 
-	// return new Array(res);
-	return [
-		{
-			id: 1,
-			thumbURL: "thumbURL",
-		},
-		{
-			id: 2,
-			thumbURL: " Twh thumbURL",
-		},
-	];
+	return data;
 };
 
 

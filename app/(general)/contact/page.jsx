@@ -43,7 +43,10 @@ export default function Page() {
                 // Reroute user to the homepage
                 setToastMessage("Success!");
 
-                console.log({ response });
+                const resJSON = JSON.parse(response);
+                const { data } = resJSON;
+
+                console.log(data);
             } else {
                 // ANYTHING GOES WRONG? Show in Toast: setToastMessage("Nope");
                 setToastMessage("Sorry, your information did not go through. Please try again.");
