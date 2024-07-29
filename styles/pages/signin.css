@@ -1,0 +1,50 @@
+/* --image-bg-color - pale purple */
+
+.signInFormContainer {
+    text-align: left;
+}
+
+.signInFormContainer form {
+    margin: 20px 0;
+}
+
+.lightMode .topNavLogo span:hover .topNavLogo span:active .topNavLogo span:focus .topNavLogo span:link .topNavLogo span:visited {
+    color: #000;
+}
+
+.darkMode .topNavLogo span:hover .topNavLogo span:active .topNavLogo span:focus .topNavLogo span:link .topNavLogo span:visited {
+    color: #fff;
+}
+
+.signInDesc {
+    margin-top: 5%;
+}
+
+.signInPage {
+    background: radial-gradient(circle at -100%, #d8d8ff 20%, #626EC2 75%);
+    padding: 7% 0;
+}
+
+.signInTypeBtn {
+    background-color: var(--color-semi-transparent-purple);
+    color: var(--color-purple);
+    padding: 2% 5%;
+    border: none;
+    /* font-size: 12px; */
+}
+
+.signInSubmitBtn {
+    color: var(--color-purple);
+    padding: 2% 5%;
+    filter: drop-shadow(1px 1px 2px var(--top-nav-hr-drop-shadow));
+    display: inline;
+} 
+
+.signInResetBtn {
+    color: var(--color-purple);
+    background-color: var(--color-semi-transparent-purple);
+    filter: drop-shadow(1px 1px 2px var(--top-nav-hr-drop-shadow));
+    padding: 2% 5%;
+    display: inline;
+    border: none;
+}
