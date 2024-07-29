@@ -1,4 +1,4 @@
-// import { useSession } from 'next-auth/react';
+import TopNav from '@/app/ui/nav/top-nav/TopNav.jsx';
 import SideNav from '@/app/ui/nav/side-nav/SideNav';
 import Player from '@/app/ui/Player';
 import { singleMediaTrackExample } from "@/app/lib/media_placeholders";
@@ -38,13 +38,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-    const { status } = { status: "authenticated" };
-    // useSession(); Status can be "loading", "authenticated", or "unauthenticated"
-
     // const [toastMessage, setToastMessage] = useState(null);
     const toastMessage = "A TODO";
 
     return <>
+        <TopNav />
+
         <GeneralToast message={toastMessage} />
 
         <main className="children">{children}</main>
