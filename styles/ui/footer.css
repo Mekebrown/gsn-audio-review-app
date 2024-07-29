@@ -10,7 +10,16 @@
 footer {
     width: 100%;
     padding: 3% 10%;
+    position: absolute;
+    bottom: 0;
     border-top: 1px solid var(--color-semi-transparent-purple);
+}
+
+.altFooter {
+    width: 100%;
+    padding: 3% 10%;
+    position: absolute;
+    bottom: 0;
 }
 
 /* Top Footer */
