@@ -1,9 +1,7 @@
-import { apiURL } from "@/app/lib/general_variables";
+import { getSingleUserAPIPath } from "@/app/lib/general_variables";
 
 const getUserInfo = async (id) => {
-  const queryString = "?request_type=single&user_id=" + id;
-
-  const user = await fetch(apiURL + '/portal/account').then((res) => res.json());
+  const user = await fetch(getSingleUserAPIPath + id).then((res) => res.json());
   const { data } = user;
 
   return data;

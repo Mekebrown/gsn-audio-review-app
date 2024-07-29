@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { apiURL, GSNLogo } from "@/app/lib/general_variables";
+import { contactAPIPath, GSNLogo } from "@/app/lib/general_variables";
 import { GeneralToast } from "@/app/ui/Toast";
 import "@/styles/pages/contact.module.css";
 
@@ -34,7 +34,7 @@ export default function Page() {
             }
 
             // Send the info and retrieve response
-            const response = await fetch(apiURL + "/contact", {
+            const response = await fetch(contactAPIPath, {
                 method: 'POST',
                 body: formData
             });
@@ -81,6 +81,7 @@ export default function Page() {
                 <option value="Referral"></option>
                 <option value="Partnership"></option>
                 <option value="Creative"></option>
+                <option value="Other"></option>
             </select>
             <input type="text" name="subject" id="subject" placeholder="A quick title summarizing your message" />
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 
 import { isAudioFile } from "@/app/lib/media_placeholders";
+import { uploadAPIPath } from "@/app/lib/general_variables";
 
 /**
  * A Modal component showing a form to 
@@ -18,8 +19,6 @@ export default function Page() {
     const [files, setFiles] = useState([]);
     const [uploadStatus, setUploadStatus] = useState(false);
     const [error, setError] = useState({ show: false, error: "" });
-
-    const uploadTrackURL = process.env.NEXT_PUBLIC_BASE_URL + "/api/media";
 
     const resetFiles = () => {
         setFiles([]);
@@ -51,7 +50,7 @@ export default function Page() {
             });
 
             const response = await axios.post(
-                uploadTrackURL,
+                uploadAPIPath,
                 formAudio,
                 {
                     headers: {

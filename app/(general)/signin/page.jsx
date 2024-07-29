@@ -7,7 +7,8 @@ import { setCookie } from 'cookies-next';
 import { send_signin_info } from "@/app/lib/db-related/query_strings";
 import { GeneralToast } from "@/app/ui/Toast";
 import { GSNLogo } from "@/app/lib/general_variables";
-import "@/styles/pages/signin.module.css";
+
+import "@/styles/pages/signin.css";
 
 export default function Page() {
     const [signinType, setSigninType] = useState("user");
@@ -20,13 +21,13 @@ export default function Page() {
 
         try {
             const formData = new FormData(e.target);
+            const identifier = formData.userEmail;
+            const password = formData.userPassword;
             let response;
 
             if (signinType === "user") {
-                // Send form info to /api/signin
-                response = await send_signin_info(formData);
+                response = await send_signin_info({ identifier, password });
             } else if (signinType === "visitor") {
-                // Send form info to /api/contact
                 response = await send_contact_info(formData);
             }
 
@@ -51,81 +52,86 @@ export default function Page() {
     };
 
     const LeftBtn = () => {
-        return signinType === "user" ? (
-            <button type="button" title="choice" onClick={() => setSigninType("visitor")}>No Sign In?</button>
-        ) : (<button type="button" title="choice" onClick={() => setSigninType("user")}>Sign In</button>
-        );
+        return signinType === "user" ? <button
+            className="signInTypeBtn"
+            type="button"
+            title="choice"
+            onClick={() => setSigninType("visitor")}
+        >
+            No Sign In?
+        </button> : <button
+            className="signInTypeBtn"
+            type="button"
+            title="choice"
+            onClick={() => setSigninType("user")}
+        >
+            Sign In
+        </button>;
     };
 
-    const RightForm = () => {
-        return signinType === "user" ? (
-            <>
-                <h2>Please use your registered email and given password.</h2>
+    const LeftSection = () => {
+        return <div>
+            <h1>
+                <GSNLogo /> &nbsp; GSN
+            </h1>
+
+            <p className="signInDesc">Best Audio Review Platform</p>
+
+            <LeftBtn />
+        </div>;
+    };
+
+    const RightSection = () => {
+        return signinType === "user" ? <div className="signInFormContainer">
+            <h2>Please use your registered email and given password.</h2>
+
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="userEmail">Your email:</label>
+                <input type="email" id="userEmail" placeholder="Your email..." required />
+
+                <label htmlFor="userPassword">Your password:</label>
+                <input type="password" id="userPassword" required />
+
+                <button className="signInSubmitBtn" type="submit" name="signinBtn" id="signinBtn">Sign In</button>
+                <button className="signInResetBtn" type="reset">Clear All</button>
+            </form>
+        </div> : <div className="signInFormContainer">
+            <h2>Do you need an invite? Please contact your GSN coordinator or submit your information for prompt assistance.</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="userEmail">Your email:</label>
-                    <input type="email" id="userEmail" placeholder="Your email..." required />
+                    <label htmlFor="NoSigninUserName">Your name:
+                        <input type="text" id="NoSigninUserName" placeholder="Your name..." required />
+                    </label>
 
-                    <label htmlFor="userPassword">Your password:</label>
-                    <input type="password" id="userPassword" required />
+                    <label htmlFor="userEmail">Your email:
+                        <input type="email" id="userEmail" placeholder="Your email..." required />
+                    </label>
 
-                    <input type="hidden" name="formType" value="user" />
+                    <input type="hidden" name="subjectDropdown" value="Sign In Issue" />
 
-                    <button type="submit" name="signinBtn" id="signinBtn">Sign In</button>
-                    <button type="reset">Clear All</button>
+                    <input type="hidden" name="subject" value="Contact From Sign In Form" />
+
+                    <input type="hidden" name="message" value="A Client Needs A Login" />
+
+                    <button type="submit" name="noSigninSubmitBtn" id="noSigninSubmitBtn">
+                        Send Your Info Inquiry
+                    </button>
+
+                    <button type="reset">
+                        Clear All
+                    </button>
                 </form>
-            </>
-        ) : (
-            <>
-                    <h2>Do you need an invite? Please contact your GSN coordinator or submit your information for prompt assistance.</h2>
-
-                <form onSubmit={handleSubmit}>
-                        <label htmlFor="NoSigninUserName">Your name:
-                            <input type="text" id="NoSigninUserName" placeholder="Your name..." required />
-                        </label>
-
-                        <label htmlFor="userEmail">Your email:
-                            <input type="email" id="userEmail" placeholder="Your email..." required />
-                        </label>
-
-                        <input type="hidden" name="subjectDropdown" value="Sign In Issue" />
-
-                        <input type="hidden" name="subject" value="Contact From Sign In Form" />
-
-                        <input type="hidden" name="contactMsg" value="A Client Needs A Login" />
-
-                        <input type="hidden" name="formType" value="visitor" />
-
-                        <button
-                            type="submit"
-                            name="noSigninSubmitBtn" id="noSigninSubmitBtn"
-                        >
-                            Send Your Info Inquiry
-                        </button>
-
-                        <button type="reset">
-                            Clear All
-                        </button>
-                </form>
-            </>
-        );
+        </div>;
     };
 
     return (
-        <section data-testid="section">
+        <section className="signInPage" data-testid="section">
             <GeneralToast message={toastMessage} />
 
             <div className="twoCols signin noSignin">
-                <div>
-                    <h1>
-                        <GSNLogo /> &nbsp; GSN
-                    </h1>
-                    <p>Best Audio Review Platform</p>
-                    <LeftBtn />
-                </div>
-                <div className="sign-in-form-container">
-                    <RightForm />
-                </div>
+                <LeftSection />
+
+                <RightSection />
             </div>
         </section>
     );

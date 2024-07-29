@@ -1,14 +1,14 @@
 import { Inter } from 'next/font/google';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from '@fortawesome/fontawesome-svg-core';
-import { setCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 
-import TopNav from '@/app/ui/nav/top-nav/TopNav.jsx';
 import Footer from '@/app/ui/Footer';
 import DisclaimerToast from "@/app/ui/Toast"
 import { baseURL } from "@/app/lib/general_variables";
 
 import "@/styles/globals.css";
+import "@/styles/layout.css";
 
 config.autoAddCss = false; /* eslint-disable import/first */
 
@@ -57,16 +57,20 @@ export const metadata = {
  * <RootLayout children={children} />
  */
 export default function RootLayout({ children }) {
-  setCookie('gsn-visited-site', true);
+  if (!getCookie("gsn-visited-site")) {
+    setCookie('gsn-visited-site', true);
+  }
+
+  if (!getCookie("gsn-disclaimer-choice")) {
+    setCookie("gsn-disclaimer-choice", false);
+  }
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TopNav />
-
         <div id="portal"></div>
 
-        <main className="children">{children}</main>
+        <main className="childrenSection">{children}</main>
 
         <DisclaimerToast />
 

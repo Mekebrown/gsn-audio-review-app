@@ -1,9 +1,9 @@
-import { apiURL } from "@/app/lib/general_variables";
+import axios from "axios";
+
+import { getSingleNoteAPIPath } from "@/app/lib/general_variables";
 
 const getNoteInfo = async (id) => {
-    const queryString = "?request_type=single&note_id=" + id;
-
-    const note = await fetch(apiURL + '/portal/notes').then((res) => res.json());
+    const note = await axios(getSingleNoteAPIPath + id).then((res) => res.json());
     const resJSON = await note.json();
     const { data } = resJSON;
 

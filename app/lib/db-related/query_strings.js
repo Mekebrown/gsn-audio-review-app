@@ -1,6 +1,8 @@
 'use server';
+import axios from "axios";
 
 import sql from './db.js';
+import { authURL } from "@/app/lib/general_variables";
 
 export const insert_media = async (data) => {
 	const insert_media_query = await sql`
@@ -183,10 +185,10 @@ export const update_track = async (user_info) => {
 	return update_track_query;
 };
 
-export const send_signin_info = async (formData) => {
-	const response = await fetch(process.env.NEXTAUTH_URL + "/api/signin", {
+export const send_signin_info = async (signInInfo) => {
+	const response = await axios(authURL, {
 		method: "POST",
-		body: formData,
+		body: signInInfo,
 	});
 
 	if (!response.ok) {
@@ -194,8 +196,10 @@ export const send_signin_info = async (formData) => {
 	} else {
 		const resJSON = await response.json();
 		const { data } = resJSON;
+		const userProfile = data.user;
+		const userJWT = data.jwt;
 
-		return JSON.stringify(data);
+		return JSON.stringify({ userProfile, userJWT });
 	}
 };
 
@@ -211,7 +215,7 @@ export const send_contact_info = async (formData) => {
 	}
 
 	// Send the info and retrieve response
-	const response = await fetch(process.env.NEXTAUTH_URL + "/api/contact", {
+	const response = await axios(process.env.NEXTAUTH_URL + "/api/contact", {
 		method: "POST",
 		body: formData,
 	});

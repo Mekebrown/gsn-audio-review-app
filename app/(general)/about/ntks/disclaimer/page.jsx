@@ -1,181 +1,186 @@
-/* 
-    BG colors made from logo colors; Waves like an ocean; Animated?
-*/
+/* BG colors made from logo colors; Waves like an ocean; Animated? */
 import Link from 'next/link';
+import { getCookie, setCookie } from 'cookies-next';
 
-
-import { baseURL } from "@/app/lib/general_variables";
+import { baseURL, gsnDisclaimerChoice } from "@/app/lib/general_variables";
 
 export default function Page() {
-    const choice = "agreed"; // Retrieve from user's session data
+    const choice = getCookie(gsnDisclaimerChoice) === true ? "agreed" : "did not agree"; // Retrieve from user's session data as well as this cookie 
+
+    const handleDisclaimerAgree = () => {
+        setCookie(gsnDisclaimerChoice, true);
+
+        // If the user is logged in, save this to their info
+    };
+
+    const handleDisclaimerDisagree = () => {
+        setCookie(gsnDisclaimerChoice, false);
+    };
 
     return <section>
         <div>
             <h1>You {choice} to the following disclaimer:</h1>
-            <p>
-                These terms of use (as amended from time to time, the &quot;Terms&quot;, &quot;T&amp;C&quot;, the &quot;Terms of Use&quot;, or the &quot;Terms of Services&quot;) together with any supplemental rules and regulations, such as the <Link href={baseURL}>Privacy Policy</Link>, govern your access to and use of the services available on our web-application and website (the &quot;Application&quot;, &quot;App&quot;, or &quot;Platform&quot;) operated by Gifted Sounds Network LLC dba Gifted Media Productions (&quot;GSN&quot; or the &quot;Company&quot;). Your access to the Application and use of our services is subject to your acceptance of and compliance with these Terms.
-            </p>
 
-            <p>
-                By accessing the Application or using our services you agree to accept and be bound by the current version of these Terms. If you do not agree to the current version of these Terms, you are not authorized to continue accessing the Application or using our services.
-            </p>
+            <div>
+                <p>
+                    These terms of use (as amended from time to time, the &quot;Terms&quot;, &quot;T&amp;C&quot;, the &quot;Terms of Use&quot;, or the &quot;Terms of Services&quot;) together with any supplemental rules and regulations, such as the <Link href={baseURL}>Privacy Policy</Link>, govern your access to and use of the services available on our web-application and website (the &quot;Application&quot;, &quot;App&quot;, or &quot;Platform&quot;) operated by Gifted Sounds Network LLC dba Gifted Media Productions (&quot;GSN&quot; or the &quot;Company&quot;). Your access to the Application and use of our services is subject to your acceptance of and compliance with these Terms.
+                </p>
 
-            <p>
-                You are considered a &quot;Visitor&quot; if you are not signed in.
-            </p>
+                <p>
+                    By accessing the Application or using our services you agree to accept and be bound by the current version of these Terms. If you do not agree to the current version of these Terms, you are not authorized to continue accessing the Application or using our services.
+                </p>
 
-            <p>
-                You are considered a &quot;User or Client&quot; if you are signed in.
-            </p>
+                <p>
+                    You are considered a &quot;Visitor&quot; if you are not signed in.
+                </p>
 
-            <p>
-                &quot;Visitor Pages&quot; are Site pages that hold general details on the Company as well as how to contact a company representative. Visitor Pages constitute the following site pages a Visitor is able to access: <br />
-                <Link
-                    href={baseURL}
-                    rel="noopener noreferrer"
-                >
-                    Home/Landing
-                </Link> <br />
-                <Link
-                    href={baseURL + "/signin"}
-                    rel="noopener noreferrer"
-                >
-                    Sign In
-                </Link> <br />
-                <Link
-                    href={baseURL + "/about/ntks/terms"}
-                    rel="noopener noreferrer"
-                >
-                    T&amp;C
-                </Link> <br />
-                <Link
-                    href={baseURL + "/about/ntks/privacy"}
-                    rel="noopener noreferrer"
-                >
-                    Privacy Policy
-                </Link> <br />
-                <br />
-                <Link
-                    href={baseURL + "/about/ntks/instructions"}
-                    rel="noopener noreferrer"
-                >
-                    Instructions
-                </Link> <br />
-                <Link
-                    href={baseURL + "/about"}
-                    rel="noopener noreferrer"
-                >
-                    About Our Company
-                </Link> <br />
-                <Link
-                    href={baseURL + "/contact"}
-                    rel="noopener noreferrer"
-                >
-                    Contact Us
-                </Link>
-            </p>
+                <p>
+                    You are considered a &quot;User or Client&quot; if you are signed in.
+                </p>
 
-            <p>
-                The Application pages, other than the Visitor Pages, provide you with content and updates (collectively the &quot;Information&quot;) related to your contracted Project. Information on your project is compiled based on your and/or your team&apos;s transactional directives, GSN team member directives, and previous and/or current purchases through the GSN app (the &quot;Data&quot;). The Information generated by GSN is for information purposes only and does not constitute a Product(s) or Service(s) promised.
-            </p>
+                <p>
+                    &quot;Visitor Pages&quot; are Site pages that hold general details on the Company as well as how to contact a company representative. Visitor Pages constitute the following site pages a Visitor is able to access: <br />
+                    <Link
+                        href={baseURL}
+                        rel="noopener noreferrer"
+                    >
+                        Home/Landing
+                    </Link> <br />
+                    <Link
+                        href={baseURL + "/signin"}
+                        rel="noopener noreferrer"
+                    >
+                        Sign In
+                    </Link> <br />
+                    <Link
+                        href={baseURL + "/about/ntks/terms"}
+                        rel="noopener noreferrer"
+                    >
+                        T&amp;C
+                    </Link> <br />
+                    <Link
+                        href={baseURL + "/about/ntks/privacy"}
+                        rel="noopener noreferrer"
+                    >
+                        Privacy Policy
+                    </Link> <br />
+                    <br />
+                    <Link
+                        href={baseURL + "/about/ntks/instructions"}
+                        rel="noopener noreferrer"
+                    >
+                        Instructions
+                    </Link> <br />
+                    <Link
+                        href={baseURL + "/about"}
+                        rel="noopener noreferrer"
+                    >
+                        About Our Company
+                    </Link> <br />
+                    <Link
+                        href={baseURL + "/contact"}
+                        rel="noopener noreferrer"
+                    >
+                        Contact Us
+                    </Link>
+                </p>
 
-            <p>
-                Products - All digital <br />
-                List them <br />
-                <br />
-                Services <br />
-                A la carte <br />
-                payment packages
-            </p>
+                <p>
+                    The Application pages, other than the Visitor Pages, provide you with content and updates (collectively the &quot;Information&quot;) related to your contracted Project. Information on your project is compiled based on your and/or your team&apos;s transactional directives, GSN team member directives, and previous and/or current purchases through the GSN app (the &quot;Data&quot;). The Information generated by GSN is for information purposes only and does not constitute a Product(s) or Service(s) promised.
+                </p>
 
-            <p>
-                GSN and its directors, officers, employees, agents, partners, affiliates, and licensors shall in no way be responsible for any decisions you may make based on the use of Application and/or the Information. You hereby waive any claim you may have or acquire against GSN or any of its directors, officers, employees, agents, partners, affiliates and licensors and indemnify and hold GSN or any of its directors, officers, employees, agents, partners, affiliates and licensors harmless from any claims, proceedings, costs, special, incidental, consequential or indirect damages and loss of profits relating to your use of the Information.
-            </p>
+                <p>
+                    Products - All digital <br />
+                    List them <br />
+                    <br />
+                    Services <br />
+                    A la carte <br />
+                    payment packages
+                </p>
 
-            <p>
-                The form and nature of the Application may change from time to time without prior notice to you. In addition, we may stop permanently or temporarily at any time operating the Application or any features within the Application towards you or towards users generally and may not be able to provide you with prior notice. We also retain the right to create limits on the user storage at our sole discretion at any time without prior notice to you.
-            </p>
+                <p>
+                    GSN and its directors, officers, employees, agents, partners, affiliates, and licensors shall in no way be responsible for any decisions you may make based on the use of Application and/or the Information. You hereby waive any claim you may have or acquire against GSN or any of its directors, officers, employees, agents, partners, affiliates and licensors and indemnify and hold GSN or any of its directors, officers, employees, agents, partners, affiliates and licensors harmless from any claims, proceedings, costs, special, incidental, consequential or indirect damages and loss of profits relating to your use of the Information.
+                </p>
 
-            <p>
-                The collection and use of the Data which you provide are subject to our Privacy Policy. By using the Application you consent to the collection and use of the Data by GSN in accordance with the Privacy Policy.
-            </p>
+                <p>
+                    The form and nature of the Application may change from time to time without prior notice to you. In addition, we may stop permanently or temporarily at any time operating the Application or any features within the Application towards you or towards users generally and may not be able to provide you with prior notice. We also retain the right to create limits on the user storage at our sole discretion at any time without prior notice to you.
+                </p>
 
-            <p>
-                The collection and use of the Data which you provide are subject to our Privacy Policy. By using the Application you consent to the collection and use of the Data by GSN in accordance with the Privacy Policy.
-            </p>
+                <p>
+                    The collection and use of the Data which you provide are subject to our Privacy Policy. By using the Application you consent to the collection and use of the Data by GSN in accordance with the Privacy Policy.
+                </p>
 
-            <p>
-                We reserve the right at all times (but we will not have an obligation) to remove or refuse to distribute any Information or Data and to terminate users or reclaim usernames. We also reserve the right to access, read, preserve and disclose any Information or Data to the extent we reasonably believe it is necessary to (i) satisfy any applicable law, regulation, legal process or governmental request, (ii) enforce these Terms, including investigations of a potential violation thereof, (iii) detect, prevent or otherwise address fraud, security or technical issues, (iv) respond to user support requests, or to (v) protect the rights, property or safety of GSN, its users and the public. Accounts that are inactive for more than one year may be removed without prior notice.
-            </p>
+                <p>
+                    The collection and use of the Data which you provide are subject to our Privacy Policy. By using the Application you consent to the collection and use of the Data by GSN in accordance with the Privacy Policy.
+                </p>
 
-            <p>
-                There are limitations on the use of the Application. These limitations comply with legal requirements and aim to protect our users from abuse and to make the use of the Application the best possible experience for all users. We may need to change these rules from time to time and reserve the right to do so. No abuse of our Application will be tolerated. Any violation of these rules may lead to a temporary or permanent suspension of all related accounts. Accounts created to replace suspended accounts will be permanently suspended.
-            </p>
+                <p>
+                    We reserve the right at all times (but we will not have an obligation) to remove or refuse to distribute any Information or Data and to terminate users or reclaim usernames. We also reserve the right to access, read, preserve and disclose any Information or Data to the extent we reasonably believe it is necessary to (i) satisfy any applicable law, regulation, legal process or governmental request, (ii) enforce these Terms, including investigations of a potential violation thereof, (iii) detect, prevent or otherwise address fraud, security or technical issues, (iv) respond to user support requests, or to (v) protect the rights, property or safety of GSN, its users and the public. Accounts that are inactive for more than one year may be removed without prior notice.
+                </p>
 
-            <p>
-                Unlawful Use: You shall not use the Application or any Information provided for any unlawful purposes or in furtherance of any illegal activities. International users are required to comply with all applicable local laws regarding online conduct and acceptable content.
-            </p>
+                <p>
+                    There are limitations on the use of the Application. These limitations comply with legal requirements and aim to protect our users from abuse and to make the use of the Application the best possible experience for all users. We may need to change these rules from time to time and reserve the right to do so. No abuse of our Application will be tolerated. Any violation of these rules may lead to a temporary or permanent suspension of all related accounts. Accounts created to replace suspended accounts will be permanently suspended.
+                </p>
 
-            <p>
-                Unauthorized Access: You shall not do any of the following while accessing or using the Application: (i) access, tamper with, or use non-public areas of the Application (except for your own account), GSN&apos;s computer systems, or the brands&apos; private information; (ii) probe, scan or test the vulnerability of any system or network or breach or circumvent any security or authentication measures; (iii) attempt to access or search the Application or any Data by any means (automated or otherwise) other than through our currently available, published interfaces; or (iv) interfere with or disrupt, or attempt to do so, the access of any user, host or network.
-            </p>
+                <p>
+                    Unlawful Use: You shall not use the Application or any Information provided for any unlawful purposes or in furtherance of any illegal activities. International users are required to comply with all applicable local laws regarding online conduct and acceptable content.
+                </p>
 
-            <p>
-                Respect for the Privacy of Third Parties: You shall not disclose other people&apos;s Data without their express authorization and permission.
-            </p>
+                <p>
+                    Unauthorized Access: You shall not do any of the following while accessing or using the Application: (i) access, tamper with, or use non-public areas of the Application (except for your own account), GSN&apos;s computer systems, or the brands&apos; private information; (ii) probe, scan or test the vulnerability of any system or network or breach or circumvent any security or authentication measures; (iii) attempt to access or search the Application or any Data by any means (automated or otherwise) other than through our currently available, published interfaces; or (iv) interfere with or disrupt, or attempt to do so, the access of any user, host or network.
+                </p>
 
-            <p>
-                No Reproduction: You shall not reproduce, duplicate, copy, sell, trade or resell the Application content and its design and look or any Information derived from the Application. You are not entitled to modify or redistribute the Application content and its design and look or any Information or to reproduce, store, link, frame or deep-link it on any other Application or in any other medium or format without our prior written consent. Further, you shall not use the Application for commercial exploitation in any circumstances.
-            </p>
+                <p>
+                    Respect for the Privacy of Third Parties: You shall not disclose other people&apos;s Data without their express authorization and permission.
+                </p>
 
-            <p>
-                No Malware: You shall not provide any malicious content intended to damage or disrupt another user&apos;s browser or computer or to compromise a user&apos;s privacy.
-            </p>
+                <p>
+                    No Reproduction: You shall not reproduce, duplicate, copy, sell, trade or resell the Application content and its design and look or any Information derived from the Application. You are not entitled to modify or redistribute the Application content and its design and look or any Information or to reproduce, store, link, frame or deep-link it on any other Application or in any other medium or format without our prior written consent. Further, you shall not use the Application for commercial exploitation in any circumstances.
+                </p>
 
-            <p>
-                All copyright, database right, patent, other intellectual property right, title and interest in and to the Application and any Information (excluding the Data provided by the users of the Application) are and will remain the exclusive property of GSN and its licensors. The elements of the Application, including but not limited to the general design, imagery, and any Information are protected by copyright, trademark, patent and other laws relating to intellectual property rights of both the United States of America and foreign countries. Nothing in these Terms gives you a right to use the GSN name or any of GSN&apos;s trademarks, logos, domain names and other distinctive brand features. You are permitted to download and print any Information from the Application solely for your own personal use and/or internal business purposes. You are not entitled to use the content of the Application for commercial exploitation in any circumstances. In case you breach the terms of this provision, GSN will have the right to claim damages against you which shall include the right to claim special, incidental, consequential or indirect damages and loss of profits.
-            </p>
+                <p>
+                    No Malware: You shall not provide any malicious content intended to damage or disrupt another user&apos;s browser or computer or to compromise a user&apos;s privacy.
+                </p>
 
-            <p>
-                Whilst we endeavor to ensure the accuracy of the Information, neither GSN nor any of its directors, officers, employees, agents, partners, affiliates, and licensors may be held responsible for any omissions or errors in the Information or for any loss or damages which may subsequently arise.
-            </p>
+                <p>
+                    All copyright, database right, patent, other intellectual property right, title and interest in and to the Application and any Information (excluding the Data provided by the users of the Application) are and will remain the exclusive property of GSN and its licensors. The elements of the Application, including but not limited to the general design, imagery, and any Information are protected by copyright, trademark, patent and other laws relating to intellectual property rights of both the United States of America and foreign countries. Nothing in these Terms gives you a right to use the GSN name or any of GSN&apos;s trademarks, logos, domain names and other distinctive brand features. You are permitted to download and print any Information from the Application solely for your own personal use and/or internal business purposes. You are not entitled to use the content of the Application for commercial exploitation in any circumstances. In case you breach the terms of this provision, GSN will have the right to claim damages against you which shall include the right to claim special, incidental, consequential or indirect damages and loss of profits.
+                </p>
 
-            <p>
-                Any Information transmitted via the Application will pass over public telecommunications networks. GSN does not give any warranty or undertaking and does not make any representation that the operation of the Application will be secure, uninterrupted, or error free.
-            </p>
+                <p>
+                    Whilst we endeavor to ensure the accuracy of the Information, neither GSN nor any of its directors, officers, employees, agents, partners, affiliates, and licensors may be held responsible for any omissions or errors in the Information or for any loss or damages which may subsequently arise.
+                </p>
 
-            <p>
-                The Application may contain links to third-party Applications or materials supplied by or contained on any third-party Application which is linked from or to the Application. GSN does not accept any responsibility or liability for: (i) the availability or accuracy of such Applications or material or (ii) the content, products or services on or available from such Applications or materials. Links to such Applications or materials do not imply any endorsement by GSN of such Applications or materials or the content, products or services available from such Applications or materials. You acknowledge sole responsibility for and assume all risks arising from your use of any such Applications or materials.
-            </p>
+                <p>
+                    Any Information transmitted via the Application will pass over public telecommunications networks. GSN does not give any warranty or undertaking and does not make any representation that the operation of the Application will be secure, uninterrupted, or error free.
+                </p>
 
-            <p>
-                GSN provides the content of the Application and any Information in good faith, but your access to and use of the Application is at your own risk. GSN operates the Application on an &quot;as is&quot; and &quot;as available&quot; basis without warranty of any kind, whether expressed or implied, including but not limited to, the implied warranties of merchantability, fitness for a particular purpose or non-infringement of any copyrights, database rights, patents, trademarks or any other intellectual property rights in the jurisdiction in which you access and/or use the Application. GSN gives no warranty or undertaking or representation for the completeness, accuracy, availability, timeliness, security or reliability of the Application or that the Information is of satisfactory quality, up to date or free from viruses, trojans or other harmful or malicious programs. GSN will not be responsible or liable for any harm to your computer system, loss of data or other harm resulting from your access to or use of the Application or for the deletion of, or the failure to store or to transmit, any Data or Information and other communications. GSN makes no warranty that the Application will meet your requirements or be available on an uninterrupted, secure or error-free basis. No advice or information, whether oral or written, obtained from GSN or the Application, shall create any implied warranty.
-            </p>
+                <p>
+                    The Application may contain links to third-party Applications or materials supplied by or contained on any third-party Application which is linked from or to the Application. GSN does not accept any responsibility or liability for: (i) the availability or accuracy of such Applications or material or (ii) the content, products or services on or available from such Applications or materials. Links to such Applications or materials do not imply any endorsement by GSN of such Applications or materials or the content, products or services available from such Applications or materials. You acknowledge sole responsibility for and assume all risks arising from your use of any such Applications or materials.
+                </p>
 
+                <p>
+                    GSN provides the content of the Application and any Information in good faith, but your access to and use of the Application is at your own risk. GSN operates the Application on an &quot;as is&quot; and &quot;as available&quot; basis without warranty of any kind, whether expressed or implied, including but not limited to, the implied warranties of merchantability, fitness for a particular purpose or non-infringement of any copyrights, database rights, patents, trademarks or any other intellectual property rights in the jurisdiction in which you access and/or use the Application. GSN gives no warranty or undertaking or representation for the completeness, accuracy, availability, timeliness, security or reliability of the Application or that the Information is of satisfactory quality, up to date or free from viruses, trojans or other harmful or malicious programs. GSN will not be responsible or liable for any harm to your computer system, loss of data or other harm resulting from your access to or use of the Application or for the deletion of, or the failure to store or to transmit, any Data or Information and other communications. GSN makes no warranty that the Application will meet your requirements or be available on an uninterrupted, secure or error-free basis. No advice or information, whether oral or written, obtained from GSN or the Application, shall create any implied warranty.
+                </p>
 
-            <p>
-                These Terms and the use of the Application shall in all respects be governed by United States of America and New York substantive law. Any dispute arising out of or in connection with these Terms and/or the use of the Application shall be subject to the exclusive jurisdiction of the courts of Westchester, New York, and you consent to such jurisdiction and venue in such courts and waive any objection as to inconvenient forum.
-            </p>
+                <p>
+                    These Terms and the use of the Application shall in all respects be governed by United States of America and New York substantive law. Any dispute arising out of or in connection with these Terms and/or the use of the Application shall be subject to the exclusive jurisdiction of the courts of Westchester, New York, and you consent to such jurisdiction and venue in such courts and waive any objection as to inconvenient forum.
+                </p>
 
-            <p>
-                GSN operates the Application from the United States of America and the Information is deemed to have been delivered in the United States of America. You are only allowed to access the Application if you are entitled to enter into a binding contract with GSN and are not a person barred from accessing the Application according to the applicable law. You undertake to access the Application solely in compliance with these Terms and all applicable rules and regulations. The Application is not directed to any person to whom (by reason of such person&apos;s nationality, residence or otherwise) the publication or availability of the Application is prohibited. Persons to whom such restrictions apply must not access the Application. If you choose to access the Application from outside the United States of America you are solely responsible for compliance with any applicable local laws.
-            </p>
+                <p>
+                    GSN operates the Application from the United States of America and the Information is deemed to have been delivered in the United States of America. You are only allowed to access the Application if you are entitled to enter into a binding contract with GSN and are not a person barred from accessing the Application according to the applicable law. You undertake to access the Application solely in compliance with these Terms and all applicable rules and regulations. The Application is not directed to any person to whom (by reason of such person&apos;s nationality, residence or otherwise) the publication or availability of the Application is prohibited. Persons to whom such restrictions apply must not access the Application. If you choose to access the Application from outside the United States of America you are solely responsible for compliance with any applicable local laws.
+                </p>
 
-            <p>
-                The most current version of the T&amp;C will be available on our Application. Revised Terms shall become effective from the date of publication on the Application. By continuing to access the Application after those revisions become effective, you agree to and accept to be bound by the revised Terms.
-            </p>
+                <p>
+                    The most current version of the T&amp;C will be available on our Application. Revised Terms shall become effective from the date of publication on the Application. By continuing to access the Application after those revisions become effective, you agree to and accept to be bound by the revised Terms.
+                </p>
 
-            <p>
-                These Terms, together with any supplemental rules and regulations, such as the Privacy Policy, are the entire and exclusive agreement between GSN and you regarding the use of the Application, and shall supersede and replace any prior agreements between GSN and you regarding the use of the Application. In the event that any provision of these Terms is held to be invalid or unenforceable, the remaining provisions of these Terms shall remain in full force and effect.
-            </p>
+                <p>
+                    These Terms, together with any supplemental rules and regulations, such as the Privacy Policy, are the entire and exclusive agreement between GSN and you regarding the use of the Application, and shall supersede and replace any prior agreements between GSN and you regarding the use of the Application. In the event that any provision of these Terms is held to be invalid or unenforceable, the remaining provisions of these Terms shall remain in full force and effect.
+                </p>
+            </div>
 
-            <button type="button">
-                [Reject All]
-            </button>
-
-            <button type="button">
-                [Accept All]
-            </button>
+            <button type="button" onClick={handleDisclaimerDisagree}> [Reject All] </button>
+            <button type="button" onClick={handleDisclaimerAgree}> [Accept All] </button>
         </div>
     </section>;
 };

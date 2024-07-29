@@ -82,6 +82,7 @@ export const NotesIcon = () => {
 };
 
 // Bell icon - faBell - For notifications
+// TODO The <sup> tag defines superscript text.
 export const NotifsIcon = ({ notifCount = null }) => {
     return <span className="notifs-icon">
         <FontAwesomeIcon icon={faBell} />
@@ -96,7 +97,7 @@ export const NotifsIcon = ({ notifCount = null }) => {
 // Search icon - faSearch - For search
 export const SearchIcon = ({ isClicked }) => {
     return <span className="search-icon">
-        {isClicked ? <span>Enter</span> : <FontAwesomeIcon icon={faSearch} />}
+        {isClicked ? <span>Enter</span> : <FontAwesomeIcon icon={faSearch} className="searchFieldIcon" />}
     </span>;
 };
 
