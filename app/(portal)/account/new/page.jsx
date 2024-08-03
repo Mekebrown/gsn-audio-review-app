@@ -70,7 +70,7 @@ export default function Page() {
   const handlePWCopy = () => {
     if (navigator?.clipboard !== undefined) {
       navigator.clipboard
-        .writeText(pw)
+        .writeText(newMemberData.pw)
         .then(
           () => {
             /* clipboard successfully set */

@@ -29,12 +29,12 @@ import "@/styles/navigation/topnav.css";
 
 /**
  * @description The site navigation showing one of three versions of 
- * navigation menus, depending on the user and credentials
+ * navigation menus, depending on the member and credentials
  * This component includes 
  * - A visitor's nav showing About, Pricing, Contact, and Sign In page links
  * - A client's nav showing Media, Notes, Contact, pages 
  *      as well as the notifications, and settings menus
- * - An admin's nav showing unpw, upload, search, all media/notes/users
+ * - An admin's nav showing unpw, upload, search, all media/notes/members
  *      as well as the notifications, and settings menus
  * - A search input that returns results in a modal
  * - The dropdown meny revealing notifications
@@ -57,7 +57,7 @@ import "@/styles/navigation/topnav.css";
  * @returns {JSX.Element} <TopNav />
  */
 export default function TopNav() {
-    const [userId, setUserId] = useState(null);
+    const [memberId, setMemberId] = useState(null);
     const [showSignedInMenu, setShowSignedInMenu] = useState(false);
     const [clicked, setClicked] = useState(false);
     const [newNotifs, setNewNotifs] = useState({ media: 0, notes: 0, signins: 0 });
@@ -186,7 +186,7 @@ export default function TopNav() {
                                 <SendPWIcon className="unpwIcon" />
 
                                 <span className="tooltiptext">
-                                    Invite a user by sending them a username and password
+                                    Invite a member by sending them a username and password
                                 </span>
                             </div>
                         </Link>
@@ -233,11 +233,11 @@ export default function TopNav() {
                             </div>
                         </Link>
                         &nbsp;|&nbsp;
-                        <Link className="usersIconLink" href={baseURL + "/account/all"}>
+                        <Link className="membersIconLink" href={baseURL + "/account/all"}>
                             <div className="tooltip">
-                                <UsersIcon className="usersIcon" />
+                                <UsersIcon className="UsersIcon" />
 
-                                <span className="tooltiptext">Users</span>
+                                <span className="tooltiptext">Members</span>
                             </div>
                         </Link>
                         &nbsp;|&nbsp;
@@ -290,35 +290,31 @@ export default function TopNav() {
     };
 
     /**
-     * Sends a sign-in cookie and JWT header with the request. 
-     * Perhaps use useSession and session data retrieval?
+     * Sends a sign-in cookie and JWT header with the request.
      * 
-     * Call to see if user is signed in
+     * Call to see if member is signed in
      */
     useEffect(() => {
         const signInCookie = getCookie(gsnSignInCookie);
         const jwtInfo = "";
 
         /* 
-        Retrieve current user's id
+        Retrieve current member's id
         .
         . 
         . 
         For now it's 1
         */
-        setUserId(1);
+        setMemberId(1);
 
-        if (signInCookie && jwtInfo) { // User's signed in? Get notifs
+        if (signInCookie && jwtInfo) { // Member's signed in? Get notifs
             const grabNotifs = async () => {
-                const response = await axios(notifsAPIPath + userId,
-                    {
-                        method: "POST",
-                        headers: {
-                            jwtInfo
-                        },
-                        body: signInCookie
-                    }
-                );
+                const response = await axios({
+                    url: notifsAPIPath + memberId,
+                    method: "POST",
+                    headers: { jwtInfo },
+                    data: signInCookie
+                });
 
                 const resJSON = await response.json();
                 const { data } = resJSON;
@@ -328,9 +324,9 @@ export default function TopNav() {
 
             const data = grabNotifs();
 
-            if (data.ok === true) {
+            if (!data.error) {
                 setNewNotifs(data.new_notifs);
-                setShowSignedInMenu(data.user_type);
+                setShowSignedInMenu(data.member_type);
             }
         }
     }, []);

@@ -1,7 +1,7 @@
-import { getSingleUserAPIPath } from "@/app/lib/general_variables";
+import { getSingleMemberAPIPath } from "@/app/lib/general_variables";
 
-const getUserInfo = async (id) => {
-  const user = await fetch(getSingleUserAPIPath + id).then((res) => res.json());
+const getMemberInfo = async (id) => {
+  const user = await fetch(getSingleMemberAPIPath + id).then((res) => res.json());
   const { data } = user;
 
   return data;
@@ -17,7 +17,7 @@ const getUserInfo = async (id) => {
 export default async function Page({ params }) {
   const thisClient = params.id;
 
-  const user_info = await getUserInfo(thisClient);
+  const user_info = await getMemberInfo(thisClient);
 
   return <section>
     <h1>Profile</h1>

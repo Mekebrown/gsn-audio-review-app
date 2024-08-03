@@ -4,19 +4,19 @@ import Image from "next/image";
  * General Info on route navigation
  *
  * Features
- * Media, notes, user accounts, sign in form, contact form, 
+ * Media, notes, member accounts, sign in form, contact form, 
  * notifications, settings, upload media, create notes, send a 
- * user a username/password
+ * member a membername/password
  *
  * Access levels
- * Full - Admins only; Access everything, handle media, grant user email access, handle password generation
- * Review - Clients only; Can view all user features, can handle notes
+ * Full - Admins only; Access everything, handle media, grant member email access, handle password generation
+ * Review - Clients only; Can view all member features, can handle notes
  * View - Visitors only; Can view all public pages
  */
 
 // Entity Types
-export const userTypes = ["admin", "client", "visitor"];
-export const userAccess = ["full", "review", "view"];
+export const memberTypes = ["admin", "client", "visitor"];
+export const memberAccess = ["full", "review", "view"];
 export const mediaContentTypes = ["audio", "video", "image"];
 
 // Images
@@ -64,35 +64,35 @@ const allMediaPath = baseURL + "/media";
 const singleMediaPath = baseURL + "/media"; // + media_id - A client can only access their assigned media
 const allNotesPath = baseURL + "/notes";
 const singleNotePath = baseURL + "/notes/"; // + note_id
-const allUsersPath = baseURL + "/account/all"; // Admin-only; IF an admin. An admin can retrieve any single user's info with
-const currentUserPath = baseURL + "/account"; // Will retrieve curent user's info  
+const allMembersPath = baseURL + "/account/all"; // Admin-only; IF an admin. An admin can retrieve any single member's info with
+const currentMemberPath = baseURL + "/account"; // Will retrieve curent member's info  
 
 // Media APIs
-const getAllMediaAPIPath = apiURL + "/media?request_type=all";
-const getSingleMediaAPIPath = apiURL + "/media?request_type=single&media_id=";
-const setMediaAPIPath = apiURL + "/media"; // POST, PUT, DELETE (hide) requests; Admin-only
+const getAllMediaAPIPath = apiURL + "/medias";
+const getSingleMediaAPIPath = apiURL + "/medias/"; // + media_id
+const setMediaAPIPath = apiURL + "/medias"; // POST, PUT, DELETE (hide) requests; Admin-only
 
 // Notes APIs
-const getAllNotesAPIPath = apiURL + "/notes?request_type=all";
-const getSingleNoteAPIPath = apiURL + "/notes?request_type=single&note_id=";
+const getAllNotesAPIPath = apiURL + "/notes";
+const getSingleNoteAPIPath = apiURL + "/notes/"; // + note_id
 const setNoteAPIPath = apiURL + "/notes"; // POST, PUT, DELETE (hide) requests
 
-// Users APIs
-const getAllUsersAPIPath = apiURL + "/account?request_type=all"; // Admin-only
-const getSingleUserAPIPath = apiURL + "/account?request_type=single&user_id="; // If admin, can retrieve any single user's info
-const setUserAPIPath = apiURL + "/account"; // POST, PUT, DELETE (hide) requests; Admin-only
+// Members APIs
+const getAllMembersAPIPath = apiURL + "/members"; // Admin-only
+const getSingleMemberAPIPath = apiURL + "/members/";  // + media_id If admin, can retrieve any single member's info
+const setMemberAPIPath = apiURL + "/members"; //apiURL + "/members"; // POST, PUT, DELETE (hide) requests; Admin-only
 
 // Sign Ins/Outs APIs
-const getLastUserSigninAPIPath = apiURL + "/signin?request_type=recent&user_id="; // Admin-only
-const getAllSingleUserSigninsAPIPath = apiURL + "/signin?request_type=single&user_id="; // Admin-only
-const getAllUsersSigninsAPIPath = apiURL + "/signin?request_type=all&user_id="; // Admin-only
-const setSigninAPIPath = apiURL + "/signin"; // POST
-const setSignoutAPIPath = apiURL + "/signout?user_id=";
+const getLastMemberSigninAPIPath = "???";  // + member_id Admin-only
+const getAllSingleMemberSigninsAPIPath = "???"; // + member_id Admin-only
+const getAllMembersSigninsAPIPath = "???"; // + member_id Admin-only
+const setSigninAPIPath = apiURL + "???"; // POST
+const setSignoutAPIPath = apiURL + "???"; // + member_id
 
 // Random APIs
 const searchAPIPath = apiURL + "/info/search?search_query=";
 const settingsAPIPath = apiURL + "/info/settings";
-const notifsAPIPath = apiURL + "/info/notifs?user_id=";
+const notifsAPIPath = apiURL + "/info/notifs?member_id="; // + member_id
 const contactAPIPath = apiURL + "/contact"; // POST
 const uploadAPIPath = apiURL + "/media/new"; // POST
 
@@ -118,8 +118,8 @@ export {
 	singleMediaPath,
 	allNotesPath,
 	singleNotePath,
-	allUsersPath,
-	currentUserPath,
+	allMembersPath,
+	currentMemberPath,
 	contactAPIPath,
 	getAllMediaAPIPath,
 	getSingleMediaAPIPath,
@@ -127,12 +127,12 @@ export {
 	getAllNotesAPIPath,
 	getSingleNoteAPIPath,
 	setNoteAPIPath,
-	getAllUsersAPIPath,
-	getSingleUserAPIPath,
-	setUserAPIPath,
-	getLastUserSigninAPIPath,
-	getAllSingleUserSigninsAPIPath,
-	getAllUsersSigninsAPIPath,
+	getAllMembersAPIPath,
+	getSingleMemberAPIPath,
+	setMemberAPIPath,
+	getLastMemberSigninAPIPath,
+	getAllSingleMemberSigninsAPIPath,
+	getAllMembersSigninsAPIPath,
 	setSigninAPIPath,
 	setSignoutAPIPath,
 	searchAPIPath,

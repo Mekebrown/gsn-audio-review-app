@@ -34,8 +34,8 @@ const adminsExample = [
     },
 ];
 
-export const getAllUsersExample = () => {
-  return usersExample.flat(adminsExample);
+export const getAllMembersExample = () => {
+	return usersExample.flat(adminsExample);
 };
 
 export default adminsExample;
