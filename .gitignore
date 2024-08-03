@@ -3,14 +3,12 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
 # next.js
 /.next/
 /out/
 
 # Jest, msw test files 
+/coverage
 __tests__/
 /public/mockServiceWorker.js
 
@@ -20,11 +18,9 @@ __tests__/
 # misc
 .DS_Store
 *.pem
-/etc
 /public/sitemap.txt
 /app/lib/db-related/db.js
 /backend
-launch.json
 
 # debug
 npm-debug.log*
@@ -41,3 +37,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vs code
+.vscode
+launch.json
+
+# docs
+/docs
+/etc
