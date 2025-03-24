@@ -6,7 +6,7 @@
 }
 
 .childrenSection {
-  padding: 1rem;
   text-align: center;
   padding: 3%;
+  min-height: -webkit-fill-available;
 }
