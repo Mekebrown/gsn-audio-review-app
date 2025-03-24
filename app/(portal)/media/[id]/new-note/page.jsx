@@ -94,10 +94,10 @@ export default function Page({ onClose }) {
                 .then(
                     () => {
                         /* clipboard successfully set */
-                        setCopiedEmail(true);
+                        setCopiedNote(true);
 
                         setTimeout(() => {
-                            setCopiedEmail(false);
+                            setCopiedNote(false);
                         }, 2000);
                     },
                     () => {
@@ -106,7 +106,6 @@ export default function Page({ onClose }) {
                 );
         }
     }
-
     return (
         <Modal onClose={onClose}>
             <h1>{noteTitle}</h1>
