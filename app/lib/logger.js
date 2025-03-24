@@ -1,30 +1,49 @@
+import fs from "fs";
+import path from "path";
+
 /**
- * What types of occurrences do I want to log?
- * - Errors
- * - Warnings
- * - Alerts
- * - Exceptions
- * - Performance issues and bottlenecks
- * - Security-related events (too many sign in attempts, accessing a restricted or non-existent page, auth issues, etc.)
+ * Logs various types of occurrences such as errors, warnings, alerts, etc.
  * 
- * The Details object will have the following properties:
- * - desc string - short description of the log
- * - message string - message to be logged
- * - req object
- * - res object
- * - headers object
+ * The Details object should have the following properties:
+ * - desc {string} - Short description of the log
+ * - message {string} - Message to be logged
+ * - req {object} [optional] - Request object
+ * - res {object} [optional] - Response object
+ * - headers {object} [optional] - Headers object
  * 
- * @param {Object} details 
+ * @param {Object} details - Details of the log entry
  */
 export const logger = (details) => {
-  const current = ((new Date()).toLocaleString()).replace(/\D*/g, "");
-  const file_name = `./files/logs/${details.desc}${current}.log`;
+  try {
+    // Generate a timestamped log file name
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, "");
+    const fileName = `${details.desc}_${timestamp}.log`;
+    const logFilePath = path.resolve("./files/logs", fileName);
 
-  const log_data = {
-    file_name,
-    message: details.message,
-    req: details.req ? details.req : "N/A",
-    res: details.res ? details.res : "N/A",
-    headers: details.headers ? details.headers : "N/A",
-  };
+    // Prepare log data
+    const logData = {
+      timestamp: new Date().toISOString(),
+      description: details.desc || "No description provided",
+      message: details.message || "No message provided",
+      request: details.req || "N/A",
+      response: details.res || "N/A",
+      headers: details.headers || "N/A",
+    };
+
+    // Convert log data to a formatted string
+    const logContent = JSON.stringify(logData, null, 2);
+
+    // Ensure the logs directory exists
+    const logsDir = path.dirname(logFilePath);
+    if (!fs.existsSync(logsDir)) {
+      fs.mkdirSync(logsDir, { recursive: true });
+    }
+
+    // Write the log data to the file
+    fs.writeFileSync(logFilePath, logContent, "utf8");
+
+    console.log(`Log written to: ${logFilePath}`);
+  } catch (error) {
+    console.error("Failed to write log:", error);
+  }
 };

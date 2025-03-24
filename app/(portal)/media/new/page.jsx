@@ -8,153 +8,186 @@ import { isAudioFile } from "@/app/lib/media_placeholders";
 import { uploadAPIPath } from "@/app/lib/general_variables";
 
 /**
- * A Modal component showing a form to 
- * configure and upload
- * 
- * @param {function} onClose
- * 
+ * A Modal component showing a form to configure and upload audio files.
+ *
  * @returns {React.ReactElement}
  */
 export default function Page() {
-    const [files, setFiles] = useState([]);
-    const [uploadStatus, setUploadStatus] = useState(false);
-    const [error, setError] = useState({ show: false, error: "" });
+  const [files, setFiles] = useState({
+    title: "",
+    fileUpload: null,
+    fileName: "",
+    mediaType: "",
+    mediaDesc: "",
+    thumbURL: "",
+    thumbUpload: null,
+    hasMediaMarkers: null,
+  });
+  const [uploadStatus, setUploadStatus] = useState(false);
+  const [error, setError] = useState("");
 
-    const resetFiles = () => {
-        setFiles([]);
-        setUploadStatus(false);
-        setError({ show: false, error: "" });
-    };
+  const resetForm = () => {
+    setFiles({
+      title: "",
+      fileUpload: null,
+      fileName: "",
+      mediaType: "",
+      mediaDesc: "",
+      thumbURL: "",
+      thumbUpload: null,
+      hasMediaMarkers: null,
+    });
+    setUploadStatus(false);
+    setError("");
+  };
 
-    const UploadTrack = async (e) => {
-        e.preventDefault();
+  const handleInputChange = (e) => {
+    const { name, value, files: inputFiles } = e.target;
+    setFiles((prev) => ({
+      ...prev,
+      [name]: inputFiles ? inputFiles[0] : value,
+    }));
+  };
 
-        const items = e.target;
+  const handleUpload = async (e) => {
+    e.preventDefault();
 
-        setFiles(items.file);
+    if (!files.fileUpload || !isAudioFile(files.fileUpload)) {
+      setError("Please upload a valid audio file.");
+      return;
+    }
 
-        try {
-            if (!isAudioFile(e[0])) {
-                setError({
-                    show: true,
-                    error: "Wrong type of file",
-                });
+    const formData = new FormData();
+    formData.append("fileUpload", files.fileUpload);
+    formData.append("title", files.title);
+    formData.append("fileName", files.fileName);
+    formData.append("mediaType", files.mediaType);
+    formData.append("mediaDesc", files.mediaDesc);
+    if (files.thumbUpload) {
+      formData.append("thumbUpload", files.thumbUpload);
+    }
+    formData.append("hasMediaMarkers", files.hasMediaMarkers);
 
-                return;
-            }
+    try {
+      const response = await axios.post(uploadAPIPath, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-            const formAudio = new FormData();
+      if (response.status === 200) {
+        setUploadStatus(true);
+        resetForm();
+      } else {
+        setError("Failed to upload the file. Please try again.");
+      }
+    } catch (err) {
+      setError(`Error uploading file: ${err.message}`);
+    }
+  };
 
-            items.foreach(item => {
-                formAudio.append(item, item);
-            });
+  if (uploadStatus) {
+    return (
+      <div>
+        <p>Upload successful!</p>
+      </div>
+    );
+  }
 
-            const response = await axios.post(
-                uploadAPIPath,
-                formAudio,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                }
-            );
+  return (
+    <section>
+      <h2>Upload Your Audio</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <form onSubmit={handleUpload} onReset={resetForm}>
+        <label htmlFor="title">Project Name or Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={files.title}
+          onChange={handleInputChange}
+        />
 
-            response.json()
-                .then(() => {
-                    setUploadStatus(true);
+        <label htmlFor="fileUpload">File Upload</label>
+        <input
+          type="file"
+          id="fileUpload"
+          name="fileUpload"
+          onChange={handleInputChange}
+        />
 
-                    return response.data.data.fileName;
-                });
-        } catch (e) {
-            setError({
-                show: true,
-                error: "Wrong type of file",
-            });
-        }
-    };
+        <label htmlFor="fileName">File Info</label>
+        <input
+          type="text"
+          id="fileName"
+          name="fileName"
+          value={files.fileName}
+          onChange={handleInputChange}
+        />
 
-    return <section>
-        <p>Upload your audio</p>
+        <label htmlFor="mediaType">File Type</label>
+        <input
+          type="text"
+          id="mediaType"
+          name="mediaType"
+          value={files.mediaType}
+          onChange={handleInputChange}
+        />
 
-        <form onSubmit={UploadTrack}>
-            <label htmlFor="uploadTitle">Project name or title</label>
+        <label htmlFor="mediaDesc">Description</label>
+        <textarea
+          id="mediaDesc"
+          name="mediaDesc"
+          value={files.mediaDesc}
+          onChange={handleInputChange}
+        ></textarea>
 
-            <input
-                type="text"
-                id="uploadTitle"
-                className="title"
-                value={files?.title}
+        {files.thumbURL ? (
+          <div>
+            <Image
+              alt="Thumbnail"
+              src={files.thumbURL}
+              width="200"
+              height="200"
             />
-
-            <label htmlFor="fileUpload">File upload</label>
-
+          </div>
+        ) : (
+          <div>
+            <label htmlFor="thumbUpload">Thumbnail</label>
             <input
-                type="file"
-                id="fileUpload"
-                className="fileUpload"
-                value={files?.fileUpload}
+              type="file"
+              id="thumbUpload"
+              name="thumbUpload"
+              onChange={handleInputChange}
             />
+          </div>
+        )}
 
-            <label htmlFor="fileName">File info</label>
-
+        <fieldset>
+          <legend>Has Media Markers?</legend>
+          <label>
             <input
-                type="text"
-                id="fileName"
-                className="fileName"
-                value={files?.fileName}
+              type="radio"
+              name="hasMediaMarkers"
+              value="true"
+              checked={files.hasMediaMarkers === "true"}
+              onChange={handleInputChange}
             />
-
-            <label htmlFor="mediaType">File type?</label>
-
+            Yes
+          </label>
+          <label>
             <input
-                type="text"
-                id="mediaType"
-                className="mediaType"
-                value={files?.mediaType}
+              type="radio"
+              name="hasMediaMarkers"
+              value="false"
+              checked={files.hasMediaMarkers === "false"}
+              onChange={handleInputChange}
             />
+            No
+          </label>
+        </fieldset>
 
-            <label htmlFor="mediaDesc">Description</label>
-
-            <textarea name="mediaDesc" id="mediaDesc"></textarea>
-
-            {files?.thumbURL ? <div>
-                <Image
-                    alt=""
-                    src={files?.thumbURL}
-                    width="200"
-                    height="200"
-                />
-            </div> : <div>
-                    <label htmlFor="thumbUpload">Thumbnail</label>
-                <input
-                    type="file"
-                        id="thumbUpload"
-                    className="thumbUpload"
-                />
-            </div>}
-
-            {/* TODO label for more than one radio button? */}
-            <label htmlFor="hasMediaMarkers">Has Media Markers?</label>
-            <input
-                type="radio"
-                name="hasMediaMarkers"
-                className="hasMediaMarkers"
-                value={true}
-            /> Yes
-
-            <input
-                type="radio"
-                name="hasMediaMarkers"
-                className="hasMediaMarkers"
-                value={false}
-            /> No
-
-            <button
-                type="submit"
-            >
-                Submit
-            </button>
-            <button type="reset">Clear All</button>
-        </form>
+        <button type="submit">Submit</button>
+        <button type="reset">Clear All</button>
+      </form>
     </section>
-};
+  );
+}

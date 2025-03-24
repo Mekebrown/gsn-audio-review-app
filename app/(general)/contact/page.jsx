@@ -7,87 +7,138 @@ import { GeneralToast } from "@/app/ui/Toast";
 import "@/styles/pages/contact.module.css";
 
 export default function Page() {
-    const [formInfo, setFormInfo] = useState({});
-    const [toastMessage, setToastMessage] = useState(""); // import { ToastContainer, toast } from "react-toastify";
+    const [formInfo, setFormInfo] = useState({
+        name: "",
+        email: "",
+        subjectDropdown: "",
+        subject: "",
+        contactMsg: "",
+    });
+
+    const updateFormInfo = (e) => {
+        const { name, value } = e.target;
+        setFormInfo((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const [toastMessage, setToastMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const info = e.target;
-
-            // Sanitize info
-
-            // Validate info
-
-            // Package info with user (visitor? Client?)
             const formData = new FormData();
 
-            for (let ind of info) {
-                if (ind in ["name", "email", "subject"]) {
-                    formData.append(ind, ind.value);
-                } else if (ind === "subjectDropdown") {
-                    formData.append("subject_cat", ind.subjectDropdown);
-                } else if (ind === "contactMsg") {
-                    formData.append("message", ind.contactMsg);
-                }
+            for (const key in formInfo) {
+                formData.append(key, formInfo[key]);
             }
 
-            // Send the info and retrieve response
             const response = await fetch(contactAPIPath, {
                 method: 'POST',
-                body: formData
+                body: formData,
             });
 
-            if (response.blob() !== undefined || !response.ok) {
-                // Reroute user to the homepage
+            if (response.ok) {
                 setToastMessage("Success!");
-
-                const resJSON = JSON.parse(response);
-                const { data } = resJSON;
-
-                console.log(data);
+                setFormInfo({
+                    name: "",
+                    email: "",
+                    subjectDropdown: "",
+                    subject: "",
+                    contactMsg: "",
+                });
             } else {
-                // ANYTHING GOES WRONG? Show in Toast: setToastMessage("Nope");
                 setToastMessage("Sorry, your information did not go through. Please try again.");
             }
         } catch (error) {
-            setFormInfo({});
-
-            setToastMessage("Error");
+            setFormInfo({
+                name: "",
+                email: "",
+                subjectDropdown: "",
+                subject: "",
+                contactMsg: "",
+            });
+            setToastMessage("Error:" + error);
         }
     };
 
-    return <section>
-        {toastMessage && <GeneralToast message={toastMessage} />}
+    return (
+        <section>
+            {toastMessage && <GeneralToast message={toastMessage} />}
 
-        <GSNLogo /> &nbsp; GSN
+            <GSNLogo /> &nbsp; GSN
 
-        <h2>Contact</h2>
-        Where to find us: <br />
-        Map <br />
+            <h2>Contact</h2>
+            Where to find us: <br />
+            Map <br />
 
-        Social media logos <br />
+            Social media logos <br />
 
-        <form action="post" onSubmit={handleSubmit}>
-            <input type="text" name="name" id="name" placeholder="Your Name III" />
+            <form action="post" onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Your Name III"
+                    value={formInfo.name}
+                    onChange={updateFormInfo}
+                />
 
-            <input type="email" name="email" id="email" placeholder="email@email.com" />
+                <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="email@email.com"
+                    value={formInfo.email}
+                    onChange={updateFormInfo}
+                />
 
-            <select name="subjectDropdown" id="subjectDropdown">
-                <option value="Sales"></option>
-                <option value="Pricing"></option>
-                <option value="Technical"></option>
-                <option value="Referral"></option>
-                <option value="Partnership"></option>
-                <option value="Creative"></option>
-                <option value="Other"></option>
-            </select>
-            <input type="text" name="subject" id="subject" placeholder="A quick title summarizing your message" />
+                <select
+                    name="subjectDropdown"
+                    id="subjectDropdown"
+                    value={formInfo.subjectDropdown}
+                    onChange={updateFormInfo}
+                >
+                    <option value="">Select a category</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Pricing">Pricing</option>
+                    <option value="Technical">Technical</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Partnership">Partnership</option>
+                    <option value="Creative">Creative</option>
+                    <option value="Other">Other</option>
+                </select>
 
-            <textarea name="contactMsg" id="contactMsg"></textarea>
+                <input
+                    type="text"
+                    name="subject"
+                    id="subject"
+                    placeholder="A quick title summarizing your message"
+                    value={formInfo.subject}
+                    onChange={updateFormInfo}
+                />
 
-            <button type="submit">Send Message</button><button type="reset">Clear All</button>
-        </form>
-    </section>;
+                <textarea
+                    name="contactMsg"
+                    id="contactMsg"
+                    placeholder="Your message"
+                    value={formInfo.contactMsg}
+                    onChange={updateFormInfo}
+                ></textarea>
+
+                <button type="submit">Send Message</button>
+                <button type="reset" onClick={() => setFormInfo({
+                    name: "",
+                    email: "",
+                    subjectDropdown: "",
+                    subject: "",
+                    contactMsg: "",
+                })}>
+                    Clear All
+                </button>
+            </form>
+        </section>
+    );
 };

@@ -1,214 +1,179 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import sql from "@/app/lib/db-related/db";
 
 /**
- * Get a single track or all media
+ * Handles GET requests to retrieve media information.
  *
- * @param {NextRequest} request
- *
- * @returns {NextResponse}
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {NextResponse} - The response object.
  */
 export async function GET(request) {
 	try {
-		const all_or_single_media =
-			request.nextUrl.searchParams.get("request_type");
-		let select_all_media_query;
+		const requestType = request.nextUrl.searchParams.get("request_type");
+		const mediaId = request.nextUrl.searchParams.get("media_id");
 
-		if (all_or_single_media === "single") {
-			// Query to grab that media's info
-			const single_media = request.nextUrl.searchParams.get("media_id");
-
-			select_all_media_query = await sql`
-                SELECT 
-                    med.id, med.media_file_name, 
-                    med.media_file_ext,
-                    med.media_description, 
-                    med.thumb_url, med.created_at,
-                    n.user_id, n.note_body, n.note_datetime,
-                    n.created_at
-                FROM 
-                    media med
-                JOIN
-                    notes n
-                ON
-                    n.media_id = med.id
-                AND 
-                    med.id = ${parseInt(single_media)}
-            `;
-
-			// Get a track's' notes
-		} else if (all_or_single_media === "all") {
-			// Get all tracks (with a count of each track's notes)
-			select_all_media_query = await sql`
-                SELECT 
-                    med.id, med.media_file_name, 
-                    med.media_file_ext,
-                    med.media_description, 
-                    med.thumb_url, med.created_at,
-                    n.user_id, n.note_body, n.note_datetime,
-                    n.created_at
-                FROM 
-                    media med
-                JOIN
-                    notes n
-                ON
-                    n.media_id = med.id
-            `;
-		}
-
-		if (select_all_media_query.ok) {
-			// Using .values will return rows as an array of values for each column, instead of objects.
-			return NextResponse.json({
-				message: "Success",
-				data: {
-					media_info: select_all_media_query, // .values()
-				},
-			});
-		} else {
-			return NextResponse.json({
-				message: "Request did not work",
-				status: 403,
-			});
-		}
-	} catch (error) {
-		console.error("Error processing:", error);
-
-		return NextResponse.json(
-			{
-				message: "Internal Server Error",
-				media: null,
-			},
-			{ status: 500 }
-		);
-	}
-}
-
-/**
- * Create a track (upload)
- *
- * @param {NextRequest} request
- *
- * @returns {NextResponse}
- */
-export async function POST(request) {
-	try {
-		const formData = await request.formData();
-
-		if (formData) {
-			const title = formData.get("title");
-			const file_upload = formData.get("file_upload");
-			const file_name = formData.get("file_name");
-			const media_type = formData.get("media_type");
-			const media_desc = formData.get("media_desc");
-			const thumb_url = formData.get("thumb_url");
-			const thumb_upload = formData.get("thumb_upload");
-			const has_media_markers = formData.get("has_media_markers");
-
-			return NextResponse.json({
-				message: "Success",
-				data: {
-					title,
-					file_upload,
-					file_name,
-					media_type,
-					media_desc,
-					thumb_url,
-					thumb_upload,
-					has_media_markers,
-				},
-			});
-		} else {
+		if (!requestType) {
 			return NextResponse.json(
-				{
-					message: "No form data found",
-				},
-				{ status: 403 }
+				{ message: "No request type provided" },
+				{ status: 400 }
 			);
 		}
-	} catch (error) {
-		console.error("Error processing form:", error);
 
-		return NextResponse.json(
-			{ message: "Internal Server Error" },
-			{ status: 500 }
-		);
-	}
-}
+		let queryResult;
 
-/**
- * Change/update a track
- *
- * @param {NextRequest} request
- *
- * @returns {NextResponse}
- */
-export async function PUT(request) {
-	try {
-		const formData = await request.formData();
+		if (requestType === "single") {
+			if (!mediaId) {
+				return NextResponse.json(
+					{ message: "No media ID provided" },
+					{ status: 400 }
+				);
+			}
 
-		if (formData) {
-			const title = formData.get("title");
-			const file_upload = formData.get("file_upload");
-			const file_name = formData.get("file_name");
-			const media_type = formData.get("media_type");
-			const media_desc = formData.get("media_desc");
-			const thumb_url = formData.get("thumb_url");
-			const thumb_upload = formData.get("thumb_upload");
-			const has_media_markers = formData.get("has_media_markers");
-
-			return NextResponse.json({
-				message: "Success",
-				data: {
-					title,
-					file_upload,
-					file_name,
-					media_type,
-					media_desc,
-					thumb_url,
-					thumb_upload,
-					has_media_markers,
-				},
-			});
+			// Query to fetch single media info
+			queryResult = await sql`
+        SELECT 
+          med.id, med.media_file_name, med.media_file_ext,
+          med.media_description, med.thumb_url, med.created_at,
+          n.user_id, n.note_body, n.note_datetime, n.created_at
+        FROM 
+          media med
+        JOIN
+          notes n
+        ON
+          n.media_id = med.id
+        WHERE 
+          med.id = ${parseInt(mediaId)}
+      `;
+		} else if (requestType === "all") {
+			// Query to fetch all media info
+			queryResult = await sql`
+        SELECT 
+          med.id, med.media_file_name, med.media_file_ext,
+          med.media_description, med.thumb_url, med.created_at,
+          n.user_id, n.note_body, n.note_datetime, n.created_at
+        FROM 
+          media med
+        JOIN
+          notes n
+        ON
+          n.media_id = med.id
+      `;
 		} else {
 			return NextResponse.json(
-				{
-					message: "No form data found",
-				},
-				{ status: 403 }
+				{ message: "Invalid request type" },
+				{ status: 400 }
 			);
 		}
-	} catch (error) {
-		console.error("Error processing form:", error);
-
-		return NextResponse.json(
-			{ message: "Internal Server Error" },
-			{ status: 500 }
-		);
-	}
-}
-
-/**
- * Delete (hide) a track
- *
- * @param {NextRequest} request
- *
- * @returns {NextResponse}
- */
-export async function DELETE(request) {
-	try {
-		const media_id = request.nextUrl.searchParams.get("media_id");
 
 		return NextResponse.json({
 			message: "Success",
-			data: "The media id that will be deleted is " + media_id,
+			data: queryResult,
 		});
 	} catch (error) {
-		console.error("Error processing form:", error);
-
+		console.error("Error processing GET request:", error);
 		return NextResponse.json(
-			{
-				message: "Internal Server Error",
+			{ message: "Internal Server Error" },
+			{ status: 500 }
+		);
+	}
+}
+
+/**
+ * Handles POST requests to create a new media entry.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {NextResponse} - The response object.
+ */
+export async function POST(request) {
+	return handleFormRequest(request, "create");
+}
+
+/**
+ * Handles PUT requests to update an existing media entry.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {NextResponse} - The response object.
+ */
+export async function PUT(request) {
+	return handleFormRequest(request, "update");
+}
+
+/**
+ * Handles DELETE requests to delete (hide) a media entry.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {NextResponse} - The response object.
+ */
+export async function DELETE(request) {
+	try {
+		const mediaId = request.nextUrl.searchParams.get("media_id");
+
+		if (!mediaId) {
+			return NextResponse.json(
+				{ message: "No media ID provided" },
+				{ status: 400 }
+			);
+		}
+
+		// Replace with actual logic to delete media
+		return NextResponse.json({
+			message: "Success",
+			data: `The media ID ${mediaId} was successfully deleted.`,
+		});
+	} catch (error) {
+		console.error("Error processing DELETE request:", error);
+		return NextResponse.json(
+			{ message: "Internal Server Error" },
+			{ status: 500 }
+		);
+	}
+}
+
+/**
+ * Handles form-based requests for creating or updating media entries.
+ *
+ * @param {NextRequest} request - The incoming request object.
+ * @param {string} action - The action to perform ("create" or "update").
+ * @returns {NextResponse} - The response object.
+ */
+async function handleFormRequest(request, action) {
+	try {
+		const formData = await request.formData();
+
+		if (!formData) {
+			return NextResponse.json(
+				{ message: "No form data found" },
+				{ status: 400 }
+			);
+		}
+
+		const title = formData.get("title");
+		const fileUpload = formData.get("file_upload");
+		const fileName = formData.get("file_name");
+		const mediaType = formData.get("media_type");
+		const mediaDesc = formData.get("media_desc");
+		const thumbUrl = formData.get("thumb_url");
+		const thumbUpload = formData.get("thumb_upload");
+		const hasMediaMarkers = formData.get("has_media_markers");
+
+		// Replace with actual logic to create or update media
+		return NextResponse.json({
+			message: `Media ${action}d successfully`,
+			data: {
+				title,
+				fileUpload,
+				fileName,
+				mediaType,
+				mediaDesc,
+				thumbUrl,
+				thumbUpload,
+				hasMediaMarkers,
 			},
+		});
+	} catch (error) {
+		console.error(`Error processing ${action} request:`, error);
+		return NextResponse.json(
+			{ message: "Internal Server Error" },
 			{ status: 500 }
 		);
 	}
