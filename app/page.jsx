@@ -17,6 +17,7 @@ analytics.gaEvent('Index Page Loaded');
  * @returns {JSX.Element} <Home />
  */
 export default async function Home() {
+  try {
   return <>
     <header>
       <nav>
@@ -62,4 +63,7 @@ export default async function Home() {
       </div>
     </section>
   </>;
+  } catch (error) {
+    throw new Error('Missing or invalid credentials. Have you created an access token using the Strapi admin panel? http://localhost:1337/admin/' + error.message);
+  }
 };
