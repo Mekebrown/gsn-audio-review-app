@@ -22,7 +22,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
-import { baseURL, apiURL } from "@/app/lib/general_variables";
+import { apiURL } from "@/app/lib/general_variables";
 // Show a Note Modal;
 
 // Times circle icon - faTimesCircle - For closing
