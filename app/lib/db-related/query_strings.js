@@ -2,10 +2,9 @@
 import axios from "axios";
 
 import sql from './db.js';
-import { authURL } from "@/app/lib/general_variables";
 
 export const insert_media = async (data) => {
-	const insert_media_query = await sql`
+    const insert_media_query = await sql`
         INSERT INTO media
             (media_desc, file_name, media_type,
             media_title, last_retrieved, thumb_url,
@@ -14,11 +13,11 @@ export const insert_media = async (data) => {
             ($1, $2, $3, $4, $5, $6, $7, $8)
     `;
 
-	return insert_media_query;
+    return insert_media_query;
 };
 
 export const insert_note = async (data) => {
-	const insert_note_query = await sql`
+    const insert_note_query = await sql`
         INSERT INTO notes 
             (user_id, media_id, note_body, note_datetime,
             last_retrieved, created_at, updated_at)
@@ -27,11 +26,11 @@ export const insert_note = async (data) => {
         RETURNING id
     `;
 
-	return insert_note_query;
+    return insert_note_query;
 };
 
 export const insert_user = async (data) => {
-	const insert_user_query = await sql`
+    const insert_user_query = await sql`
         INSERT INTO users
             (role, email, hashed_password,
             media_list, created_at) 
@@ -40,11 +39,11 @@ export const insert_user = async (data) => {
         RETURNING id
     `;
 
-	return insert_user_query;
+    return insert_user_query;
 };
 
 export const select_all_media = async () => {
-	const select_all_media_query = await sql`
+    const select_all_media_query = await sql`
         SELECT
             id, media_title, media_desc, 
             file_name, thumb_url, file_directory
@@ -52,33 +51,33 @@ export const select_all_media = async () => {
             media
     `;
 
-	return select_all_media_query;
+    return select_all_media_query;
 };
 
 export const select_all_notes = async () => {
-	const select_all_notes_query = await sql`
+    const select_all_notes_query = await sql`
         SELECT
             *
         FROM 
             notes
     `;
 
-	return select_all_notes_query;
+    return select_all_notes_query;
 };
 
 export const select_all_users = async () => {
-	const select_all_users_query = await sql`
+    const select_all_users_query = await sql`
         SELECT
             *
         FROM 
             users
     `;
 
-	return select_all_users_query;
+    return select_all_users_query;
 };
 
 export const select_a_note = async (note_id) => {
-	const select_one_note_query = await sql`
+    const select_one_note_query = await sql`
         SELECT
             id, note_body, note_datetime
         FROM
@@ -88,11 +87,11 @@ export const select_a_note = async (note_id) => {
         DESC LIMIT 5
     `;
 
-	return select_one_note_query;
+    return select_one_note_query;
 };
 
 export const select_a_user = async (user_id) => {
-	const select_one_user_query = await sql`
+    const select_one_user_query = await sql`
         SELECT 
             * 
         FROM 
@@ -101,11 +100,11 @@ export const select_a_user = async (user_id) => {
             email = $1
     `;
 
-	return select_one_user_query;
+    return select_one_user_query;
 };
 
 export const select_recent_signins_for_user = async (user_id) => {
-	const select_recent_signins_for_user_query = await sql`
+    const select_recent_signins_for_user_query = await sql`
         SELECT 
             * 
         FROM 
@@ -115,15 +114,15 @@ export const select_recent_signins_for_user = async (user_id) => {
         LIMIT 5
     `;
 
-	return select_recent_signins_for_user_query;
+    return select_recent_signins_for_user_query;
 };
 
 export const select_user_signin = async (userEmail, userPassword) => {
-	return true;
+    return true;
 };
 
 export const select_a_track = async (media_id) => {
-	const select_one_track_query = await sql`
+    const select_one_track_query = await sql`
         SELECT 
             * 
         FROM 
@@ -132,11 +131,11 @@ export const select_a_track = async (media_id) => {
             id = $1
     `;
 
-	return select_one_track_query;
+    return select_one_track_query;
 };
 
 export const update_note = async (note_info) => {
-	const update_note_query = await sql`
+    const update_note_query = await sql`
         UPDATE notes
         SET
             note_body = $1,
@@ -147,11 +146,11 @@ export const update_note = async (note_info) => {
         AND media_id = $6
     `;
 
-	return update_note_query;
+    return update_note_query;
 };
 
 export const update_user = async (user_info) => {
-	const update_users_query = await sql`
+    const update_users_query = await sql`
         UPDATE users 
         SET 
             (user_email = $1
@@ -164,12 +163,12 @@ export const update_user = async (user_info) => {
         VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
-	return update_user_query;
+    return update_user_query;
 };
 
 export const update_track = async (user_info) => {
-	// TODO Incorrect query table?
-	const update_track_query = await sql`
+    // TODO Incorrect query table?
+    const update_track_query = await sql`
         UPDATE media 
         SET 
             (user_email = $1
@@ -182,62 +181,62 @@ export const update_track = async (user_info) => {
         VALUES ($1, $2, $3, $4, $5, $6, $7)
     `;
 
-	return update_track_query;
+    return update_track_query;
 };
 
 export const send_signin_info = async (signInInfo) => {
-	const response = await axios(authURL, {
-		method: "POST",
-		body: signInInfo,
-	});
+    const response = await axios(process.env.NEXTAUTH_URL, {
+        method: "POST",
+        body: signInInfo,
+    });
 
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	} else {
-		const resJSON = await response.json();
-		const { data } = resJSON;
-		const userProfile = data.user;
-		const userJWT = data.jwt;
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    } else {
+        const resJSON = await response.json();
+        const { data } = resJSON;
+        const userProfile = data.user;
+        const userJWT = data.jwt;
 
-		return JSON.stringify({ userProfile, userJWT });
-	}
+        return JSON.stringify({ userProfile, userJWT });
+    }
 };
 
 export const send_contact_info = async (formData) => {
-	for (let ind of formData) {
-		if (ind in ["name", "email", "subject"]) {
-			formData.append(ind, ind.value);
-		} else if (ind === "subjectDropdown") {
-			formData.append("subject_cat", ind.subjectDropdown);
-		} else if (ind === "contactMsg") {
-			formData.append("message", ind.contactMsg);
-		}
-	}
+    for (let ind of formData) {
+        if (ind in ["name", "email", "subject"]) {
+            formData.append(ind, ind.value);
+        } else if (ind === "subjectDropdown") {
+            formData.append("subject_cat", ind.subjectDropdown);
+        } else if (ind === "contactMsg") {
+            formData.append("message", ind.contactMsg);
+        }
+    }
 
-	// Send the info and retrieve response
-	const response = await axios(process.env.NEXTAUTH_URL + "/api/contact", {
-		method: "POST",
-		body: formData,
-	});
+    // Send the info and retrieve response
+    const response = await axios(process.env.NEXTAUTH_URL + "/api/contact", {
+        method: "POST",
+        body: formData,
+    });
 
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	} else {
-		const resJSON = await response.json();
-		const { data } = resJSON;
+    if (!response.ok) {
+        throw new Error("Network response was not ok");
+    } else {
+        const resJSON = await response.json();
+        const { data } = resJSON;
 
-		return JSON.stringify(data);
-	}
+        return JSON.stringify(data);
+    }
 };
 
-export const send_admin_email = () => {};
+export const send_admin_email = () => { };
 
 export const get_all_media = async () => {
-	const response = await select_all_media();
-	const resJSON = await response.json();
-	const { data } = resJSON;
+    const response = await select_all_media();
+    const resJSON = await response.json();
+    const { data } = resJSON;
 
-	return data;
+    return data;
 };
 
 
@@ -249,7 +248,7 @@ export const add_signins_for_admin = async () => {
       ON 
         users.user_id = user_signins.sign_in_user_id
     `;
-  
+
     return signins_for_admin;
 };
 

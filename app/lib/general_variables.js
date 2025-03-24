@@ -42,7 +42,6 @@ export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 export const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 // Auth URL
-export const authURL = apiURL + "/auth/local";
 export const bearerToken = `Bearer ` + process.env.API_TOKEN;
 
 // Public frontend paths
