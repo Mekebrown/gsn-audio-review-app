@@ -1,267 +1,163 @@
 'use server';
 import axios from "axios";
-
 import sql from './db.js';
 
-export const insert_media = async (data) => {
-    const insert_media_query = await sql`
-        INSERT INTO media
-            (media_desc, file_name, media_type,
-            media_title, last_retrieved, thumb_url,
-            file_directory, created_at) 
-        VALUES
-            ($1, $2, $3, $4, $5, $6, $7, $8)
-    `;
-
-    return insert_media_query;
+/**
+ * Inserts a new media record into the database.
+ * @param {Object} data - Media data to insert.
+ * @returns {Promise<Object>} - Query result.
+ */
+export const insertMedia = async (data) => {
+    const query = await sql`
+    INSERT INTO media
+      (media_desc, file_name, media_type, media_title, last_retrieved, thumb_url, file_directory, created_at)
+    VALUES
+      (${data.mediaDesc}, ${data.fileName}, ${data.mediaType}, ${data.mediaTitle}, ${data.lastRetrieved}, ${data.thumbUrl}, ${data.fileDirectory}, now())
+    RETURNING id
+  `;
+    return query;
 };
 
-export const insert_note = async (data) => {
-    const insert_note_query = await sql`
-        INSERT INTO notes 
-            (user_id, media_id, note_body, note_datetime,
-            last_retrieved, created_at, updated_at)
-        VALUES 
-            ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING id
-    `;
-
-    return insert_note_query;
+/**
+ * Updates a user record in the database.
+ * @param {Object} userInfo - User data to update.
+ * @returns {Promise<Object>} - Query result.
+ */
+export const updateUser = async (userInfo) => {
+    const query = await sql`
+    UPDATE users
+    SET
+      email = ${userInfo.email},
+      created_at = ${userInfo.createdAt},
+      media_list = ${userInfo.mediaList},
+      last_sign_in_ts = ${userInfo.lastSignInTs},
+      role = ${userInfo.role},
+      hashed_password = ${userInfo.hashedPassword}
+    WHERE id = ${userInfo.userId}
+    RETURNING id
+  `;
+    return query;
 };
 
-export const insert_user = async (data) => {
-    const insert_user_query = await sql`
-        INSERT INTO users
-            (role, email, hashed_password,
-            media_list, created_at) 
-        VALUES
-            ($1, $2, $3, $4, now()) 
-        RETURNING id
-    `;
-
-    return insert_user_query;
+/**
+ * Updates a media record in the database.
+ * @param {Object} mediaInfo - Media data to update.
+ * @returns {Promise<Object>} - Query result.
+ */
+export const updateMedia = async (mediaInfo) => {
+    const query = await sql`
+    UPDATE media
+    SET
+      media_desc = ${mediaInfo.mediaDesc},
+      file_name = ${mediaInfo.fileName},
+      media_type = ${mediaInfo.mediaType},
+      media_title = ${mediaInfo.mediaTitle},
+      thumb_url = ${mediaInfo.thumbUrl},
+      file_directory = ${mediaInfo.fileDirectory},
+      last_retrieved = ${mediaInfo.lastRetrieved}
+    WHERE id = ${mediaInfo.mediaId}
+    RETURNING id
+  `;
+    return query;
 };
 
-export const select_all_media = async () => {
-    const select_all_media_query = await sql`
-        SELECT
-            id, media_title, media_desc, 
-            file_name, thumb_url, file_directory
-        FROM 
-            media
-    `;
-
-    return select_all_media_query;
-};
-
-export const select_all_notes = async () => {
-    const select_all_notes_query = await sql`
-        SELECT
-            *
-        FROM 
-            notes
-    `;
-
-    return select_all_notes_query;
-};
-
-export const select_all_users = async () => {
-    const select_all_users_query = await sql`
-        SELECT
-            *
-        FROM 
-            users
-    `;
-
-    return select_all_users_query;
-};
-
-export const select_a_note = async (note_id) => {
-    const select_one_note_query = await sql`
-        SELECT
-            id, note_body, note_datetime
-        FROM
-            notes 
-        WHERE media_id = $1
-        ORDER BY created_at 
-        DESC LIMIT 5
-    `;
-
-    return select_one_note_query;
-};
-
-export const select_a_user = async (user_id) => {
-    const select_one_user_query = await sql`
-        SELECT 
-            * 
-        FROM 
-            users
-        WHERE 
-            email = $1
-    `;
-
-    return select_one_user_query;
-};
-
-export const select_recent_signins_for_user = async (user_id) => {
-    const select_recent_signins_for_user_query = await sql`
-        SELECT 
-            * 
-        FROM 
-            signins
-        WHERE 
-            user_id = $1
-        LIMIT 5
-    `;
-
-    return select_recent_signins_for_user_query;
-};
-
-export const select_user_signin = async (userEmail, userPassword) => {
-    return true;
-};
-
-export const select_a_track = async (media_id) => {
-    const select_one_track_query = await sql`
-        SELECT 
-            * 
-        FROM 
-            media
-        WHERE 
-            id = $1
-    `;
-
-    return select_one_track_query;
-};
-
-export const update_note = async (note_info) => {
-    const update_note_query = await sql`
-        UPDATE notes
-        SET
-            note_body = $1,
-            note_datetime = $2,
-            last_retrieved = $3,
-            updated_at = $4
-        WHERE id = $5
-        AND media_id = $6
-    `;
-
-    return update_note_query;
-};
-
-export const update_user = async (user_info) => {
-    const update_users_query = await sql`
-        UPDATE users 
-        SET 
-            (user_email = $1
-            user_created_ts = $2
-            user_media_list = $3
-            last_sign_in_ts = $4
-            user_role = $5
-            user_hashed_pw = $6)
-        WHERE user_id = $7
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-    `;
-
-    return update_user_query;
-};
-
-export const update_track = async (user_info) => {
-    // TODO Incorrect query table?
-    const update_track_query = await sql`
-        UPDATE media 
-        SET 
-            (user_email = $1
-            user_created_ts = $2
-            user_media_list = $3
-            last_sign_in_ts = $4
-            user_role = $5
-            user_hashed_pw = $6)
-        WHERE user_id = $7
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-    `;
-
-    return update_track_query;
-};
-
-export const send_signin_info = async (signInInfo) => {
-    const response = await axios(process.env.NEXTAUTH_URL, {
-        method: "POST",
-        body: signInInfo,
-    });
-
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
-    } else {
-        const resJSON = await response.json();
-        const { data } = resJSON;
-        const userProfile = data.user;
-        const userJWT = data.jwt;
-
-        return JSON.stringify({ userProfile, userJWT });
+/**
+ * Sends sign-in information to the authentication API.
+ * @param {Object} signInInfo - Sign-in data.
+ * @returns {Promise<Object>} - User profile and JWT.
+ */
+export const sendSignInInfo = async (signInInfo) => {
+    try {
+        const response = await axios.post(process.env.NEXTAUTH_URL, signInInfo, {
+            headers: { "Content-Type": "application/json" },
+        });
+        const { data } = response;
+        return { userProfile: data.user, userJWT: data.jwt };
+    } catch (error) {
+        throw new Error(`Failed to send sign-in info: ${error.message}`);
     }
 };
 
-export const send_contact_info = async (formData) => {
-    for (let ind of formData) {
-        if (ind in ["name", "email", "subject"]) {
-            formData.append(ind, ind.value);
-        } else if (ind === "subjectDropdown") {
-            formData.append("subject_cat", ind.subjectDropdown);
-        } else if (ind === "contactMsg") {
-            formData.append("message", ind.contactMsg);
-        }
-    }
-
-    // Send the info and retrieve response
-    const response = await axios(process.env.NEXTAUTH_URL + "/api/contact", {
-        method: "POST",
-        body: formData,
-    });
-
-    if (!response.ok) {
-        throw new Error("Network response was not ok");
-    } else {
-        const resJSON = await response.json();
-        const { data } = resJSON;
-
-        return JSON.stringify(data);
+/**
+ * Sends contact information to the contact API.
+ * @param {Object} formData - Contact form data.
+ * @returns {Promise<Object>} - API response data.
+ */
+export const sendContactInfo = async (formData) => {
+    try {
+        const response = await axios.post(`${process.env.NEXTAUTH_URL}/api/contact`, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(`Failed to send contact info: ${error.message}`);
     }
 };
 
-export const send_admin_email = () => { };
-
-export const get_all_media = async () => {
-    const response = await select_all_media();
-    const resJSON = await response.json();
-    const { data } = resJSON;
-
-    return data;
+/**
+ * Selects all media records from the database.
+ * @returns {Promise<Array>} - List of media records.
+ */
+export const selectAllMedia = async () => {
+    const query = await sql`
+    SELECT id, media_title, media_desc, file_name, thumb_url, file_directory
+    FROM media
+  `;
+    return query;
 };
 
-
-// const add_signins_for_admin = "LEFT JOIN user_signins ON users.user_id = user_signins.sign_in_user_id";
-export const add_signins_for_admin = async () => {
-    const signins_for_admin = await sql`
-      LEFT JOIN 
-        user_signins 
-      ON 
-        users.user_id = user_signins.sign_in_user_id
-    `;
-
-    return signins_for_admin;
+/**
+ * Selects all user records from the database.
+ * @returns {Promise<Array>} - List of user records.
+ */
+export const selectAllUsers = async () => {
+    const query = await sql`
+    SELECT id, email, created_at, role
+    FROM users
+  `;
+    return query;
 };
 
-// const fields_to_review = ` 
-//     users.user_id,
-//     users.user_email,
-//     users.user_created_ts,
-//     users.user_media_list,
-//     users.last_sign_in_ts,
-//     users.last_sign_out_ts,
-//     users.user_internal_note,
-//     users.user_discl_agreed_ts,
-//     users.is_discl_agreed,
-//     users.user_role,
-//     users.user_hashed_pw,
-// `;
+/**
+ * Selects a single user by email.
+ * @param {string} email - User email.
+ * @returns {Promise<Object>} - User record.
+ */
+export const selectUserByEmail = async (email) => {
+    const query = await sql`
+    SELECT id, email, created_at, role
+    FROM users
+    WHERE email = ${email}
+  `;
+    return query;
+};
+
+/**
+ * Selects a single media record by ID.
+ * @param {number} mediaId - Media ID.
+ * @returns {Promise<Object>} - Media record.
+ */
+export const selectMediaById = async (mediaId) => {
+    const query = await sql`
+    SELECT id, media_title, media_desc, file_name, thumb_url, file_directory
+    FROM media
+    WHERE id = ${mediaId}
+  `;
+    return query;
+};
+
+/**
+ * Selects recent sign-ins for a user.
+ * @param {number} userId - User ID.
+ * @returns {Promise<Array>} - List of recent sign-ins.
+ */
+export const selectRecentSignInsForUser = async (userId) => {
+    const query = await sql`
+    SELECT *
+    FROM signins
+    WHERE user_id = ${userId}
+    ORDER BY created_at DESC
+    LIMIT 5
+  `;
+    return query;
+};
