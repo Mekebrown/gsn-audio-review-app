@@ -1,3 +1,4 @@
+"use client";
 /* BG colors made from logo colors; Waves like an ocean; Animated? */
 import Link from 'next/link';
 import { getCookie, setCookie } from 'cookies-next';
