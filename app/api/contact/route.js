@@ -9,6 +9,10 @@ export async function POST(request) {
         const subject = formData.get('subject');
         const message = formData.get('message');
 
+        if (!formData || !name || !email || !subject_cat || !subject || !message) {
+            return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
+        }
+
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
         console.error('Error processing form:', error);
