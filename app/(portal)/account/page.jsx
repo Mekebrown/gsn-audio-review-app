@@ -84,7 +84,7 @@ export default function Page() {
                         <hr />
                     </div>;
                 })) : (
-                <p>"No media to show"</p>
+                <p>No media to show</p>
             )
         }
     </section>;
