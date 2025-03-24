@@ -1,6 +1,6 @@
 # GSN Audio Review App - In development
 
-A React/Node/PostgreSQL media reviewing web application to be used by producers and their clients.
+A React/Node/PostgreSQL media reviewing web application to be used by producers and their clients. GSN's producers can give clients access to all draft media for reviewing and leaving feedback when needed.
 
 List of main technologies required: [Next JS](https://nextjs.org/) has ALL the goods of [Node JS](https://nodejs.org) and [React JS](https://reactjs.org/), [PostgreSQL](https://www.postgresql.org/), [Amazon S3](https://aws.amazon.com/s3/) for storing uploaded media, [Axios](https://axios-http.com/docs/intro) for the frontend's HTTP requests, [Jest](https://jestjs.io/) for testing React components, and a few packages for [Font Awesome](https://cdnjs.com/libraries/font-awesome) icons.
 

@@ -1,15 +1,19 @@
 {
-    "source": {
-      "include": ["app"], 
-      "includePattern": ".+\\.jsx?$" 
-    },
-    "plugins": ["plugins/markdown"], 
-    "opts": {
-      "recurse": true,
-      "destination": "docs"
-    },
-    "templates": {
-      "cleverLinks": false,
-      "monospaceLinks": false
-    }
+  "source": {
+    "include": [
+      "app"
+    ],
+    "includePattern": ".+\\.[jt]sx?$"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "recurse": true,
+    "destination": "docs"
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  }
 }
