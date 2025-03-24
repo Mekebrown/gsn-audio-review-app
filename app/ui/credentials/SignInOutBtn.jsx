@@ -5,7 +5,7 @@ import { deleteCookie } from 'cookies-next';
 // import { useSession } from 'next-auth/react';
 
 export default function SignInOutBtn() {
-    const { data, status } = { data: "user", status: "authenticated" }; 
+    const { data } = { data: "user", status: "authenticated" }; //Temporary
     const router = useRouter();
 
     const handleSignOut = () => {
