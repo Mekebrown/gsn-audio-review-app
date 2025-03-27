@@ -1,4 +1,3 @@
-import handleErrors from "@app/lib/error_handler";
 
 /**
  * Send to BE info. Also sends a browser console message.
@@ -17,8 +16,6 @@ const analytics = {
 	 * @param {string|Error|null} errorMsg - The error message to log
 	 */
 	logError: function (errorMsg) {
-		handleErrors({}, {}, errorMsg, "");
-
 		console.log("Error logged: ");
 		console.log({ errorMsg });
 	},
