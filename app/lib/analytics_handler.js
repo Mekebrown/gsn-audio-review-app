@@ -1,4 +1,4 @@
-import handleErrors from  "./error_handler";
+import handleErrors from "@app/lib/error_handler";
 
 /**
  * Send to BE info. Also sends a browser console message.
