@@ -1,4 +1,3 @@
-import { Inter } from 'next/font/google';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { getCookie, setCookie } from 'cookies-next';
@@ -11,8 +10,6 @@ import "@/styles/globals.css";
 import "@/styles/layout.css";
 
 config.autoAddCss = false; /* eslint-disable import/first */
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   alternates: {
@@ -67,7 +64,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <div id="portal"></div>
 
         <main className="childrenSection">{children}</main>
