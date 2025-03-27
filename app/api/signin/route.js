@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import handleErrors from 'app/lib/error_handler';
+
 /**
  * Handles GET requests for user sign-ins.
  * 
@@ -34,7 +36,10 @@ export async function GET(request) {
 
         return NextResponse.json({ message: 'Success', userId });
     } catch (error) {
+        handleErrors(request, 500, error.message, 'app/api/signin/route.js');
+
         console.error('Error processing GET request:', error);
+
         return NextResponse.json(
             { message: 'Internal Server Error' },
             { status: 500 }
@@ -65,6 +70,7 @@ export async function POST(request) {
 
         return NextResponse.json({ message: 'Success', userEmail });
     } catch (error) {
+        handleErrors(request, 500, error.message, 'app/api/signin/route.js');
         console.error('Error processing POST request:', error);
         return NextResponse.json(
             { message: 'Internal Server Error' },
@@ -95,6 +101,7 @@ export async function DELETE(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
+        handleErrors(request, 500, error.message, 'app/api/signin/route.js');
         console.error('Error processing DELETE request:', error);
         return NextResponse.json(
             { message: 'Internal Server Error' },

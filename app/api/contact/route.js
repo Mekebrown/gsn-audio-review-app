@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import handleErrors from 'app/lib/error_handler';
+
 export async function POST(request) {
     try {
         const formData = await request.formData();
@@ -15,6 +17,8 @@ export async function POST(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
+        handleErrors(formData, 500, error.message, "app/api/contact/route.js");
+
         console.error('Error processing form:', error);
 
         return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });

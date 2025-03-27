@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+
 import sql from "@/app/lib/db-related/db";
+import handleErrors from "@/app/lib/error_handler";
 
 /**
  * Handles GET requests to retrieve media information.
@@ -59,6 +61,8 @@ export async function GET(request) {
           n.media_id = med.id
       `;
 		} else {
+			handleErrors(request, 400, "Invalid request type", "app/api/portal/media/route.js");
+
 			return NextResponse.json(
 				{ message: "Invalid request type" },
 				{ status: 400 }
@@ -70,7 +74,10 @@ export async function GET(request) {
 			data: queryResult,
 		});
 	} catch (error) {
+		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+
 		console.error("Error processing GET request:", error);
+
 		return NextResponse.json(
 			{ message: "Internal Server Error" },
 			{ status: 500 }
@@ -121,7 +128,10 @@ export async function DELETE(request) {
 			data: `The media ID ${mediaId} was successfully deleted.`,
 		});
 	} catch (error) {
+		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+
 		console.error("Error processing DELETE request:", error);
+
 		return NextResponse.json(
 			{ message: "Internal Server Error" },
 			{ status: 500 }
@@ -171,7 +181,10 @@ async function handleFormRequest(request, action) {
 			},
 		});
 	} catch (error) {
+		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+
 		console.error(`Error processing ${action} request:`, error);
+
 		return NextResponse.json(
 			{ message: "Internal Server Error" },
 			{ status: 500 }

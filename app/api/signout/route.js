@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+import handleErrors from 'app/lib/error_handler';
+
 /**
  * Handles the GET request for user signout.
  * 
@@ -22,6 +24,8 @@ export async function GET(request) {
         // Return success response
         return NextResponse.json({ message: 'Success', user_id });
     } catch (error) {
+        handleErrors(request, 500, error.message, 'app/api/signout/route.js');
+
         console.error('Error processing request:', error);
 
         return NextResponse.json(
