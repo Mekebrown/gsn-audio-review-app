@@ -1,5 +1,7 @@
-const { TextDecoder, TextEncoder } = require('node:util');
-const { ReadableStream, TransformStream } = require('node:stream/web');
+import { TextDecoder, TextEncoder } from 'node:util';
+import { ReadableStream, TransformStream } from 'node:stream/web';
+import { Blob, File } from 'node:buffer';
+import { fetch, Headers, FormData, Request, Response } from 'undici';
 
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
@@ -7,9 +9,6 @@ Object.defineProperties(globalThis, {
   ReadableStream: { value: ReadableStream },
   TransformStream: { value: TransformStream },
 });
- 
-const { Blob, File } = require('node:buffer');
-const { fetch, Headers, FormData, Request, Response } = require('undici');
 
 Object.defineProperties(globalThis, {
   fetch: { value: fetch, writable: true },
