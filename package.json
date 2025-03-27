@@ -5,6 +5,7 @@
   "private": true,
   "author": "Meke",
   "license": "ISC",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,7 +20,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.1",
     "@next/eslint-plugin-next": "^15.2.3",
-    "@tailwindcss/postcss": "^4.0.15",
     "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
@@ -37,9 +37,9 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "18.2.0",
-    "tailwindcss": "^4.0.15",
     "typescript": "^5.8.2",
-    "undici": "^6.18.2"
+    "undici": "^6.18.2",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.26.10",
