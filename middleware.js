@@ -11,10 +11,11 @@ export const config = {
 };
 
 export default function middleware(request) {
+	const baseURLString = baseURL ? baseURL : "http://localhost:3000";
 	// const gsnCookieValue = request.cookies.get('gsn-sign-in-cookie')?.value;
 	const pathname = request.nextUrl.pathname;
 
 	if (["/manifest.json", "/favicon.ico"].includes(pathname)) return;
 
-	return NextResponse.redirect(new URL("/", baseURL));
+	// return NextResponse.redirect(new URL("/", baseURLString));
 }
