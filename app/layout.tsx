@@ -4,7 +4,7 @@ import { getCookie, setCookie } from 'cookies-next';
 
 import Footer from '@/app/ui/Footer';
 import DisclaimerToast from "@/app/ui/Toast"
-import { baseURL } from "@/app/lib/general_variables";
+import { baseURL, gsnVisitedSiteCookie, gsnDisclaimerChoice, gsnSignInCookie, userId } from "@/app/lib/general_variables";
 
 import "@/styles/globals.css";
 import "@/styles/layout.css";
@@ -53,13 +53,25 @@ export const metadata = {
  * @returns {JSX.Element}
  * <RootLayout children={children} />
  */
-export default function RootLayout({ children }) {
-  if (!getCookie("gsn-visited-site")) {
-    setCookie('gsn-visited-site', true);
+export default function RootLayout({ children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  try {
+  if (!getCookie(gsnVisitedSiteCookie)) {
+    setCookie(gsnVisitedSiteCookie, true);
   }
 
-  if (!getCookie("gsn-disclaimer-choice")) {
-    setCookie("gsn-disclaimer-choice", false);
+  if (!getCookie(gsnDisclaimerChoice)) {
+    setCookie(gsnDisclaimerChoice, true);
+  }
+
+  if (!getCookie(gsnSignInCookie)) {
+    setCookie(gsnSignInCookie, "sign-in-cookie");
+  }
+
+  if (!getCookie(userId)) {
+    setCookie(userId, 1);
   }
 
   return (
@@ -74,5 +86,7 @@ export default function RootLayout({ children }) {
         <Footer />
       </body>
     </html>
-  );
+  );} catch (error: any) {
+    throw new Error('Missing or invalid credentials. Have you created an access token using the Strapi admin panel? http://localhost:1337/admin/');
+  }
 };

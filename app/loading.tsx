@@ -4,7 +4,6 @@
  * 
  * @returns {JSX.Element}
  */
-export default function Loading() {
-    // Or a custom loading skeleton component
+export default function Loading()  {
     return <p>Loading...</p>
 };

@@ -23,6 +23,13 @@ import {
 import axios from 'axios';
 
 import { apiURL } from "@/app/lib/general_variables";
+
+interface User {
+    settings?: {
+        light_mode?: boolean;
+    };
+}
+
 // Show a Note Modal;
 
 // Times circle icon - faTimesCircle - For closing
@@ -83,7 +90,7 @@ export const NotesIcon = () => {
 
 // Bell icon - faBell - For notifications
 // TODO The <sup> tag defines superscript text.
-export const NotifsIcon = ({ notifCount = null }) => {
+export const NotifsIcon = ({ className, notifCount }: { className: string; notifCount?: number | null | undefined }) => {
     return <span className="notifs-icon">
         <FontAwesomeIcon icon={faBell} />
         {
@@ -95,21 +102,22 @@ export const NotifsIcon = ({ notifCount = null }) => {
 };
 
 // Search icon - faSearch - For search
-export const SearchIcon = ({ isClicked }) => {
-    return <span className="search-icon">
+export const SearchIcon = ({ isClicked, className }: { isClicked: boolean, className: string }) => {
+    return <span className={className}>
         {isClicked ? <span>Enter</span> : <FontAwesomeIcon icon={faSearch} className="searchFieldIcon" />}
     </span>;
 };
 
 // House lock icon faHouseLock - For sending a pw/media list
-export const SendPWIcon = () => {
-    return <span className="send-pw-icon">
+export const SendPWIcon = ({className}: {className: string}) => {
+    return <span className={className}>
         <FontAwesomeIcon icon={faHouseLock} />
     </span>;
 };
 
 // Cog icon - faCog - For settings
-export const SettingsIcon = ({ user }) => {
+// Define a type for the user prop
+export const SettingsIcon = ({ user, className }: { user: User, className: string }) => {
     const [show, setShow] = useState(false);
     const [lightMode, setLightMode] = useState(user?.settings?.light_mode);
 
@@ -144,7 +152,7 @@ export const SettingsIcon = ({ user }) => {
             });
     };
 
-    return <span className="settings">
+    return <span className={className}>
         <FontAwesomeIcon icon={faCog} onClick={handleCogClick} />
         {show && <menu className="settings-menu">
             <ul>
