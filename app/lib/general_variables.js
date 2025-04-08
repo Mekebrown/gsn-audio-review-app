@@ -38,7 +38,7 @@ export const GSNLogo = ({
 };
 
 // ENV URLs
-export const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+export const baseURL = new URL(process.env.NEXT_PUBLIC_BASE_URL);
 export const apiURL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 
 // Auth URL
@@ -99,6 +99,7 @@ const uploadAPIPath = apiURL + "/media/new"; // POST
 const gsnVisitedSiteCookie = "gsn-visited-site";
 const gsnDisclaimerChoice = "gsn-disclaimer-choice";
 const gsnSignInCookie = "gsn-sign-in-cookie";
+const userId = "gsn-user-id";
 
 export {
 	indexPath,
@@ -140,5 +141,6 @@ export {
 	uploadAPIPath,
 	gsnVisitedSiteCookie,
 	gsnDisclaimerChoice,
-	gsnSignInCookie
+	gsnSignInCookie,
+	userId
 }
