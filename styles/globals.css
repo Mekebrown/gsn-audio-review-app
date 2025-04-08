@@ -216,6 +216,11 @@ li {
   flex: 1 1 50%;
 }
 
+.userName {
+  font-weight: bold;
+  color: #007BFF;
+}
+
 @media (prefers-color-scheme: dark) {
   /* :root {
     --foreground-rgb: 255, 255, 255;
