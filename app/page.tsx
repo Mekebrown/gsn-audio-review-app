@@ -20,13 +20,20 @@ export default async function Home() {
       const userIdentifier = getCookie(userId);
 
       console.log('userId:', userIdentifier);
-      const response = await axios.get(`/api/signin?user_id=${userIdentifier}&request_type=single`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
-      const data = response.data;
 
+      const signinData = async () => {
+        const response = await axios.get(`/api/signin?user_id=${userIdentifier}&request_type=single`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+        
+        const data = response.data;
+
+        return data;
+      }
+
+      const data = await signinData();
       setIsLoggedIn(data?.user?.isLoggedIn);
       setUserName(data?.user?.name);
     } catch (error) {

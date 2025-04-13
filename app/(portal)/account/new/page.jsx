@@ -129,35 +129,36 @@ export default function Page() {
       setSuccess(false);
       setLoading(true);
 
-      // Send email with pw and media links
-      // const response = await fetch(apiURL + '/portal/account', {
-      //     method: 'POST',
-      //     headers:
-      //     {
-      //         'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({
-      //         email: email,
-      //         pw: pw,
-      //         media: mediaChecked
-      //     })
-      // });
-   
-      // const resJSON = await response.json();
-      // const {data} = resJSON;
+      // In an async function:
+        // Send email with pw and media links
+        // const response = await fetch(apiURL + '/portal/account', {
+        //     method: 'POST',
+        //     headers:
+        //     {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         email: email,
+        //         pw: pw,
+        //         media: mediaChecked
+        //     })
+        // });
+    
+        // const resJSON = await response.json();
+        // const {data} = resJSON;
 
-      // if (data.error) {
-      //     setError(data.error);
-      //     setLoading(false);
-      
-      //     return;
-      // }
+        // if (data.error) {
+        //     setError(data.error);
+        //     setLoading(false);
+        
+        //     return;
+        // }
 
-      // if (data.success) {
-      //     setSuccess(true);
-      //     setLoading(false);
-      //     return;
-      // }
+        // if (data.success) {
+        //     setSuccess(true);
+        //     setLoading(false);
+        //     return;
+        // }
     } catch (err) {
       setError(err.message);
     }
