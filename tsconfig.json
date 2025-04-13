@@ -34,10 +34,13 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/page.tsx",
-    "app/(general)/notes/page.tsx"
+    "@/app/page.tsx",
+    "@/app/(general)/notes/page.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "notes",
+    "public",
+    "styles",
   ]
 }
