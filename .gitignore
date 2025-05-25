@@ -45,5 +45,6 @@ launch.json
 # docs
 /docs
 /etc
+/notes
 
 package-lock.json
