@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 
 import { pool } from "@/app/lib/db-related/db";
-import handleErrors from "app/lib/error_handler";
+import handleErrors from "@/app/lib/error_handler";
 
 export const authOptions = {
   providers: [

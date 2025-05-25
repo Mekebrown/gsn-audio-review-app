@@ -3,42 +3,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getCookie } from 'cookies-next';
 
 import { baseURL, GSNLogo, tempImage, gsnSignInCookie, userId } from "@/app/lib/general_variables";
 
 import "@/styles/navigation/topnav.css";
 
-export default async function Home() {
+export default function Home() {
   try {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);//useState(false);
-    const [userName, setUserName] = useState("Meke");//useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [userName, setUserName] = useState("Meke");//useState("");
 
-    try {
-      const token = getCookie(gsnSignInCookie);
-      const userIdentifier = getCookie(userId);
+    // try {
+    //   useEffect(() => {
+    //     const token = getCookie(gsnSignInCookie);
+    //     const userIdentifier = getCookie(userId) ? getCookie(userId) : "1";
+    //     const fetchUserData = async () => {
+    //       try {
+    //         const response = await axios.get(`/api/signin?user_id=${userIdentifier}&request_type=single`, {
+    //           headers: {
+    //             Authorization: `Bearer ${token}`,
+    //           }
+    //         });
+    //         const data = response.data;
 
-      console.log('userId:', userIdentifier);
-
-      const signinData = async () => {
-        const response = await axios.get(`/api/signin?user_id=${userIdentifier}&request_type=single`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }
-        });
-        
-        const data = response.data;
-
-        return data;
-      }
-
-      const data = await signinData();
-      setIsLoggedIn(data?.user?.isLoggedIn);
-      setUserName(data?.user?.name);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
+    //         setIsLoggedIn(data?.user?.isLoggedIn);
+    //         setUserName(data?.user?.name);
+    //       } catch (error) {
+    //         console.error("Error fetching user data:", error);
+    //       }
+    //     }
+    //     fetchUserData();
+    //   }, []);
+    // } catch (error) {
+    //   console.error("Error fetching user data:", error);
+    // }
 
     return (<>
         <header>
@@ -60,7 +60,7 @@ export default async function Home() {
 
                 {isLoggedIn ? (
                   <>
-                    <span className="userName">Welcome, {userName}</span> &nbsp;| &nbsp;
+                    <span className="userName">Welcome, "userName"</span> &nbsp;| &nbsp;
                     <Link href={baseURL + "/dashboard"} className="marginLeftSpacer">
                       Dashboard
                     </Link>

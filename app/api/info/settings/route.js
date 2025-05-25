@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import handleErrors from 'app/lib/error_handler';
+import handleErrors from '@/app/lib/error_handler';
 
 /**
  * Get user's settings
@@ -21,7 +21,7 @@ export async function GET(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
-        handleErrors(request, 500, error.message, "app/api/info/settings/route.js");
+        handleErrors(request, 500, error.message, "@/app/api/info/settings/route.js");
 
         console.error('Error processing form:', error);
 
@@ -46,7 +46,7 @@ export async function POST(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
-        handleErrors(request, 500, error.message, "app/api/info/settings/route.js");
+        handleErrors(request, 500, error.message, "@/app/api/info/settings/route.js");
 
         console.error('Error processing form:', error);
 
@@ -71,7 +71,7 @@ export async function PUT(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
-        handleErrors(request, 500, error.message, "app/api/info/settings/route.js");
+        handleErrors(request, 500, error.message, "@/app/api/info/settings/route.js");
 
         console.error('Error processing form:', error);
 

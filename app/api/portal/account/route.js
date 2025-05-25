@@ -17,7 +17,7 @@ export async function GET(req) {
 		const requestType = searchParams.get("request_type");
 
 		if (!requestType) {
-			handleErrors(req, 400, "Request type is required", "app/api/portal/account/route.js");
+			handleErrors(req, 400, "Request type is required", "@/app/api/portal/account/route.js");
 
 			return NextResponse.json(
 				{ error: "Request type is required" },
@@ -29,7 +29,7 @@ export async function GET(req) {
 
 		if (requestType === "single") {
 			if (!userId) {
-				handleErrors(req, 400, "User ID is required for single user request", "app/api/portal/account/route.js");
+				handleErrors(req, 400, "User ID is required for single user request", "@/app/api/portal/account/route.js");
 
 				return NextResponse.json(
 					{ error: "User ID is required for single user request" },
@@ -44,7 +44,7 @@ export async function GET(req) {
       `;
 
 			if (queryResult.length === 0) {
-				handleErrors(queryResult, 404, "User not found", "app/api/portal/account/route.js");
+				handleErrors(queryResult, 404, "User not found", "@/app/api/portal/account/route.js");
 
 				return NextResponse.json(
 					{ error: "User not found" },
@@ -58,7 +58,7 @@ export async function GET(req) {
       `;
 
 			if (queryResult.length === 0) {
-				handleErrors(queryResult, 404, "No users found", "app/api/portal/account/route.js");
+				handleErrors(queryResult, 404, "No users found", "@/app/api/portal/account/route.js");
 
 				return NextResponse.json(
 					{ error: "No users found" },
@@ -66,7 +66,7 @@ export async function GET(req) {
 				);
 			}
 		} else {
-			handleErrors(req, 400, "Invalid request type", "app/api/portal/account/route.js");
+			handleErrors(req, 400, "Invalid request type", "@/app/api/portal/account/route.js");
 
 			return NextResponse.json(
 				{ error: "Invalid request type" },
@@ -79,7 +79,7 @@ export async function GET(req) {
 			data: queryResult,
 		});
 	} catch (error) {
-		handleErrors(req, 500, error.message, "app/api/portal/account/route.js");
+		handleErrors(req, 500, error.message, "@/app/api/portal/account/route.js");
 
 		console.error("Error processing GET request:", error);
 
@@ -104,7 +104,7 @@ export async function POST(req) {
 		const clientName = formData.get("client_name");
 
 		if (!email || !password || !clientName) {
-			handleErrors(req, 400, "Email, password, and client name are required", "app/api/portal/account/route.js");
+			handleErrors(req, 400, "Email, password, and client name are required", "@/app/api/portal/account/route.js");
 
 			return NextResponse.json(
 				{ error: "Email, password, and client name are required" },
@@ -118,7 +118,7 @@ export async function POST(req) {
 			data: { email, clientName },
 		});
 	} catch (error) {
-		handleErrors(req, 500, error.message, "app/api/portal/account/route.js");
+		handleErrors(req, 500, error.message, "@/app/api/portal/account/route.js");
 
 		console.error("Error processing POST request:", error);
 
@@ -160,7 +160,7 @@ export async function PUT(req) {
 			data: { userId },
 		});
 	} catch (error) {
-		handleErrors(req, 500, error.message, "app/api/portal/account/route.js");
+		handleErrors(req, 500, error.message, "@/app/api/portal/account/route.js");
 
 		console.error("Error processing PUT request:", error);
 
@@ -183,7 +183,7 @@ export async function DELETE(req) {
 		const userId = formData.get("user_id");
 
 		if (!userId) {
-			handleErrors(req, 400, "User ID is required", "app/api/portal/account/route.js");
+			handleErrors(req, 400, "User ID is required", "@/app/api/portal/account/route.js");
 
 			return NextResponse.json(
 				{ error: "User ID is required" },
@@ -197,7 +197,7 @@ export async function DELETE(req) {
 			data: { userId },
 		});
 	} catch (error) {
-		handleErrors(req, 500, error.message, "app/api/portal/account/route.js");
+		handleErrors(req, 500, error.message, "@/app/api/portal/account/route.js");
 
 		console.error("Error processing DELETE request:", error);
 

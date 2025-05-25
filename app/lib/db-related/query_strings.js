@@ -7,6 +7,7 @@ import { logDetails } from '@/app/lib/logger';
  * Helper function to make API requests to Strapi.
  * @param {string} endpoint - The Strapi API endpoint.
  * @param {Object} [options] - Additional options for the request (e.g., method, headers, body).
+ * 
  * @returns {Promise<Object>} - The response data from Strapi.
  */
 const fetchFromStrapi = async (endpoint, options = {}) => {
@@ -19,13 +20,25 @@ const fetchFromStrapi = async (endpoint, options = {}) => {
       },
       ...options,
     });
+
     return response.data;
   } catch (error) {
     logDetails("Error fetching from Strapi", "Failed to fetch from Strapi", { error });
 
     console.error(`Error fetching from Strapi: ${error.message}`);
+
     throw new Error(error.response?.data?.error?.message || 'Failed to fetch from Strapi');
   }
+};
+
+/**
+ * Selects all media records from Strapi.
+ * @returns {Promise<Array>} - List of media records.
+ */
+export const selectAllMedia = async () => {
+  const response = await fetchFromStrapi('/media');
+
+  return response.data;
 };
 
 /**
@@ -115,7 +128,7 @@ export const sendSignInInfo = async (signInInfo) => {
  */
 export const sendContactInfo = async (formData) => {
   try {
-    const response = await axios.post(`${process.env.NEXTAUTH_URL}/api/contact`, formData, {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/contact`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return response.data;
@@ -124,15 +137,6 @@ export const sendContactInfo = async (formData) => {
 
     throw new Error(`Failed to send contact info: ${error.message}`);
   }
-};
-
-/**
- * Selects all media records from Strapi.
- * @returns {Promise<Array>} - List of media records.
- */
-export const selectAllMedia = async () => {
-  const response = await fetchFromStrapi('/media');
-  return response.data;
 };
 
 /**
@@ -172,4 +176,17 @@ export const selectMediaById = async (mediaId) => {
 export const selectRecentSignInsForUser = async (userId) => {
   const response = await fetchFromStrapi(`/signins?filters[user_id][$eq]=${userId}&sort=created_at:desc&pagination[limit]=5`);
   return response.data;
+};
+
+export {
+  insertMedia,
+  updateUser,
+  updateMedia,
+  sendSignInInfo,
+  sendContactInfo,
+  selectAllMedia,
+  selectAllUsers,
+  selectUserByEmail,
+  selectMediaById,
+  selectRecentSignInsForUser
 };

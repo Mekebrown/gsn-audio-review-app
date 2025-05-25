@@ -38,7 +38,7 @@ export const GSNLogo = ({
 };
 
 // ENV URLs
-export const baseURL = new URL(process.env.NEXT_PUBLIC_BASE_URL);
+export const baseURL = JSON.parse(JSON.stringify(new URL(process.env.NEXT_PUBLIC_BASE_URL)));
 export const apiURL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 
 // Auth URL

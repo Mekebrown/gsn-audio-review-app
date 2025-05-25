@@ -139,7 +139,7 @@ export const sendSignInInfo = async (signInInfo) => {
  */
 export const sendContactInfo = async (formData) => {
     try {
-        const response = await axios.post(`${process.env.NEXTAUTH_URL}/api/contact`, formData, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/contact`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
         });
         return response.data;

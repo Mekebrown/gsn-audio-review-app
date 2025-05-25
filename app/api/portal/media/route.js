@@ -61,7 +61,7 @@ export async function GET(request) {
           n.media_id = med.id
       `;
 		} else {
-			handleErrors(request, 400, "Invalid request type", "app/api/portal/media/route.js");
+			handleErrors(request, 400, "Invalid request type", "@/app/api/portal/media/route.js");
 
 			return NextResponse.json(
 				{ message: "Invalid request type" },
@@ -74,7 +74,7 @@ export async function GET(request) {
 			data: queryResult,
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/media/route.js");
 
 		console.error("Error processing GET request:", error);
 
@@ -128,7 +128,7 @@ export async function DELETE(request) {
 			data: `The media ID ${mediaId} was successfully deleted.`,
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/media/route.js");
 
 		console.error("Error processing DELETE request:", error);
 
@@ -181,7 +181,7 @@ async function handleFormRequest(request, action) {
 			},
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/media/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/media/route.js");
 
 		console.error(`Error processing ${action} request:`, error);
 

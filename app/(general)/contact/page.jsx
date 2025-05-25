@@ -1,19 +1,17 @@
-"use client";
-
-import { useState } from "react";
+// import { useState } from "react";
 
 import { contactAPIPath, GSNLogo } from "@/app/lib/general_variables";
-import { GeneralToast } from "@/app/ui/Toast";
+// import { GeneralToast } from "@/app/ui/Toast";
 import "@/styles/pages/contact.module.css";
 
 export default function Page() {
-    const [formInfo, setFormInfo] = useState({
-        name: "",
-        email: "",
-        subjectDropdown: "",
-        subject: "",
-        contactMsg: "",
-    });
+    // const [formInfo, setFormInfo] = useState({
+    //     name: "",
+    //     email: "",
+    //     subjectDropdown: "",
+    //     subject: "",
+    //     contactMsg: "",
+    // });
 
     const updateFormInfo = (e) => {
         const { name, value } = e.target;
@@ -23,7 +21,7 @@ export default function Page() {
         }));
     };
 
-    const [toastMessage, setToastMessage] = useState("");
+    // const [toastMessage, setToastMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,7 +64,7 @@ export default function Page() {
 
     return (
         <section>
-            {toastMessage && <GeneralToast message={toastMessage} />}
+            {/* {toastMessage && <GeneralToast message={toastMessage} />} */}
 
             <GSNLogo /> &nbsp; GSN
 

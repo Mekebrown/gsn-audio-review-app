@@ -27,7 +27,8 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "sourceMap": true
   },
   "include": [
     "next-env.d.ts",
@@ -35,7 +36,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "@/app/page.tsx",
-    "@/app/(general)/notes/page.tsx"
   ],
   "exclude": [
     "node_modules",

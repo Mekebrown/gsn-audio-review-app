@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import handleErrors from "app/lib/error_handler";
+import handleErrors from "@/app/lib/error_handler";
 
 /**
  * Handles GET requests to retrieve notes.
@@ -47,7 +47,7 @@ export async function GET(request) {
 			);
 		}
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/notes/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/notes/route.js");
 
 		console.error("Error processing GET request:", error);
 
@@ -74,7 +74,7 @@ export async function POST(request) {
 			data: { msg: `Here is the new note information: ${formData}` },
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/notes/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/notes/route.js");
 
 		console.error("Error processing POST request:", error);
 
@@ -108,7 +108,7 @@ export async function PUT(request) {
 			data: { msg: `Here is the updated note information for note ID: ${noteId}` },
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/notes/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/notes/route.js");
 
 		console.error("Error processing PUT request:", error);
 
@@ -142,7 +142,7 @@ export async function DELETE(request) {
 			data: { msg: `Note ID ${noteId} was successfully deleted.` },
 		});
 	} catch (error) {
-		handleErrors(request, 500, error.message, "app/api/portal/notes/route.js");
+		handleErrors(request, 500, error.message, "@/app/api/portal/notes/route.js");
 
 		console.error("Error processing DELETE request:", error);
 

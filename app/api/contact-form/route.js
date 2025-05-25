@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 
-import handleErrors from 'app/lib/error_handler';
+import handleErrors from '@/app/lib/error_handler';
 
 export async function POST(request) {
     try {
         const formData = await request.formData();
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const subject_cat = formData.get('subject_cat');
+        const name = formData.get('NoSigninUserName');
+        const email = formData.get('userEmail');
+        const subject_cat = formData.get('subjectDropdown');
         const subject = formData.get('subject');
         const message = formData.get('message');
 
@@ -17,7 +17,7 @@ export async function POST(request) {
 
         return NextResponse.json({ message: 'Success' });
     } catch (error) {
-        handleErrors(formData, 500, error.message, "app/api/contact/route.js");
+        handleErrors(formData, 500, error.message, "@/app/api/contact/route.js");
 
         console.error('Error processing form:', error);
 

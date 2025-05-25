@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { setCookie } from 'cookies-next';
 
-import { send_signin_info } from "@/app/lib/db-related/query_strings";
+import send_signin_info, { send_contact_info } from "@/app/lib/fetch_statements";
 import { GeneralToast } from "@/app/ui/Toast";
 import { GSNLogo } from "@/app/lib/general_variables";
 
@@ -26,7 +26,10 @@ export default function Page() {
             let response;
 
             if (signinType === "user") {
-                response = await send_signin_info({ identifier, password });
+                response = await send_signin_info({
+                    "signInEmail": identifier, 
+                    "signInPassword": password
+                });
             } else if (signinType === "visitor") {
                 response = await send_contact_info(formData);
             }
@@ -46,6 +49,7 @@ export default function Page() {
             }
         } catch (error) {
             console.error('Error submitting form:', error);
+
             setSigninType("user");
             setToastMessage("An error occurred. Please try again.");
         }
@@ -99,8 +103,8 @@ export default function Page() {
             <h2>Do you need an invite? Please contact your GSN coordinator or submit your information for prompt assistance.</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="NoSigninUserName">Your name:
-                        <input type="text" id="NoSigninUserName" placeholder="Your name..." required />
+                    <label htmlFor="noSigninUserName">Your name:
+                        <input type="text" id="noSigninUserName" placeholder="Your name..." required />
                     </label>
 
                     <label htmlFor="userEmail">Your email:
