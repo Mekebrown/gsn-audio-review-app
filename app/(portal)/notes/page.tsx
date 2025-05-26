@@ -130,7 +130,7 @@ function Accordion({ note }: AccordionProps) {
   );
 }
 
-export default function NotesPage() {
+export default function AllNotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);

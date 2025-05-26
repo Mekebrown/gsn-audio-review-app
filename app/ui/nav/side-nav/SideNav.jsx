@@ -1,10 +1,8 @@
 import "@/styles/navigation/sidenav.css";
 
-export default function SideNav({ status }) {
+export default function SideNav() {
     return <aside className="sideMenuCont">
         <h2>Browse Media</h2>
-
-        {status}
 
         <h3>Find One</h3>
         <h3>Find Two</h3>

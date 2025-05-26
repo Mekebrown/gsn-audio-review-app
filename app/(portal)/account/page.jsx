@@ -1,15 +1,9 @@
-'use client';
-
 import Image from "next/image";
 import Link from 'next/link';
 
-import { GeneralToast } from "@/app/ui/Toast";
 import { baseURL, logoImage } from "@/app/lib/general_variables";
 
-export default function Page() {
-    const { data: session, status } = { data: "user", status: "authenticated" }; //useSession();
-
-    const loading = status === "loading";
+export default async function AccountPage() {
     const allMedia = [
         {
             id: 1,
@@ -21,15 +15,7 @@ export default function Page() {
         },
     ];
 
-    if (status === "unauthenticated") {
-        window.location.href = baseURL;
-        return null;
-    } else if (loading) {
-        return "Loading or not authenticated..."
-    }
-
     return <section>
-        <GeneralToast message={session} />
         <h1>
             <Link href={baseURL + "/media"}>MEDIA!!!</Link>
         </h1>

@@ -4,23 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { baseURL } from "@/app/lib/general_variables";
-import { GeneralToast } from "@/app/ui/Toast";
 
-export default function Page() {
-    const { data: session, status } = { data: "user", status: "authenticated" }; //useSession();
-
-    const loading = status === "loading";
-    const allMedia = []; 
-
-    if (status === "unauthenticated") {
-        window.location.href = baseURL;
-        return null;
-    } else if (loading) {
-        return "Loading or not authenticated..."
-    }
+export default function AllMediaPage() {
+    const allMedia = [];
 
     return <section>
-        <GeneralToast message={session} />
         <h1>
             <Link href={baseURL + "/media"}>MEDIA!!!</Link>
         </h1>

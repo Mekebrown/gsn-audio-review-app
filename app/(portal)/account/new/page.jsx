@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Modal, Button, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
  * 
  * @returns {JSX.Element}
  */
-export default function Page() {
+export default function NewUserCreationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
