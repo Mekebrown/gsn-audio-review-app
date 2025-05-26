@@ -35,6 +35,23 @@ const nextConfig = {
             },
         },
     },
+    async headers() {
+        return [
+            {
+                source: '/manifest.json',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=3600, must-revalidate',
+                    },
+                    {
+                        key: 'Content-Type',
+                        value: 'application/manifest+json',
+                    },
+                ],
+            },
+        ];
+    },
 };
 
 export default nextConfig;
