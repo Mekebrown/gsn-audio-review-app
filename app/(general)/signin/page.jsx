@@ -1,20 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { setCookie } from 'cookies-next';
+import { getCookie, setCookie } from 'cookies-next';
 
 import send_signin_info, { send_contact_info } from "@/app/lib/fetch_statements";
 import { GeneralToast } from "@/app/ui/Toast";
-import { GSNLogo } from "@/app/lib/general_variables";
+import { GSNLogo, gsnSignInCookie } from "@/app/lib/general_variables";
 
 import "@/styles/pages/signin.css";
 
 export default function SignInPage() {
+    const [loading, setLoading] = useState(true);
     const [signinType, setSigninType] = useState("user");
     const [toastMessage, setToastMessage] = useState("");
 
     const router = useRouter();
+
+    useEffect(() => {
+        const isCookieSet = getCookie(gsnSignInCookie);
+
+        if (isCookieSet) {
+            setTimeout(() => {
+                router.replace('/media');
+            }, 1000);
+        } else {
+            setLoading(false);
+        }
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,7 +54,7 @@ export default function SignInPage() {
             } else {
                 const { cookie_value } = result.data;
 
-                setCookie('gsn-sign-in-cookie', cookie_value);
+                setCookie(gsnSignInCookie, cookie_value);
 
                 setToastMessage("Success!");
 
@@ -82,8 +95,29 @@ export default function SignInPage() {
             <p className="signInDesc">Best Audio Review Platform</p>
 
             <LeftBtn />
+            
+            <TemporaryLoginBtn />
         </div>;
     };
+
+    const TemporaryLoginBtn = () => {
+        return <button
+            className="signInTypeBtn"
+            type="button"
+            title="temporary login"
+            onClick={() => {
+                setSigninType("user");
+                setCookie(gsnSignInCookie, "Meke");
+                setToastMessage("Let's log you in");
+
+                setTimeout(() => {
+                    router.replace('/media');
+                }, 3000);
+            }}
+        >
+            Temporary Login
+        </button>;
+    }
 
     const RightSection = () => {
         return signinType === "user" ? <div className="signInFormContainer">
@@ -127,7 +161,9 @@ export default function SignInPage() {
                 </form>
         </div>;
     };
-
+    
+    if (loading) return null;
+    
     return (
         <section className="signInPage" data-testid="section">
             <GeneralToast message={toastMessage} />

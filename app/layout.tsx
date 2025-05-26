@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import SignInAndOutChecker from "@/app/ui/credentials/SignInAndOutChecker"; // Import the client component
 import DisclaimerToast from "@/app/ui/Toast"                          // Import the client component
 import Footer from '@/app/ui/Footer';                                 // Import the client component
-import { baseURL, GSNLogo, bearerToken, userIdCookie} from "@/app/lib/general_variables";
+import { baseURL, GSNLogo, gsnSignInCookie} from "@/app/lib/general_variables";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "@/styles/globals.css";
@@ -46,27 +46,13 @@ export const metadata = {
 
 const retrieveUserData = async () => {
   const cookieStore = cookies();
-  const userIdentifier = (await cookieStore).get(userIdCookie)?.value || "0";
 
   try {
-    const axiosInstance = axios.create({ baseURL: baseURL });
-    const response = await axiosInstance.get(`/api/signin?request_type=single&user_id=${userIdentifier}`, {
-      headers: {
-          Authorization: bearerToken,
-      }
-    });
+    const userIdentifier = (await cookieStore).get(gsnSignInCookie)?.value;
 
-    if (response.status === 200) {
-      return response.data;
-    } else if (response.status === 401) {
-      console.error("Unauthorized access - please check your credentials.");
-
-      return null;
-    } else if (response.status === 404) {
-      console.error("User not found - please check the user ID.");
-
-      return null;
-    }
+    if (userIdentifier !== undefined) {
+      return userIdentifier;
+    } 
   } catch (error) {
     console.error("Error fetching user data:", error);
 

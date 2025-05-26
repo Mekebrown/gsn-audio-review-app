@@ -1,26 +1,29 @@
 'use client';
 
+import { useState, useEffect } from "react";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from "react";
-import { getCookie, setCookie, deleteCookie } from 'cookies-next';
+import { deleteCookie } from 'cookies-next';
 
-import { gsnSignInCookie, signInUsernameCookie, userIdCookie } from "@/app/lib/general_variables";
+import { gsnSignInCookie, userIdCookie } from "@/app/lib/general_variables";
 
 const SignInOutBtn = ({username}) => {
+    const [userNameInfo, setUserNameInfo] = useState(username);
     const router = useRouter();
 
     const handleSignOut = () => {
-        [gsnSignInCookie, signInUsernameCookie, userIdCookie].forEach(deleteCookie);
-
-        router.refresh(); // or router.push('/signin');?
+        [gsnSignInCookie, userIdCookie].forEach(deleteCookie);
+        
+        setUserNameInfo(undefined);
+        
+        router.refresh();
     };
 
-    if (username !== undefined) {
+    if (userNameInfo !== undefined) {
         return <span aria-label="User is signed in">
             Welcome, 
             <Link href={"/account"} className="marginLeftSpacer">
-                {username}
+                {userNameInfo}
             </Link>
 
             &nbsp;| &nbsp;
@@ -48,7 +51,7 @@ const SignInOutBtn = ({username}) => {
 };
 
 export default function SignInAndOutChecker({userData}) {
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState(userData);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -57,19 +60,7 @@ export default function SignInAndOutChecker({userData}) {
 
         const fetchUserData = async () => {
             try {
-                if (getCookie(gsnSignInCookie) !== String(userData?.user?.isLoggedIn)) {
-                    setCookie(gsnSignInCookie, userData?.user?.isLoggedIn);
-                }
-                if (getCookie(signInUsernameCookie) !== userData?.user?.name) {
-                    setCookie(signInUsernameCookie, userData?.user?.name);
-                }
-                if (getCookie(userIdCookie) !== userData?.user?.id) {
-                    setCookie(userIdCookie, userData?.user?.id);
-                }
-
                 if (isMounted) {
-                    setUsername(userData?.user?.name || null);
-                    
                     setError(null);
                 }
             } catch (error) {
