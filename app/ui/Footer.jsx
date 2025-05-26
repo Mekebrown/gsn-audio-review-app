@@ -80,21 +80,21 @@ export default function Footer() {
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/faq"
+                        href="/ntks/faq"
                         rel="noopener noreferrer"
                     >
                         FAQ
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/terms"
+                        href="/ntks/terms"
                         rel="noopener noreferrer"
                     >
                         Terms
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/disclaimer"
+                        href="/ntks/disclaimer"
                         rel="noopener noreferrer"
                     >
                         Disclaimer
@@ -146,21 +146,21 @@ export default function Footer() {
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/faq"
+                        href="/ntks/faq"
                         rel="noopener noreferrer"
                     >
                         FAQ
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/terms"
+                        href="/ntks/terms"
                         rel="noopener noreferrer"
                     >
                         Terms
                     </Link>
                     &nbsp; - &nbsp;
                     <Link
-                        href="/about/ntks/disclaimer"
+                        href="/ntks/disclaimer"
                         rel="noopener noreferrer"
                     >
                         Disclaimer

@@ -50,12 +50,12 @@ const aboutGSNPath = baseURL + "/about/gsn";
 const aboutGMPPath = baseURL + "/about/gmp";
 const blogPath = baseURL + "/blog";
 const contactPath = baseURL + "/contact";
-const disclaimerPath = baseURL + "/about/ntks/disclaimer";
-const faqPath = baseURL + "/about/ntks/faq";
-const pricingPath = baseURL + "/about/ntks/pricing";
-const privacyPath = baseURL + "/about/ntks/privacy";
-const sitemapPath = baseURL + "/about/ntks/sitemap";
-const termsPath = baseURL + "/about/ntks/terms";
+const disclaimerPath = baseURL + "/ntks/disclaimer";
+const faqPath = baseURL + "/ntks/faq";
+const pricingPath = baseURL + "/ntks/pricing";
+const privacyPath = baseURL + "/ntks/privacy";
+const sitemapPath = baseURL + "/ntks/sitemap";
+const termsPath = baseURL + "/ntks/terms";
 const signinPath = baseURL + "/signin";
 
 // Protected frontent paths. If visitor, NEED REDIRECT TO HOME PAGE

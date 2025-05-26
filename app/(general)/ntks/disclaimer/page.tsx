@@ -58,20 +58,20 @@ export default function Page() {
                             Sign In
                         </Link> <br />
                         <Link
-                            href={baseURL + "/about/ntks/terms"}
+                            href={baseURL + "/ntks/terms"}
                             rel="noopener noreferrer"
                         >
                             T&amp;C
                         </Link> <br />
                         <Link
-                            href={baseURL + "/about/ntks/privacy"}
+                            href={baseURL + "/ntks/privacy"}
                             rel="noopener noreferrer"
                         >
                             Privacy Policy
                         </Link> <br />
                         <br />
                         <Link
-                            href={baseURL + "/about/ntks/instructions"}
+                            href={baseURL + "/ntks/instructions"}
                             rel="noopener noreferrer"
                         >
                             Instructions

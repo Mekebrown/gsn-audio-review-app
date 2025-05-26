@@ -20,12 +20,12 @@ export default function TempUniversalNav() {
                     <Link href={baseURL + "/about"}>About</Link> | &nbsp;
                     <Link href={baseURL + "/blog"}>blog</Link> | &nbsp;
                     <Link href={baseURL + "/contact"}>contact</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/disclaimer"}>disclaimer</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/faq"}>faq</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/pricing"}>pricing</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/privacy"}>privacy</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/sitemap"}>sitemap</Link> | &nbsp;
-                    <Link href={baseURL + "/about/ntks/terms"}>terms</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/disclaimer"}>disclaimer</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/faq"}>faq</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/pricing"}>pricing</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/privacy"}>privacy</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/sitemap"}>sitemap</Link> | &nbsp;
+                    <Link href={baseURL + "/ntks/terms"}>terms</Link> | &nbsp;
                     <Link href={baseURL + "/signin"}>signin</Link>
                 </li>
             </ul>

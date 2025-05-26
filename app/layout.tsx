@@ -106,7 +106,7 @@ export default async function RootLayout({ children,
 
               <div className="topNavSection rightLinks">
                 <Link href={"/about"}>About</Link> &nbsp;
-                <Link href={"/about/ntks/pricing"}>Pricing</Link> &nbsp;
+                <Link href={"/ntks/pricing"}>Pricing</Link> &nbsp;
                 <Link href={"/contact"}>Contact</Link> &nbsp;| &nbsp;
 
                 <SignInAndOutChecker userData={userData}/>
