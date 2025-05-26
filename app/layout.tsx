@@ -1,11 +1,14 @@
-import "@fortawesome/fontawesome-svg-core/styles.css";
+import axios from "axios";
+import Link from "next/link";
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { cookies } from 'next/headers';
 
-import Footer from '@/app/ui/Footer';
-import CookieHandler from "@/app/ui/CookieHandler"; // Import the client component
-import DisclaimerToast from "@/app/ui/Toast"
-import { baseURL} from "@/app/lib/general_variables";
+import SignInAndOutChecker from "@/app/ui/credentials/SignInAndOutChecker"; // Import the client component
+import DisclaimerToast from "@/app/ui/Toast"                          // Import the client component
+import Footer from '@/app/ui/Footer';                                 // Import the client component
+import { baseURL, GSNLogo, bearerToken, userIdCookie} from "@/app/lib/general_variables";
 
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "@/styles/globals.css";
 import "@/styles/layout.css";
 
@@ -32,7 +35,7 @@ export const metadata = {
   title: 'Gifted Sounds Network',
   twitter: {
     card: 'summary',
-    creator: 'TODO', // https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup
+    creator: 'TODO',
     creatorId: 'TODO',
     description: "Gifted Sounds is your source of diverse, top-notch podcast, livestreaming, and A/V production studio, providing a unique and immersive experience for viewers by incorporating interactive elements and cutting-edge technology.",
     images: ['TODO'], // Must be an absolute URL
@@ -40,6 +43,36 @@ export const metadata = {
     title: "Gifted Sounds Network",
   },
 };
+
+const retrieveUserData = async () => {
+  const cookieStore = cookies();
+  const userIdentifier = (await cookieStore).get(userIdCookie)?.value || "0";
+
+  try {
+    const axiosInstance = axios.create({ baseURL: baseURL });
+    const response = await axiosInstance.get(`/api/signin?request_type=single&user_id=${userIdentifier}`, {
+      headers: {
+          Authorization: bearerToken,
+      }
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else if (response.status === 401) {
+      console.error("Unauthorized access - please check your credentials.");
+
+      return null;
+    } else if (response.status === 404) {
+      console.error("User not found - please check the user ID.");
+
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+
+    throw new Error('Network response was not ok');
+  }
+}
 
 /**
  * @description Component for a layout that will wrap 
@@ -50,22 +83,46 @@ export const metadata = {
  * @returns {JSX.Element}
  * <RootLayout children={children} />
  */
-export default function RootLayout({ children,
+export default async function RootLayout({ children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    return (
-      <html lang="en">
-        <body>
-          {/* <CookieHandler /> */}
-          <div id="portal"></div>
+  const userData = await retrieveUserData();
 
-          <main className="childrenSection">{children}</main>
+  return (
+    <html lang="en">
+      <body>
+        <header>
+          <nav>
+            <menu className="topNav">
+              <div className="topNavSection">
+                <Link href="/">
+                  <GSNLogo />
+                  <span className="topNavLeftGSNText">Gifted Sounds Network</span>
+                </Link>
+              </div>
 
-          <DisclaimerToast />
+              <div className="topNavSection"></div>
 
-          <Footer />
-        </body>
-      </html>
-    );
+              <div className="topNavSection rightLinks">
+                <Link href={"/about"}>About</Link> &nbsp;
+                <Link href={"/about/ntks/pricing"}>Pricing</Link> &nbsp;
+                <Link href={"/contact"}>Contact</Link> &nbsp;| &nbsp;
+
+                <SignInAndOutChecker userData={userData}/>
+              </div>
+            </menu>
+          </nav>
+        </header>
+
+        <div id="portal"></div>
+
+        <main className="childrenSection">{children}</main>
+
+        <DisclaimerToast />
+
+        <Footer />
+      </body>
+    </html>
+  );
 };

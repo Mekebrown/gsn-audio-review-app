@@ -5,40 +5,43 @@ interface GlobalErrorProps {
   reset: () => void;
 }
 
+export async function generateMetadata() {
+  return {
+    title: "Error",
+    description: "An error occurred while processing your request.",
+  };
+}
+
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   return (
-    <html lang="en">
-      <head>
-        <title>Error</title>
-      </head>
-      <body>
-        <main style={{ textAlign: 'center', marginTop: '20vh' }}>
-          <h1>Oops! Something went wrong.</h1>
-          <p>
-            {error.message || 'An unexpected error occurred.'}
-          </p>
-          {error.digest && (
-            <p style={{ color: 'gray', fontSize: '0.9em' }}>
-              Error Code: {error.digest}
-            </p>
-          )}
-          <button
-            onClick={reset}
-            style={{
-              padding: '10px 20px',
-              fontSize: '1em',
-              backgroundColor: '#007BFF',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-            aria-label="Try again"
-          >
-            Try Again
-          </button>
-        </main>
-      </body>
-    </html>
+    <div style={{ textAlign: 'center', marginTop: '20vh' }}>
+      <h1>Oops! Something went wrong.</h1>
+
+      <p>
+        {error.message || 'An unexpected error occurred.'}
+      </p>
+      
+      {error.digest && (
+        <p style={{ color: 'gray', fontSize: '0.9em' }}>
+          Error Code: {error.digest}
+        </p>
+      )}
+      
+      <button
+        onClick={reset}
+        aria-label="Try again"
+        style={{
+          padding: '10px 20px',
+          fontSize: '1em',
+          backgroundColor: '#007BFF',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '5px',
+          cursor: 'pointer',
+        }}
+      >
+        Try Again
+      </button>
+    </div>
   );
 }

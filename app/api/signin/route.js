@@ -34,7 +34,14 @@ export async function GET(request) {
             );
         }
 
-        return NextResponse.json({ message: 'Success', userId });
+        return NextResponse.json({
+            message: 'Success',
+            user: {
+                isLoggedIn: true,
+                name: 'Meke',
+                userId: userId || '1',
+            }
+        });
     } catch (error) {
         handleErrors(request, 500, error.message, '@/app/api/signin/route.js');
 

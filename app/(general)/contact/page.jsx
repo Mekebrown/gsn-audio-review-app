@@ -1,30 +1,58 @@
-// import { useState } from "react";
+"use client";
+
+import { useState, useRef } from "react";
+import axios from 'axios';
 
 import { contactAPIPath, GSNLogo } from "@/app/lib/general_variables";
-// import { GeneralToast } from "@/app/ui/Toast";
+
 import "@/styles/pages/contact.module.css";
 
-export default function Page() {
-    // const [formInfo, setFormInfo] = useState({
-    //     name: "",
-    //     email: "",
-    //     subjectDropdown: "",
-    //     subject: "",
-    //     contactMsg: "",
-    // });
+export default function ContactPage() {
+    const toastRef = useRef(null);
+    const [errors, setErrors] = useState([]);
+    const [successMsg, setSuccessMsg] = useState('');
+    const [formInfo, setFormInfo] = useState({
+        name: "",
+        email: "",
+        subjectDropdown: "",
+        subject: "",
+        contactMsg: "",
+    });
 
     const updateFormInfo = (e) => {
         const { name, value } = e.target;
+
         setFormInfo((prev) => ({
             ...prev,
             [name]: value,
         }));
     };
 
-    // const [toastMessage, setToastMessage] = useState("");
+    const validate = () => {
+        const errs = [];
+        if (!formInfo.name) errs.push('Name is required.');
+        if (!/\S+@\S+\.\S+/.test(formInfo.email)) errs.push('Valid email is required.');
+        if (!formInfo.subjectDropdown) errs.push('Please select a subject category.');
+        if (!formInfo.subject) errs.push('Subject is required.');
+        if (!formInfo.contactMsg) errs.push('Message body cannot be empty.');
+
+        return errs;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setErrors([]);
+        setSuccessMsg('');
+
+        const errs = validate();
+
+        if (errs.length > 0) {
+            setErrors(errs);
+            showToast();
+
+            return;
+        }
 
         try {
             const formData = new FormData();
@@ -33,13 +61,12 @@ export default function Page() {
                 formData.append(key, formInfo[key]);
             }
 
-            const response = await fetch(contactAPIPath, {
-                method: 'POST',
-                body: formData,
+            const response = await axios.post(contactAPIPath, {
+                ...formData
             });
 
-            if (response.ok) {
-                setToastMessage("Success!");
+            if (response.status === 200) {
+                setSuccessMsg('Message sent successfully!');
                 setFormInfo({
                     name: "",
                     email: "",
@@ -48,9 +75,11 @@ export default function Page() {
                     contactMsg: "",
                 });
             } else {
-                setToastMessage("Sorry, your information did not go through. Please try again.");
+                setErrors(['Failed to send message. Please try again later.']);
+                showToast();
             }
         } catch (error) {
+            setErrors(['Failed to submit. Please try again later.']);
             setFormInfo({
                 name: "",
                 email: "",
@@ -58,14 +87,38 @@ export default function Page() {
                 subject: "",
                 contactMsg: "",
             });
-            setToastMessage("Error:" + error);
+            showToast();
         }
+    };
+
+    const handleReset = () => {
+        setFormData({
+        name: '',
+        email: '',
+        subjectDropdown: '',
+        subject: '',
+        contactMsg: '',
+        });
+        setErrors([]);
+        setSuccessMsg('');
+    };
+
+    const showToast = () => {
+        if (!toastRef.current) return;
+        toastRef.current.style.display = 'block';
+        toastRef.current.style.opacity = '1';
+
+        setTimeout(() => {
+            toastRef.current.style.opacity = '0';
+
+            setTimeout(() => {
+                if (toastRef.current) toastRef.current.style.display = 'none';
+            }, 1000);
+        }, 3000);
     };
 
     return (
         <section>
-            {/* {toastMessage && <GeneralToast message={toastMessage} />} */}
-
             <GSNLogo /> &nbsp; GSN
 
             <h2>Contact</h2>
@@ -74,12 +127,14 @@ export default function Page() {
 
             Social media logos <br />
 
+            {successMsg && <div>{successMsg}</div>}
+
             <form action="post" onSubmit={handleSubmit}>
                 <input
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="Your Name III"
+                    placeholder="Your Name"
                     value={formInfo.name}
                     onChange={updateFormInfo}
                 />
@@ -127,16 +182,16 @@ export default function Page() {
                 ></textarea>
 
                 <button type="submit">Send Message</button>
-                <button type="reset" onClick={() => setFormInfo({
-                    name: "",
-                    email: "",
-                    subjectDropdown: "",
-                    subject: "",
-                    contactMsg: "",
-                })}>
+                <button type="reset" onClick={handleReset}>
                     Clear All
                 </button>
             </form>
+
+            <div ref={toastRef}>
+                {errors.map((err, i) => (
+                    <div key={i}>{err}</div>
+                ))}
+            </div>
         </section>
     );
 };

@@ -29,10 +29,10 @@ export const GSNLogo = ({
 }) => {
 	return (
 		<Image
-			src={logoImage}
-			alt={customAlt}
-			width={customWidth}
-			height={customHeight}
+			src={ logoImage }
+			alt={ customAlt }
+			width={ customWidth }
+			height={ customHeight }
 		/>
 	);
 };
@@ -99,7 +99,8 @@ const uploadAPIPath = apiURL + "/media/new"; // POST
 const gsnVisitedSiteCookie = "gsn-visited-site";
 const gsnDisclaimerChoice = "gsn-disclaimer-choice";
 const gsnSignInCookie = "gsn-sign-in-cookie";
-const userId = "gsn-user-id";
+const signInUsernameCookie = "sign-in-username-cookie";
+const userIdCookie = "gsn-user-id-cookie";
 
 export {
 	indexPath,
@@ -142,5 +143,6 @@ export {
 	gsnVisitedSiteCookie,
 	gsnDisclaimerChoice,
 	gsnSignInCookie,
-	userId
+	signInUsernameCookie,
+	userIdCookie
 }

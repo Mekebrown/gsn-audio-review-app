@@ -10,7 +10,7 @@ import { GSNLogo } from "@/app/lib/general_variables";
 
 import "@/styles/pages/signin.css";
 
-export default function Page() {
+export default function SignInPage() {
     const [signinType, setSigninType] = useState("user");
     const [toastMessage, setToastMessage] = useState("");
 

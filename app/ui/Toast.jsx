@@ -1,11 +1,7 @@
-"use client";
-
 import "@/styles/ui/toast.css";
 
 /**
- * S/E 
- * 
- * @returns {JSX.Element} <DisclaimerToast />
+ * @returns {JSX.Element}
  */
 export default function DisclaimerToast({ show = "hideToast" }) {
     const classes = `disclaimerToast ` + show;
@@ -24,11 +20,9 @@ export default function DisclaimerToast({ show = "hideToast" }) {
 };
 
 /**
- * S/E 
- * 
  * @param {string} message 
  * 
- * @returns {JSX.Element} <GeneralToast message=message />
+ * @returns {JSX.Element}
  */
 export const GeneralToast = ({ message }) => {
     if (message) {
