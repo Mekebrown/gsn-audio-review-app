@@ -8,7 +8,7 @@ export default function DisplayAllUserAccountsPage() {
 // import { usersExample } from "@/app/lib/user_placeholders";
 // import { apiURL } from "@/app/lib/general_variables";
 
-// export default function Page() {
+// function Page() {
 //   const [toastMessage, setToastMessage] = useState("");
 
 //   const response = fetch(apiURL + "/portal/account");

@@ -1,5 +1,8 @@
 export default function NewNotePage({ onClose }) {
-    return <div>New Note Page </div>;
+    return <Modal onClose={onClose}>
+        <h1>New Note Page </h1>
+        <p>This is a placeholder for the New Note Page.</p>
+    </Modal>;
 };
 
 // "use client";
@@ -20,7 +23,7 @@ export default function NewNotePage({ onClose }) {
 //  * 
 //  * @returns {JSX.Element}
 //  */
-// export default function NewNotePage({ onClose }) {
+// function NewNotePage({ onClose }) {
 //     const [loading, setLoading] = useState(false);
 //     const [error, setError] = useState('');
 //     const [success, setSuccess] = useState(false);

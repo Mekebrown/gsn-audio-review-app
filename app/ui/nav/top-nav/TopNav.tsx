@@ -33,7 +33,7 @@ export default function TopNav() {
 // /**
 //  * @returns {JSX.Element}
 //  */
-// export default function TopNav() {
+// function TopNav() {
 //   try {
 //     interface User {
 //       settings?: {
