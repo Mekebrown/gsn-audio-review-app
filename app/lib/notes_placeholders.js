@@ -7,6 +7,7 @@
  * @param {*} userId 
  * @param {*} mediaId 
  * @param {*} noteBody 
+ * @param {*} noteTitle 
  * @param {*} noteDatetime 
  * @param {*} createdAt 
  * @param {*} updatedAt 
@@ -16,6 +17,7 @@ export const noteInfo = (
 	userId,
 	mediaId,
 	noteBody,
+	noteTitle,
 	noteDatetime,
 	createdAt,
 	updatedAt
@@ -24,6 +26,7 @@ export const noteInfo = (
 	this.userId = userId;
 	this.mediaId = mediaId;
 	this.noteBody = noteBody;
+	this.noteTitle = noteTitle;
 	this.noteDatetime = noteDatetime;
 	this.createdAt = createdAt;
 	this.updatedAt = createdAt < updatedAt ? updatedAt : "not updated";
@@ -47,6 +50,7 @@ const notesExample = [
 		userId: 1,
 		mediaId: 1,
 		noteBody: "This is a great job Lance",
+		noteTitle: "Title of a great job Lance",
 		noteDatetime: "17/12/1997 15:37:16.00",
 		createdAt: "2004-10-19 10:23:54",
 		updatedAt: "2004-10-19 10:23:54",
@@ -56,6 +60,7 @@ const notesExample = [
 		userId: 2,
 		mediaId: 1,
 		noteBody: "This is a great track job",
+		noteTitle: "Title of a great job Lance",
 		noteDatetime: "2004-10-19 10:23:54",
 		createdAt: "2004-10-19 10:23:54",
 		updatedAt: "2004-10-19 10:23:54",
