@@ -1,8 +1,8 @@
 export default function NewNotePage() {
-    return <Modal>
+    return <div>
         <h1>New Note Page </h1>
         <p>This is a placeholder for the New Note Page.</p>
-    </Modal>;
+    </div>;
 };
 
 // "use client";
