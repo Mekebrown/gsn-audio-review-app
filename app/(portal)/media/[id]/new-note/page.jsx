@@ -1,5 +1,5 @@
-export default function NewNotePage({ onClose }) {
-    return <Modal onClose={onClose}>
+export default function NewNotePage() {
+    return <Modal>
         <h1>New Note Page </h1>
         <p>This is a placeholder for the New Note Page.</p>
     </Modal>;
@@ -19,11 +19,9 @@ export default function NewNotePage({ onClose }) {
 //  * @description A Modal component showing a form to 
 //  * create a note for a specific track
 //  * 
-//  * @param {function} onClose
-//  * 
 //  * @returns {JSX.Element}
 //  */
-// function NewNotePage({ onClose }) {
+// function NewNotePage() {
 //     const [loading, setLoading] = useState(false);
 //     const [error, setError] = useState('');
 //     const [success, setSuccess] = useState(false);
@@ -114,7 +112,7 @@ export default function NewNotePage({ onClose }) {
 //         }
 //     }
 //     return (
-//         <Modal onClose={onClose}>
+//         <Modal>
 //             <h1>{noteTitle}</h1>
 
 //             <p>{note.body}</p>
