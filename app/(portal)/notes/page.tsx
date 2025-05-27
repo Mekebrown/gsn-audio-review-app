@@ -83,20 +83,15 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 };
 
-// Define types for the note and audio track
-interface MediaTrack {
-  id: number;
-  media_title: string;
-}
-
 interface Note {
-  id: number;
-  note_title: string;
-  note_author: string;
-  note_body: string;
-  note_media_info: MediaTrack;
-  note_created_at: string;
-  note_updated_at?: string;
+  noteId: number;
+  userId: string;
+  noteBody: string;
+  noteTitle: string;
+  mediaId: number;
+  createdAt: string;
+  updatedAt?: string;
+  noteDatetime: string;
 }
 
 interface AccordionProps {
@@ -113,17 +108,14 @@ function Accordion({ note }: AccordionProps) {
   return (
     <div style={styles.accordion}>
       <div style={styles.accordionHeader} onClick={toggleAccordion}>
-        <h3 style={styles.noteTitle}>{note.note_title}</h3>
+        <h3 style={styles.noteTitle}>{note.noteTitle}</h3>
         <p style={styles.noteMeta}>
-          By {note.note_author} | {new Date(note.note_updated_at || note.note_created_at).toLocaleDateString()}
-        </p>
-        <p style={styles.mediaTrack}>
-          Audio: {note.note_media_info.id} - {note.note_media_info.media_title.split(' ').slice(0, 3).join(' ')}...
+          By {note.userId} | {new Date(note.updatedAt || note.createdAt).toLocaleDateString()}
         </p>
       </div>
       {isOpen && (
         <div style={styles.accordionContent}>
-          <p>{note.note_body}</p>
+          <p>{note.noteBody}</p>
         </div>
       )}
     </div>
@@ -146,18 +138,30 @@ export default function AllNotesPage() {
     }
   };
 
-  // Fetch notes from Strapi API
   useEffect(() => {
     const fetchNotes = async () => {
       setLoading(true);
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/notes?_limit=${NOTES_PER_PAGE}&_start=${
-            (currentPage - 1) * NOTES_PER_PAGE
-          }`
-        );
-        const data: Note[] = await response.json();
+        // const response = await fetch(
+        //   `${process.env.NEXT_PUBLIC_STRAPI_URL}/notes?_limit=${NOTES_PER_PAGE}&_start=${
+        //     (currentPage - 1) * NOTES_PER_PAGE
+        //   }`
+        // );
+        // Make dummy data for the response. Integrate the Note[] interface in the dummy data.
+        const response = {
+          status: 200,
+          json: async () => notesExample,
+          headers: {
+            get: (header: string) => {
+              if (header === 'X-Total-Count') {
+                return String(notesExample.length); // Simulating total count
+              }
+              return null;
+            },
+          },
+        }
+        const data = await response.json();
         const totalCount = response.headers.get('X-Total-Count');
         
         setNotes(data);
@@ -180,7 +184,7 @@ export default function AllNotesPage() {
       ) : (
         <div style={styles.notesContainer}>
           {notes.map((note) => (
-            <Accordion key={note.id} note={note} />
+            <Accordion key={note.noteId} note={note} />
           ))}
         </div>
       )}
