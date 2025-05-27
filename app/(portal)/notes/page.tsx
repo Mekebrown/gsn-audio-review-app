@@ -85,7 +85,7 @@ const styles: { [key: string]: React.CSSProperties } = {
 
 interface Note {
   noteId: number;
-  userId: string;
+  userId: number;
   noteBody: string;
   noteTitle: string;
   mediaId: number;
