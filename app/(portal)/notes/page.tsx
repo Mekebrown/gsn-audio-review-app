@@ -150,6 +150,7 @@ export default function AllNotesPage() {
   useEffect(() => {
     const fetchNotes = async () => {
       setLoading(true);
+
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/notes?_limit=${NOTES_PER_PAGE}&_start=${
@@ -158,6 +159,7 @@ export default function AllNotesPage() {
         );
         const data: Note[] = await response.json();
         const totalCount = response.headers.get('X-Total-Count');
+        
         setNotes(data);
         setTotalPages(Math.ceil(Number(totalCount) / NOTES_PER_PAGE));
       } catch (error) {
