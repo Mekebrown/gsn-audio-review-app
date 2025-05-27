@@ -1,16 +1,19 @@
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 import SideNav from '@/app/ui/nav/side-nav/SideNav';
 import Player from '@/app/ui/Player';
 import { singleMediaTrackExample } from "@/app/lib/media_placeholders";
+import { gsnSignInCookie } from "@/app/lib/general_variables";
 
-export default function RootLayout({ children }) {
-    const { data: session, status } = { data: "user", status: "authenticated" }; //useSession();?
+export default async function RootLayout({ children }) {
+    const cookieStore = cookies();
+    const userIdentifier = (await cookieStore).get(gsnSignInCookie)?.value;
 
-    if (status === "unauthenticated") {
+    if (userIdentifier === undefined) {
         redirect('/signin');
-    } else if (status === "loading") {
-        return "Loading or not authenticated..."
+
+        return null;
     }
 
     return <>
