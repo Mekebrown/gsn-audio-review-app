@@ -16,6 +16,4 @@ export default function middleware(request) {
 	const pathname = request.nextUrl.pathname;
 
 	if (["/manifest.json", "/favicon.ico"].includes(pathname)) return;
-
-	// return NextResponse.redirect(new URL("/", baseURLString));
 }

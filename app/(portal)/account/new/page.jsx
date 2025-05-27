@@ -2,6 +2,8 @@ export default function NewUserCreationPage() {
   return <div>New user creation page</div>;
 };
   
+// /send-pw* - close icon, msg, form (checkboxes of media, email input, generated pw and "copy" link), submit button, clear button, cancel link
+
 // "use client";
 
 // import { useState } from 'react';

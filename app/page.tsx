@@ -4,9 +4,9 @@ import { tempImage} from "@/app/lib/general_variables";
 
 import "@/styles/navigation/topnav.css";
 
+// / - msg, media (title/link, notes and the profiles, uploaded date, update link, delete link)
 export default function Home() {
   return (<>
-
     <section>
       <div className="twoCols">
         <section style={{ paddingTop: "10%", flex: "1", textAlign: "left" }}>

@@ -27,7 +27,7 @@ const SignInOutBtn = ({username}) => {
             </Link>
 
             &nbsp;| &nbsp;
-
+            {/* /signout - redirect to / */}
             <button
                 type="button"
                 title="Sign Out"

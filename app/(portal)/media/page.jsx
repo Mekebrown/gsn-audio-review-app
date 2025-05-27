@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { baseURL } from "@/app/lib/general_variables";
 
+// /delete-upload* - close icon, msg, confirm button, cancel link
 export default function AllMediaPage() {
     const allMedia = [];
 

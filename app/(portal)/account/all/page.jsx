@@ -2,6 +2,9 @@ export default function DisplayAllUserAccountsPage() {
   return <div>Display all info in the account</div>;
 };
 
+// /users - msg, users (link to each user and their profiles, preview of latest note(s), list of media, last sign in(s?), reset pw link, delete user link)
+// /delete-profile* - close icon, msg, confirm button, cancel link
+
 // import { useState } from "react";
 
 // import { GeneralToast } from '@/app/ui/Toast';

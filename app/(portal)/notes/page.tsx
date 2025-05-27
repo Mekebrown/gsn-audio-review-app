@@ -122,6 +122,7 @@ function Accordion({ note }: AccordionProps) {
   );
 }
 
+// /notes - msg, notes (note copy, media title/link, created date)
 export default function AllNotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);

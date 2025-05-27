@@ -8,6 +8,8 @@ import { isAudioFile } from "@/app/lib/media_placeholders";
 import { uploadAPIPath } from "@/app/lib/general_variables";
 
 /**
+ * /upload* - close icon, msg, form (logo, title, desc, user, audio, datetimes), submit button, clear button, cancel link
+ * 
  * A Modal component showing a form to configure and upload audio files.
  *
  * @returns {React.ReactElement}

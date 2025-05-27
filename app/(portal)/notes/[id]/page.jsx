@@ -1,4 +1,6 @@
 /**
+ * /notes/:note* - note copy, media title/link, created date
+ * 
  * @description A component showing a note 
  * to an admin in a modal
  * 
