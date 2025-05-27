@@ -125,10 +125,10 @@ export default function SignInPage() {
 
             <form onSubmit={handleSubmit}>
                 <label htmlFor="userEmail">Your email:</label>
-                <input type="email" id="userEmail" placeholder="Your email..." required />
+                <input type="email" id="userEmail" autoComplete="email" placeholder="Your email..." required />
 
                 <label htmlFor="userPassword">Your password:</label>
-                <input type="password" id="userPassword" required />
+                <input type="password" id="userPassword" autoComplete="current-password" required />
 
                 <button className="signInSubmitBtn" type="submit" name="signinBtn" id="signinBtn">Sign In</button>
                 <button className="signInResetBtn" type="reset">Clear All</button>
@@ -138,7 +138,7 @@ export default function SignInPage() {
 
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="noSigninUserName">Your name:
-                        <input type="text" id="noSigninUserName" placeholder="Your name..." required />
+                        <input type="text" id="noSigninUserName" autoComplete="name" placeholder="Your name..." required />
                     </label>
 
                     <label htmlFor="userEmail">Your email:
