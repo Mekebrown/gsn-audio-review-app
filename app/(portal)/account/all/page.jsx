@@ -1,40 +1,40 @@
-export default function DisplayAllUserAccountsPage() {
-  return <div>Display all info in the account</div>;
-};
+import { allUsers as allUsersFunc } from "@/app/lib/user_placeholders";
 
 // /users - msg, users (link to each user and their profiles, preview of latest note(s), list of media, last sign in(s?), reset pw link, delete user link)
 // /delete-profile* - close icon, msg, confirm button, cancel link
 
-// import { useState } from "react";
+export default async function AllUsersPage() {
+  const allUsers = await allUsersFunc();
 
-// import { GeneralToast } from '@/app/ui/Toast';
-// import { usersExample } from "@/app/lib/user_placeholders";
-// import { apiURL } from "@/app/lib/general_variables";
+  // If there are no users
+  if (!allUsers || allUsers.length === 0) {
+    return <section>
+      <h1>No users found</h1>
+      <p>There are currently no user accounts.</p>
+    </section>;
+  }
 
-// function Page() {
-//   const [toastMessage, setToastMessage] = useState("");
+  // If there is only one user
+  if (allUsers.length === 1) {
+    return <section>
+      <h1>One user account</h1>
+      <article key={allUsers[0].id}>
+        <div className="user">Name: {allUsers[0].username}</div>
+        <div>Package: {allUsers[0].role.name}</div>
+      </article>
+    </section>;
+  }
 
-//   const response = fetch(apiURL + "/portal/account");
+  // If there are multiple users
+  return <section>
+    <h1>All user accounts</h1>
 
-//   if (response.ok) {
-//   const resJSON = JSON.parse(response);
-//     usersExample = resJSON.data;
-//   } else {
-//     usersExample = [];
-
-//     setToastMessage("No clients signed in yet");
-//   }
-
-//   return <section>
-//     <GeneralToast message={toastMessage} />
-
-//     <h1>All user accounts</h1>
-
-//     {usersExample.map(client => {
-//       return <article key={client.id}>
-//         <div className="user">Name: {client.name}</div>
-//         <div>Package: {client.package}</div>
-//       </article>;
-//     })}
-//   </section>;
-// };
+    {allUsers.map(user => {
+      return <article key={user.id}>
+        <div className="user">Name: {user.username}</div>
+        <div>User Role: {user.role.name}</div>
+        <hr />
+      </article>;
+    })}
+  </section>;
+};

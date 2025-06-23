@@ -1,35 +1,43 @@
+import StrapiHandler from "@/app/lib/strapiclient_handler";
+
+export const allNotes = async () => {
+	const notesCollection = StrapiHandler.collection('notes');
+
+	return (await notesCollection.find({ populate: ["cover", "users_permissions_user", "media"] }));
+};
+
 // The default export is notesExample
 
 /**
  * A note will have:
  * 
- * @param {*} noteId 
- * @param {*} userId 
- * @param {*} mediaId 
- * @param {*} noteBody 
- * @param {*} noteTitle 
- * @param {*} noteDatetime 
- * @param {*} createdAt 
- * @param {*} updatedAt 
+ * @param {number} noteId 
+ * @param {number} userId 
+ * @param {string} noteBody 
+ * @param {string} noteTitle 
+ * @param {number} mediaId 
+ * @param {string} createdAt 
+ * @param {string} updatedAt 
+ * @param {string} noteDatetime 
  */
-export const noteInfo = (
+const noteInfo = (
 	noteId,
 	userId,
-	mediaId,
 	noteBody,
 	noteTitle,
-	noteDatetime,
+	mediaId,
 	createdAt,
-	updatedAt
+	updatedAt,
+	noteDatetime,
 ) => {
-	this.noteId = noteId ? noteId : null;
-	this.userId = userId;
-	this.mediaId = mediaId;
+	this.noteId = parseInt(noteId) !== undefined ? parseInt(noteId) : null;
+	this.userId = parseInt(userId) !== undefined ? parseInt(userId) : null;
 	this.noteBody = noteBody;
 	this.noteTitle = noteTitle;
-	this.noteDatetime = noteDatetime;
+	this.mediaId = parseInt(mediaId) !== undefined ? parseInt(mediaId) : null;
 	this.createdAt = createdAt;
 	this.updatedAt = createdAt < updatedAt ? updatedAt : "not updated";
+	this.noteDatetime = noteDatetime;
 
 	this.getCreatedDate = () => {
 		return new Date(this.createdAt.replace(" ", "T"));
@@ -48,23 +56,24 @@ const notesExample = [
 	{
 		noteId: 1,
 		userId: 1,
-		mediaId: 1,
 		noteBody: "This is a great job Lance",
 		noteTitle: "Title of a great job Lance",
-		noteDatetime: "17/12/1997 15:37:16.00",
+		mediaId: 1,
 		createdAt: "2004-10-19 10:23:54",
 		updatedAt: "2004-10-19 10:23:54",
+		noteDatetime: "17/12/1997 15:37:16.00",
 	},
 	{
 		noteId: 2,
 		userId: 2,
-		mediaId: 1,
 		noteBody: "This is a great track job",
 		noteTitle: "Title of a great job Lance",
-		noteDatetime: "2004-10-19 10:23:54",
+		mediaId: 1,
 		createdAt: "2004-10-19 10:23:54",
 		updatedAt: "2004-10-19 10:23:54",
+		noteDatetime: "2004-10-19 10:23:54",
 	},
 ];
 
 export default notesExample;
+export { noteInfo };

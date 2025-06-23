@@ -1,14 +1,11 @@
-'use client';
-
 import Image from "next/image";
 import Link from "next/link";
 
 import { baseURL } from "@/app/lib/general_variables";
+import { allMedia } from "@/app/lib/media_placeholders";
 
 // /delete-upload* - close icon, msg, confirm button, cancel link
-export default function AllMediaPage() {
-    const allMedia = [];
-
+export default async function AllMediaPage() {
     return <section>
         <h1>
             <Link href={baseURL + "/media"}>MEDIA!!!</Link>
@@ -32,7 +29,7 @@ export default function AllMediaPage() {
                     <div style={{ flexGrow: 2 }}>
                         <Image
                             alt=""
-                            src={track.thumbURL}
+                            src={"http://localhost:1337" + track.thumbnail.url}
                             width="50"
                             height="50"
                         />
