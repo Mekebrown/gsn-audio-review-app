@@ -10,3 +10,7 @@
   padding: 3%;
   min-height: -webkit-fill-available;
 }
+
+.signInOutButton {
+    display: inline;
+}

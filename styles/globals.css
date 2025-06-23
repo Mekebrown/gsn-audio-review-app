@@ -89,6 +89,21 @@ li {
   padding: 5%;
 }
 
+.leftCol {
+  padding-top: 10%;
+  flex: 1;
+  text-align: left;
+}
+
+.leftCol .description {
+  width: 50%;
+  margin: 5% auto;
+}
+
+.rightCol {
+  flex: 1;
+}
+
 /* Images */
 .rich-text img {
   @apply w-full object-cover rounded-xl my-6;

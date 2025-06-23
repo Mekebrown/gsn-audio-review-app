@@ -21,7 +21,7 @@ const SignInOutBtn = ({username}) => {
 
     if (userNameInfo !== undefined) {
         return <span aria-label="User is signed in">
-            Welcome, 
+            Welcome,&nbsp;
             <Link href={"/account"} className="marginLeftSpacer">
                 {userNameInfo}
             </Link>
@@ -32,7 +32,7 @@ const SignInOutBtn = ({username}) => {
                 type="button"
                 title="Sign Out"
                 onClick={handleSignOut}
-                className="marginLeftSpacer"
+                className="signInOutButton marginLeftSpacer"
             >
                 Sign Out
             </button>
