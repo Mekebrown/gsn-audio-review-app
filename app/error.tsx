@@ -29,7 +29,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
       
       <button
         onClick={reset}
-        aria-label="Try again"
+        aria-label="Please reload the page and try again."
         style={{
           padding: '10px 20px',
           fontSize: '1em',
@@ -40,7 +40,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           cursor: 'pointer',
         }}
       >
-        Try Again
+        Please reload the page and try again.
       </button>
     </div>
   );
