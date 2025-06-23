@@ -68,6 +68,9 @@ export default function SignInPage() {
             setToastMessage("An error occurred. Please try again.");
         }
     };
+    // Temporary login for testing purposes
+                setCookie(gsnSignInCookie, "Meke");
+                setTimeout(() => { router.push('/media'); }, 500);
 
     const LeftBtn = () => {
         return signinType === "user" ? <button
