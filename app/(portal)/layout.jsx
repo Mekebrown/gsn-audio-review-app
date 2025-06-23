@@ -6,6 +6,7 @@ import Player from '@/app/ui/Player';
 import { singleMediaTrackExample } from "@/app/lib/media_placeholders";
 import { gsnSignInCookie } from "@/app/lib/general_variables";
 
+// / - msg, media (title/link, notes and the profiles, uploaded date, update link, delete link)
 export default async function RootLayout({ children }) {
     const cookieStore = cookies();
     const userIdentifier = (await cookieStore).get(gsnSignInCookie)?.value;
@@ -21,14 +22,16 @@ export default async function RootLayout({ children }) {
 
         <main className="children">{children}</main>
 
-        <Player
-            title={singleMediaTrackExample.title}
-            track={[
-                singleMediaTrackExample.mp3,
-                singleMediaTrackExample.ogg
-            ]}
-            desc={singleMediaTrackExample.description}
-            captions={singleMediaTrackExample.captions}
-        />
+        {!singleMediaTrackExample && (
+            <Player
+                title={singleMediaTrackExample.title}
+                track={[
+                    singleMediaTrackExample.mp3,
+                    singleMediaTrackExample.ogg
+                ]}
+                desc={singleMediaTrackExample.description}
+                captions={singleMediaTrackExample.captions}
+            />
+        )}
     </>;
 };
