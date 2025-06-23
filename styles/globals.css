@@ -236,6 +236,104 @@ li {
   color: #007BFF;
 }
 
+/* Start of styling for Notes page */
+.clickable:hover {
+    background-color: aliceblue;
+}
+
+.hideNotePad {
+    display: none;
+}
+
+.hideDatetimeText {
+    visibility: hidden;
+}
+
+.notesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: "Arial sans-serif";
+  }
+
+  .notesHeading {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .notesLoading {
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .notesAccordion {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .notesAccordionHeader {
+    padding: 10px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+
+  .notesTitle {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .notesMeta {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+
+  .notesMediaTrack {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #777;
+  }
+
+  .notesAccordionContent {
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+
+  .notesPagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .notesPageButton {
+    padding: 10px 15px;
+    font-size: 1rem;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .notesPageButtonDisabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .notesPageInfo {
+    font-size: 1rem;
+  }
+/* End of styling for Notes page */
+
 @media (prefers-color-scheme: dark) {
   /* :root {
     --foreground-rgb: 255, 255, 255;
