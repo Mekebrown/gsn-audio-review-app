@@ -1,9 +1,16 @@
 import StrapiHandler from "@/app/lib/strapiclient_handler";
 
+// id, title, body, media (id, title, url), createdAt, updatedAt, users_permissions_user (id, username), cover (id, url, alternativeText, caption), timestamp 
 export const allNotes = async () => {
 	const notesCollection = StrapiHandler.collection('notes');
 
 	return (await notesCollection.find({ populate: ["cover", "users_permissions_user", "media"] }));
+};
+
+export const noteById = async (documentId) => {
+	const notesCollection = StrapiHandler.collection('notes');
+
+	return (await notesCollection.findOne(documentId, { populate: ["cover", "users_permissions_user", "media"] }));
 };
 
 // The default export is notesExample
