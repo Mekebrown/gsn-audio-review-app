@@ -40,7 +40,6 @@ export default function TempUniversalNav() {
                     <Link href={baseURL + "/media/1"}>A single track</Link> | &nbsp;
                     <Link href={baseURL + "/media/new"}>Admin: Upload a single track</Link> | &nbsp;
                     <Link href={baseURL + "/notes"}>Admin: All notes</Link> | &nbsp;
-                    <Link href={baseURL + "/notes/1"}>Admin: A single note, in a modal</Link> | &nbsp;
                     <Link href={baseURL + "/account"}>Dashboard</Link> | &nbsp;
                     <Link href={baseURL + "/account/1"}>A single user</Link> | &nbsp;
                     <Link href={baseURL + "/account/new"}>Send a UN/PW to a new user</Link> | &nbsp;

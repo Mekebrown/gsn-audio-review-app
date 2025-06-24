@@ -62,7 +62,6 @@ const signinPath = baseURL + "/signin";
 const allMediaPath = baseURL + "/media";
 const singleMediaPath = baseURL + "/media"; // + media_id - A client can only access their assigned media
 const allNotesPath = baseURL + "/notes";
-const singleNotePath = baseURL + "/notes/"; // + noteId
 const allMembersPath = baseURL + "/account/all"; // Admin-only; IF an admin. An admin can retrieve any single member's info with
 const currentMemberPath = baseURL + "/account"; // Will retrieve curent member's info  
 
@@ -73,7 +72,6 @@ const setMediaAPIPath = apiURL + "/medias"; // POST, PUT, DELETE (hide) requests
 
 // Notes APIs
 const getAllNotesAPIPath = apiURL + "/notes";
-const getSingleNoteAPIPath = apiURL + "/notes/"; // + noteId
 const setNoteAPIPath = apiURL + "/notes"; // POST, PUT, DELETE (hide) requests
 
 // Members APIs
@@ -118,7 +116,6 @@ export {
 	allMediaPath,
 	singleMediaPath,
 	allNotesPath,
-	singleNotePath,
 	allMembersPath,
 	currentMemberPath,
 	contactAPIPath,
@@ -126,7 +123,6 @@ export {
 	getSingleMediaAPIPath,
 	setMediaAPIPath,
 	getAllNotesAPIPath,
-	getSingleNoteAPIPath,
 	setNoteAPIPath,
 	getAllMembersAPIPath,
 	getSingleMemberAPIPath,

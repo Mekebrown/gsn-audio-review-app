@@ -33,7 +33,6 @@ export default function Page() {
                 /account/all    [I:T][O:T,M] Client | ADMIN-ONLY; displays all users; Non-admins will be redirected to acct
                 /account/new    [I:T,M][O:T] Client | ADMIN-ONLY: Send un/pw; displays that specific user&apos;s account info; Non-admins will be redirected to acct
                 /media/new      [I:ALL][O:T] Client | ADMIN-ONLY; Upload new track; Non-admins will be redirected to /media
-                /notes/:id      [I:T][O:T,M] Client | ADMIN-ONLY; If current user can access the track: displays specific note, with a reference to the track;
                 Non-admins will be redirected to /media/:id the note [:id] belongs to
 
                 Key/Legend for any content in the main body of the page:
