@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
-import { allNotes } from "@/app/lib/notes_placeholders";
+import { allNotes as allNotesFunc } from "@/app/lib/notes_placeholders";
 
 // /notes - All notes to be displayed 
 // msg, notes (note copy, media title/link, created date)
@@ -22,23 +23,23 @@ function Accordion({ note }) {
       onClick={toggleAccordion}>
         <h3 
         // className={notesTitle}
-        >{note.title}</h3>
+        ><Link href={note.media.id}>{note.title}</Link></h3>
         <p 
         // className={notesMeta}
         >
-          By {note.users_permissions_user.id} | {new Date(note.updatedAt || note.createdAt).toLocaleDateString()}
+          By <Link href={note.users_permissions_user.id}>{note.users_permissions_user.id}</Link> | {new Date(note.updatedAt || note.createdAt).toLocaleDateString()}
         </p>
       </div>
       {isOpen && (
         <div> {/* <div className={notesAccordionContent}> */}
-          <p>{note.body}</p>
+          <p>{note.body}<Link href={note.media.id}>[Truncate!]...</Link></p>
         </div>
       )}
     </div>
   );
 }
 
-export default function AllNotesPage() {
+export default function Page() {
   const [notes, setNotes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -57,7 +58,7 @@ export default function AllNotesPage() {
       setLoading(true);
 
       try {
-        const {data, meta} = await allNotes();
+        const {data, meta} = await allNotesFunc();
 
         if (Array.isArray(data)) {
           const totalPageCount = meta.pagination?.pageCount || 1;
