@@ -5,7 +5,7 @@ import { baseURL } from "@/app/lib/general_variables";
 /**
  * @returns {JSX.Element}
  */
-export default function AboutPage() {
+export default function Page() {
   try {
     const baseURLString = baseURL ? baseURL : "http://localhost:3000";
 

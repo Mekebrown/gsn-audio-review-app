@@ -7,7 +7,7 @@ import { contactAPIPath, GSNLogo } from "@/app/lib/general_variables";
 
 import "@/styles/pages/contact.module.css";
 
-export default function ContactPage() {
+export default function Page() {
     const toastRef = useRef(null);
     const [errors, setErrors] = useState([]);
     const [successMsg, setSuccessMsg] = useState('');

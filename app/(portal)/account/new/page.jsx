@@ -1,4 +1,4 @@
-export default function NewUserCreationPage() {
+export default function Page() {
   return <div>New user creation page</div>;
 };
   

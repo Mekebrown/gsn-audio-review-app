@@ -14,7 +14,7 @@ import { uploadAPIPath } from "@/app/lib/general_variables";
  *
  * @returns {React.ReactElement}
  */
-export default function UploadMediaPage() {
+export default function Page() {
   const [files, setFiles] = useState({
     title: "",
     fileUpload: null,

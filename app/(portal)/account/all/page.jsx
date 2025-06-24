@@ -3,7 +3,7 @@ import { allUsers as allUsersFunc } from "@/app/lib/user_placeholders";
 // /users - msg, users (link to each user and their profiles, preview of latest note(s), list of media, last sign in(s?), reset pw link, delete user link)
 // /delete-profile* - close icon, msg, confirm button, cancel link
 
-export default async function AllUsersPage() {
+export default async function Page() {
   const allUsers = await allUsersFunc();
 
   // If there are no users
@@ -31,6 +31,7 @@ export default async function AllUsersPage() {
 
     {allUsers.map(user => {
       return <article key={user.id}>
+        <div className="user">User #{user.id}:</div>
         <div className="user">Name: {user.username}</div>
         <div>User Role: {user.role.name}</div>
         <hr />
