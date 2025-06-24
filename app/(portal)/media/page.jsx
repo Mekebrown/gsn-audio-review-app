@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { baseURL } from "@/app/lib/general_variables";
-import { allMedia } from "@/app/lib/media_placeholders";
+import { allMedia as allMediaFunc } from "@/app/lib/media_placeholders";
 
 // /delete-upload* - close icon, msg, confirm button, cancel link
-export default async function AllMediaPage() {
+export default async function Page() {
+    const allMedia = await allMediaFunc();
+
     return <section>
         <h1>
             <Link href={baseURL + "/media"}>MEDIA!!!</Link>
@@ -37,23 +39,20 @@ export default async function AllMediaPage() {
 
                     <div style={{ flexGrow: 4 }}>
                         <p>
-                            Media project #{track.id}
+                            <Link href={baseURL + "/media/" + track.id}>Media project #{track.id}</Link>
                         </p>
                         <p>
                             A player with preloaded audio of each media item
                         </p>
                         <p>
-                            A preview of the latest note added to each media...
+                            <Link href={baseURL + "/media/" + track.id}>A preview of the latest note added to each media...</Link>
                         </p>
                         <p>
                             Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users
                         </p>
                     </div>
 
-                    <span style={{ flexGrow: 1 }}>4:05 mins</span>
-
-                    <button style={{ flexGrow: 2 }}>Make A Note</button>
-                    <button type="reset">Clear All</button>
+                    <span style={{ flexGrow: 1 }}>Timestamp: 04:05</span>
                 </div>
 
                 <hr />
