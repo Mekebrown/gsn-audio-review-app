@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 
 import { allNotes } from "@/app/lib/notes_placeholders";
 
-// /notes - msg, notes (note copy, media title/link, created date)
+// /notes - All notes to be displayed 
+// msg, notes (note copy, media title/link, created date)
 function Accordion({ note }) {
   const [isOpen, setIsOpen] = useState(false);
 
