@@ -283,11 +283,6 @@ li {
     cursor: pointer;
   }
 
-  .notesTitle {
-    margin: 0;
-    font-size: 1.2rem;
-  }
-
   .notesMeta {
     margin: 5px 0;
     font-size: 0.9rem;

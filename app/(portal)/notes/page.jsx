@@ -22,8 +22,8 @@ function Accordion({ note }) {
       // className={notesAccordionHeader}
       onClick={toggleAccordion}>
         <h3 
-        // className={notesTitle}
-        ><Link href={note.media.id}>{note.title}</Link></h3>
+        // className={notesBody
+        ><Link href={note.media.id}>{note.body}</Link></h3>
         <p 
         // className={notesMeta}
         >
