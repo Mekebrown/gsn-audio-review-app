@@ -1,43 +1,52 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
 import Image from "next/image";
+import { getCookie } from 'cookies-next';
 
+import StrapiHandler from "@/app/lib/strapiclient_handler";
 import { isAudioFile } from "@/app/lib/media_placeholders";
-import { uploadAPIPath } from "@/app/lib/general_variables";
+import { signInUsernameCookie, getUserRoleCookie, userIdCookie } from "@/app/lib/general_variables";
 
 /**
  * /upload* - close icon, msg, form (logo, title, desc, user, audio, datetimes), submit button, clear button, cancel link
  * 
- * A Modal component showing a form to configure and upload audio files.
+ * A TODO: Modal component showing a form to configure and upload audio files.
  *
  * @returns {React.ReactElement}
  */
-export default function Page() {
+export default async function Page() {
   const [files, setFiles] = useState({
     title: "",
-    fileUpload: null,
-    fileName: "",
-    mediaType: "",
-    mediaDesc: "",
-    thumbURL: "",
-    thumbUpload: null,
-    hasMediaMarkers: null,
+    description: "",
+    media_file: null,
+    media_url: "",
+    thumbnail_file: null,
+    thumbnail_url: "",
+    category: "",
+    markers: null,
   });
   const [uploadStatus, setUploadStatus] = useState(false);
   const [error, setError] = useState("");
 
+  const currentUser = getCookie(signInUsernameCookie);
+  
+  if (!currentUser) {
+    setError("You must be signed in to upload files.");
+    
+    return;
+  }
+
   const resetForm = () => {
     setFiles({
       title: "",
-      fileUpload: null,
-      fileName: "",
-      mediaType: "",
-      mediaDesc: "",
-      thumbURL: "",
-      thumbUpload: null,
-      hasMediaMarkers: null,
+      description: "",
+      media_file: null,
+      media_url: "",
+      thumbnail_file: null,
+      thumbnail_url: "",
+      category: "",
+      markers: null,
     });
     setUploadStatus(false);
     setError("");
@@ -54,29 +63,54 @@ export default function Page() {
   const handleUpload = async (e) => {
     e.preventDefault();
 
-    if (!files.fileUpload || !isAudioFile(files.fileUpload)) {
+    if (!files.media_file || !isAudioFile(files.media_file)) {
       setError("Please upload a valid audio file.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("fileUpload", files.fileUpload);
-    formData.append("title", files.title);
-    formData.append("fileName", files.fileName);
-    formData.append("mediaType", files.mediaType);
-    formData.append("mediaDesc", files.mediaDesc);
-    if (files.thumbUpload) {
-      formData.append("thumbUpload", files.thumbUpload);
-    }
-    formData.append("hasMediaMarkers", files.hasMediaMarkers);
-
     try {
-      const response = await axios.post(uploadAPIPath, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const currentUserRole = getCookie(getUserRoleCookie);
+      const currentUserID = getCookie(userIdCookie);
+      const awsS3BucketURL = "https://awss3bucketmedia.url/";
+      const mediaFilenameFromUpload = files.media_file.name;
+      const mediaTypeFromUpload = files.media_file.type;
+      const tempCatArray = ["audio", "video", "image", "document"];
+      const thumbnailFilenameFromUpload = files.thumbnail_file ? files.thumbnail_file.name : null;
+      const isMediaTypeInCategoryArray = tempCatArray.split(",").map((cat) => cat.trim()).includes(mediaTypeFromUpload);
+
+      if (!currentUserRole || currentUserRole !== "admin") {
+        setError("You must be an admin to upload files.");
+
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("title", files.title);
+      formData.append("description", files.description);
+      formData.append("media_file", files.media_file);
+      formData.append("media_url", awsS3BucketURL + mediaFilenameFromUpload);
+      formData.append("admin_user", currentUserID || 1);
+      formData.append("assigned_users", [1, 2, 3]);
+
+      if (isMediaTypeInCategoryArray) {
+        formData.append("category", files.category);
+      }
+
+      if (files.markers) {
+        formData.append("markers", files.markers);
+      }
+
+      if (files.thumbnail_file) {
+        formData.append("thumbnail_file", files.thumbnail_file);
+        formData.append("thumbnail_url", awsS3BucketURL + thumbnailFilenameFromUpload);
+      }
+      
+      const mediaHandler = StrapiHandler.collection("media");
+      const response = mediaHandler.create(formData);
 
       if (response.status === 200) {
         setUploadStatus(true);
+
         resetForm();
       } else {
         setError("Failed to upload the file. Please try again.");
@@ -97,7 +131,9 @@ export default function Page() {
   return (
     <section>
       <h2>Upload Your Audio</h2>
+      
       {error && <p style={{ color: "red" }}>{error}</p>}
+
       <form onSubmit={handleUpload} onReset={resetForm}>
         <label htmlFor="title">Project Name or Title</label>
         <input
@@ -108,56 +144,47 @@ export default function Page() {
           onChange={handleInputChange}
         />
 
-        <label htmlFor="fileUpload">File Upload</label>
-        <input
-          type="file"
-          id="fileUpload"
-          name="fileUpload"
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="fileName">File Info</label>
-        <input
-          type="text"
-          id="fileName"
-          name="fileName"
-          value={files.fileName}
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="mediaType">File Type</label>
-        <input
-          type="text"
-          id="mediaType"
-          name="mediaType"
-          value={files.mediaType}
-          onChange={handleInputChange}
-        />
-
-        <label htmlFor="mediaDesc">Description</label>
+        <label htmlFor="description">Description</label>
         <textarea
-          id="mediaDesc"
-          name="mediaDesc"
-          value={files.mediaDesc}
+          id="description"
+          name="description"
+          value={files.description}
           onChange={handleInputChange}
         ></textarea>
 
-        {files.thumbURL ? (
+        <label htmlFor="media_file">File Upload</label>
+        <input
+          type="file"
+          id="media_file"
+          name="media_file"
+          onChange={handleInputChange}
+        />
+
+        <label htmlFor="category">Category/File Type</label>
+        <input
+          type="text"
+          id="category"
+          name="category"
+          value={files.category}
+          onChange={handleInputChange}
+        />
+
+        {files.thumbnail ? (
           <div>
             <Image
               alt="Thumbnail"
-              src={files.thumbURL}
+              src={files.thumbnail}
               width="200"
               height="200"
             />
           </div>
         ) : (
           <div>
-            <label htmlFor="thumbUpload">Thumbnail</label>
+            <label htmlFor="thumbnail_file">Thumbnail Upload</label>
             <input
               type="file"
-              id="thumbUpload"
-              name="thumbUpload"
+              id="thumbnail_file"
+              name="thumbnail_file"
               onChange={handleInputChange}
             />
           </div>
@@ -168,9 +195,9 @@ export default function Page() {
           <label>
             <input
               type="radio"
-              name="hasMediaMarkers"
+              name="markers"
               value="true"
-              checked={files.hasMediaMarkers === "true"}
+              checked={files.markers === "true"}
               onChange={handleInputChange}
             />
             Yes
@@ -178,9 +205,9 @@ export default function Page() {
           <label>
             <input
               type="radio"
-              name="hasMediaMarkers"
+              name="markers"
               value="false"
-              checked={files.hasMediaMarkers === "false"}
+              checked={files.markers === "false"}
               onChange={handleInputChange}
             />
             No

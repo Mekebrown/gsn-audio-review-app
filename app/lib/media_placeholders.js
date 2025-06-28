@@ -118,7 +118,7 @@ export const mediaTrackFileOnlyExample = {
 };
 
 export const thumbFileOnlyExample = {
-	thumbURL: logoImage,
+	thumbnail: logoImage,
 };
 
 export const isThumbFileImage = (imgFile) => {
@@ -152,7 +152,7 @@ export const getFileSize = (number) => {
 export const singleMediaTrackExample = {
 	id: 1,
 	title: "The Title",
-	thumbURL: logoImage,
+	thumbnail: logoImage,
 	description:
 		"This will be the track's description. Here you can learn more about it",
 	lengthMS: 5290,
@@ -169,7 +169,7 @@ const mediaTrackExample = [
 	{
 		id: 1,
 		title: "Exceptional Title",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description:
 			"This will be the track's description. Here you can learn more about it",
 		lengthMS: 5290,
@@ -184,7 +184,7 @@ const mediaTrackExample = [
 	{
 		id: 2,
 		title: "Second One",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description: "The second track's description.",
 		lengthMS: 5290,
 		notes: "The total notes from all users",
@@ -198,7 +198,7 @@ const mediaTrackExample = [
 	{
 		id: 3,
 		title: "Three Litthe Pigs",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description:
 			"This will be the track's description. Here you can learn more about it",
 		lengthMS: 5290,
@@ -213,7 +213,7 @@ const mediaTrackExample = [
 	{
 		id: 4,
 		title: "FOUR SCORES!!!",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description: "The second track's description.",
 		lengthMS: 5290,
 		notes: "The total notes from all users",
@@ -227,7 +227,7 @@ const mediaTrackExample = [
 	{
 		id: 5,
 		title: "Titles, g",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description:
 			"This will be the track's description. Here you can learn more about it",
 		lengthMS: 5290,
@@ -242,7 +242,7 @@ const mediaTrackExample = [
 	{
 		id: 6,
 		title: "Sixth One",
-		thumbURL: logoImage,
+		thumbnail: logoImage,
 		description: "The second track's description.",
 		lengthMS: 5290,
 		notes: "The total notes from all users",

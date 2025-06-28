@@ -17,8 +17,8 @@ export default async function Page() {
 
         <hr />
 
-        {allMedia.map(track => {
-            return <div key={track.id}>
+        {allMedia.map(media => {
+            return <div key={media.id}>
                 <div style={{ display: "flex" }}>
                     <div style={{ flexGrow: 1 }}>
                         &#x23EF;
@@ -31,7 +31,7 @@ export default async function Page() {
                     <div style={{ flexGrow: 2 }}>
                         <Image
                             alt=""
-                            src={"http://localhost:1337" + track.thumbnail.url}
+                            src={"http://localhost:1337" + media.thumbnail.url}
                             width="50"
                             height="50"
                         />
@@ -39,13 +39,13 @@ export default async function Page() {
 
                     <div style={{ flexGrow: 4 }}>
                         <p>
-                            <Link href={baseURL + "/media/" + track.id}>Media project #{track.id}</Link>
+                            <Link href={baseURL + "/media/" + media.id}>Media project #{media.id}</Link>
                         </p>
                         <p>
                             A player with preloaded audio of each media item
                         </p>
                         <p>
-                            <Link href={baseURL + "/media/" + track.id}>A preview of the latest note added to each media...</Link>
+                            <Link href={baseURL + "/media/" + media.id}>A preview of the latest note added to each media...</Link>
                         </p>
                         <p>
                             Posted on 01/01/2023, 9:14 pm | 12 total notes | 2 total users
