@@ -10,7 +10,6 @@ import { GSNLogo, gsnSignInCookie } from "@/app/lib/general_variables";
 
 import "@/styles/pages/signin.css";
 
-// /auth/signin - msg, form (email input, password input), submit button, cancel button
 export default function Page() {
     const [loading, setLoading] = useState(true);
     const [signinType, setSigninType] = useState("user");
