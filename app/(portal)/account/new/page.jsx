@@ -1,288 +1,255 @@
-export default function Page() {
-  return <div>New user creation page</div>;
-};
+"use client";
   
-// /send-pw* - close icon, msg, form (checkboxes of media, email input, generated pw and "copy" link), submit button, clear button, cancel link
+import { useState } from 'react';
+import { Modal, Button, Alert } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-// "use client";
+/**
+ * A user is to be created here, by a producer.
+ * 
+ * send-PW* - close icon, msg, form (checkboxes of media, email input, generated PW and "copy" link), submit button, clear button, cancel link
+ * 
+ * @description A Modal component showing a form to 
+ * configure and send a new user their
+ * account details
+ * 
+ * @returns {JSX.Element}
+ */
+export default function Page() {
+  const [success, setSuccess] = useState(false);
 
-// import { useState } from 'react';
-// import { Modal, Button, Alert } from 'react-bootstrap';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCopy, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+  const [pw, setPW] = useState('');
+  const [email, setEmail] = useState('');
+  const [mediaChecked, setMediaChecked] = useState([]);
 
-// /**
-//  * @description A Modal component showing a form to 
-//  * configure and send a new user their
-//  * account details
-//  * 
-//  * @returns {JSX.Element}
-//  */
-// function NewUserCreationPage() {
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState('');
-//   const [success, setSuccess] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPW, setCopiedPW] = useState(false);
 
-//   const [pw, setPw] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [mediaChecked, setMediaChecked] = useState([]);
+  const [show, setShow] = useState(true);
 
-//   const [copiedEmail, setCopiedEmail] = useState(false);
-//   const [copiedPW, setCopiedPW] = useState(false);
+  const media = [
+    {
+      id: 1,
+      title: "test1"
+    },
+    {
+      id: 2,
+      title: "test2"
+    }
+  ];
 
-//   const [show, setShow] = useState(true);
+  const handleClose = () => {
+    setShow(false);
+    setSendPW(false);
+  }
 
-//   const media = [
-//     {
-//       id: 1,
-//       title: "test1"
-//     },
-//     {
-//       id: 2,
-//       title: "test2"
-//     }
-//   ];
+  const handleShow = () => {
+    setShow(true);
+    setSendPW(true);
+  }
 
-//   const handleClose = () => {
-//     setShow(false);
-//     setSendPW(false);
-//   }
+  const handleEmailCopy = () => {
+    if (navigator?.clipboard !== undefined) {
+      navigator.clipboard
+        .writeText(email)
+        .then(
+          () => {
+            /* clipboard successfully set */
+            setCopiedEmail(true);
 
-//   const handleShow = () => {
-//     setShow(true);
-//     setSendPW(true);
-//   }
+            setTimeout(() => {
+              setCopiedEmail(false);
+            }, 2000);
+          },
+          () => {
+            /* clipboard write failed */
+          },
+        );
+    }
+  }
 
-//   const handleEmailCopy = () => {
-//     if (navigator?.clipboard !== undefined) {
-//       navigator.clipboard
-//         .writeText(email)
-//         .then(
-//           () => {
-//             /* clipboard successfully set */
-//             setCopiedEmail(true);
+  const handlePWCopy = () => {
+    if (navigator?.clipboard !== undefined) {
+      navigator.clipboard
+        .writeText(newMemberData.PW)
+        .then(
+          () => {
+            /* clipboard successfully set */
+            setCopiedPW(true);
 
-//             setTimeout(() => {
-//               setCopiedEmail(false);
-//             }, 2000);
-//           },
-//           () => {
-//             /* clipboard write failed */
-//           },
-//         );
-//     }
-//   }
+            setTimeout(() => {
+              setCopiedPW(false);
+            }, 2000);
+          },
+          () => {
+            /* clipboard write failed */
+          },
+        );
+    }
+  }
 
-//   const handlePWCopy = () => {
-//     if (navigator?.clipboard !== undefined) {
-//       navigator.clipboard
-//         .writeText(newMemberData.pw)
-//         .then(
-//           () => {
-//             /* clipboard successfully set */
-//             setCopiedPW(true);
+  const handleCheck = (e) => {
+    const { checked, value } = e.target;
 
-//             setTimeout(() => {
-//               setCopiedPW(false);
-//             }, 2000);
-//           },
-//           () => {
-//             /* clipboard write failed */
-//           },
-//         );
-//     }
-//   }
+    if (checked && !mediaChecked.includes(value)) {
+      setMediaChecked([...mediaChecked, value]);
+    } else {
+      setMediaChecked(mediaChecked.filter((item) => item !== value));
+    }
+  }
 
-//   const handleCheck = (e) => {
-//     const { checked, value } = e.target;
+  const handleCheckAll = () => {
+    if (mediaChecked.length === media.length) {
+      setMediaChecked([]);
+    } else {
+      setMediaChecked(media.map(item => item.id));
+      setMediaChecked(true);
+    }
+  }
 
-//     if (checked && !mediaChecked.includes(value)) {
-//       setMediaChecked([...mediaChecked, value]);
-//     } else {
-//       setMediaChecked(mediaChecked.filter((item) => item !== value));
-//     }
-//   }
+  const handleSend = async (e) => {
+    e.preventDefault();
 
-//   const handleCheckAll = () => {
-//     if (mediaChecked.length === media.length) {
-//       setMediaChecked([]);
-//     } else {
-//       setMediaChecked(media.map(item => item.id));
-//       setMediaChecked(true);
-//     }
-//   }
+    try {
+      setSuccess(false);
 
-//   const handleSend = async (e) => {
-//     e.preventDefault();
-
-//     if (mediaChecked.length === 0) {
-//       setError('Please select at least one media item.');
-//       return;
-//     }
-
-//     if (email === '') {
-//       setError('Please enter an email address.');
-//       return;
-//     }
-
-//     if (email !== '' && (!email.includes('@') || !email.includes('.'))) {
-//       setError('Please enter a valid email address.');
-//       return;
-//     }
-
-//     try {
-//       setError('');
-//       setSuccess(false);
-//       setLoading(true);
-
-//       // In an async function:
-//         // Send email with pw and media links
-//         // const response = await fetch(apiURL + '/portal/account', {
-//         //     method: 'POST',
-//         //     headers:
-//         //     {
-//         //         'Content-Type': 'application/json'
-//         //     },
-//         //     body: JSON.stringify({
-//         //         email: email,
-//         //         pw: pw,
-//         //         media: mediaChecked
-//         //     })
-//         // });
+      // In an async function:
+        // Send email with pw and media links
+        // const response = await fetch(apiURL + '/portal/account', {
+        //     method: 'POST',
+        //     headers:
+        //     {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         email: email,
+        //         pw: pw,
+        //         media: mediaChecked
+        //     })
+        // });
     
-//         // const resJSON = await response.json();
-//         // const {data} = resJSON;
+        // const resJSON = await response.json();
+        // const {data} = resJSON;
 
-//         // if (data.error) {
-//         //     setError(data.error);
-//         //     setLoading(false);
-        
-//         //     return;
-//         // }
+        // if (data.success) {
+        //     setSuccess(true);
+        //     return;
+        // }
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
 
-//         // if (data.success) {
-//         //     setSuccess(true);
-//         //     setLoading(false);
-//         //     return;
-//         // }
-//     } catch (err) {
-//       setError(err.message);
-//     }
+  return (
+    <>
+      <Button variant="secondary" onClick={handleShow}>
+        Send Password
+      </Button>
 
-//     setLoading(false);
-//   }
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Send Password</Modal.Title>
+        </Modal.Header>
 
-//   return (
-//     <>
-//       <Button variant="secondary" onClick={handleShow}>
-//         Send Password
-//       </Button>
+        <Modal.Body>
+          <form onSubmit={handleSend}>
+            {/* Name of New User */}
+            <div className="form-group">
+              <label htmlFor="username">Client Name</label>
 
-//       <Modal show={show} onHide={handleClose}>
-//         <Modal.Header closeButton>
-//           <Modal.Title>Send Password</Modal.Title>
-//         </Modal.Header>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                placeholder="Enter the client's name"
+              />
+            </div>
 
-//         <Modal.Body>
-//           <form onSubmit={handleSend}>
-//             {/* Name of New User */}
-//             <div className="form-group">
-//               <label htmlFor="clientName">Client Name</label>
+            {/* Email of New User */}
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
 
-//               <input
-//                 type="text"
-//                 className="form-control"
-//                 id="clientName"
-//                 placeholder="Enter name"
-//                 value=""
-//               />
-//             </div>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                placeholder="Enter email"
+                // value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-//             {/* Email of New User */}
-//             <div className="form-group">
-//               <label htmlFor="email">Email</label>
+              <div className="input-group-append">
+                <button className="btn btn-outline-secondary" type="button" onClick={handleEmailCopy}>
+                  {copiedEmail ? <FontAwesomeIcon icon={faCheckCircle} /> : <FontAwesomeIcon icon={faCopy} />}
+                </button>
+              </div>
+            </div>
 
-//               <input
-//                 type="email"
-//                 className="form-control"
-//                 id="email"
-//                 placeholder="Enter email"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//               />
+            {/* Password */}
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
 
-//               <div className="input-group-append">
-//                 <button className="btn btn-outline-secondary" type="button" onClick={handleEmailCopy}>
-//                   {copiedEmail ? <FontAwesomeIcon icon={faCheckCircle} /> : <FontAwesomeIcon icon={faCopy} />}
-//                 </button>
-//               </div>
-//             </div>
+              <div className="input-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="password"
+                  placeholder="Enter password"
+                  // value={pw}
+                  onChange={(e) => setPW(e.target.value)}
+                />
 
-//             {/* Password */}
-//             <div className="form-group">
-//               <label htmlFor="password">Password</label>
+                <div className="input-group-append">
+                  <button className="btn btn-outline-secondary" type="button" onClick={handlePWCopy}>
+                    {copiedPW ? <FontAwesomeIcon icon={faCheckCircle} /> : <FontAwesomeIcon icon={faCopy} />}
+                  </button>
+                </div>
+              </div>
+            </div>
 
-//               <div className="input-group">
-//                 <input
-//                   type="text"
-//                   className="form-control"
-//                   id="password"
-//                   placeholder="Enter password"
-//                   value={pw}
-//                   onChange={(e) => setPw(e.target.value)}
-//                 />
+            {/* Checklist of All Media */}
+            {/* TODO update htmlFor for labels */}
+            <div className="form-group">
+              <label htmlFor="checklistToggle">Media</label>
 
-//                 <div className="input-group-append">
-//                   <button className="btn btn-outline-secondary" type="button" onClick={handlePWCopy}>
-//                     {copiedPW ? <FontAwesomeIcon icon={faCheckCircle} /> : <FontAwesomeIcon icon={faCopy} />}
-//                   </button>
-//                 </div>
-//               </div>
-//             </div>
+              <div className="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  // value={() => mediaChecked.length === media.length}
+                  id="checklistToggle"
+                  onChange={handleCheckAll}
+                />
 
-//             {/* Checklist of All Media */}
-//             {/* TODO update htmlFor for labels */}
-//             <div className="form-group">
-//               <label htmlFor="checklistToggle">Media</label>
+                <label className="form-check-label" htmlFor="all">All</label>
+              </div>
 
-//               <div className="form-check">
-//                 <input
-//                   className="form-check-input"
-//                   type="checkbox"
-//                   value={() => mediaChecked.length === media.length}
-//                   id="checklistToggle"
-//                   onChange={handleCheckAll}
-//                 />
+              {media.map(item => (
+                <div className="form-check" key={item.id}>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    // value={item.id}
+                    id={item.id}
+                    // checked={() => mediaChecked.includes(item.id) || mediaChecked.length === media.length}
+                    onChange={handleCheck}
+                  />
 
-//                 <label className="form-check-label" htmlFor="all">All</label>
-//               </div>
+                  <label className="form-check-label" htmlFor={item.id}>{item.title}</label>
+                </div>
+              ))}
+            </div>
 
-//               {media.map(item => (
-//                 <div className="form-check" key={item.id}>
-//                   <input
-//                     className="form-check-input"
-//                     type="checkbox"
-//                     value={item.id}
-//                     id={item.id}
-//                     checked={() => mediaChecked.includes(item.id) || mediaChecked.length === media.length}
-//                     onChange={handleCheck}
-//                   />
+            {/* Alerts */}
+            {success && <Alert variant="success">Email sent!</Alert>}
 
-//                   <label className="form-check-label" htmlFor={item.id}>{item.title}</label>
-//                 </div>
-//               ))}
-//             </div>
-
-//             {/* Alerts */}
-//             {error && <Alert variant="danger">{error}</Alert>}
-//             {success && <Alert variant="success">Email sent!</Alert>}
-
-//             {/* Form Submit */}
-//             <Button variant="primary" type="submit" disabled={loading}>Send</Button>
-//             <button type="reset">Clear All</button>
-//           </form>
-//         </Modal.Body>
-//       </Modal>
-//     </>
-//   );
-// }
+            {/* Form Submit */}
+            <Button variant="primary" type="submit">Send</Button>
+            <button type="reset">Clear All</button>
+          </form>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+}
