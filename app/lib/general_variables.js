@@ -66,9 +66,9 @@ const allMembersPath = baseURL + "/account/all"; // Admin-only; IF an admin. An 
 const currentMemberPath = baseURL + "/account"; // Will retrieve curent member's info  
 
 // Media APIs
-const getAllMediaAPIPath = apiURL + "/medias";
-const getSingleMediaAPIPath = apiURL + "/medias/"; // + media_id
-const setMediaAPIPath = apiURL + "/medias"; // POST, PUT, DELETE (hide) requests; Admin-only
+const getAllMediaAPIPath = apiURL + "/media";
+const getSingleMediaAPIPath = apiURL + "/media/"; // + media_id
+const setMediaAPIPath = apiURL + "/media"; // POST, PUT, DELETE (hide) requests; Admin-only
 
 // Notes APIs
 const getAllNotesAPIPath = apiURL + "/notes";
@@ -78,6 +78,7 @@ const setNoteAPIPath = apiURL + "/notes"; // POST, PUT, DELETE (hide) requests
 const getAllMembersAPIPath = apiURL + "/members"; // Admin-only
 const getSingleMemberAPIPath = apiURL + "/members/";  // + media_id If admin, can retrieve any single member's info
 const setMemberAPIPath = apiURL + "/members"; //apiURL + "/members"; // POST, PUT, DELETE (hide) requests; Admin-only
+const getUserRoleCookie = apiURL + "/members/role"; // + member_id Admin-only; Will retrieve the role of a single member
 
 // Sign Ins/Outs APIs
 const getLastMemberSigninAPIPath = "???";  // + member_id Admin-only
@@ -104,10 +105,17 @@ export {
 	indexPath,
 	aboutGSNPath,
 	aboutGMPPath,
+	allNotesPath,
+	allMembersPath,
+	currentMemberPath,
+	contactAPIPath,
 	blogPath,
 	contactPath,
 	disclaimerPath,
 	faqPath,
+	getUserRoleCookie,
+	getAllMediaAPIPath,
+	getSingleMediaAPIPath,
 	pricingPath,
 	privacyPath,
 	sitemapPath,
@@ -115,12 +123,6 @@ export {
 	signinPath,
 	allMediaPath,
 	singleMediaPath,
-	allNotesPath,
-	allMembersPath,
-	currentMemberPath,
-	contactAPIPath,
-	getAllMediaAPIPath,
-	getSingleMediaAPIPath,
 	setMediaAPIPath,
 	getAllNotesAPIPath,
 	setNoteAPIPath,

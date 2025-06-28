@@ -1,12 +1,9 @@
-import axios from "axios";
-import Link from "next/link";
 import { config } from '@fortawesome/fontawesome-svg-core';
-import { cookies } from 'next/headers';
 
-import SignInAndOutChecker from "@/app/ui/credentials/SignInAndOutChecker"; // Import the client component
+import GuestTopNav from "@/app/ui/nav/top-nav/GuestTopNav";
 import DisclaimerToast from "@/app/ui/Toast"                          // Import the client component
 import Footer from '@/app/ui/Footer';                                 // Import the client component
-import { baseURL, GSNLogo, gsnSignInCookie} from "@/app/lib/general_variables";
+import { baseURL } from "@/app/lib/general_variables";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "@/styles/globals.css";
@@ -44,22 +41,6 @@ export const metadata = {
   },
 };
 
-const retrieveUserData = async () => {
-  const cookieStore = cookies();
-
-  try {
-    const userIdentifier = (await cookieStore).get(gsnSignInCookie)?.value;
-
-    if (userIdentifier !== undefined) {
-      return userIdentifier;
-    } 
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-
-    throw new Error('Network response was not ok');
-  }
-}
-
 /**
  * @description Component for a layout that will wrap 
  * around every site page
@@ -73,31 +54,12 @@ export default async function RootLayout({ children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userData = await retrieveUserData();
-
   return (
     <html lang="en">
       <body>
         <header>
           <nav>
-            <menu className="topNav">
-              <div className="topNavSection">
-                <Link href="/">
-                  <GSNLogo />
-                  <span className="topNavLeftGSNText">Gifted Sounds Network</span>
-                </Link>
-              </div>
-
-              <div className="topNavSection"></div>
-
-              <div className="topNavSection rightLinks">
-                <Link href={"/about"}>About</Link> &nbsp;
-                <Link href={"/ntks/pricing"}>Pricing</Link> &nbsp;
-                <Link href={"/contact"}>Contact</Link> &nbsp;| &nbsp;
-
-                <SignInAndOutChecker userData={userData}/>
-              </div>
-            </menu>
+            <GuestTopNav />
           </nav>
         </header>
 

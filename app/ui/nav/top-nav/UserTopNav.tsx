@@ -1,4 +1,4 @@
-export default function TopNav() {
+export default function UserTopNav() {
   return <div>TopNav Component Placeholder</div>;
 }
 

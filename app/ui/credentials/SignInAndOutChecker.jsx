@@ -8,26 +8,22 @@ import { deleteCookie } from 'cookies-next';
 import { gsnSignInCookie, userIdCookie } from "@/app/lib/general_variables";
 
 const SignInOutBtn = ({username}) => {
-    const [userNameInfo, setUserNameInfo] = useState(username);
     const router = useRouter();
 
     const handleSignOut = () => {
         [gsnSignInCookie, userIdCookie].forEach(deleteCookie);
         
-        setUserNameInfo(undefined);
-        
         router.refresh();
     };
 
-    if (userNameInfo !== undefined) {
+    if (username !== undefined) {
         return <span aria-label="User is signed in">
             Welcome,&nbsp;
             <Link href={"/account"} className="marginLeftSpacer">
-                {userNameInfo}
+                {username}
             </Link>
 
             &nbsp;| &nbsp;
-            {/* /signout - redirect to / */}
             <button
                 type="button"
                 title="Sign Out"
@@ -81,6 +77,7 @@ export default function SignInAndOutChecker({userData}) {
     }, []);
 
     if (loading) return <span aria-label="Loading user data">Loading...</span>;
+    
     if (error) return <span aria-label="Error retrieving user data">{error}</span>;
 
     return <SignInOutBtn username={username}/>;

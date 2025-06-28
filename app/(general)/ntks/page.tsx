@@ -1,26 +1,34 @@
 import Link from "next/link";
 
-import { baseURL } from "@/app/lib/general_variables";
-// Will list links to all the docs: Terms, disclaimer, site map, etc.
-
 /**
  * @returns {JSX.Element}
  */
 export default function Page() {
-    try {
-        const baseURLString = baseURL ? baseURL : "http://localhost:3000";
+    return <section>
+        <h2>Sitemap:</h2>
 
-        return <section>
-            <h2>Some Need to Knows:</h2>
+        <Link href={"/about"}>About</Link><br />
+        <Link href={"/blog"}>Blog</Link><br />
+        <Link href={"/contact"}>Contact</Link><br />
+        <Link href={"/signin"}>Signin</Link><br />
+        <Link href={"/account"}>User Dashboard</Link><br />
+        <hr />
+        <Link href={"/ntks/disclaimer"}>disclaimer</Link><br />
+        <Link href={"/ntks/faq"}>FAQ</Link><br />
+        <Link href={"/ntks/instructions"}>Instructions</Link><br />
+        <Link href={"/ntks/pricing"}>Pricing</Link><br />
+        <Link href={"/ntks/privacy"}>Privacy</Link><br />
+        <Link href={"/ntks"}>Sitemap</Link><br />
+        <Link href={"/ntks/terms"}>Terms</Link><br />
+        <hr />
+        <Link href={"/account/1"}>Admin-Only: A specific user</Link><br />
+        <Link href={"/account/new"}>Admin-Only: Send a UN/PW to a new user</Link><br />
+        <Link href={"/account/all"}>Admin-Only: Seeing all users</Link><br />
 
-            <Link href={baseURLString + "/ntks/disclaimer"}>Disclaimer</Link>
-            <Link href={baseURLString + "/ntks/faq"}>FAQ</Link>
-            <Link href={baseURLString + "/ntks/pricing"}>Pricing</Link>
-            <Link href={baseURLString + "/ntks/privacy"}>Privacy</Link>
-            <Link href={baseURLString + "/ntks/sitemap"}>Sitemap</Link>
-            <Link href={baseURLString + "/ntks/terms"}>Terms</Link>
-        </section>;
-    } catch (error: any) {
-        throw new Error('Missing or invalid credentials. Have you created an access token using the Strapi admin panel? http://localhost:1337/admin/');
-    }
+        <Link href={"/media"}>All media (assigned or total (Admin-Only))</Link><br />
+        <Link href={"/media/1"}>A specific track</Link><br />
+        <Link href={"/media/new"}>Admin-Only: Upload a single track</Link><br />
+
+        <Link href={"/notes"}>All notes</Link>
+    </section>;
 };
