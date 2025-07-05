@@ -66,7 +66,7 @@ export const logDetails = (details: {
 }): void => {
   try {
     const logData = {
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString().slice(0, 10),
       description: details.desc || 'No description provided',
       message: details.message || 'No message provided',
       request: details.req || 'N/A',

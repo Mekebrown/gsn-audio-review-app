@@ -27,7 +27,7 @@ function Accordion({ note }) {
         <p 
         // className={notesMeta}
         >
-          By <Link href={note.users_permissions_user.id}>{note.users_permissions_user.id}</Link> | {new Date(note.updatedAt || note.createdAt).toLocaleDateString()}
+          By <Link href={note.users_permissions_user.id}>{note.users_permissions_user.id}</Link> | {new Date(note.updatedAt || note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
         </p>
       </div>
       {isOpen && (

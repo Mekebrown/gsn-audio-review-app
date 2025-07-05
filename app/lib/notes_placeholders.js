@@ -53,11 +53,11 @@ const noteInfo = (
 	this.timestamp = timestamp;
 
 	this.getCreatedDate = () => {
-		return new Date(this.createdAt.replace(" ", "T"));
+		return (new Date(this.createdAt.replace(" ", "T"))).toLocaleDateString('en-US', { timeZone: 'UTC' });
 	};
 
 	this.getUpdatedDate = () => {
-		return new Date(this.updatedAt.replace(" ", "T"));
+		return (new Date(this.updatedAt.replace(" ", "T"))).toLocaleDateString('en-US', { timeZone: 'UTC' });
 	};
 
 	this.getAllInfo = () => {

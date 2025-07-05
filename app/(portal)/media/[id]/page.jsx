@@ -109,7 +109,7 @@ export default async function Page({
 
             <input type="hidden" name="user-id" value={signedInUser.id} />
             <input type="hidden" name="media-id" value={id} />
-            <input type="hidden" name="timestamp" value={new Date().toISOString()} />
+            <input type="hidden" name="timestamp" value={new Date().toISOString().slice(0, 10)} />
 
             <div style={{ marginTop: "0.5em" }}>
                 <button type="submit">Make A Note</button>
@@ -122,13 +122,13 @@ export default async function Page({
         <h3>Notes</h3>
 
         <ul>
-            {(await params.mediaNotesArray).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map(note => (
+            {(await params.mediaNotesArray).sort((a, b) => (new Date(b.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })) - (new Date(a.createdAt)).toLocaleDateString('en-US', { timeZone: 'UTC' })).map(note => (
                 <li key={note.id} style={{ marginBottom: "1em" }}>
                     <div>
                         <strong>{noteWriter}</strong> 
                         
                         <span style={{ color: "#888" }}>
-                            {new Date(note.createdAt).toLocaleString()}
+                            {new Date(note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
                         </span>
                     </div>
 
