@@ -169,11 +169,11 @@ export default async function Page() {
           onChange={handleInputChange}
         />
 
-        {files.thumbnail ? (
+        {files.thumbnail_url ? (
           <div>
             <Image
               alt="Thumbnail"
-              src={files.thumbnail}
+              src={files.thumbnail_url}
               width="200"
               height="200"
             />

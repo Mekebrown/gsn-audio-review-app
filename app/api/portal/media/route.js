@@ -28,7 +28,8 @@ async function handleFormRequest(request, action) {
 		const fileName = formData.get("file_name");
 		const mediaType = formData.get("media_type");
 		const description = formData.get("description");
-		const thumbnail = formData.get("thumbnail");
+		const thumbnail_url = formData.get("thumbnail_url");
+		const thumbnail_file = formData.get("thumbnail_file");
 		const hasMediaMarkers = formData.get("has_media_markers");
 		const mediaId = formData.get("media_id");
 		let result;
@@ -51,7 +52,8 @@ async function handleFormRequest(request, action) {
 			file_name: fileName,
 			media_type: mediaType,
 			description,
-			thumbnail,
+			thumbnail_file,
+			thumbnail_url,
 			has_media_markers: hasMediaMarkers === "true",
 		};
 

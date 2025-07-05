@@ -4,11 +4,11 @@ export default async function Page() {
     const allMedia = [
         {
             id: 1,
-            thumbnail: logoImage,
+            thumbnail_file: logoImage,
         },
         {
             id: 2,
-            thumbnail: logoImage,
+            thumbnail_file: logoImage,
         },
     ];
 

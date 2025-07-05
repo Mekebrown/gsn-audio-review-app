@@ -31,7 +31,7 @@ export default async function Page() {
                     <div style={{ flexGrow: 2 }}>
                         <Image
                             alt=""
-                            src={"http://localhost:1337" + media.thumbnail.url}
+                            src={"http://localhost:1337" + media.thumbnail_url}
                             width="50"
                             height="50"
                         />

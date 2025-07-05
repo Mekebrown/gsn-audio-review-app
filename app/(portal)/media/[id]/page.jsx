@@ -10,7 +10,7 @@ export async function generateStaticParams() {
         description: media.description || 'No Media Provided',
         mediaFileName: media.media_file_name || 'Unknown Media File',
         mediaFileExt: media.media_file_ext || 'Unknown File Extension',
-        thumbnail: media.thumbnail || 'No Thumbnail Available',
+        thumbnail_url: media.thumbnail_url || 'No Thumbnail Available',
         createdAt: media.created_at || 'No Creation Date Available',
         mediaId: media.id,
         mediaUrl: media.media_file_name ? `/media/${media.id}/${media.media_file_name}.${media.media_file_ext}` : null,
@@ -65,7 +65,7 @@ export default async function Page({
                     src={params.mediaUrl}
                     controls
                     width="480"
-                    poster={params.thumbnail}
+                    poster={params.thumbnail_url}
                     style={{ borderRadius: "8px", background: "#222" }}
                 />
             ) : params.mediaType === "mp3" || params.mediaType === "wav" ? (
