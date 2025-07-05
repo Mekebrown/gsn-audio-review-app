@@ -130,14 +130,15 @@ export const SettingsIcon = ({ user, className }: { user: User, className: strin
 
         setLightMode(prev => !prev);
 
-        if (lightMode) {
-            document.body.classList.add('darkMode');
-            document.body.classList.remove('lightMode');
-        }
-        else {
-            document.body.classList.add('lightMode');
-            document.body.classList.remove('darkMode');
-        }
+        // Complete later - TODO
+        // if (lightMode) {
+        //     document.body.classList.add('darkMode');
+        //     document.body.classList.remove('lightMode');
+        // }
+        // else {
+        //     document.body.classList.add('lightMode');
+        //     document.body.classList.remove('darkMode');
+        // }
 
         setShow(false);
 
