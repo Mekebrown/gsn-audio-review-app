@@ -5,7 +5,7 @@ import StrapiHandler from "@/app/lib/strapiclient_handler";
 export const allMedia = async () => {
 	const mediaData = StrapiHandler.collection('medias');
 
-	return (await mediaData.find()).data;
+	return (await mediaData.find({ populate: ["markers", "thumbnail_file", "media_file"] })).data;
 };
 
 export const audioExtensions = [
