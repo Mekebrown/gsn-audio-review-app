@@ -1,30 +1,24 @@
 import { allMedia as allMediaFunc } from "@/app/lib/media_placeholders";
 import { allNotesForMedia as allNotesForMediaFunc } from "@/app/lib/notes_placeholders";
 
-export async function generateStaticParams() {
+// export async function generateStaticParams() {
+const getMediaInfo = async () => {
     const allMedia = await allMediaFunc();
 
-    return allMedia.map(media => ({
-        id: media.id.toString(),
+    const resultingArray = allMedia.map(media => ({
+        id: media.documentId.toString(),
         title: media.title || 'Unknown Media Type',
         description: media.description || 'No Media Provided',
-        mediaFileName: media.media_file_name || 'Unknown Media File',
-        mediaFileExt: media.media_file_ext || 'Unknown File Extension',
-        thumbnail_url: media.thumbnail_url || 'No Thumbnail Available',
+        mediaFileName: media.media_file_name || 'Unknown Media File Name YET',
+        mediaFileExt: media.media_file_ext || 'Unknown File Extension YET',
+        thumbnail_url: media.thumbnail_url && media.media_url.includes("http") ? media.media_url : 'No Thumbnail Available',
         createdAt: media.created_at || 'No Creation Date Available',
-        mediaId: media.id,
-        mediaUrl: media.media_file_name ? `/media/${media.id}/${media.media_file_name}.${media.media_file_ext}` : null,
-        mediaType: media.media_file_ext ? media.media_file_ext.toLowerCase() : 'unknown', 
-        mediaNotesArray: allNotesForMediaFunc({ mediaId: media.id }).then(notes => notes.map(note => ({
-            id: note.id,
-            body: note.body,
-            userId: note.users_permissions_user.id,
-            timestamp: note.timestamp,
-            createdAt: note.createdAt,
-            updatedAt: note.updatedAt,
-            mediaId: note.media.id,
-        })))
+        mediaId: media.documentId,
+        mediaUrl: media.media_url && media.media_url.includes("http") ? media.media_url : `/media/${media.documentId}/${media.media_file_name}.${media.media_file_ext}`,
+        mediaType: media.media_file_ext ? media.media_file_ext.toLowerCase() : 'unknown'
     }));
+
+    return resultingArray;
 };
 
 /**
@@ -41,15 +35,34 @@ export async function generateStaticParams() {
  * 
  * @returns {JSX.Element}
  */
-export default async function Page({
-  params,
-}) {
-    const { id, title, description } = await params;
+// export default async function Page({
+//   params,
+// }) {
+export default async function Page() {
+    const items = await getMediaInfo();
+    const { id, title, description, thumbnail_url, mediaUrl, mediaType, mediaId } = items[0];
     const signedInUser = {
         id: 1,
         username: "User Name"
     };
-    const noteWriterId = "Writer Name";
+    const noteWriter = "Writer Name";
+
+    const mediaNotesArray = await allNotesForMediaFunc(mediaId)
+        .then(returnedNotes => {
+            return returnedNotes.data.map(note => {
+                if (mediaId == note.media.documentId) {
+                    return {
+                        id: note.documentId,
+                        body: note.body,
+                        userId: note.users_permissions_user.id,
+                        timestamp: note.timestamp,
+                        createdAt: note.createdAt,
+                        updatedAt: note.updatedAt,
+                        publishedAt: note.publishedAt,
+                    };
+                }
+            });
+        });
 
     return <section className="media-profile" data={"media-profile-" + id}>
         <h1>Media page for</h1>
@@ -60,24 +73,24 @@ export default async function Page({
 
         {/* Media Player */}
         <div style={{ margin: "1em 0" }}>
-            {params.mediaType === "mp4" || params.mediaType === "webm" ? (
+            {mediaType === "mp4" || mediaType === "webm" ? (
                 <video
-                    src={params.mediaUrl}
+                    src={mediaUrl}
                     controls
                     width="480"
-                    poster={params.thumbnail_url}
+                    poster={thumbnail_url}
                     style={{ borderRadius: "8px", background: "#222" }}
                 />
-            ) : params.mediaType === "mp3" || params.mediaType === "wav" ? (
+            ) : mediaType === "mp3" || mediaType === "wav" ? (
                 <audio
-                    src={params.mediaUrl}
+                    src={mediaUrl}
                     controls
                     style={{ width: "100%" }}
                 />
-            ) : params.mediaType === "jpg" || params.mediaType === "jpeg" || params.mediaType === "png" || params.mediaType === "gif" ? (
+            ) : mediaType === "jpg" || mediaType === "jpeg" || mediaType === "png" || mediaType === "gif" ? (
                 <img
-                    src={params.mediaUrl}
-                    alt={params.title}
+                    src={mediaUrl}
+                    alt={title}
                     style={{ maxWidth: "100%", borderRadius: "8px" }}
                 />
             ) : (
@@ -86,7 +99,7 @@ export default async function Page({
         </div>
 
         {/* Ratings and Notes Field */}
-        <form style={{ margin: "1em 0", display: "none" }}>
+        <form style={{ margin: "1em 0", display: "block", width: "400px" }}>
             <label htmlFor="media-rating">
                 <strong>Rate this media:</strong>
             </label>
@@ -119,22 +132,29 @@ export default async function Page({
         </form>
         
         {/* Notes List */}
-        <h3>Notes</h3>
+        {mediaNotesArray !== undefined && (<>
+            <h3>Notes</h3>
 
-        <ul>
-            {(await params.mediaNotesArray).sort((a, b) => (new Date(b.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })) - (new Date(a.createdAt)).toLocaleDateString('en-US', { timeZone: 'UTC' })).map(note => (
-                <li key={note.id} style={{ marginBottom: "1em" }}>
-                    <div>
-                        <strong>{noteWriter}</strong> 
-                        
-                        <span style={{ color: "#888" }}>
-                            {new Date(note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
-                        </span>
-                    </div>
+            <ul>
+                {mediaNotesArray.sort((a, b) => (
+                    new Date(b.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })
+                ) - (
+                    new Date(a.createdAt)).toLocaleDateString('en-US', { timeZone: 'UTC' })
+                ).map(note => (
+                    <li key={note.documentId} style={{ marginBottom: "1em" }}>
+                        <div>
+                            <strong>{noteWriter}</strong> 
+                            
+                            <span style={{ color: "#888" }}>
+                                {new Date(note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+                            </span>
+                        </div>
 
-                    <div>{note.body}</div>
-                </li>
-            ))}
-        </ul>
+                        <div>{note.body}</div>
+                    </li>
+                ))}
+            </ul>
+        </>)
+        }
     </section>;
 };
