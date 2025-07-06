@@ -18,7 +18,7 @@ export default async function Page() {
   if (allUsers.length === 1) {
     return <section>
       <h1>One user account</h1>
-      <article key={allUsers[0].id}>
+      <article key={allUsers[0].documentId}>
         <div className="user">Name: {allUsers[0].username}</div>
         <div>Package: {allUsers[0].role.name}</div>
       </article>
@@ -30,8 +30,7 @@ export default async function Page() {
     <h1>All user accounts</h1>
 
     {allUsers.map(user => {
-      return <article key={user.id}>
-        <div className="user">User #{user.id}:</div>
+      return <article key={user.documentId}>
         <div className="user">Name: {user.username}</div>
         <div>User Role: {user.role.name}</div>
         <hr />

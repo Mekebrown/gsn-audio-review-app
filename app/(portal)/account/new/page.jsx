@@ -30,11 +30,11 @@ export default function Page() {
 
   const media = [
     {
-      id: 1,
+      documentId: 1,
       title: "test1"
     },
     {
-      id: 2,
+      documentId: 2,
       title: "test2"
     }
   ];
@@ -103,7 +103,7 @@ export default function Page() {
     if (mediaChecked.length === media.length) {
       setMediaChecked([]);
     } else {
-      setMediaChecked(media.map(item => item.id));
+      setMediaChecked(media.map(item => item.documentId));
       setMediaChecked(true);
     }
   }
@@ -226,17 +226,17 @@ export default function Page() {
               </div>
 
               {media.map(item => (
-                <div className="form-check" key={item.id}>
+                <div className="form-check" key={item.documentId}>
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    // value={item.id}
-                    id={item.id}
-                    // checked={() => mediaChecked.includes(item.id) || mediaChecked.length === media.length}
+                    // value={item.documentId}
+                    id={item.documentId}
+                    // checked={() => mediaChecked.includes(item.documentId) || mediaChecked.length === media.length}
                     onChange={handleCheck}
                   />
 
-                  <label className="form-check-label" htmlFor={item.id}>{item.title}</label>
+                  <label className="form-check-label" htmlFor={item.documentId}>{item.title}</label>
                 </div>
               ))}
             </div>

@@ -23,16 +23,16 @@ function Accordion({ note }) {
       onClick={toggleAccordion}>
         <h3 
         // className={notesBody
-        ><Link href={note.media.id}>{note.body}</Link></h3>
+        ><Link href={"/media/" + note.media.documentId}>{note.body}</Link></h3>
         <p 
         // className={notesMeta}
         >
-          By <Link href={note.users_permissions_user.id}>{note.users_permissions_user.id}</Link> | {new Date(note.updatedAt || note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
+          By <Link href={"/users/" + note.users_permissions_user.id}>{note.users_permissions_user.username}</Link> | {new Date(note.updatedAt || note.createdAt).toLocaleDateString('en-US', { timeZone: 'UTC' })}
         </p>
       </div>
       {isOpen && (
         <div> {/* <div className={notesAccordionContent}> */}
-          <p>{note.body}<Link href={note.media.id}>[Truncate!]...</Link></p>
+          <p>{note.body}<Link href={"/media/" + note.media.documentId}>[Truncate!]...</Link></p>
         </div>
       )}
     </div>
@@ -92,7 +92,7 @@ export default function Page() {
         // className={notesContainer}
         >
           {notes.map((note) => (
-            <Accordion key={note.id} note={note} />
+            <Accordion key={note.documentId} note={note} />
           ))}
         </div>
       )}

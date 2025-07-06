@@ -4,7 +4,7 @@ export async function generateStaticParams() {
     const allUsers = await allUsersFunc();
 
     return allUsers.map(user => ({
-      id: user.id.toString(),
+      id: user.documentId.toString(),
       username: user.username || 'Unknown User',
       email: user.email || 'No Email Provided',
     }));

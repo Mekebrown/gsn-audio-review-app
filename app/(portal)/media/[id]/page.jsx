@@ -108,7 +108,7 @@ export default async function Page({
             ></textarea><br />
 
             <input type="hidden" name="user-id" value={signedInUser.id} />
-            <input type="hidden" name="media-id" value={id} />
+            <input type="hidden" name="media-id" value={mediaId} />
             <input type="hidden" name="timestamp" value={new Date().toISOString().slice(0, 10)} />
 
             <div style={{ marginTop: "0.5em" }}>

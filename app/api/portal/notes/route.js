@@ -131,7 +131,7 @@ export async function POST(request) {
 		// Assuming newNote contains the created note information
 		// You can return the note ID or any other relevant information
 		// For example, if newNote has an id property:
-		const noteId = newNote.id;
+		const noteId = newNote.documentId;
 
 		if (!noteId) {
 			return NextResponse.json(
